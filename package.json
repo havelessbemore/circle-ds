@@ -8,13 +8,13 @@
     "README.md"
   ],
   "type": "module",
-  "main": "./dist/cjs/cicle-ds.cjs",
-  "module": "./dist/esm/cicle-ds.mjs",
+  "main": "./dist/cjs/circle-ds.cjs",
+  "module": "./dist/esm/circle-ds.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/esm/cicle-ds.mjs",
-      "require": "./dist/cjs/cicle-ds.cjs",
+      "import": "./dist/esm/circle-ds.mjs",
+      "require": "./dist/cjs/circle-ds.cjs",
       "types": "./dist/index.d.ts"
     }
   },

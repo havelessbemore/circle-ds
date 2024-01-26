@@ -27,7 +27,7 @@ yarn install circle-ds
 
 ## Usage
 
-Try out the examples below with ([JSFiddle](https://jsfiddle.net/Lyvbj24c/)).
+Try out the examples below with ([JSFiddle](https://jsfiddle.net/2hxepf9s/)).
 
 ## License
 
