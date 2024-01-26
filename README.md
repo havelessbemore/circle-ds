@@ -40,22 +40,38 @@ Try it out on [JSFiddle](https://jsfiddle.net/n1pefc54/1/).
 - `CircleStack<T>(items: Iterable<T>)`: Constructs a full circular stack with the given items.
 - `CircleStack<T>(...items: T[])`: Constructs a full circular stack with the given items.
 
+#### Static Methods
+
+- `from<T>(iterable: Iterable<T> | ArrayLike<T>): CircleStack<T>`: Creates a new stack from an iterable or array-like object.
+
+- `of<T>(...elements: T[]): CircleStack<T>`: Creates a new stack from a variable number of elements.
+
 #### Properties
 
 - [`capacity: number`](./docs/classes/CircleStack.md#capacity): The maximum size of the stack. Update to grow or shrink the stack.
+
 - [`size: Readonly<number>`](./docs/classes/CircleStack.md#size): The number of items in the stack.
 
 #### Methods
 
 - [`clear(): void`](./docs/classes/CircleStack.md#clear): Remove all items from the stack.
+
 - [`entries(): IterableIterator<[number, T]>`](./docs/classes/CircleStack.md#entries): Returns an iterator that allows iteration through `[index, value]` pairs of the stack.
+
 - [`forEach(callbackFn: (value: T, index: number, stack: CircleStack<T>) => void, thisArg?: unknown): void`](./docs/classes/CircleStack.md#foreach): Executes the provided `callbackFn` function once for each element, in insertion order.
+
 - [`has(value: T): boolean`](./docs/classes/CircleStack.md#has): Checks if the stack contains a specific value.
+
 - [`keys(): IterableIterator<number>`](./docs/classes/CircleStack.md#keys): Returns an iterator for the keys (indices) in the stack.
+
 - [`pop(): T | undefined`](./docs/classes/CircleStack.md#pop): Removes and returns the item at the top of the stack. Returns `undefined` if the stack is empty.
+
 - [`push(...items: T[]): T[]`](./docs/classes/CircleStack.md#push): Adds items to the top of the stack. If the stack is full, the oldest items are overwritten and returned.
+
 - [`top(): T | undefined`](./docs/classes/CircleStack.md#top): Returns the item at the top of the stack without removing it. Returns `undefined` if the stack is empty.
+
 - [`values(): IterableIterator<T>`](./docs/classes/CircleStack.md#values): Returns an iterator for the values in the stack.
+
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircleStack.md#iterator): Returns the default iterator for the stack, which iterates through its values.
 
 ### [CircleQueue](./docs/classes/CircleQueue.md)
@@ -69,27 +85,43 @@ Try it out on [JSFiddle](https://jsfiddle.net/n1pefc54/1/).
 - `CircleQueue<T>(items: Iterable<T>)`: Constructs a full circular queue with the given items.
 - `CircleQueue<T>(...items: T[])`: Constructs a full circular queue with the given items.
 
+#### Static Methods
+
+- `from<T>(iterable: Iterable<T> | ArrayLike<T>): CircleQueue<T>`: Creates a new queue from an iterable or array-like object.
+
+- `of<T>(...elements: T[]): CircleQueue<T>`: Creates a new queue from a variable number of elements.
+
 #### Properties
 
 - [`capacity: number`](./docs/classes/CircleQueue.md#capacity): The maximum size of the queue. Update to grow or shrink the queue.
+
 - [`size: Readonly<number>`](./docs/classes/CircleQueue.md#size): The number of items in the queue.
 
 #### Methods
 
 - [`clear(): void`](./docs/classes/CircleQueue.md#clear): Remove all items from the queue.
+
 - [`entries(): IterableIterator<[number, T]>`](./docs/classes/CircleQueue.md#entries): Returns an iterator that allows iteration through `[index, value]` pairs of the queue.
-- [`forEach(callbackFn: (value: T, index: number, stack: CircleQueue<T>) => void, thisArg?: unknown): void`](./docs/classes/CircleQueue.md#foreach): Executes the provided `callbackFn` function once for each element, in insertion order.
+
+- [`forEach(callbackFn: (value: T, index: number, queue: CircleQueue<T>) => void, thisArg?: unknown): void`](./docs/classes/CircleQueue.md#foreach): Executes the provided `callbackFn` function once for each element, in insertion order.
+
 - [`front(): T | undefined`](./docs/classes/CircleQueue.md#front): Returns the item at the front of the queue without removing it. Returns `undefined` if the queue is empty.
+
 - [`has(value: T): boolean`](./docs/classes/CircleQueue.md#has): Checks if the queue contains a specific value.
+
 - [`keys(): IterableIterator<number>`](./docs/classes/CircleQueue.md#keys): Returns an iterator for the keys (indices) in the queue.
+
 - [`push(...items: T[]): T[]`](./docs/classes/CircleQueue.md#push): Adds items to the back of the queue. If the queue is full, the oldest items are overwritten and returned.
+
 - [`shift(): T | undefined`](./docs/classes/CircleQueue.md#shift): Removes and returns the item at the front of the queue. Returns `undefined` if the queue is empty.
+
 - [`values(): IterableIterator<T>`](./docs/classes/CircleQueue.md#values): Returns an iterator for the values in the queue.
+
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircleQueue.md#iterator): Returns the default iterator for the queue, which iterates through its values.
 
 ### [CircleDeque](./docs/classes/CircleDeque.md)
 
-`CircleDeque` is a double-ended queue that combines the features stacks and queues, allowing insertion and removal at both ends.
+`CircleDeque` is a double-ended queue that combines the features of stacks and queues, allowing insertion and removal at both ends.
 
 #### Constructor
 
@@ -98,25 +130,44 @@ Try it out on [JSFiddle](https://jsfiddle.net/n1pefc54/1/).
 - `CircleDeque<T>(items: Iterable<T>)`: Constructs a full circular deque with the given items.
 - `CircleDeque<T>(...items: T[])`: Constructs a full circular deque with the given items.
 
+#### Static Methods
+
+- `from<T>(iterable: Iterable<T> | ArrayLike<T>): CircleDeque<T>`: Creates a new deque from an iterable or array-like object.
+
+- `of<T>(...elements: T[]): CircleDeque<T>`: Creates a new deque from a variable number of elements.
+
 #### Properties
 
 - [`capacity: number`](./docs/classes/CircleDeque.md#capacity): The maximum size of the deque. Update to grow or shrink the deque.
+
 - [`size: Readonly<number>`](./docs/classes/CircleDeque.md#size): The number of items in the deque.
 
 #### Methods
 
 - [`clear(): void`](./docs/classes/CircleDeque.md#clear): Remove all items from the deque.
+
 - [`entries(): IterableIterator<[number, T]>`](./docs/classes/CircleDeque.md#entries): Returns an iterator that allows iteration through `[index, value]` pairs of the deque.
-- [`forEach(callbackFn: (value: T, index: number, stack: CircleDeque<T>) => void, thisArg?: unknown): void`](./docs/classes/CircleDeque.md#foreach): Executes the provided `callbackFn` function once for each element, in insertion order.
+
+- [`forEach(callbackFn: (value: T, index: number, deque: CircleDeque<T>) => void, thisArg?: unknown): void`](./docs/classes/CircleDeque.md#foreach): Executes the provided `callbackFn` function once for each element, in insertion order.
+
 - [`front(): T | undefined`](./docs/classes/CircleDeque.md#front): Returns the item at the front of the deque without removing it. Returns `undefined` if the deque is empty.
+
 - [`has(value: T): boolean`](./docs/classes/CircleDeque.md#has): Checks if the deque contains a specific value.
+
 - [`keys(): IterableIterator<number>`](./docs/classes/CircleDeque.md#keys): Returns an iterator for the keys (indices) in the deque.
+
 - [`pop(): T | undefined`](./docs/classes/CircleDeque.md#pop): Removes and returns the item at the top of the deque. Returns `undefined` if the deque is empty.
+
 - [`push(...items: T[]): T[]`](./docs/classes/CircleDeque.md#push): Adds items to the back of the deque. If the deque is full, items at the front are overwritten and returned.
+
 - [`shift(): T | undefined`](./docs/classes/CircleDeque.md#shift): Removes and returns the item at the front of the deque. Returns `undefined` if the deque is empty.
+
 - [`top(): T | undefined`](./docs/classes/CircleDeque.md#top): Returns the item at the top of the deque without removing it. Returns `undefined` if the deque is empty.
+
 - [`unshift(...items: T[]): T[]`](./docs/classes/CircleDeque.md#unshift): Adds items to the fron of the deque. If the deque is full, items at the back are overwritten and returned.
+
 - [`values(): IterableIterator<T>`](./docs/classes/CircleDeque.md#values): Returns an iterator for the values in the deque.
+
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircleDeque.md#iterator): Returns the default iterator for the deque, which iterates through its values.
 
 ## License
