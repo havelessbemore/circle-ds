@@ -112,7 +112,7 @@ export declare class CircularView<T> implements Collection<T, number> {
     /* Excluded from this release type: tail */
     /* Excluded from this release type: vals */
     /**
-     * Capacity defaults to zero and should be updated via {@link CircularArrayCollection.capacity}.
+     * Capacity defaults to zero and should be updated via {@link CircularView.capacity}.
      */
     constructor();
     /**

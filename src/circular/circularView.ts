@@ -34,7 +34,7 @@ export class CircularView<T> implements Collection<T, number> {
   protected vals: (T | undefined)[];
 
   /**
-   * Capacity defaults to zero and should be updated via {@link CircularArrayCollection.capacity}.
+   * Capacity defaults to zero and should be updated via {@link CircularView.capacity}.
    */
   constructor();
   /**
