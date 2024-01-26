@@ -43,7 +43,6 @@ class o {
     l(this, "tail");
     /**
      * The values in the collection.
-     *
      * @internal
      */
     l(this, "vals");

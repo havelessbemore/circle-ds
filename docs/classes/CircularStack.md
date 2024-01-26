@@ -1,4 +1,4 @@
-[circle-ds](../README.md) / CircularStack
+[circle-ds](../README.md) / [Exports](../modules.md) / CircularStack
 
 # Class: CircularStack\<T\>
 
@@ -91,7 +91,7 @@ Capacity defaults to zero and should be updated via [CircularView.capacity](Circ
 
 #### Defined in
 
-[circular/circularView.ts:39](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L39)
+[circular/circularView.ts:38](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L38)
 
 • **new CircularStack**\<`T`\>(`capacity`): [`CircularStack`](CircularStack.md)\<`T`\>
 
@@ -117,7 +117,7 @@ Capacity defaults to zero and should be updated via [CircularView.capacity](Circ
 
 #### Defined in
 
-[circular/circularView.ts:43](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L43)
+[circular/circularView.ts:42](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L42)
 
 • **new CircularStack**\<`T`\>(`items`): [`CircularStack`](CircularStack.md)\<`T`\>
 
@@ -143,7 +143,7 @@ Capacity defaults to zero and should be updated via [CircularView.capacity](Circ
 
 #### Defined in
 
-[circular/circularView.ts:47](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L47)
+[circular/circularView.ts:46](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L46)
 
 • **new CircularStack**\<`T`\>(`...items`): [`CircularStack`](CircularStack.md)\<`T`\>
 
@@ -169,7 +169,7 @@ Capacity defaults to zero and should be updated via [CircularView.capacity](Circ
 
 #### Defined in
 
-[circular/circularView.ts:51](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L51)
+[circular/circularView.ts:50](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L50)
 
 ## Properties
 
@@ -185,7 +185,7 @@ The number of elements in the collection.
 
 #### Defined in
 
-[circular/circularView.ts:21](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L21)
+[circular/circularView.ts:21](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L21)
 
 ---
 
@@ -201,7 +201,7 @@ The index representing the first element in the collection.
 
 #### Defined in
 
-[circular/circularView.ts:15](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L15)
+[circular/circularView.ts:15](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L15)
 
 ---
 
@@ -217,7 +217,7 @@ The index one more than the last element in the collection.
 
 #### Defined in
 
-[circular/circularView.ts:27](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L27)
+[circular/circularView.ts:27](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L27)
 
 ---
 
@@ -233,7 +233,7 @@ The values in the collection.
 
 #### Defined in
 
-[circular/circularView.ts:34](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L34)
+[circular/circularView.ts:33](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L33)
 
 ## Accessors
 
@@ -257,7 +257,7 @@ CircularView.capacity
 
 #### Defined in
 
-[circular/circularView.ts:110](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L110)
+[circular/circularView.ts:109](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L109)
 
 • `set` **capacity**(`newCapacity`): `void`
 
@@ -283,7 +283,7 @@ CircularView.capacity
 
 #### Defined in
 
-[circular/circularView.ts:117](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L117)
+[circular/circularView.ts:116](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L116)
 
 ---
 
@@ -307,7 +307,7 @@ CircularView.size
 
 #### Defined in
 
-[circular/circularView.ts:142](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L142)
+[circular/circularView.ts:141](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L141)
 
 ## Methods
 
@@ -335,7 +335,7 @@ an iterable of values.
 
 #### Defined in
 
-[circular/circularView.ts:227](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L227)
+[circular/circularView.ts:226](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L226)
 
 ---
 
@@ -359,7 +359,7 @@ Remove all elements and resets the collection.
 
 #### Defined in
 
-[circular/circularView.ts:149](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L149)
+[circular/circularView.ts:148](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L148)
 
 ---
 
@@ -387,7 +387,7 @@ an iterable of [key, value] pairs for every entry.
 
 #### Defined in
 
-[circular/circularView.ts:163](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L163)
+[circular/circularView.ts:162](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L162)
 
 ---
 
@@ -420,7 +420,7 @@ Performs the specified action for each element in the collection.
 
 #### Defined in
 
-[circular/circularView.ts:177](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L177)
+[circular/circularView.ts:176](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L176)
 
 ---
 
@@ -446,7 +446,7 @@ Grow capacity.
 
 #### Defined in
 
-[circular/circularView.ts:262](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L262)
+[circular/circularView.ts:261](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L261)
 
 ---
 
@@ -480,7 +480,7 @@ a boolean indicating if `value` was found or not
 
 #### Defined in
 
-[circular/circularView.ts:197](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L197)
+[circular/circularView.ts:196](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L196)
 
 ---
 
@@ -508,7 +508,7 @@ an iterable of keys.
 
 #### Defined in
 
-[circular/circularView.ts:214](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L214)
+[circular/circularView.ts:213](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L213)
 
 ---
 
@@ -530,7 +530,7 @@ the last element in the stack, or `undefined` if empty.
 
 #### Defined in
 
-[circular/circularStack.ts:20](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularStack.ts#L20)
+[circular/circularStack.ts:20](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularStack.ts#L20)
 
 ---
 
@@ -558,7 +558,7 @@ The overwritten elements, if any.
 
 #### Defined in
 
-[circular/circularStack.ts:38](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularStack.ts#L38)
+[circular/circularStack.ts:38](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularStack.ts#L38)
 
 ---
 
@@ -584,7 +584,7 @@ Shrink capacity.
 
 #### Defined in
 
-[circular/circularView.ts:286](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L286)
+[circular/circularView.ts:285](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L285)
 
 ---
 
@@ -612,7 +612,7 @@ The internal index
 
 #### Defined in
 
-[circular/circularView.ts:252](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L252)
+[circular/circularView.ts:251](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L251)
 
 ---
 
@@ -634,7 +634,7 @@ the last inserted element, or `undefined` if empty.
 
 #### Defined in
 
-[circular/circularStack.ts:67](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularStack.ts#L67)
+[circular/circularStack.ts:67](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularStack.ts#L67)
 
 ---
 
@@ -662,7 +662,7 @@ an iterable of values.
 
 #### Defined in
 
-[circular/circularView.ts:238](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L238)
+[circular/circularView.ts:237](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L237)
 
 ---
 
@@ -696,7 +696,7 @@ Creates a collection from an iterable object.
 
 #### Defined in
 
-[circular/circularView.ts:82](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L82)
+[circular/circularView.ts:81](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L81)
 
 ---
 
@@ -730,4 +730,4 @@ Creates a collection from a variable number of arguments.
 
 #### Defined in
 
-[circular/circularView.ts:97](https://github.com/havelessbemore/circle-ds/blob/b227384/src/circular/circularView.ts#L97)
+[circular/circularView.ts:96](https://github.com/havelessbemore/circle-ds/blob/5237265/src/circular/circularView.ts#L96)

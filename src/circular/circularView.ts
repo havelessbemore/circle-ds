@@ -28,7 +28,6 @@ export class CircularView<T> implements Collection<T, number> {
 
   /**
    * The values in the collection.
-   *
    * @internal
    */
   protected vals: (T | undefined)[];

@@ -46,7 +46,6 @@ class CircularView {
     __publicField(this, "tail");
     /**
      * The values in the collection.
-     *
      * @internal
      */
     __publicField(this, "vals");
