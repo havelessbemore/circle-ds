@@ -1,0 +1,80 @@
+{
+  "name": "circle-ds",
+  "version": "0.0.1",
+  "description": "A suite of circular data structures, including CircleStack, CircleQueue, and CircleDeque. Use circular buffers with ease and supported by a variety of operations.",
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
+  "type": "module",
+  "main": "./dist/cjs/cicle-ds.cjs",
+  "module": "./dist/esm/cicle-ds.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/cicle-ds.mjs",
+      "require": "./dist/cjs/cicle-ds.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "rimraf dist && tsc && vite build && vite build -c vite.config.misc.ts",
+    "build:docs": "typedoc",
+    "dev": "vite --host",
+    "format": "prettier . --write",
+    "lint": "eslint . --ext .ts",
+    "prepare": "husky install && husky set .husky/pre-commit 'npx lint-staged' && git add .husky/pre-commit",
+    "prepublish": "npm run lint && npm run test && npm run build",
+    "test": "vitest --run",
+    "test:coverage": "vitest --coverage --run",
+    "uninstall-husky": "npm uninstall husky --no-save && git config --unset core.hooksPath && npx rimraf .husky"
+  },
+  "sideEffects": false,
+  "keywords": [
+    "buffer",
+    "cache",
+    "circular",
+    "collection",
+    "cyclic",
+    "data",
+    "data structure",
+    "deque",
+    "queue",
+    "ring",
+    "stack"
+  ],
+  "author": "Michael Rojas <dev.michael.rojas@gmail.com> (https://github.com/havelessbemore)",
+  "homepage": "https://github.com/havelessbemore/circle-ds",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/havelessbemore/circle-ds.git"
+  },
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">= 18"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.1",
+    "@types/node": "^20.4.9",
+    "@typescript-eslint/eslint-plugin": "^6.3.0",
+    "@typescript-eslint/parser": "^6.3.0",
+    "@vitest/coverage-v8": "^0.34.1",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-tsdoc": "^0.2.17",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "prettier": "^3.0.1",
+    "rimraf": "^5.0.1",
+    "ts-node": "^10.9.1",
+    "typedoc": "^0.25.7",
+    "typedoc-plugin-markdown": "^3.17.1",
+    "typescript": "^5.1.6",
+    "vite": "^5.0.12",
+    "vite-plugin-banner": "^0.7.1",
+    "vite-plugin-dts": "^3.7.1",
+    "vitest": "^0.34.1"
+  }
+}
