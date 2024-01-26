@@ -1,29 +1,29 @@
 import { tests } from "../types/collectionTests";
-import { CircularView } from "./circularView";
+import { CircleView } from "./circleView";
 import { describe, expect, it, vi } from "vitest";
 
 for (const name of Object.keys(tests)) {
-  tests[name](CircularView);
+  tests[name](CircleView);
 }
 
-describe(CircularView.name, () => {
+describe(CircleView.name, () => {
   describe("static from()", () => {
     it("creates a queue correctly from an array", () => {
       const array = [1, 2, 3];
-      const queue = CircularView.from(array);
+      const queue = CircleView.from(array);
       expect(queue.size).toBe(array.length);
       expect([...queue.values()]).toEqual(array);
     });
 
     it("creates a queue from other iterable types", () => {
       const set = new Set([1, 2, 3]);
-      const queue = CircularView.from(set);
+      const queue = CircleView.from(set);
       expect(queue.size).toBe(set.size);
       expect([...queue.values()]).toEqual([...set]);
     });
 
     it("creates an empty queue from an empty iterable", () => {
-      const queue = CircularView.from([]);
+      const queue = CircleView.from([]);
       expect(queue.size).toBe(0);
       expect([...queue.values()]).toEqual([]);
     });
@@ -32,19 +32,19 @@ describe(CircularView.name, () => {
   describe("static of()", () => {
     it("creates a queue correctly with multiple elements", () => {
       const elements = [1, 2, 3];
-      const queue = CircularView.of(...elements);
+      const queue = CircleView.of(...elements);
       expect(queue.size).toBe(elements.length);
       expect([...queue.values()]).toEqual(elements);
     });
 
     it("creates an empty queue when no arguments are provided", () => {
-      const queue = CircularView.of();
+      const queue = CircleView.of();
       expect(queue.size).toBe(0);
       expect([...queue.values()]).toEqual([]);
     });
 
     it("creates a queue correctly with a single element", () => {
-      const queue = CircularView.of(1);
+      const queue = CircleView.of(1);
       expect(queue.size).toBe(1);
       expect([...queue.values()]).toEqual([1]);
     });
@@ -52,12 +52,12 @@ describe(CircularView.name, () => {
 
   describe("entries()", () => {
     it("returns an empty iterable for an empty queue", () => {
-      const queue = new CircularView<number>(3);
+      const queue = new CircleView<number>(3);
       expect([...queue.entries()]).toEqual([]);
     });
 
     it("returns all key-value pairs for a non-empty queue", () => {
-      const queue = new CircularView<number>(1, 2, 3);
+      const queue = new CircleView<number>(1, 2, 3);
       expect([...queue.entries()]).toEqual([
         [0, 1],
         [1, 2],
@@ -68,7 +68,7 @@ describe(CircularView.name, () => {
 
   describe("forEach()", () => {
     it("provides correct arguments to the callback function", () => {
-      const queue = new CircularView<number>(1, 2, 3);
+      const queue = new CircleView<number>(1, 2, 3);
       const mockCallback = vi.fn();
       queue.forEach(mockCallback);
       expect(mockCallback.mock.calls[0][0]).toBe(1); // First element's value
@@ -77,7 +77,7 @@ describe(CircularView.name, () => {
     });
 
     it("should execute the callback for each element", () => {
-      const queue = new CircularView<number>(1, 2, 3);
+      const queue = new CircleView<number>(1, 2, 3);
       const mockCallback = vi.fn();
       queue.forEach(mockCallback);
       expect(mockCallback.mock.calls.length).toBe(3);

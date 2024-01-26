@@ -1,6 +1,6 @@
-[circle-ds](../README.md) / [Exports](../modules.md) / CircularDeque
+[circle-ds](../README.md) / [Exports](../modules.md) / CircleDeque
 
-# Class: CircularDeque\<T\>
+# Class: CircleDeque\<T\>
 
 A circular deque is similar to a traditional deque, but uses a fixed-size,
 circular buffer. When the deque reaches its maximum capacity and a new
@@ -16,18 +16,18 @@ most recent additions are of interest and older data can be discarded.
 ## Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 ## Hierarchy
 
-- [`CircularView`](CircularView.md)\<`T`\>
+- [`CircleView`](CircleView.md)\<`T`\>
 
-- [`CircularQueue`](CircularQueue.md)\<`T`\>
+- [`CircleQueue`](CircleQueue.md)\<`T`\>
 
-- [`CircularStack`](CircularStack.md)\<`T`\>
+- [`CircleStack`](CircleStack.md)\<`T`\>
 
-  ↳ **`CircularDeque`**
+  ↳ **`CircleDeque`**
 
 ## Implements
 
@@ -37,146 +37,146 @@ most recent additions are of interest and older data can be discarded.
 
 ### Constructors
 
-- [constructor](CircularDeque.md#constructor)
+- [constructor](CircleDeque.md#constructor)
 
 ### Properties
 
-- [\_size](CircularDeque.md#_size)
-- [head](CircularDeque.md#head)
-- [tail](CircularDeque.md#tail)
-- [vals](CircularDeque.md#vals)
+- [\_size](CircleDeque.md#_size)
+- [head](CircleDeque.md#head)
+- [tail](CircleDeque.md#tail)
+- [vals](CircleDeque.md#vals)
 
 ### Accessors
 
-- [capacity](CircularDeque.md#capacity)
-- [size](CircularDeque.md#size)
+- [capacity](CircleDeque.md#capacity)
+- [size](CircleDeque.md#size)
 
 ### Methods
 
-- [[iterator]](CircularDeque.md#[iterator])
-- [back](CircularDeque.md#back)
-- [bottom](CircularDeque.md#bottom)
-- [clear](CircularDeque.md#clear)
-- [entries](CircularDeque.md#entries)
-- [forEach](CircularDeque.md#foreach)
-- [front](CircularDeque.md#front)
-- [grow](CircularDeque.md#grow)
-- [has](CircularDeque.md#has)
-- [keys](CircularDeque.md#keys)
-- [pop](CircularDeque.md#pop)
-- [push](CircularDeque.md#push)
-- [shift](CircularDeque.md#shift)
-- [shrink](CircularDeque.md#shrink)
-- [toInt](CircularDeque.md#toint)
-- [top](CircularDeque.md#top)
-- [unshift](CircularDeque.md#unshift)
-- [values](CircularDeque.md#values)
-- [from](CircularDeque.md#from)
-- [of](CircularDeque.md#of)
+- [[iterator]](CircleDeque.md#[iterator])
+- [back](CircleDeque.md#back)
+- [bottom](CircleDeque.md#bottom)
+- [clear](CircleDeque.md#clear)
+- [entries](CircleDeque.md#entries)
+- [forEach](CircleDeque.md#foreach)
+- [front](CircleDeque.md#front)
+- [grow](CircleDeque.md#grow)
+- [has](CircleDeque.md#has)
+- [keys](CircleDeque.md#keys)
+- [pop](CircleDeque.md#pop)
+- [push](CircleDeque.md#push)
+- [shift](CircleDeque.md#shift)
+- [shrink](CircleDeque.md#shrink)
+- [toInt](CircleDeque.md#toint)
+- [top](CircleDeque.md#top)
+- [unshift](CircleDeque.md#unshift)
+- [values](CircleDeque.md#values)
+- [from](CircleDeque.md#from)
+- [of](CircleDeque.md#of)
 
 ## Constructors
 
 ### constructor
 
-• **new CircularDeque**\<`T`\>(): [`CircularDeque`](CircularDeque.md)\<`T`\>
+• **new CircleDeque**\<`T`\>(): [`CircleDeque`](CircleDeque.md)\<`T`\>
 
-Capacity defaults to zero and should be updated via [CircularView.capacity](CircularView.md#capacity).
+Capacity defaults to zero and should be updated via [CircleView.capacity](CircleView.md#capacity).
 
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Returns
 
-[`CircularDeque`](CircularDeque.md)\<`T`\>
+[`CircleDeque`](CircleDeque.md)\<`T`\>
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[constructor](CircularStack.md#constructor)
+[CircleStack](CircleStack.md).[constructor](CircleStack.md#constructor)
 
 #### Defined in
 
-[circular/circularView.ts:38](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L38)
+circle/circleView.ts:38
 
-• **new CircularDeque**\<`T`\>(`capacity`): [`CircularDeque`](CircularDeque.md)\<`T`\>
+• **new CircleDeque**\<`T`\>(`capacity`): [`CircleDeque`](CircleDeque.md)\<`T`\>
 
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type     | Description           |
+| :--------- | :------- | :-------------------- |
 | `capacity` | `number` | the maximum capacity. |
 
 #### Returns
 
-[`CircularDeque`](CircularDeque.md)\<`T`\>
+[`CircleDeque`](CircleDeque.md)\<`T`\>
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[constructor](CircularStack.md#constructor)
+[CircleStack](CircleStack.md).[constructor](CircleStack.md#constructor)
 
 #### Defined in
 
-[circular/circularView.ts:42](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L42)
+circle/circleView.ts:42
 
-• **new CircularDeque**\<`T`\>(`items`): [`CircularDeque`](CircularDeque.md)\<`T`\>
+• **new CircleDeque**\<`T`\>(`items`): [`CircleDeque`](CircleDeque.md)\<`T`\>
 
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name    | Type              | Description                           |
+| :------ | :---------------- | :------------------------------------ |
 | `items` | `Iterable`\<`T`\> | the items to store in the collection. |
 
 #### Returns
 
-[`CircularDeque`](CircularDeque.md)\<`T`\>
+[`CircleDeque`](CircleDeque.md)\<`T`\>
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[constructor](CircularStack.md#constructor)
+[CircleStack](CircleStack.md).[constructor](CircleStack.md#constructor)
 
 #### Defined in
 
-[circular/circularView.ts:46](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L46)
+circle/circleView.ts:46
 
-• **new CircularDeque**\<`T`\>(`...items`): [`CircularDeque`](CircularDeque.md)\<`T`\>
+• **new CircleDeque**\<`T`\>(`...items`): [`CircleDeque`](CircleDeque.md)\<`T`\>
 
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type  | Description                           |
+| :--------- | :---- | :------------------------------------ |
 | `...items` | `T`[] | the items to store in the collection. |
 
 #### Returns
 
-[`CircularDeque`](CircularDeque.md)\<`T`\>
+[`CircleDeque`](CircleDeque.md)\<`T`\>
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[constructor](CircularStack.md#constructor)
+[CircleStack](CircleStack.md).[constructor](CircleStack.md#constructor)
 
 #### Defined in
 
-[circular/circularView.ts:50](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L50)
+circle/circleView.ts:50
 
 ## Properties
 
@@ -188,13 +188,13 @@ The number of elements in the collection.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[_size](CircularStack.md#_size)
+[CircleStack](CircleStack.md).[\_size](CircleStack.md#_size)
 
 #### Defined in
 
-[circular/circularView.ts:21](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L21)
+circle/circleView.ts:21
 
-___
+---
 
 ### head
 
@@ -204,13 +204,13 @@ The index representing the first element in the collection.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[head](CircularStack.md#head)
+[CircleStack](CircleStack.md).[head](CircleStack.md#head)
 
 #### Defined in
 
-[circular/circularView.ts:15](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L15)
+circle/circleView.ts:15
 
-___
+---
 
 ### tail
 
@@ -220,13 +220,13 @@ The index one more than the last element in the collection.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[tail](CircularStack.md#tail)
+[CircleStack](CircleStack.md).[tail](CircleStack.md#tail)
 
 #### Defined in
 
-[circular/circularView.ts:27](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L27)
+circle/circleView.ts:27
 
-___
+---
 
 ### vals
 
@@ -236,11 +236,11 @@ The values in the collection.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[vals](CircularStack.md#vals)
+[CircleStack](CircleStack.md).[vals](CircleStack.md#vals)
 
 #### Defined in
 
-[circular/circularView.ts:33](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L33)
+circle/circleView.ts:33
 
 ## Accessors
 
@@ -260,11 +260,11 @@ the maximum number of elements that can be stored.
 
 #### Inherited from
 
-CircularView.capacity
+CircleView.capacity
 
 #### Defined in
 
-[circular/circularView.ts:109](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L109)
+circle/circleView.ts:109
 
 • `set` **capacity**(`newCapacity`): `void`
 
@@ -272,8 +272,8 @@ Sets the maximum number of elements that can be stored.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name          | Type     |
+| :------------ | :------- |
 | `newCapacity` | `number` |
 
 #### Returns
@@ -286,13 +286,13 @@ Sets the maximum number of elements that can be stored.
 
 #### Inherited from
 
-CircularView.capacity
+CircleView.capacity
 
 #### Defined in
 
-[circular/circularView.ts:116](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L116)
+circle/circleView.ts:116
 
-___
+---
 
 ### size
 
@@ -310,11 +310,11 @@ the number of elements in the collection.
 
 #### Inherited from
 
-CircularView.size
+CircleView.size
 
 #### Defined in
 
-[circular/circularView.ts:141](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L141)
+circle/circleView.ts:141
 
 ## Methods
 
@@ -338,13 +338,13 @@ an iterable of values.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[[iterator]](CircularStack.md#[iterator])
+[CircleStack](CircleStack.md).[[iterator]](CircleStack.md#[iterator])
 
 #### Defined in
 
-[circular/circularView.ts:226](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L226)
+circle/circleView.ts:226
 
-___
+---
 
 ### back
 
@@ -364,9 +364,9 @@ the last inserted element, or `undefined` if empty.
 
 #### Defined in
 
-[circular/circularDeque.ts:25](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularDeque.ts#L25)
+circle/circleDeque.ts:25
 
-___
+---
 
 ### bottom
 
@@ -386,9 +386,9 @@ the earliest inserted element, or `undefined` if empty.
 
 #### Defined in
 
-[circular/circularDeque.ts:33](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularDeque.ts#L33)
+circle/circleDeque.ts:33
 
-___
+---
 
 ### clear
 
@@ -406,13 +406,13 @@ Remove all elements and resets the collection.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[clear](CircularStack.md#clear)
+[CircleStack](CircleStack.md).[clear](CircleStack.md#clear)
 
 #### Defined in
 
-[circular/circularView.ts:148](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L148)
+circle/circleView.ts:148
 
-___
+---
 
 ### entries
 
@@ -434,13 +434,13 @@ an iterable of [key, value] pairs for every entry.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[entries](CircularStack.md#entries)
+[CircleStack](CircleStack.md).[entries](CircleStack.md#entries)
 
 #### Defined in
 
-[circular/circularView.ts:162](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L162)
+circle/circleView.ts:162
 
-___
+---
 
 ### forEach
 
@@ -452,10 +452,10 @@ Performs the specified action for each element in the collection.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `callbackfn` | (`value`: `T`, `index`: `number`, `collection`: `this`) => `void` | A function that accepts up to three arguments. It is called once per element. |
-| `thisArg?` | `unknown` | An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used. |
+| Name         | Type                                                              | Description                                                                                                    |
+| :----------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- |
+| `callbackfn` | (`value`: `T`, `index`: `number`, `collection`: `this`) => `void` | A function that accepts up to three arguments. It is called once per element.                                  |
+| `thisArg?`   | `unknown`                                                         | An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used. |
 
 #### Returns
 
@@ -467,13 +467,13 @@ Performs the specified action for each element in the collection.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[forEach](CircularStack.md#foreach)
+[CircleStack](CircleStack.md).[forEach](CircleStack.md#foreach)
 
 #### Defined in
 
-[circular/circularView.ts:176](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L176)
+circle/circleView.ts:176
 
-___
+---
 
 ### front
 
@@ -493,13 +493,13 @@ the earliest inserted element, or `undefined` if empty.
 
 #### Inherited from
 
-[CircularQueue](CircularQueue.md).[front](CircularQueue.md#front)
+[CircleQueue](CircleQueue.md).[front](CircleQueue.md#front)
 
 #### Defined in
 
-[circular/circularQueue.ts:20](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularQueue.ts#L20)
+circle/circleQueue.ts:20
 
-___
+---
 
 ### grow
 
@@ -509,8 +509,8 @@ Grow capacity.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name          | Type     | Description      |
+| :------------ | :------- | :--------------- |
 | `newCapacity` | `number` | the new capacity |
 
 #### Returns
@@ -519,13 +519,13 @@ Grow capacity.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[grow](CircularStack.md#grow)
+[CircleStack](CircleStack.md).[grow](CircleStack.md#grow)
 
 #### Defined in
 
-[circular/circularView.ts:261](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L261)
+circle/circleView.ts:261
 
-___
+---
 
 ### has
 
@@ -537,9 +537,9 @@ Determines whether a given element is in the collection.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `value` | `T` | The element to search for |
+| Name    | Type | Description               |
+| :------ | :--- | :------------------------ |
+| `value` | `T`  | The element to search for |
 
 #### Returns
 
@@ -553,13 +553,13 @@ a boolean indicating if `value` was found or not
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[has](CircularStack.md#has)
+[CircleStack](CircleStack.md).[has](CircleStack.md#has)
 
 #### Defined in
 
-[circular/circularView.ts:196](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L196)
+circle/circleView.ts:196
 
-___
+---
 
 ### keys
 
@@ -581,13 +581,13 @@ an iterable of keys.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[keys](CircularStack.md#keys)
+[CircleStack](CircleStack.md).[keys](CircleStack.md#keys)
 
 #### Defined in
 
-[circular/circularView.ts:213](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L213)
+circle/circleView.ts:213
 
-___
+---
 
 ### pop
 
@@ -607,13 +607,13 @@ the last element in the stack, or `undefined` if empty.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[pop](CircularStack.md#pop)
+[CircleStack](CircleStack.md).[pop](CircleStack.md#pop)
 
 #### Defined in
 
-[circular/circularStack.ts:20](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularStack.ts#L20)
+circle/circleStack.ts:20
 
-___
+---
 
 ### push
 
@@ -623,8 +623,8 @@ Inserts new elements at the end of the queue.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type  | Description         |
+| :--------- | :---- | :------------------ |
 | `...elems` | `T`[] | Elements to insert. |
 
 #### Returns
@@ -639,13 +639,13 @@ The overwritten elements, if any.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[push](CircularStack.md#push)
+[CircleStack](CircleStack.md).[push](CircleStack.md#push)
 
 #### Defined in
 
-[circular/circularQueue.ts:31](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularQueue.ts#L31)
+circle/circleQueue.ts:31
 
-___
+---
 
 ### shift
 
@@ -665,13 +665,13 @@ the front element, or `undefined` if empty.
 
 #### Inherited from
 
-[CircularQueue](CircularQueue.md).[shift](CircularQueue.md#shift)
+[CircleQueue](CircleQueue.md).[shift](CircleQueue.md#shift)
 
 #### Defined in
 
-[circular/circularQueue.ts:60](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularQueue.ts#L60)
+circle/circleQueue.ts:60
 
-___
+---
 
 ### shrink
 
@@ -681,8 +681,8 @@ Shrink capacity.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name          | Type     | Description      |
+| :------------ | :------- | :--------------- |
 | `newCapacity` | `number` | the new capacity |
 
 #### Returns
@@ -691,13 +691,13 @@ Shrink capacity.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[shrink](CircularStack.md#shrink)
+[CircleStack](CircleStack.md).[shrink](CircleStack.md#shrink)
 
 #### Defined in
 
-[circular/circularView.ts:285](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L285)
+circle/circleView.ts:285
 
-___
+---
 
 ### toInt
 
@@ -707,8 +707,8 @@ Converts an external index to an internal index
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name  | Type     | Description        |
+| :---- | :------- | :----------------- |
 | `ext` | `number` | The external index |
 
 #### Returns
@@ -719,13 +719,13 @@ The internal index
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[toInt](CircularStack.md#toint)
+[CircleStack](CircleStack.md).[toInt](CircleStack.md#toint)
 
 #### Defined in
 
-[circular/circularView.ts:251](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L251)
+circle/circleView.ts:251
 
-___
+---
 
 ### top
 
@@ -745,13 +745,13 @@ the last inserted element, or `undefined` if empty.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[top](CircularStack.md#top)
+[CircleStack](CircleStack.md).[top](CircleStack.md#top)
 
 #### Defined in
 
-[circular/circularStack.ts:67](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularStack.ts#L67)
+circle/circleStack.ts:67
 
-___
+---
 
 ### unshift
 
@@ -761,8 +761,8 @@ Inserts new elements at the start of the collection.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type  | Description        |
+| :--------- | :---- | :----------------- |
 | `...elems` | `T`[] | Elements to insert |
 
 #### Returns
@@ -777,9 +777,9 @@ The overwritten elements
 
 #### Defined in
 
-[circular/circularDeque.ts:43](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularDeque.ts#L43)
+circle/circleDeque.ts:43
 
-___
+---
 
 ### values
 
@@ -801,13 +801,13 @@ an iterable of values.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[values](CircularStack.md#values)
+[CircleStack](CircleStack.md).[values](CircleStack.md#values)
 
 #### Defined in
 
-[circular/circularView.ts:237](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L237)
+circle/circleView.ts:237
 
-___
+---
 
 ### from
 
@@ -817,16 +817,16 @@ Creates a collection from an iterable object.
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | `T` |
-| `I` | extends typeof [`CircularView`](CircularView.md) |
+| Name | Type                                         |
+| :--- | :------------------------------------------- |
+| `T`  | `T`                                          |
+| `I`  | extends typeof [`CircleView`](CircleView.md) |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `this` | `I` | - |
+| Name       | Type                                    | Description                                    |
+| :--------- | :-------------------------------------- | :--------------------------------------------- |
+| `this`     | `I`                                     | -                                              |
 | `iterable` | `Iterable`\<`T`\> \| `ArrayLike`\<`T`\> | an iterable object to convert to a collection. |
 
 #### Returns
@@ -835,13 +835,13 @@ Creates a collection from an iterable object.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[from](CircularStack.md#from)
+[CircleStack](CircleStack.md).[from](CircleStack.md#from)
 
 #### Defined in
 
-[circular/circularView.ts:81](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L81)
+circle/circleView.ts:81
 
-___
+---
 
 ### of
 
@@ -851,16 +851,16 @@ Creates a collection from a variable number of arguments.
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `I` | extends typeof [`CircularView`](CircularView.md) |
-| `T` | `unknown` |
+| Name | Type                                         |
+| :--- | :------------------------------------------- |
+| `I`  | extends typeof [`CircleView`](CircleView.md) |
+| `T`  | `unknown`                                    |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `this` | `I` | - |
+| Name          | Type  | Description                                      |
+| :------------ | :---- | :----------------------------------------------- |
+| `this`        | `I`   | -                                                |
 | `...elements` | `T`[] | the elements to be inserted into the collection. |
 
 #### Returns
@@ -869,8 +869,8 @@ Creates a collection from a variable number of arguments.
 
 #### Inherited from
 
-[CircularStack](CircularStack.md).[of](CircularStack.md#of)
+[CircleStack](CircleStack.md).[of](CircleStack.md#of)
 
 #### Defined in
 
-[circular/circularView.ts:96](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L96)
+circle/circleView.ts:96

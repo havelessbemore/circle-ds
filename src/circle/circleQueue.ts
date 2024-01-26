@@ -1,9 +1,9 @@
-import { CircularView } from "./circularView";
-import { Stack } from "../types/stack";
+import { CircleView } from "./circleView";
+import { Queue } from "../types/queue";
 
 /**
- * A circular stack is similar to a traditional stack, but uses a fixed-size,
- * circular buffer. When the stack reaches its maximum capacity and a new
+ * A circular queue is similar to a traditional queue, but uses a fixed-size,
+ * circular buffer. When the queue reaches its maximum capacity and a new
  * element is added, the oldest is discarded, thus maintaining its size.
  *
  * This structure efficiently utilizes memory for applications where only the
@@ -11,25 +11,18 @@ import { Stack } from "../types/stack";
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export class CircularStack<T> extends CircularView<T> implements Stack<T> {
+export class CircleQueue<T> extends CircleView<T> implements Queue<T> {
   /**
-   * Removes the last element from the stack and returns it.
+   * Get the element at the front of the queue.
    *
-   * @returns the last element in the stack, or `undefined` if empty.
+   * @returns the earliest inserted element, or `undefined` if empty.
    */
-  pop(): T | undefined {
-    if (this._size < 1) {
-      return undefined;
-    }
-    this.tail = this.toInt(this._size - 1);
-    const value = this.vals[this.tail];
-    this.vals[this.tail] = undefined;
-    --this._size;
-    return value;
+  front(): T | undefined {
+    return this._size <= 0 ? undefined : this.vals[this.head];
   }
 
   /**
-   * Inserts new elements at the end of the stack.
+   * Inserts new elements at the end of the queue.
    *
    * @param elems - Elements to insert.
    *
@@ -60,11 +53,18 @@ export class CircularStack<T> extends CircularView<T> implements Stack<T> {
   }
 
   /**
-   * Get the element at the top of the stack.
+   * Removes the element at the front of the queue.
    *
-   * @returns the last inserted element, or `undefined` if empty.
+   * @returns the front element, or `undefined` if empty.
    */
-  top(): T | undefined {
-    return this._size <= 0 ? undefined : this.vals[this.toInt(this._size - 1)];
+  shift(): T | undefined {
+    if (this._size < 1) {
+      return undefined;
+    }
+    const value = this.vals[this.head];
+    this.vals[this.head] = undefined;
+    this.head = (this.head + 1) % this.vals.length;
+    --this._size;
+    return value;
   }
 }

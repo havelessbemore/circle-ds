@@ -8,7 +8,7 @@
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularDeque<T> extends CircularView<T> implements Deque<T> {
+export declare class CircleDeque<T> extends CircleView<T> implements Deque<T> {
     /**
      * Get the element at the back of the queue.
      *
@@ -31,7 +31,7 @@ export declare class CircularDeque<T> extends CircularView<T> implements Deque<T
     unshift(...elems: T[]): T[];
 }
 
-export declare interface CircularDeque<T> extends CircularQueue<T>, CircularStack<T> {
+export declare interface CircleDeque<T> extends CircleQueue<T>, CircleStack<T> {
 }
 
 /**
@@ -44,7 +44,7 @@ export declare interface CircularDeque<T> extends CircularQueue<T>, CircularStac
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularQueue<T> extends CircularView<T> implements Queue<T> {
+export declare class CircleQueue<T> extends CircleView<T> implements Queue<T> {
     /**
      * Get the element at the front of the queue.
      *
@@ -77,7 +77,7 @@ export declare class CircularQueue<T> extends CircularView<T> implements Queue<T
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularStack<T> extends CircularView<T> implements Stack<T> {
+export declare class CircleStack<T> extends CircleView<T> implements Stack<T> {
     /**
      * Removes the last element from the stack and returns it.
      *
@@ -106,13 +106,13 @@ export declare class CircularStack<T> extends CircularView<T> implements Stack<T
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularView<T> implements Collection<T, number> {
+export declare class CircleView<T> implements Collection<T, number> {
     /* Excluded from this release type: head */
     /* Excluded from this release type: _size */
     /* Excluded from this release type: tail */
     /* Excluded from this release type: vals */
     /**
-     * Capacity defaults to zero and should be updated via {@link CircularView.capacity}.
+     * Capacity defaults to zero and should be updated via {@link CircleView.capacity}.
      */
     constructor();
     /**
@@ -132,13 +132,13 @@ export declare class CircularView<T> implements Collection<T, number> {
      *
      * @param iterable - an iterable object to convert to a collection.
      */
-    static from<T, I extends typeof CircularView>(this: I, iterable: Iterable<T> | ArrayLike<T>): InstanceType<I>;
+    static from<T, I extends typeof CircleView>(this: I, iterable: Iterable<T> | ArrayLike<T>): InstanceType<I>;
     /**
      * Creates a collection from a variable number of arguments.
      *
      * @param elements - the elements to be inserted into the collection.
      */
-    static of<I extends typeof CircularView<T>, T = unknown>(this: I, ...elements: T[]): InstanceType<I>;
+    static of<I extends typeof CircleView<T>, T = unknown>(this: I, ...elements: T[]): InstanceType<I>;
     /**
      * @returns the maximum number of elements that can be stored.
      */

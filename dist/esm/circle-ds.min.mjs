@@ -18,11 +18,11 @@ limitations under the License.
 var n = Object.defineProperty;
 var c = (e, t, s) => t in e ? n(e, t, { enumerable: !0, configurable: !0, writable: !0, value: s }) : e[t] = s;
 var l = (e, t, s) => (c(e, typeof t != "symbol" ? t + "" : t, s), s);
-function u(e) {
+function v(e) {
   return typeof e == "function";
 }
-function v(e) {
-  return u(e == null ? void 0 : e[Symbol.iterator]);
+function f(e) {
+  return v(e == null ? void 0 : e[Symbol.iterator]);
 }
 class o {
   constructor(t, ...s) {
@@ -48,7 +48,7 @@ class o {
     l(this, "vals");
     this.head = 0, this._size = 0, this.tail = 0, this.vals = [];
     const h = arguments.length;
-    h < 1 || (h === 1 && typeof t == "number" ? this.vals.length = t : h === 1 && v(t) ? (this.vals = Array.from(t), this._size = this.vals.length) : (this.vals = s, this.vals.push(t), this._size = this.vals.length, this.tail = this._size - 1, this.head = this.tail));
+    h < 1 || (h === 1 && typeof t == "number" ? this.vals.length = t : h === 1 && f(t) ? (this.vals = Array.from(t), this._size = this.vals.length) : (this.vals = s, this.vals.push(t), this._size = this.vals.length, this.tail = this._size - 1, this.head = this.tail));
   }
   /**
    * Creates a collection from an iterable object.
@@ -205,7 +205,7 @@ class o {
     this._size = Math.min(this._size, t), this.tail = this.head + this._size, this.tail <= t ? (this.tail %= t, this.vals.length = t) : (this.tail %= this.capacity, this.vals = Array.from(this), this.tail = this._size % t, this.head = 0);
   }
 }
-class f extends o {
+class u extends o {
   /**
    * Get the element at the front of the queue.
    *
@@ -330,11 +330,11 @@ class _ extends o {
     return h.reverse();
   }
 }
-d(_, [f, z]);
+d(_, [u, z]);
 export {
-  _ as CircularDeque,
-  f as CircularQueue,
-  z as CircularStack,
-  o as CircularView
+  _ as CircleDeque,
+  u as CircleQueue,
+  z as CircleStack,
+  o as CircleView
 };
 //# sourceMappingURL=circle-ds.min.mjs.map

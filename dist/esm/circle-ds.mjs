@@ -27,7 +27,7 @@ function isFunction(value) {
 function isIterable(value) {
   return isFunction(value == null ? void 0 : value[Symbol.iterator]);
 }
-class CircularView {
+class CircleView {
   constructor(capacity, ...items) {
     /**
      * The index representing the first element in the collection.
@@ -264,7 +264,7 @@ class CircularView {
     }
   }
 }
-class CircularQueue extends CircularView {
+class CircleQueue extends CircleView {
   /**
    * Get the element at the front of the queue.
    *
@@ -316,7 +316,7 @@ class CircularQueue extends CircularView {
     return value;
   }
 }
-class CircularStack extends CircularView {
+class CircleStack extends CircleView {
   /**
    * Removes the last element from the stack and returns it.
    *
@@ -377,7 +377,7 @@ function applyMixins(ctor, mixins) {
     }
   }
 }
-class CircularDeque extends CircularView {
+class CircleDeque extends CircleView {
   /**
    * Get the element at the back of the queue.
    *
@@ -421,11 +421,11 @@ class CircularDeque extends CircularView {
     return out.reverse();
   }
 }
-applyMixins(CircularDeque, [CircularQueue, CircularStack]);
+applyMixins(CircleDeque, [CircleQueue, CircleStack]);
 export {
-  CircularDeque,
-  CircularQueue,
-  CircularStack,
-  CircularView
+  CircleDeque,
+  CircleQueue,
+  CircleStack,
+  CircleView
 };
 //# sourceMappingURL=circle-ds.mjs.map

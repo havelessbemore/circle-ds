@@ -6,10 +6,10 @@
 
 ### Classes
 
-- [CircularDeque](classes/CircularDeque.md)
-- [CircularQueue](classes/CircularQueue.md)
-- [CircularStack](classes/CircularStack.md)
-- [CircularView](classes/CircularView.md)
+- [CircleDeque](classes/CircleDeque.md)
+- [CircleQueue](classes/CircleQueue.md)
+- [CircleStack](classes/CircleStack.md)
+- [CircleView](classes/CircleView.md)
 
 ### Interfaces
 

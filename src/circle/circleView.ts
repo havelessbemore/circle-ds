@@ -7,7 +7,7 @@ import { Collection } from "../types/collection";
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export class CircularView<T> implements Collection<T, number> {
+export class CircleView<T> implements Collection<T, number> {
   /**
    * The index representing the first element in the collection.
    * @internal
@@ -33,7 +33,7 @@ export class CircularView<T> implements Collection<T, number> {
   protected vals: (T | undefined)[];
 
   /**
-   * Capacity defaults to zero and should be updated via {@link CircularView.capacity}.
+   * Capacity defaults to zero and should be updated via {@link CircleView.capacity}.
    */
   constructor();
   /**
@@ -78,7 +78,7 @@ export class CircularView<T> implements Collection<T, number> {
    *
    * @param iterable - an iterable object to convert to a collection.
    */
-  static from<T, I extends typeof CircularView>(
+  static from<T, I extends typeof CircleView>(
     this: I,
     iterable: Iterable<T> | ArrayLike<T>
   ): InstanceType<I> {
@@ -93,7 +93,7 @@ export class CircularView<T> implements Collection<T, number> {
    *
    * @param elements - the elements to be inserted into the collection.
    */
-  static of<I extends typeof CircularView<T>, T = unknown>(
+  static of<I extends typeof CircleView<T>, T = unknown>(
     this: I,
     ...elements: T[]
   ): InstanceType<I> {

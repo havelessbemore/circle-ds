@@ -1,6 +1,6 @@
-import { CircularView } from "./circularView";
-import { CircularQueue } from "./circularQueue";
-import { CircularStack } from "./circularStack";
+import { CircleView } from "./circleView";
+import { CircleQueue } from "./circleQueue";
+import { CircleStack } from "./circleStack";
 import { Deque } from "../types/deque";
 import { applyMixins } from "../utils/mixins";
 
@@ -16,7 +16,7 @@ import { applyMixins } from "../utils/mixins";
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export class CircularDeque<T> extends CircularView<T> implements Deque<T> {
+export class CircleDeque<T> extends CircleView<T> implements Deque<T> {
   /**
    * Get the element at the back of the queue.
    *
@@ -63,5 +63,5 @@ export class CircularDeque<T> extends CircularView<T> implements Deque<T> {
   }
 }
 
-export interface CircularDeque<T> extends CircularQueue<T>, CircularStack<T> {}
-applyMixins(CircularDeque, [CircularQueue, CircularStack]);
+export interface CircleDeque<T> extends CircleQueue<T>, CircleStack<T> {}
+applyMixins(CircleDeque, [CircleQueue, CircleStack]);

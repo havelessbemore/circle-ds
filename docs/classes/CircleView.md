@@ -1,6 +1,6 @@
-[circle-ds](../README.md) / [Exports](../modules.md) / CircularView
+[circle-ds](../README.md) / [Exports](../modules.md) / CircleView
 
-# Class: CircularView\<T\>
+# Class: CircleView\<T\>
 
 A circular view is a fixed-size, read-only, circular array used to
 store elements.
@@ -12,18 +12,18 @@ store elements.
 ## Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 ## Hierarchy
 
-- **`CircularView`**
+- **`CircleView`**
 
-  ↳ [`CircularDeque`](CircularDeque.md)
+  ↳ [`CircleDeque`](CircleDeque.md)
 
-  ↳ [`CircularQueue`](CircularQueue.md)
+  ↳ [`CircleQueue`](CircleQueue.md)
 
-  ↳ [`CircularStack`](CircularStack.md)
+  ↳ [`CircleStack`](CircleStack.md)
 
 ## Implements
 
@@ -33,122 +33,122 @@ store elements.
 
 ### Constructors
 
-- [constructor](CircularView.md#constructor)
+- [constructor](CircleView.md#constructor)
 
 ### Properties
 
-- [\_size](CircularView.md#_size)
-- [head](CircularView.md#head)
-- [tail](CircularView.md#tail)
-- [vals](CircularView.md#vals)
+- [\_size](CircleView.md#_size)
+- [head](CircleView.md#head)
+- [tail](CircleView.md#tail)
+- [vals](CircleView.md#vals)
 
 ### Accessors
 
-- [capacity](CircularView.md#capacity)
-- [size](CircularView.md#size)
+- [capacity](CircleView.md#capacity)
+- [size](CircleView.md#size)
 
 ### Methods
 
-- [[iterator]](CircularView.md#[iterator])
-- [clear](CircularView.md#clear)
-- [entries](CircularView.md#entries)
-- [forEach](CircularView.md#foreach)
-- [grow](CircularView.md#grow)
-- [has](CircularView.md#has)
-- [keys](CircularView.md#keys)
-- [shrink](CircularView.md#shrink)
-- [toInt](CircularView.md#toint)
-- [values](CircularView.md#values)
-- [from](CircularView.md#from)
-- [of](CircularView.md#of)
+- [[iterator]](CircleView.md#[iterator])
+- [clear](CircleView.md#clear)
+- [entries](CircleView.md#entries)
+- [forEach](CircleView.md#foreach)
+- [grow](CircleView.md#grow)
+- [has](CircleView.md#has)
+- [keys](CircleView.md#keys)
+- [shrink](CircleView.md#shrink)
+- [toInt](CircleView.md#toint)
+- [values](CircleView.md#values)
+- [from](CircleView.md#from)
+- [of](CircleView.md#of)
 
 ## Constructors
 
 ### constructor
 
-• **new CircularView**\<`T`\>(): [`CircularView`](CircularView.md)\<`T`\>
+• **new CircleView**\<`T`\>(): [`CircleView`](CircleView.md)\<`T`\>
 
-Capacity defaults to zero and should be updated via [CircularView.capacity](CircularView.md#capacity).
+Capacity defaults to zero and should be updated via [CircleView.capacity](CircleView.md#capacity).
 
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Returns
 
-[`CircularView`](CircularView.md)\<`T`\>
+[`CircleView`](CircleView.md)\<`T`\>
 
 #### Defined in
 
-[circular/circularView.ts:38](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L38)
+circle/circleView.ts:38
 
-• **new CircularView**\<`T`\>(`capacity`): [`CircularView`](CircularView.md)\<`T`\>
+• **new CircleView**\<`T`\>(`capacity`): [`CircleView`](CircleView.md)\<`T`\>
 
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type     | Description           |
+| :--------- | :------- | :-------------------- |
 | `capacity` | `number` | the maximum capacity. |
 
 #### Returns
 
-[`CircularView`](CircularView.md)\<`T`\>
+[`CircleView`](CircleView.md)\<`T`\>
 
 #### Defined in
 
-[circular/circularView.ts:42](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L42)
+circle/circleView.ts:42
 
-• **new CircularView**\<`T`\>(`items`): [`CircularView`](CircularView.md)\<`T`\>
+• **new CircleView**\<`T`\>(`items`): [`CircleView`](CircleView.md)\<`T`\>
 
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name    | Type              | Description                           |
+| :------ | :---------------- | :------------------------------------ |
 | `items` | `Iterable`\<`T`\> | the items to store in the collection. |
 
 #### Returns
 
-[`CircularView`](CircularView.md)\<`T`\>
+[`CircleView`](CircleView.md)\<`T`\>
 
 #### Defined in
 
-[circular/circularView.ts:46](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L46)
+circle/circleView.ts:46
 
-• **new CircularView**\<`T`\>(`...items`): [`CircularView`](CircularView.md)\<`T`\>
+• **new CircleView**\<`T`\>(`...items`): [`CircleView`](CircleView.md)\<`T`\>
 
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type  | Description                           |
+| :--------- | :---- | :------------------------------------ |
 | `...items` | `T`[] | the items to store in the collection. |
 
 #### Returns
 
-[`CircularView`](CircularView.md)\<`T`\>
+[`CircleView`](CircleView.md)\<`T`\>
 
 #### Defined in
 
-[circular/circularView.ts:50](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L50)
+circle/circleView.ts:50
 
 ## Properties
 
@@ -160,9 +160,9 @@ The number of elements in the collection.
 
 #### Defined in
 
-[circular/circularView.ts:21](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L21)
+circle/circleView.ts:21
 
-___
+---
 
 ### head
 
@@ -172,9 +172,9 @@ The index representing the first element in the collection.
 
 #### Defined in
 
-[circular/circularView.ts:15](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L15)
+circle/circleView.ts:15
 
-___
+---
 
 ### tail
 
@@ -184,9 +184,9 @@ The index one more than the last element in the collection.
 
 #### Defined in
 
-[circular/circularView.ts:27](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L27)
+circle/circleView.ts:27
 
-___
+---
 
 ### vals
 
@@ -196,7 +196,7 @@ The values in the collection.
 
 #### Defined in
 
-[circular/circularView.ts:33](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L33)
+circle/circleView.ts:33
 
 ## Accessors
 
@@ -216,7 +216,7 @@ the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circular/circularView.ts:109](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L109)
+circle/circleView.ts:109
 
 • `set` **capacity**(`newCapacity`): `void`
 
@@ -224,8 +224,8 @@ Sets the maximum number of elements that can be stored.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name          | Type     |
+| :------------ | :------- |
 | `newCapacity` | `number` |
 
 #### Returns
@@ -238,9 +238,9 @@ Sets the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circular/circularView.ts:116](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L116)
+circle/circleView.ts:116
 
-___
+---
 
 ### size
 
@@ -258,7 +258,7 @@ the number of elements in the collection.
 
 #### Defined in
 
-[circular/circularView.ts:141](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L141)
+circle/circleView.ts:141
 
 ## Methods
 
@@ -282,9 +282,9 @@ an iterable of values.
 
 #### Defined in
 
-[circular/circularView.ts:226](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L226)
+circle/circleView.ts:226
 
-___
+---
 
 ### clear
 
@@ -302,9 +302,9 @@ Remove all elements and resets the collection.
 
 #### Defined in
 
-[circular/circularView.ts:148](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L148)
+circle/circleView.ts:148
 
-___
+---
 
 ### entries
 
@@ -326,9 +326,9 @@ an iterable of [key, value] pairs for every entry.
 
 #### Defined in
 
-[circular/circularView.ts:162](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L162)
+circle/circleView.ts:162
 
-___
+---
 
 ### forEach
 
@@ -340,10 +340,10 @@ Performs the specified action for each element in the collection.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `callbackfn` | (`value`: `T`, `index`: `number`, `collection`: `this`) => `void` | A function that accepts up to three arguments. It is called once per element. |
-| `thisArg?` | `unknown` | An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used. |
+| Name         | Type                                                              | Description                                                                                                    |
+| :----------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- |
+| `callbackfn` | (`value`: `T`, `index`: `number`, `collection`: `this`) => `void` | A function that accepts up to three arguments. It is called once per element.                                  |
+| `thisArg?`   | `unknown`                                                         | An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used. |
 
 #### Returns
 
@@ -355,9 +355,9 @@ Performs the specified action for each element in the collection.
 
 #### Defined in
 
-[circular/circularView.ts:176](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L176)
+circle/circleView.ts:176
 
-___
+---
 
 ### grow
 
@@ -367,8 +367,8 @@ Grow capacity.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name          | Type     | Description      |
+| :------------ | :------- | :--------------- |
 | `newCapacity` | `number` | the new capacity |
 
 #### Returns
@@ -377,9 +377,9 @@ Grow capacity.
 
 #### Defined in
 
-[circular/circularView.ts:261](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L261)
+circle/circleView.ts:261
 
-___
+---
 
 ### has
 
@@ -391,9 +391,9 @@ Determines whether a given element is in the collection.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `value` | `T` | The element to search for |
+| Name    | Type | Description               |
+| :------ | :--- | :------------------------ |
+| `value` | `T`  | The element to search for |
 
 #### Returns
 
@@ -407,9 +407,9 @@ a boolean indicating if `value` was found or not
 
 #### Defined in
 
-[circular/circularView.ts:196](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L196)
+circle/circleView.ts:196
 
-___
+---
 
 ### keys
 
@@ -431,9 +431,9 @@ an iterable of keys.
 
 #### Defined in
 
-[circular/circularView.ts:213](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L213)
+circle/circleView.ts:213
 
-___
+---
 
 ### shrink
 
@@ -443,8 +443,8 @@ Shrink capacity.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name          | Type     | Description      |
+| :------------ | :------- | :--------------- |
 | `newCapacity` | `number` | the new capacity |
 
 #### Returns
@@ -453,9 +453,9 @@ Shrink capacity.
 
 #### Defined in
 
-[circular/circularView.ts:285](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L285)
+circle/circleView.ts:285
 
-___
+---
 
 ### toInt
 
@@ -465,8 +465,8 @@ Converts an external index to an internal index
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name  | Type     | Description        |
+| :---- | :------- | :----------------- |
 | `ext` | `number` | The external index |
 
 #### Returns
@@ -477,9 +477,9 @@ The internal index
 
 #### Defined in
 
-[circular/circularView.ts:251](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L251)
+circle/circleView.ts:251
 
-___
+---
 
 ### values
 
@@ -501,9 +501,9 @@ an iterable of values.
 
 #### Defined in
 
-[circular/circularView.ts:237](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L237)
+circle/circleView.ts:237
 
-___
+---
 
 ### from
 
@@ -513,16 +513,16 @@ Creates a collection from an iterable object.
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | `T` |
-| `I` | extends typeof [`CircularView`](CircularView.md) |
+| Name | Type                                         |
+| :--- | :------------------------------------------- |
+| `T`  | `T`                                          |
+| `I`  | extends typeof [`CircleView`](CircleView.md) |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `this` | `I` | - |
+| Name       | Type                                    | Description                                    |
+| :--------- | :-------------------------------------- | :--------------------------------------------- |
+| `this`     | `I`                                     | -                                              |
 | `iterable` | `Iterable`\<`T`\> \| `ArrayLike`\<`T`\> | an iterable object to convert to a collection. |
 
 #### Returns
@@ -531,9 +531,9 @@ Creates a collection from an iterable object.
 
 #### Defined in
 
-[circular/circularView.ts:81](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L81)
+circle/circleView.ts:81
 
-___
+---
 
 ### of
 
@@ -543,16 +543,16 @@ Creates a collection from a variable number of arguments.
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `I` | extends typeof [`CircularView`](CircularView.md) |
-| `T` | `unknown` |
+| Name | Type                                         |
+| :--- | :------------------------------------------- |
+| `I`  | extends typeof [`CircleView`](CircleView.md) |
+| `T`  | `unknown`                                    |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `this` | `I` | - |
+| Name          | Type  | Description                                      |
+| :------------ | :---- | :----------------------------------------------- |
+| `this`        | `I`   | -                                                |
 | `...elements` | `T`[] | the elements to be inserted into the collection. |
 
 #### Returns
@@ -561,4 +561,4 @@ Creates a collection from a variable number of arguments.
 
 #### Defined in
 
-[circular/circularView.ts:96](https://github.com/havelessbemore/circle-ds/blob/8e638f7/src/circular/circularView.ts#L96)
+circle/circleView.ts:96
