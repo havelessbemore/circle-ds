@@ -132,13 +132,13 @@ export declare class CircleView<T> implements Collection<T, number> {
      *
      * @param iterable - an iterable object to convert to a collection.
      */
-    static from<T, I extends typeof CircleView>(this: I, iterable: Iterable<T> | ArrayLike<T>): InstanceType<I>;
+    static from<T, I extends typeof CircleView<T>>(this: I, iterable: Iterable<T> | ArrayLike<T>): InstanceType<I>;
     /**
      * Creates a collection from a variable number of arguments.
      *
      * @param elements - the elements to be inserted into the collection.
      */
-    static of<I extends typeof CircleView<T>, T = unknown>(this: I, ...elements: T[]): InstanceType<I>;
+    static of<T, I extends typeof CircleView<T>>(this: I, ...elements: T[]): InstanceType<I>;
     /**
      * @returns the maximum number of elements that can be stored.
      */

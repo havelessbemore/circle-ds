@@ -78,7 +78,7 @@ export class CircleView<T> implements Collection<T, number> {
    *
    * @param iterable - an iterable object to convert to a collection.
    */
-  static from<T, I extends typeof CircleView>(
+  static from<T, I extends typeof CircleView<T>>(
     this: I,
     iterable: Iterable<T> | ArrayLike<T>
   ): InstanceType<I> {
@@ -93,7 +93,7 @@ export class CircleView<T> implements Collection<T, number> {
    *
    * @param elements - the elements to be inserted into the collection.
    */
-  static of<I extends typeof CircleView<T>, T = unknown>(
+  static of<T, I extends typeof CircleView<T>>(
     this: I,
     ...elements: T[]
   ): InstanceType<I> {

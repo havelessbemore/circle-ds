@@ -23,7 +23,7 @@ describe(CircleView.name, () => {
     });
 
     it("creates an empty queue from an empty iterable", () => {
-      const queue = CircleView.from([]);
+      const queue = CircleView.from([] as unknown[]);
       expect(queue.size).toBe(0);
       expect([...queue.values()]).toEqual([]);
     });
