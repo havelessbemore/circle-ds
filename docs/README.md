@@ -29,7 +29,7 @@ yarn install circle-ds
 
 ## API
 
-Try it out on [JSFiddle](https://jsfiddle.net/n1pefc54/1/).
+Try it out on [JSFiddle](https://jsfiddle.net/8cv6n9y0).
 
 ### [CircleStack](./docs/classes/CircleStack.md)
 
