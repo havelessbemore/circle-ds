@@ -3,7 +3,6 @@
 A suite of circular data structures, including CircleStack, CircleQueue, and CircleDeque. Use circular buffers with ease and supported by a variety of operations.
 
 [![Version](https://img.shields.io/npm/v/circle-ds.svg)](https://www.npmjs.com/package/circle-ds)
-[![Downloads](https://img.shields.io/npm/dm/circle-ds.svg)](https://www.npmjs.com/package/circle-ds)
 [![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)](https://github.com/havelessbemore/circle-ds/graphs/commit-activity)
 [![License](https://img.shields.io/github/license/havelessbemore/circle-ds.svg)](https://github.com/havelessbemore/circle-ds/blob/master/LICENSE)
 [![codecov](https://codecov.io/gh/havelessbemore/circle-ds/graph/badge.svg?token=F362G7C9U0)](https://codecov.io/gh/havelessbemore/circle-ds)
