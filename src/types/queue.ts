@@ -1,4 +1,4 @@
-import { Collection } from "./collection";
+import { IndexedCollection } from "./indexedCollection";
 
 /*
 export interface List<V> extends Deque<V> {
@@ -20,7 +20,8 @@ export interface List<V> extends Deque<V> {
 }
 */
 
-export interface Queue<V> extends Collection<V, number> {
+export interface Queue<V> extends IndexedCollection<V> {
+  first(): V | undefined;
   front(): V | undefined;
   push(...values: V[]): void;
   shift(): V | undefined;

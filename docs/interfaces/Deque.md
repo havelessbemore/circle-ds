@@ -5,8 +5,8 @@
 ## Type parameters
 
 | Name |
-| :------ |
-| `V` |
+| :--- |
+| `V`  |
 
 ## Hierarchy
 
@@ -59,7 +59,7 @@
 
 [types/collection.ts:10](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L10)
 
-___
+---
 
 ### size
 
@@ -91,7 +91,7 @@ ___
 
 [types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L13)
 
-___
+---
 
 ### back
 
@@ -105,7 +105,7 @@ ___
 
 [types/deque.ts:5](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/deque.ts#L5)
 
-___
+---
 
 ### bottom
 
@@ -119,7 +119,7 @@ ___
 
 [types/deque.ts:6](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/deque.ts#L6)
 
-___
+---
 
 ### clear
 
@@ -137,7 +137,7 @@ ___
 
 [types/collection.ts:2](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L2)
 
-___
+---
 
 ### entries
 
@@ -155,7 +155,7 @@ ___
 
 [types/collection.ts:3](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L3)
 
-___
+---
 
 ### forEach
 
@@ -163,10 +163,10 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name         | Type                                                            |
+| :----------- | :-------------------------------------------------------------- |
 | `callbackfn` | (`value`: `V`, `key`: `number`, `collection`: `this`) => `void` |
-| `thisArg?` | `unknown` |
+| `thisArg?`   | `unknown`                                                       |
 
 #### Returns
 
@@ -180,7 +180,7 @@ ___
 
 [types/collection.ts:4](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L4)
 
-___
+---
 
 ### front
 
@@ -198,7 +198,7 @@ ___
 
 [types/queue.ts:24](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/queue.ts#L24)
 
-___
+---
 
 ### has
 
@@ -206,9 +206,9 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `V` |
+| Name    | Type |
+| :------ | :--- |
+| `value` | `V`  |
 
 #### Returns
 
@@ -222,7 +222,7 @@ ___
 
 [types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L8)
 
-___
+---
 
 ### keys
 
@@ -240,7 +240,7 @@ ___
 
 [types/collection.ts:9](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L9)
 
-___
+---
 
 ### pop
 
@@ -258,7 +258,7 @@ ___
 
 [types/stack.ts:4](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/stack.ts#L4)
 
-___
+---
 
 ### push
 
@@ -266,8 +266,8 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name        | Type  |
+| :---------- | :---- |
 | `...values` | `V`[] |
 
 #### Returns
@@ -282,7 +282,7 @@ ___
 
 [types/queue.ts:25](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/queue.ts#L25)
 
-___
+---
 
 ### shift
 
@@ -300,7 +300,7 @@ ___
 
 [types/queue.ts:26](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/queue.ts#L26)
 
-___
+---
 
 ### top
 
@@ -318,7 +318,7 @@ ___
 
 [types/stack.ts:6](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/stack.ts#L6)
 
-___
+---
 
 ### unshift
 
@@ -326,8 +326,8 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name        | Type  |
+| :---------- | :---- |
 | `...values` | `V`[] |
 
 #### Returns
@@ -338,7 +338,7 @@ ___
 
 [types/deque.ts:7](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/deque.ts#L7)
 
-___
+---
 
 ### values
 

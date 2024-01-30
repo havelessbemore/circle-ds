@@ -1,8 +1,8 @@
-import { CircleView } from "./circleView";
 import { CircleQueue } from "./circleQueue";
 import { CircleStack } from "./circleStack";
 import { Deque } from "../types/deque";
 import { applyMixins } from "../utils/mixins";
+import { ArrayCore } from "./arrayCore";
 
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 
@@ -16,7 +16,7 @@ import { applyMixins } from "../utils/mixins";
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export class CircleDeque<T> extends CircleView<T> implements Deque<T> {
+export class CircleDeque<T> extends ArrayCore<T> implements Deque<T> {
   /**
    * Get the element at the back of the queue.
    *

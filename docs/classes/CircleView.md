@@ -12,8 +12,8 @@ store elements.
 ## Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 ## Hierarchy
 
@@ -63,8 +63,8 @@ Capacity defaults to zero and should be updated via [CircleView.capacity](Circle
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Returns
 
@@ -79,13 +79,13 @@ Capacity defaults to zero and should be updated via [CircleView.capacity](Circle
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type     | Description           |
+| :--------- | :------- | :-------------------- |
 | `capacity` | `number` | the maximum capacity. |
 
 #### Returns
@@ -101,13 +101,13 @@ Capacity defaults to zero and should be updated via [CircleView.capacity](Circle
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name    | Type              | Description                           |
+| :------ | :---------------- | :------------------------------------ |
 | `items` | `Iterable`\<`T`\> | the items to store in the collection. |
 
 #### Returns
@@ -123,13 +123,13 @@ Capacity defaults to zero and should be updated via [CircleView.capacity](Circle
 #### Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name       | Type  | Description                           |
+| :--------- | :---- | :------------------------------------ |
 | `...items` | `T`[] | the items to store in the collection. |
 
 #### Returns
@@ -166,8 +166,8 @@ Sets the maximum number of elements that can be stored.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name          | Type     |
+| :------------ | :------- |
 | `newCapacity` | `number` |
 
 #### Returns
@@ -182,7 +182,7 @@ Sets the maximum number of elements that can be stored.
 
 [circle/circleView.ts:116](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/circle/circleView.ts#L116)
 
-___
+---
 
 ### size
 
@@ -226,7 +226,7 @@ an iterable of values.
 
 [circle/circleView.ts:226](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/circle/circleView.ts#L226)
 
-___
+---
 
 ### clear
 
@@ -246,7 +246,7 @@ Remove all elements and resets the collection.
 
 [circle/circleView.ts:148](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/circle/circleView.ts#L148)
 
-___
+---
 
 ### entries
 
@@ -270,7 +270,7 @@ an iterable of [key, value] pairs for every entry.
 
 [circle/circleView.ts:162](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/circle/circleView.ts#L162)
 
-___
+---
 
 ### forEach
 
@@ -282,10 +282,10 @@ Performs the specified action for each element in the collection.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `callbackfn` | (`value`: `T`, `index`: `number`, `collection`: `this`) => `void` | A function that accepts up to three arguments. It is called once per element. |
-| `thisArg?` | `unknown` | An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used. |
+| Name         | Type                                                              | Description                                                                                                    |
+| :----------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- |
+| `callbackfn` | (`value`: `T`, `index`: `number`, `collection`: `this`) => `void` | A function that accepts up to three arguments. It is called once per element.                                  |
+| `thisArg?`   | `unknown`                                                         | An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used. |
 
 #### Returns
 
@@ -299,7 +299,7 @@ Performs the specified action for each element in the collection.
 
 [circle/circleView.ts:176](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/circle/circleView.ts#L176)
 
-___
+---
 
 ### has
 
@@ -311,9 +311,9 @@ Determines whether a given element is in the collection.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `value` | `T` | The element to search for |
+| Name    | Type | Description               |
+| :------ | :--- | :------------------------ |
+| `value` | `T`  | The element to search for |
 
 #### Returns
 
@@ -329,7 +329,7 @@ a boolean indicating if `value` was found or not
 
 [circle/circleView.ts:196](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/circle/circleView.ts#L196)
 
-___
+---
 
 ### keys
 
@@ -353,7 +353,7 @@ an iterable of keys.
 
 [circle/circleView.ts:213](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/circle/circleView.ts#L213)
 
-___
+---
 
 ### values
 
@@ -377,7 +377,7 @@ an iterable of values.
 
 [circle/circleView.ts:237](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/circle/circleView.ts#L237)
 
-___
+---
 
 ### from
 
@@ -387,16 +387,16 @@ Creates a collection from an iterable object.
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | `T` |
-| `I` | extends typeof [`CircleView`](CircleView.md) |
+| Name | Type                                         |
+| :--- | :------------------------------------------- |
+| `T`  | `T`                                          |
+| `I`  | extends typeof [`CircleView`](CircleView.md) |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `this` | `I` | - |
+| Name       | Type                                    | Description                                    |
+| :--------- | :-------------------------------------- | :--------------------------------------------- |
+| `this`     | `I`                                     | -                                              |
 | `iterable` | `Iterable`\<`T`\> \| `ArrayLike`\<`T`\> | an iterable object to convert to a collection. |
 
 #### Returns
@@ -407,7 +407,7 @@ Creates a collection from an iterable object.
 
 [circle/circleView.ts:81](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/circle/circleView.ts#L81)
 
-___
+---
 
 ### of
 
@@ -417,16 +417,16 @@ Creates a collection from a variable number of arguments.
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | `T` |
-| `I` | extends typeof [`CircleView`](CircleView.md) |
+| Name | Type                                         |
+| :--- | :------------------------------------------- |
+| `T`  | `T`                                          |
+| `I`  | extends typeof [`CircleView`](CircleView.md) |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `this` | `I` | - |
+| Name          | Type  | Description                                      |
+| :------------ | :---- | :----------------------------------------------- |
+| `this`        | `I`   | -                                                |
 | `...elements` | `T`[] | the elements to be inserted into the collection. |
 
 #### Returns

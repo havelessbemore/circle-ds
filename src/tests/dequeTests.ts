@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { Deque } from "./deque";
+import { Deque } from "../types/deque";
 import { Constructor } from "../utils/mixins";
 
-import { tests as collectionTests } from "./collectionTests";
+import { tests as collectionTests } from "./indexedCollectionTests";
 import { tests as queueTests } from "./queueTests";
 import { tests as stackTests } from "./stackTests";
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { tests } from "../types/queueTests";
+import { tests } from "../tests/queueTests";
 import { CircleQueue } from "./circleQueue";
 
 for (const name of Object.keys(tests)) {
@@ -24,7 +24,7 @@ describe(CircleQueue.name, () => {
     });
 
     it("creates an empty queue from an empty iterable", () => {
-      const queue = CircleQueue.from([]);
+      const queue = CircleQueue.from([] as unknown[]);
       expect(queue.size).toBe(0);
       expect([...queue.values()]).toEqual([]);
     });

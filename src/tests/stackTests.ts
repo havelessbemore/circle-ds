@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { Stack } from "./stack";
+import { Stack } from "../types/stack";
 import { Constructor } from "../utils/mixins";
-import { tests as collectionTests } from "./collectionTests";
+import { tests as collectionTests } from "./indexedCollectionTests";
 
 export const tests: {
   [key: string]: (ctor: Constructor<Stack<unknown>>) => void;
@@ -96,10 +96,12 @@ export function test(ctor: Constructor<Stack<any>>): void {
         const stack = gen<number>(1, 2, 3, 4, 5);
         stack.push(6);
         stack.capacity = 3;
-        stack.push(10);
         expect(stack.capacity).toBe(3);
         expect(stack.size).toBe(3);
-        expect([...stack.values()]).toEqual([3, 4, 10]);
+        expect([...stack.values()]).toEqual([4, 5, 6]);
+        stack.push(10);
+        expect(stack.capacity).toBe(3);
+        expect([...stack.values()]).toEqual([5, 6, 10]);
       });
 
       it("shrink correctly when greatly rotated", () => {
@@ -109,7 +111,7 @@ export function test(ctor: Constructor<Stack<any>>): void {
         stack.push(10);
         expect(stack.capacity).toBe(3);
         expect(stack.size).toBe(3);
-        expect([...stack.values()]).toEqual([6, 7, 10]);
+        expect([...stack.values()]).toEqual([8, 9, 10]);
       });
     });
 
@@ -117,6 +119,9 @@ export function test(ctor: Constructor<Stack<any>>): void {
       it("allows adding elements after clearing", () => {
         const stack = gen<number>(1, 2, 3);
         stack.clear();
+        expect(stack.size).toBe(0);
+        expect(stack.capacity).toBe(3);
+        expect([...stack.values()]).toEqual([]);
         stack.push(4);
         expect(stack.size).toBe(1);
         expect([...stack.values()]).toEqual([4]);
@@ -280,6 +285,36 @@ export function test(ctor: Constructor<Stack<any>>): void {
         stack.push(3, 4);
         stack.pop();
         expect([...stack.keys()]).toEqual([0, 1]);
+      });
+    });
+
+    describe("last()", () => {
+      it("returns the last element in a non-empty stack", () => {
+        const stack = gen<number>(1, 2, 3);
+        expect(stack.last()).toBe(3);
+      });
+
+      it("returns undefined for an empty stack", () => {
+        const stack = gen<number>(3);
+        expect(stack.last()).toBeUndefined();
+      });
+
+      it("does not modify the stack", () => {
+        const stack = gen<number>(1, 2, 3);
+        const initialSize = stack.size;
+        stack.last();
+        expect(stack.size).toBe(initialSize);
+        expect([...stack.values()]).toEqual([1, 2, 3]);
+      });
+
+      it("reflects the correct last element after modifications", () => {
+        const stack = gen<number>(3);
+        stack.push(1);
+        expect(stack.last()).toBe(1);
+        stack.push(2);
+        expect(stack.last()).toBe(2);
+        stack.pop();
+        expect(stack.last()).toBe(1);
       });
     });
 

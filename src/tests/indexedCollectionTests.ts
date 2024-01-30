@@ -1,16 +1,16 @@
 import { describe, expect, it, vi } from "vitest";
 import { Constructor } from "../utils/mixins";
-import { Collection } from "./collection";
+import { IndexedCollection } from "../types/indexedCollection";
 
 export const tests: {
-  [key: string]: (ctor: Constructor<Collection<unknown, unknown>>) => void;
+  [key: string]: (ctor: Constructor<IndexedCollection<unknown>>) => void;
 } = Object.assign({
-  collection: test,
+  indexedCollection: test,
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function test(ctor: Constructor<Collection<any, any>>): void {
-  function gen<V, K = V>(...args: unknown[]): Collection<V, K> {
+export function test(ctor: Constructor<IndexedCollection<any>>): void {
+  function gen<V>(...args: unknown[]): IndexedCollection<V> {
     return new ctor(...args);
   }
 
@@ -56,7 +56,7 @@ export function test(ctor: Constructor<Collection<any, any>>): void {
       });
 
       it("accepts an element", () => {
-        let obj!: Collection<unknown, unknown>;
+        let obj!: IndexedCollection<unknown>;
         expect(() => (obj = gen(BigInt(12)))).not.toThrow();
         expect(obj.capacity).toEqual(1);
         expect([...obj.values()]).toEqual([BigInt(12)]);
@@ -183,7 +183,7 @@ export function test(ctor: Constructor<Collection<any, any>>): void {
         const queue = gen<number>(1, 2, 3, 4, 5);
         queue.capacity = 3;
         expect(queue.capacity).toBe(3);
-        expect([...queue.values()]).toEqual([1, 2, 3]);
+        expect([...queue.values()]).toEqual([3, 4, 5]);
       });
 
       it("handles capacity shrink for an empty queue", () => {

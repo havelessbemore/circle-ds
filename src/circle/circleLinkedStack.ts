@@ -1,5 +1,5 @@
 import { Stack } from "../types/stack";
-import { ArrayCore } from "./arrayCore";
+import { LinkedListCore } from "./linkedListCore";
 
 /**
  * A circular stack is similar to a traditional stack, but uses a fixed-size,
@@ -11,7 +11,10 @@ import { ArrayCore } from "./arrayCore";
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export class CircleStack<T> extends ArrayCore<T> implements Stack<T> {
+export class CircleLinkedStack<T>
+  extends LinkedListCore<T>
+  implements Stack<T>
+{
   /**
    * Get the last element pushed onto the stack.
    *
@@ -20,7 +23,7 @@ export class CircleStack<T> extends ArrayCore<T> implements Stack<T> {
    * @returns the last element, or `undefined` if empty.
    */
   last(): T | undefined {
-    return this._size <= 0 ? undefined : this.vals[this.toInt(this._size - 1)];
+    return this.root.prev.value;
   }
 
   /**
@@ -32,11 +35,11 @@ export class CircleStack<T> extends ArrayCore<T> implements Stack<T> {
     if (this._size < 1) {
       return undefined;
     }
-    this.tail = this.toInt(this._size - 1);
-    const value = this.vals[this.tail];
-    this.vals[this.tail] = undefined;
+    const node = this.root.prev;
+    this.root.prev = node.prev;
+    node.prev.next = this.root;
     --this._size;
-    return value;
+    return node.value;
   }
 
   /**
@@ -47,26 +50,29 @@ export class CircleStack<T> extends ArrayCore<T> implements Stack<T> {
    * @returns The overwritten elements, if any.
    */
   push(...elems: T[]): T[] {
-    const cap = this.capacity;
-    if (cap < 1) {
+    const capacity = this._capacity;
+    if (capacity < 1) {
       return elems;
     }
 
     const N = elems.length;
     const out: T[] = [];
+    const root = this.root;
 
+    let tail = root.prev;
     for (let i = 0; i < N; ++i) {
-      const prev = this.vals[this.tail]!;
-      this.vals[this.tail] = elems[i];
-      this.tail = this.toInt(this._size + 1);
-      if (this._size < cap) {
+      tail.next = { next: root, prev: tail, value: elems[i] };
+      tail = tail.next;
+      if (this._size < capacity) {
         ++this._size;
       } else {
-        this.head = this.tail;
-        out.push(prev);
+        out.push(root.next.value);
+        root.next = root.next.next;
       }
     }
 
+    root.prev = tail;
+    root.next.prev = root;
     return out;
   }
 
@@ -78,6 +84,6 @@ export class CircleStack<T> extends ArrayCore<T> implements Stack<T> {
    * @returns the top element, or `undefined` if empty.
    */
   top(): T | undefined {
-    return this._size <= 0 ? undefined : this.vals[this.toInt(this._size - 1)];
+    return this.root.prev.value;
   }
 }

@@ -1,13 +1,12 @@
+import { IndexedCollection } from "../types/indexedCollection";
 import { isIterable } from "../utils/is";
-import { Collection } from "../types/collection";
 
 /**
- * A circular view is a fixed-size, read-only, circular array used to
- * store elements.
+ * A fixed-size, iterable-only, circular array used to store elements.
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export class CircleView<T> implements Collection<T, number> {
+export class ArrayCore<T> implements IndexedCollection<T> {
   /**
    * The index representing the first element in the collection.
    * @internal
@@ -33,7 +32,7 @@ export class CircleView<T> implements Collection<T, number> {
   protected vals: (T | undefined)[];
 
   /**
-   * Capacity defaults to zero and should be updated via {@link CircleView.capacity}.
+   * Capacity defaults to zero and should be updated via {@link CircleCollection.capacity}.
    */
   constructor();
   /**
@@ -78,7 +77,7 @@ export class CircleView<T> implements Collection<T, number> {
    *
    * @param iterable - an iterable object to convert to a collection.
    */
-  static from<T, I extends typeof CircleView<T>>(
+  static from<T, I extends typeof ArrayCore<T>>(
     this: I,
     iterable: Iterable<T> | ArrayLike<T>
   ): InstanceType<I> {
@@ -93,7 +92,7 @@ export class CircleView<T> implements Collection<T, number> {
    *
    * @param elements - the elements to be inserted into the collection.
    */
-  static of<T, I extends typeof CircleView<T>>(
+  static of<T, I extends typeof ArrayCore<T>>(
     this: I,
     ...elements: T[]
   ): InstanceType<I> {
@@ -284,16 +283,22 @@ export class CircleView<T> implements Collection<T, number> {
    */
   protected shrink(newCapacity: number): void {
     this._size = Math.min(this._size, newCapacity);
-    this.tail = this.head + this._size;
+    this.head = this.tail - this._size;
 
-    if (this.tail <= newCapacity) {
-      this.tail %= newCapacity;
-      this.vals.length = newCapacity;
-    } else {
-      this.tail %= this.capacity;
-      this.vals = Array.from(this);
-      this.tail = this._size % newCapacity;
-      this.head = 0;
+    if (this.head > 0) {
+      this.vals.copyWithin(0, this.head, this.tail);
+      this.vals.fill(
+        undefined,
+        Math.max(this.head, this._size),
+        Math.min(newCapacity, this.tail)
+      );
+    } else if (this.head < 0) {
+      this.vals.copyWithin(-this.head, 0, this.tail);
+      this.vals.copyWithin(0, this.head + this.capacity, this.capacity);
     }
+
+    this.head = 0;
+    this.tail = 0;
+    this.vals.length = newCapacity;
   }
 }

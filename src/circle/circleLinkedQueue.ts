@@ -1,5 +1,5 @@
 import { Queue } from "../types/queue";
-import { ArrayCore } from "./arrayCore";
+import { LinkedListCore } from "./linkedListCore";
 
 /**
  * A circular queue is similar to a traditional queue, but uses a fixed-size,
@@ -11,7 +11,10 @@ import { ArrayCore } from "./arrayCore";
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export class CircleQueue<T> extends ArrayCore<T> implements Queue<T> {
+export class CircleLinkedQueue<T>
+  extends LinkedListCore<T>
+  implements Queue<T>
+{
   /**
    * Get the first element in the queue.
    *
@@ -20,7 +23,7 @@ export class CircleQueue<T> extends ArrayCore<T> implements Queue<T> {
    * @returns the first element, or `undefined` if empty.
    */
   first(): T | undefined {
-    return this._size <= 0 ? undefined : this.vals[this.head];
+    return this.root.next.value;
   }
 
   /**
@@ -31,7 +34,7 @@ export class CircleQueue<T> extends ArrayCore<T> implements Queue<T> {
    * @returns the front element, or `undefined` if empty.
    */
   front(): T | undefined {
-    return this._size <= 0 ? undefined : this.vals[this.head];
+    return this.root.next.value;
   }
 
   /**
@@ -42,26 +45,29 @@ export class CircleQueue<T> extends ArrayCore<T> implements Queue<T> {
    * @returns The overwritten elements, if any.
    */
   push(...elems: T[]): T[] {
-    const cap = this.capacity;
-    if (cap < 1) {
-      return Array.from(elems);
+    const capacity = this._capacity;
+    if (capacity < 1) {
+      return elems;
     }
 
     const N = elems.length;
     const out: T[] = [];
+    const root = this.root;
 
+    let tail = root.prev;
     for (let i = 0; i < N; ++i) {
-      const prev = this.vals[this.tail]!;
-      this.vals[this.tail] = elems[i];
-      this.tail = this.toInt(this._size + 1);
-      if (this._size < cap) {
+      tail.next = { next: root, prev: tail, value: elems[i] };
+      tail = tail.next;
+      if (this._size < capacity) {
         ++this._size;
       } else {
-        this.head = this.tail;
-        out.push(prev);
+        out.push(root.next.value);
+        root.next = root.next.next;
       }
     }
 
+    root.prev = tail;
+    root.next.prev = root;
     return out;
   }
 
@@ -74,10 +80,10 @@ export class CircleQueue<T> extends ArrayCore<T> implements Queue<T> {
     if (this._size < 1) {
       return undefined;
     }
-    const value = this.vals[this.head];
-    this.vals[this.head] = undefined;
-    this.head = (this.head + 1) % this.vals.length;
+    const head = this.root.next;
+    this.root.next = head.next;
+    head.next.prev = this.root;
     --this._size;
-    return value;
+    return head.value;
   }
 }

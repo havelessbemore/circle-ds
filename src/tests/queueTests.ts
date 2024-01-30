@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { Queue } from "./queue";
+import { Queue } from "../types/queue";
 import { Constructor } from "../utils/mixins";
-import { tests as collectionTests } from "./collectionTests";
+import { tests as collectionTests } from "./indexedCollectionTests";
 
 export const tests: {
   [key: string]: (ctor: Constructor<Queue<unknown>>) => void;
@@ -99,7 +99,7 @@ export function test(ctor: Constructor<Queue<any>>): void {
         stack.push(10);
         expect(stack.capacity).toBe(3);
         expect(stack.size).toBe(3);
-        expect([...stack.values()]).toEqual([3, 4, 10]);
+        expect([...stack.values()]).toEqual([5, 6, 10]);
       });
 
       it("shrink correctly when greatly rotated", () => {
@@ -109,7 +109,7 @@ export function test(ctor: Constructor<Queue<any>>): void {
         stack.push(10);
         expect(stack.capacity).toBe(3);
         expect(stack.size).toBe(3);
-        expect([...stack.values()]).toEqual([6, 7, 10]);
+        expect([...stack.values()]).toEqual([8, 9, 10]);
       });
     });
 
@@ -174,6 +174,36 @@ export function test(ctor: Constructor<Queue<any>>): void {
         for (const [key, value] of queue.entries()) {
           expect(key + 1).toBe(value);
         }
+      });
+    });
+
+    describe("first()", () => {
+      it("returns the first element in a non-empty queue", () => {
+        const queue = gen<number>(1, 2, 3);
+        expect(queue.first()).toBe(1);
+      });
+
+      it("returns undefined for an empty queue", () => {
+        const queue = gen<number>(3);
+        expect(queue.first()).toBeUndefined();
+      });
+
+      it("does not modify the queue", () => {
+        const queue = gen<number>(1, 2, 3);
+        const initialSize = queue.size;
+        queue.first();
+        expect(queue.size).toBe(initialSize);
+        expect([...queue.values()]).toEqual([1, 2, 3]);
+      });
+
+      it("reflects the correct first element after modifications", () => {
+        const queue = gen<number>(3);
+        queue.push(1);
+        expect(queue.first()).toBe(1);
+        queue.push(2);
+        expect(queue.first()).toBe(1);
+        queue.shift();
+        expect(queue.first()).toBe(2);
       });
     });
 
