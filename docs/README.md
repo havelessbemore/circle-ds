@@ -63,35 +63,35 @@ The following is common across all collections.
 
 - `[Symbol.iterator](): IterableIterator`: Returns an iterator for the values or key-value pairs in the collection.
 
-### [CircularDeque](./docs/classes/CircularDeque.md)
+### [CircularLinkedDeque](./docs/classes/CircularLinkedDeque.md)
 
-`CircularDeque` is a double-ended queue that combines the features of stacks and queues, allowing insertion and removal at both ends.
+`CircularLinkedDeque` is a double-ended queue that combines the features of stacks and queues, allowing insertion and removal at both ends.
 
 #### Constructor
 
-- `CircularDeque<T>(items: Iterable<T>)`: Initialize a full deque with the given items.
+- `CircularLinkedDeque<T>(items: Iterable<T>)`: Initialize a full deque with the given items.
 
 #### Methods
 
-- [`first(): T | undefined`](./docs/classes/CircularDeque.md#first): Returns the first item without removing it, or `undefined` if the collection is empty. Alias for front().
+- [`first(): T | undefined`](./docs/classes/CircularLinkedDeque.md#first): Returns the first item without removing it, or `undefined` if the collection is empty. Alias for front().
 
-- [`front(): T | undefined`](./docs/classes/CircularDeque.md#front): Returns the item at the front without removing it, or `undefined` if the collection is empty. Alias for first().
+- [`front(): T | undefined`](./docs/classes/CircularLinkedDeque.md#front): Returns the item at the front without removing it, or `undefined` if the collection is empty. Alias for first().
 
-- [`has(value: T): boolean`](./docs/classes/CircularDeque.md#has): Checks if the collection contains a specific value.
+- [`has(value: T): boolean`](./docs/classes/CircularLinkedDeque.md#has): Checks if the collection contains a specific value.
 
-- [`last(): T | undefined`](./docs/classes/CircularDeque.md#last): Returns the last item without removing it, or `undefined` if the collection is empty. Alias for top().
+- [`last(): T | undefined`](./docs/classes/CircularLinkedDeque.md#last): Returns the last item without removing it, or `undefined` if the collection is empty. Alias for top().
 
-- [`pop(): T | undefined`](./docs/classes/CircularDeque.md#pop): Removes and returns the last item, or `undefined` if the collection is empty.
+- [`pop(): T | undefined`](./docs/classes/CircularLinkedDeque.md#pop): Removes and returns the last item, or `undefined` if the collection is empty.
 
-- [`push(...items: T[]): T[]`](./docs/classes/CircularDeque.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- [`push(...items: T[]): T[]`](./docs/classes/CircularLinkedDeque.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
-- [`shift(): T | undefined`](./docs/classes/CircularDeque.md#shift): Removes and returns the first item, or `undefined` if the collection is empty.
+- [`shift(): T | undefined`](./docs/classes/CircularLinkedDeque.md#shift): Removes and returns the first item, or `undefined` if the collection is empty.
 
-- [`top(): T | undefined`](./docs/classes/CircularDeque.md#top): Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
+- [`top(): T | undefined`](./docs/classes/CircularLinkedDeque.md#top): Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
 
-- [`unshift(...items: T[]): T[]`](./docs/classes/CircularDeque.md#unshift): Prepends items to the collection. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- [`unshift(...items: T[]): T[]`](./docs/classes/CircularLinkedDeque.md#unshift): Prepends items to the collection. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
-- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularDeque.md#iterator): Returns an iterator for the values in the collection.
+- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularLinkedDeque.md#iterator): Returns an iterator for the values in the collection.
 
 ### [CircularMap](./docs/classes/CircularMap.md)
 
@@ -109,7 +109,7 @@ The following is common across all collections.
 
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularSet.md#iterator): Returns an iterator for the values in the collection.
 
-### [CircularQueue](./docs/classes/CircularQueue.md)
+### [CircularQueue](./docs/classes/CircularQueue.md) & [CircularLinkedQueue](./docs/classes/CircularLinkedQueue.md)
 
 `CircularQueue` is a FIFO (First In, First Out) data structure with a fixed size.
 
@@ -147,7 +147,7 @@ The following is common across all collections.
 
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularSet.md#iterator): Returns an iterator for the values in the collection.
 
-### [CircularStack](./docs/classes/CircularStack.md)
+### [CircularStack](./docs/classes/CircularStack.md) & [CircularLinkedStack](./docs/classes/CircularLinkedStack.md)
 
 `CircularStack` is a LIFO (Last In, First Out) data structure with a fixed capacity.
 

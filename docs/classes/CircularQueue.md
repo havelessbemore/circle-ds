@@ -92,7 +92,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularQueue.ts:59](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L59)
+[circle/circularQueue.ts:59](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L59)
 
 • **new CircularQueue**\<`T`\>(`capacity?`): [`CircularQueue`](CircularQueue.md)\<`T`\>
 
@@ -120,7 +120,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularQueue.ts:65](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L65)
+[circle/circularQueue.ts:65](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L65)
 
 • **new CircularQueue**\<`T`\>(`items`): [`CircularQueue`](CircularQueue.md)\<`T`\>
 
@@ -148,7 +148,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularQueue.ts:71](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L71)
+[circle/circularQueue.ts:71](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L71)
 
 ## Properties
 
@@ -160,7 +160,7 @@ The maximum number of elements that can be stored in the collection.
 
 #### Defined in
 
-[circle/circularQueue.ts:30](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L30)
+[circle/circularQueue.ts:30](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L30)
 
 ## Accessors
 
@@ -176,7 +176,7 @@ Return the type of the object.
 
 #### Defined in
 
-[circle/circularQueue.ts:151](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L151)
+[circle/circularQueue.ts:151](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L151)
 
 ___
 
@@ -196,7 +196,7 @@ the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularQueue.ts:107](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L107)
+[circle/circularQueue.ts:107](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L107)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -218,7 +218,7 @@ Sets the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularQueue.ts:114](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L114)
+[circle/circularQueue.ts:114](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L114)
 
 ___
 
@@ -238,7 +238,7 @@ the number of elements in the collection.
 
 #### Defined in
 
-[circle/circularQueue.ts:144](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L144)
+[circle/circularQueue.ts:144](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L144)
 
 ## Methods
 
@@ -262,7 +262,7 @@ an iterable of values.
 
 #### Defined in
 
-[circle/circularQueue.ts:331](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L331)
+[circle/circularQueue.ts:331](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L331)
 
 ___
 
@@ -304,7 +304,7 @@ CircularBase.addListener
 
 #### Defined in
 
-[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularBase.ts#L40)
+[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularBase.ts#L40)
 
 ___
 
@@ -324,7 +324,7 @@ Remove all elements and resets the collection.
 
 #### Defined in
 
-[circle/circularQueue.ts:158](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L158)
+[circle/circularQueue.ts:158](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L158)
 
 ___
 
@@ -344,7 +344,7 @@ ___
 
 #### Defined in
 
-[circle/circularQueue.ts:411](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L411)
+[circle/circularQueue.ts:411](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L411)
 
 ___
 
@@ -368,7 +368,7 @@ an iterable of [key, value] pairs for every entry.
 
 #### Defined in
 
-[circle/circularQueue.ts:172](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L172)
+[circle/circularQueue.ts:172](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L172)
 
 ___
 
@@ -392,7 +392,7 @@ is emitted one or more times.
 
 #### Defined in
 
-[circle/circularQueue.ts:425](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L425)
+[circle/circularQueue.ts:425](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L425)
 
 ___
 
@@ -416,7 +416,7 @@ the first element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularQueue.ts:185](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L185)
+[circle/circularQueue.ts:185](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L185)
 
 ___
 
@@ -445,7 +445,7 @@ Performs the specified action for each element in the collection.
 
 #### Defined in
 
-[circle/circularQueue.ts:197](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L197)
+[circle/circularQueue.ts:197](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L197)
 
 ___
 
@@ -469,7 +469,7 @@ the front element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularQueue.ts:215](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L215)
+[circle/circularQueue.ts:215](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L215)
 
 ___
 
@@ -499,7 +499,7 @@ a boolean indicating if `value` was found or not
 
 #### Defined in
 
-[circle/circularQueue.ts:228](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L228)
+[circle/circularQueue.ts:228](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L228)
 
 ___
 
@@ -517,7 +517,7 @@ Returns whether the queue is stored sequentially in memory.
 
 #### Defined in
 
-[circle/circularQueue.ts:407](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L407)
+[circle/circularQueue.ts:407](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L407)
 
 ___
 
@@ -541,7 +541,7 @@ an iterable of keys.
 
 #### Defined in
 
-[circle/circularQueue.ts:245](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L245)
+[circle/circularQueue.ts:245](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L245)
 
 ___
 
@@ -583,7 +583,7 @@ CircularBase.on
 
 #### Defined in
 
-[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularBase.ts#L73)
+[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularBase.ts#L73)
 
 ___
 
@@ -624,7 +624,7 @@ CircularBase.prependListener
 
 #### Defined in
 
-[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularBase.ts#L102)
+[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularBase.ts#L102)
 
 ___
 
@@ -652,7 +652,7 @@ The overwritten elements, if any.
 
 #### Defined in
 
-[circle/circularQueue.ts:258](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L258)
+[circle/circularQueue.ts:258](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L258)
 
 ___
 
@@ -689,7 +689,7 @@ CircularBase.removeListener
 
 #### Defined in
 
-[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularBase.ts#L127)
+[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularBase.ts#L127)
 
 ___
 
@@ -715,7 +715,7 @@ Assumes the queue is A) sequential in memory and B) size \<= capacity.
 
 #### Defined in
 
-[circle/circularQueue.ts:475](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L475)
+[circle/circularQueue.ts:475](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L475)
 
 ___
 
@@ -737,7 +737,7 @@ the front element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularQueue.ts:309](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L309)
+[circle/circularQueue.ts:309](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L309)
 
 ___
 
@@ -761,4 +761,4 @@ an iterable of values.
 
 #### Defined in
 
-[circle/circularQueue.ts:342](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/circle/circularQueue.ts#L342)
+[circle/circularQueue.ts:342](https://github.com/havelessbemore/circle-ds/blob/199dcf1/src/circle/circularQueue.ts#L342)
