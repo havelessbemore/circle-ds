@@ -5,9 +5,9 @@
 ## Type parameters
 
 | Name |
-| :--- |
-| `K`  |
-| `V`  |
+| :------ |
+| `K` |
+| `V` |
 
 ## Hierarchy
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L13)
+[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/types/collection.ts#L13)
 
 ## Methods
 
@@ -58,9 +58,9 @@
 
 #### Defined in
 
-[types/collection.ts:6](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L6)
+[types/collection.ts:6](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/types/collection.ts#L6)
 
----
+___
 
 ### entries
 
@@ -72,9 +72,9 @@
 
 #### Defined in
 
-[types/collection.ts:7](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L7)
+[types/collection.ts:7](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/types/collection.ts#L7)
 
----
+___
 
 ### forEach
 
@@ -82,10 +82,10 @@
 
 #### Parameters
 
-| Name         | Type                                                       |
-| :----------- | :--------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `callbackfn` | (`value`: `V`, `key`: `K`, `collection`: `this`) => `void` |
-| `thisArg?`   | `unknown`                                                  |
+| `thisArg?` | `unknown` |
 
 #### Returns
 
@@ -93,9 +93,9 @@
 
 #### Defined in
 
-[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L8)
+[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/types/collection.ts#L8)
 
----
+___
 
 ### keys
 
@@ -107,9 +107,9 @@
 
 #### Defined in
 
-[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L12)
+[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/types/collection.ts#L12)
 
----
+___
 
 ### values
 
@@ -121,4 +121,4 @@
 
 #### Defined in
 
-[types/collection.ts:14](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L14)
+[types/collection.ts:14](https://github.com/havelessbemore/circle-ds/blob/e0d2f00/src/types/collection.ts#L14)

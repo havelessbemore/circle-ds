@@ -34,28 +34,28 @@ The following is common across all collections.
 
 #### Constructor
 
-- `Collection()`: Initialize an empty collection of infinite capacity.
-- `Collection(capacity: number)`: Initialize an empty collection with the given capacity.
+- `constructor()`: Initialize an empty collection of infinite capacity.
+- `constructor(capacity: number)`: Initialize an empty collection with the given capacity.
 
 #### Properties
 
-- [`capacity: number`](./docs/interfaces/Bounded.md#capacity): The maximum size of the collection. Update to grow or shrink the collection.
+- `capacity: number`: A positive integer that represents the maximum size of the collection. Can be updated to grow or shrink the collection. Can also be set to `Infinity`.
 
-- [`size: Readonly<number>`](./docs/interfaces/Collection.md#size): The number of items in the collection.
+- `size: Readonly<number>`: The number of items in the collection.
 
-- [`Symbol.toStringTag`]: A string that represents the type of the object. See [Symbol.toStringTag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toStringTag).
+- `[Symbol.toStringTag]`: A string that represents the type of the object. See [Symbol.toStringTag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toStringTag) for more details.
 
 #### Events
 
-- [`BoundedEvent.Overflow`](./src/types/boundedEvent.ts): Triggered when existing elements must be discarded from the collection. This can happen when the collection's capacity is reduced or when new values are added while at capacity.
+- [`BoundedEvent.Overflow`](./src/types/boundedEvent.ts): Triggered when existing elements are discarded from the collection. This happens when the collection's capacity is reduced below its size or when new values are added while at capacity.
 
 #### Methods
 
 - [`clear(): void`](./docs/interfaces/Collection.md#clear): Remove all items from the collection.
 
-- [`entries(): IterableIterator<K, V>`](./docs/interfaces/Collection.md#entries): Returns an iterator that allows iteration through `[key/index, value]` pairs of the deque.
+- [`entries(): IterableIterator<K, V>`](./docs/interfaces/Collection.md#entries): Returns an iterator of `[key/index, value]` pairs through the collection.
 
-- [`forEach(callbackFn: (value: V, index: K, collection: Collection<K, V>) => void, thisArg?: unknown): void`](./docs/interfaces/Collection.md#foreach): Executes the provided `callbackFn` function once for each element, in insertion order.
+- [`forEach(callbackFn: (value: V, index: K, collection: Collection<K, V>) => void, thisArg?: unknown): void`](./docs/interfaces/Collection.md#foreach): Executes the provided `callbackFn` function once for each element.
 
 - [`keys(): IterableIterator<K>`](./docs/interfaces/Collection.md#keys): Returns an iterator for the keys / indices in the collection.
 
@@ -63,7 +63,7 @@ The following is common across all collections.
 
 - `[Symbol.iterator](): IterableIterator`: Returns an iterator for the values or key-value pairs in the collection.
 
-### [CircularDeque<T>](./docs/classes/CircularDeque.md)
+### [CircularDeque](./docs/classes/CircularDeque.md)
 
 `CircularDeque` is a double-ended queue that combines the features of stacks and queues, allowing insertion and removal at both ends.
 
@@ -89,11 +89,11 @@ The following is common across all collections.
 
 - [`top(): T | undefined`](./docs/classes/CircularDeque.md#top): Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
 
-- [`unshift(...items: T[]): T[]`](./docs/classes/CircularDeque.md#unshift): Prepends items to the collection. If at capacity, items at the back are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- [`unshift(...items: T[]): T[]`](./docs/classes/CircularDeque.md#unshift): Prepends items to the collection. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularDeque.md#iterator): Returns an iterator for the values in the collection.
 
-### [CircularMap<K, V>](./docs/classes/CircularMap.md)
+### [CircularMap](./docs/classes/CircularMap.md)
 
 #### Constructor
 
@@ -109,7 +109,7 @@ The following is common across all collections.
 
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularSet.md#iterator): Returns an iterator for the values in the collection.
 
-### [CircularQueue<T>](./docs/classes/CircularQueue.md)
+### [CircularQueue](./docs/classes/CircularQueue.md)
 
 `CircularQueue` is a FIFO (First In, First Out) data structure with a fixed size.
 
@@ -119,19 +119,19 @@ The following is common across all collections.
 
 #### Methods
 
-- [`first(): T | undefined`](./docs/classes/CircularDeque.md#first): Returns the first item without removing it, or `undefined` if the collection is empty. Alias for front().
+- [`first(): T | undefined`](./docs/classes/CircularQueue.md#first): Returns the first item without removing it, or `undefined` if the collection is empty. Alias for front().
 
-- [`front(): T | undefined`](./docs/classes/CircularDeque.md#front): Returns the item at the front without removing it, or `undefined` if the collection is empty. Alias for first().
+- [`front(): T | undefined`](./docs/classes/CircularQueue.md#front): Returns the item at the front without removing it, or `undefined` if the collection is empty. Alias for first().
 
-- [`has(value: T): boolean`](./docs/classes/CircularDeque.md#has): Checks if the collection contains a specific value.
+- [`has(value: T): boolean`](./docs/classes/CircularQueue.md#has): Checks if the collection contains a specific value.
 
-- [`push(...items: T[]): T[]`](./docs/classes/CircularDeque.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- [`push(...items: T[]): T[]`](./docs/classes/CircularQueue.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
-- [`shift(): T | undefined`](./docs/classes/CircularDeque.md#shift): Removes and returns the first item, or `undefined` if the collection is empty.
+- [`shift(): T | undefined`](./docs/classes/CircularQueue.md#shift): Removes and returns the first item, or `undefined` if the collection is empty.
 
-- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularDeque.md#iterator): Returns an iterator for the values in the collection.
+- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularQueue.md#iterator): Returns an iterator for the values in the collection.
 
-### [CircularSet<T>](./docs/classes/CircularSet.md)
+### [CircularSet](./docs/classes/CircularSet.md)
 
 #### Constructor
 
@@ -147,7 +147,7 @@ The following is common across all collections.
 
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularSet.md#iterator): Returns an iterator for the values in the collection.
 
-### [CircularStack<T>](./docs/classes/CircularStack.md)
+### [CircularStack](./docs/classes/CircularStack.md)
 
 `CircularStack` is a LIFO (Last In, First Out) data structure with a fixed capacity.
 
@@ -157,17 +157,76 @@ The following is common across all collections.
 
 #### Methods
 
-- [`has(value: T): boolean`](./docs/classes/CircularDeque.md#has): Checks if the collection contains a specific value.
+- [`has(value: T): boolean`](./docs/classes/CircularStack.md#has): Checks if the collection contains a specific value.
 
-- [`last(): T | undefined`](./docs/classes/CircularDeque.md#last): Returns the last item without removing it, or `undefined` if the collection is empty. Alias for top().
+- [`last(): T | undefined`](./docs/classes/CircularStack.md#last): Returns the last item without removing it, or `undefined` if the collection is empty. Alias for top().
 
-- [`pop(): T | undefined`](./docs/classes/CircularDeque.md#pop): Removes and returns the last item, or `undefined` if the collection is empty.
+- [`pop(): T | undefined`](./docs/classes/CircularStack.md#pop): Removes and returns the last item, or `undefined` if the collection is empty.
 
-- [`push(...items: T[]): T[]`](./docs/classes/CircularDeque.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- [`push(...items: T[]): T[]`](./docs/classes/CircularStack.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
-- [`top(): T | undefined`](./docs/classes/CircularDeque.md#top): Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
+- [`top(): T | undefined`](./docs/classes/CircularStack.md#top): Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
 
-- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularDeque.md#iterator): Returns an iterator for the values in the collection.
+- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularStack.md#iterator): Returns an iterator for the values in the collection.
+
+## Build
+
+First clone the project from github:
+
+```bash
+git clone git@github.com:havelessbemore/circle-ds.git
+cd circle-ds
+```
+
+Install the project dependencies:
+
+```bash
+npm install
+```
+
+Then, the project can be build by executing the build script via npm:
+
+```bash
+npm run build
+```
+
+This will build ESM and CommonJS outputs from the source files and put them in the dist/ folder.
+
+## Test
+
+To execute tests for the library, install the project dependencies once:
+
+```bash
+npm install
+```
+
+Then, the tests can be executed:
+
+```bash
+npm test
+```
+
+You can separately run the code linter:
+
+```bash
+npm run lint
+```
+
+To automatically fix linting issue, run:
+
+```bash
+npm run format
+```
+
+To test code coverage of the tests:
+
+```bash
+npm run test:coverage
+```
+
+To see the coverage results, open the generated report in your browser:
+
+    ./coverage/index.html
 
 ## License
 
