@@ -1,6 +1,6 @@
 # Circle DS
 
-A suite of circular data structures, including CircleStack, CircleQueue, and CircleDeque. Use circular buffers with ease and supported by a variety of operations.
+A suite of circular data structures, including deques, maps, queues, sets and stacks. Use circular buffers with ease.
 
 [![Version](https://img.shields.io/npm/v/circle-ds.svg)](https://www.npmjs.com/package/circle-ds)
 [![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)](https://github.com/havelessbemore/circle-ds/graphs/commit-activity)
@@ -26,148 +26,205 @@ yarn install circle-ds
 
 ## API
 
-Try it out on [JSFiddle](https://jsfiddle.net/8cv6n9y0).
+### Common
 
-### [CircleStack](./docs/classes/CircleStack.md)
-
-`CircleStack` is a LIFO (Last In, First Out) data structure with a fixed capacity.
+The following is common across all collections.
 
 #### Constructor
 
-- `CircleStack<T>()`: Constructs an empty circular stack a capacity of zero.
-- `CircleStack<T>(capacity: number)`: Constructs an empty circular stack with the specified capacity.
-- `CircleStack<T>(items: Iterable<T>)`: Constructs a full circular stack with the given items.
-- `CircleStack<T>(...items: T[])`: Constructs a full circular stack with the given items.
-
-#### Static Methods
-
-- `from<T>(iterable: Iterable<T> | ArrayLike<T>): CircleStack<T>`: Creates a new stack from an iterable or array-like object.
-
-- `of<T>(...elements: T[]): CircleStack<T>`: Creates a new stack from a variable number of elements.
+- `constructor()`: Initialize an empty collection of infinite capacity.
+- `constructor(capacity: number)`: Initialize an empty collection with the given capacity.
 
 #### Properties
 
-- [`capacity: number`](./docs/classes/CircleStack.md#capacity): The maximum size of the stack. Update to grow or shrink the stack.
+- `capacity: number`: A positive integer that represents the maximum size of the collection. Can be updated to grow or shrink the collection. Can also be set to `Infinity`.
 
-- [`size: Readonly<number>`](./docs/classes/CircleStack.md#size): The number of items in the stack.
+- `size: Readonly<number>`: The number of items in the collection.
+
+- `[Symbol.toStringTag]`: A string that represents the type of the object. See [Symbol.toStringTag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toStringTag) for more details.
+
+#### Events
+
+- [`BoundedEvent.Overflow`](./src/types/boundedEvent.ts): Triggered when existing elements are discarded from the collection. This happens when the collection's capacity is reduced below its size or when new values are added while at capacity.
 
 #### Methods
 
-- [`clear(): void`](./docs/classes/CircleStack.md#clear): Remove all items from the stack.
+- [`clear(): void`](./docs/interfaces/Collection.md#clear): Remove all items from the collection.
 
-- [`entries(): IterableIterator<[number, T]>`](./docs/classes/CircleStack.md#entries): Returns an iterator that allows iteration through `[index, value]` pairs of the stack.
+- [`entries(): IterableIterator<K, V>`](./docs/interfaces/Collection.md#entries): Returns an iterator of `[key/index, value]` pairs through the collection.
 
-- [`forEach(callbackFn: (value: T, index: number, stack: CircleStack<T>) => void, thisArg?: unknown): void`](./docs/classes/CircleStack.md#foreach): Executes the provided `callbackFn` function once for each element, in insertion order.
+- [`forEach(callbackFn: (value: V, index: K, collection: Collection<K, V>) => void, thisArg?: unknown): void`](./docs/interfaces/Collection.md#foreach): Executes the provided `callbackFn` function once for each element.
 
-- [`has(value: T): boolean`](./docs/classes/CircleStack.md#has): Checks if the stack contains a specific value.
+- [`keys(): IterableIterator<K>`](./docs/interfaces/Collection.md#keys): Returns an iterator for the keys / indices in the collection.
 
-- [`keys(): IterableIterator<number>`](./docs/classes/CircleStack.md#keys): Returns an iterator for the keys (indices) in the stack.
+- [`values(): IterableIterator<V>`](./docs/interfaces/Collection.md#values): Returns an iterator for the values in the collection.
 
-- [`pop(): T | undefined`](./docs/classes/CircleStack.md#pop): Removes and returns the item at the top of the stack. Returns `undefined` if the stack is empty.
+- `[Symbol.iterator](): IterableIterator`: Returns an iterator for the values or key-value pairs in the collection.
 
-- [`push(...items: T[]): T[]`](./docs/classes/CircleStack.md#push): Adds items to the top of the stack. If the stack is full, the oldest items are overwritten and returned.
+### [CircularDeque](./docs/classes/CircularDeque.md)
 
-- [`top(): T | undefined`](./docs/classes/CircleStack.md#top): Returns the item at the top of the stack without removing it. Returns `undefined` if the stack is empty.
-
-- [`values(): IterableIterator<T>`](./docs/classes/CircleStack.md#values): Returns an iterator for the values in the stack.
-
-- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircleStack.md#iterator): Returns the default iterator for the stack, which iterates through its values.
-
-### [CircleQueue](./docs/classes/CircleQueue.md)
-
-`CircleQueue` is a FIFO (First In, First Out) data structure with a fixed size.
+`CircularDeque` is a double-ended queue that combines the features of stacks and queues, allowing insertion and removal at both ends.
 
 #### Constructor
 
-- `CircleQueue<T>()`: Constructs an empty circular queue a capacity of zero.
-- `CircleQueue<T>(capacity: number)`: Constructs an empty circular queue with the specified capacity.
-- `CircleQueue<T>(items: Iterable<T>)`: Constructs a full circular queue with the given items.
-- `CircleQueue<T>(...items: T[])`: Constructs a full circular queue with the given items.
-
-#### Static Methods
-
-- `from<T>(iterable: Iterable<T> | ArrayLike<T>): CircleQueue<T>`: Creates a new queue from an iterable or array-like object.
-
-- `of<T>(...elements: T[]): CircleQueue<T>`: Creates a new queue from a variable number of elements.
-
-#### Properties
-
-- [`capacity: number`](./docs/classes/CircleQueue.md#capacity): The maximum size of the queue. Update to grow or shrink the queue.
-
-- [`size: Readonly<number>`](./docs/classes/CircleQueue.md#size): The number of items in the queue.
+- `CircularDeque<T>(items: Iterable<T>)`: Initialize a full deque with the given items.
 
 #### Methods
 
-- [`clear(): void`](./docs/classes/CircleQueue.md#clear): Remove all items from the queue.
+- [`first(): T | undefined`](./docs/classes/CircularDeque.md#first): Returns the first item without removing it, or `undefined` if the collection is empty. Alias for front().
 
-- [`entries(): IterableIterator<[number, T]>`](./docs/classes/CircleQueue.md#entries): Returns an iterator that allows iteration through `[index, value]` pairs of the queue.
+- [`front(): T | undefined`](./docs/classes/CircularDeque.md#front): Returns the item at the front without removing it, or `undefined` if the collection is empty. Alias for first().
 
-- [`forEach(callbackFn: (value: T, index: number, queue: CircleQueue<T>) => void, thisArg?: unknown): void`](./docs/classes/CircleQueue.md#foreach): Executes the provided `callbackFn` function once for each element, in insertion order.
+- [`has(value: T): boolean`](./docs/classes/CircularDeque.md#has): Checks if the collection contains a specific value.
 
-- [`front(): T | undefined`](./docs/classes/CircleQueue.md#front): Returns the item at the front of the queue without removing it. Returns `undefined` if the queue is empty.
+- [`last(): T | undefined`](./docs/classes/CircularDeque.md#last): Returns the last item without removing it, or `undefined` if the collection is empty. Alias for top().
 
-- [`has(value: T): boolean`](./docs/classes/CircleQueue.md#has): Checks if the queue contains a specific value.
+- [`pop(): T | undefined`](./docs/classes/CircularDeque.md#pop): Removes and returns the last item, or `undefined` if the collection is empty.
 
-- [`keys(): IterableIterator<number>`](./docs/classes/CircleQueue.md#keys): Returns an iterator for the keys (indices) in the queue.
+- [`push(...items: T[]): T[]`](./docs/classes/CircularDeque.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
-- [`push(...items: T[]): T[]`](./docs/classes/CircleQueue.md#push): Adds items to the back of the queue. If the queue is full, the oldest items are overwritten and returned.
+- [`shift(): T | undefined`](./docs/classes/CircularDeque.md#shift): Removes and returns the first item, or `undefined` if the collection is empty.
 
-- [`shift(): T | undefined`](./docs/classes/CircleQueue.md#shift): Removes and returns the item at the front of the queue. Returns `undefined` if the queue is empty.
+- [`top(): T | undefined`](./docs/classes/CircularDeque.md#top): Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
 
-- [`values(): IterableIterator<T>`](./docs/classes/CircleQueue.md#values): Returns an iterator for the values in the queue.
+- [`unshift(...items: T[]): T[]`](./docs/classes/CircularDeque.md#unshift): Prepends items to the collection. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
-- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircleQueue.md#iterator): Returns the default iterator for the queue, which iterates through its values.
+- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularDeque.md#iterator): Returns an iterator for the values in the collection.
 
-### [CircleDeque](./docs/classes/CircleDeque.md)
-
-`CircleDeque` is a double-ended queue that combines the features of stacks and queues, allowing insertion and removal at both ends.
+### [CircularMap](./docs/classes/CircularMap.md)
 
 #### Constructor
 
-- `CircleDeque<T>()`: Constructs an empty circular deque a capacity of zero.
-- `CircleDeque<T>(capacity: number)`: Constructs an empty circular deque with the specified capacity.
-- `CircleDeque<T>(items: Iterable<T>)`: Constructs a full circular deque with the given items.
-- `CircleDeque<T>(...items: T[])`: Constructs a full circular deque with the given items.
-
-#### Static Methods
-
-- `from<T>(iterable: Iterable<T> | ArrayLike<T>): CircleDeque<T>`: Creates a new deque from an iterable or array-like object.
-
-- `of<T>(...elements: T[]): CircleDeque<T>`: Creates a new deque from a variable number of elements.
-
-#### Properties
-
-- [`capacity: number`](./docs/classes/CircleDeque.md#capacity): The maximum size of the deque. Update to grow or shrink the deque.
-
-- [`size: Readonly<number>`](./docs/classes/CircleDeque.md#size): The number of items in the deque.
+- `CircularMap<K, V>(items: Iterable<[K, V]>)`: Initialize a full map with the given items. Capacity will be the number of unique keys given.
 
 #### Methods
 
-- [`clear(): void`](./docs/classes/CircleDeque.md#clear): Remove all items from the deque.
+- [`add(value: T): this`](./docs/classes/CircularMap.md#add): Adds the value to the collection. If at capacity, the oldest values are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event. If an existing value is added again, then it will be treated as new.
 
-- [`entries(): IterableIterator<[number, T]>`](./docs/classes/CircleDeque.md#entries): Returns an iterator that allows iteration through `[index, value]` pairs of the deque.
+- [`delete(value: T): boolean`](./docs/classes/CircularMap.md#add): Deletes the value from the collection. Returns `true` if the value exists and was removed successfully, or `false` otherwise.
 
-- [`forEach(callbackFn: (value: T, index: number, deque: CircleDeque<T>) => void, thisArg?: unknown): void`](./docs/classes/CircleDeque.md#foreach): Executes the provided `callbackFn` function once for each element, in insertion order.
+- [`has(value: T): boolean`](./docs/classes/CircularMap.md#has): Checks if the collection contains a specific value.
 
-- [`front(): T | undefined`](./docs/classes/CircleDeque.md#front): Returns the item at the front of the deque without removing it. Returns `undefined` if the deque is empty.
+- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularSet.md#iterator): Returns an iterator for the values in the collection.
 
-- [`has(value: T): boolean`](./docs/classes/CircleDeque.md#has): Checks if the deque contains a specific value.
+### [CircularQueue](./docs/classes/CircularQueue.md)
 
-- [`keys(): IterableIterator<number>`](./docs/classes/CircleDeque.md#keys): Returns an iterator for the keys (indices) in the deque.
+`CircularQueue` is a FIFO (First In, First Out) data structure with a fixed size.
 
-- [`pop(): T | undefined`](./docs/classes/CircleDeque.md#pop): Removes and returns the item at the top of the deque. Returns `undefined` if the deque is empty.
+#### Constructor
 
-- [`push(...items: T[]): T[]`](./docs/classes/CircleDeque.md#push): Adds items to the back of the deque. If the deque is full, items at the front are overwritten and returned.
+- `CircularQueue<T>(items: Iterable<T>)`: Initialize a full queue with the given items.
 
-- [`shift(): T | undefined`](./docs/classes/CircleDeque.md#shift): Removes and returns the item at the front of the deque. Returns `undefined` if the deque is empty.
+#### Methods
 
-- [`top(): T | undefined`](./docs/classes/CircleDeque.md#top): Returns the item at the top of the deque without removing it. Returns `undefined` if the deque is empty.
+- [`first(): T | undefined`](./docs/classes/CircularQueue.md#first): Returns the first item without removing it, or `undefined` if the collection is empty. Alias for front().
 
-- [`unshift(...items: T[]): T[]`](./docs/classes/CircleDeque.md#unshift): Adds items to the fron of the deque. If the deque is full, items at the back are overwritten and returned.
+- [`front(): T | undefined`](./docs/classes/CircularQueue.md#front): Returns the item at the front without removing it, or `undefined` if the collection is empty. Alias for first().
 
-- [`values(): IterableIterator<T>`](./docs/classes/CircleDeque.md#values): Returns an iterator for the values in the deque.
+- [`has(value: T): boolean`](./docs/classes/CircularQueue.md#has): Checks if the collection contains a specific value.
 
-- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircleDeque.md#iterator): Returns the default iterator for the deque, which iterates through its values.
+- [`push(...items: T[]): T[]`](./docs/classes/CircularQueue.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+
+- [`shift(): T | undefined`](./docs/classes/CircularQueue.md#shift): Removes and returns the first item, or `undefined` if the collection is empty.
+
+- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularQueue.md#iterator): Returns an iterator for the values in the collection.
+
+### [CircularSet](./docs/classes/CircularSet.md)
+
+#### Constructor
+
+- `CircularSet<T>(items: Iterable<T>)`: Initialize a full set with the given items. Capacity will be the number of unique items given.
+
+#### Methods
+
+- [`add(value: T): this`](./docs/classes/CircularSet.md#add): Adds the value to the collection. If at capacity, the oldest values are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event. If an existing value is added again, then it will be treated as new.
+
+- [`delete(value: T): boolean`](./docs/classes/CircularSet.md#add): Deletes the value from the collection. Returns `true` if the value exists and was removed successfully, or `false` otherwise.
+
+- [`has(value: T): boolean`](./docs/classes/CircularSet.md#has): Checks if the collection contains a specific value.
+
+- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularSet.md#iterator): Returns an iterator for the values in the collection.
+
+### [CircularStack](./docs/classes/CircularStack.md)
+
+`CircularStack` is a LIFO (Last In, First Out) data structure with a fixed capacity.
+
+#### Constructor
+
+- `CircularStack<T>(items: Iterable<T>)`: Initialize a full stack with the given items.
+
+#### Methods
+
+- [`has(value: T): boolean`](./docs/classes/CircularStack.md#has): Checks if the collection contains a specific value.
+
+- [`last(): T | undefined`](./docs/classes/CircularStack.md#last): Returns the last item without removing it, or `undefined` if the collection is empty. Alias for top().
+
+- [`pop(): T | undefined`](./docs/classes/CircularStack.md#pop): Removes and returns the last item, or `undefined` if the collection is empty.
+
+- [`push(...items: T[]): T[]`](./docs/classes/CircularStack.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+
+- [`top(): T | undefined`](./docs/classes/CircularStack.md#top): Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
+
+- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularStack.md#iterator): Returns an iterator for the values in the collection.
+
+## Build
+
+First clone the project from github:
+
+```bash
+git clone git@github.com:havelessbemore/circle-ds.git
+cd circle-ds
+```
+
+Install the project dependencies:
+
+```bash
+npm install
+```
+
+Then, the project can be build by executing the build script via npm:
+
+```bash
+npm run build
+```
+
+This will build ESM and CommonJS outputs from the source files and put them in the dist/ folder.
+
+## Test
+
+To execute tests for the library, install the project dependencies once:
+
+```bash
+npm install
+```
+
+Then, the tests can be executed:
+
+```bash
+npm test
+```
+
+You can separately run the code linter:
+
+```bash
+npm run lint
+```
+
+To automatically fix linting issue, run:
+
+```bash
+npm run format
+```
+
+To test code coverage of the tests:
+
+```bash
+npm run test:coverage
+```
+
+To see the coverage results, open the generated report in your browser:
+
+    ./coverage/index.html
 
 ## License
 

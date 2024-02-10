@@ -1,10 +1,8 @@
 export interface CollectionConstructor<K, V> {
   new (): Collection<K, V>;
-  new (capacity: number): Collection<K, V>;
 }
 
 export interface Collection<K, V> {
-  capacity: number;
   clear(): void;
   entries(): IterableIterator<[K, V]>;
   forEach(

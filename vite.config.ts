@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { defineConfig, UserConfig } from "vite";
+import { defineConfig } from "vite";
 import banner from "vite-plugin-banner";
 
 import PACKAGE from "./package.json";
@@ -25,7 +25,7 @@ const exts = {
 const formats = Object.keys(dirs) as Array<keyof typeof dirs>;
 
 // https://vitejs.dev/config/
-const config: UserConfig = defineConfig({
+const config = defineConfig({
   base: "./",
   build: {
     emptyOutDir: false,
@@ -46,6 +46,11 @@ const config: UserConfig = defineConfig({
       content: fs.readFileSync(path.resolve(__dirname, "NOTICE"), "utf-8"),
     }),
   ],
+  test: {
+    coverage: {
+      exclude: ["src/tests/**"],
+    },
+  },
 });
 
 export default config;

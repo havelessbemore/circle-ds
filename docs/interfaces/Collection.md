@@ -1,13 +1,13 @@
 [circle-ds](../README.md) / [Exports](../modules.md) / Collection
 
-# Interface: Collection\<V, K\>
+# Interface: Collection\<K, V\>
 
 ## Type parameters
 
 | Name |
 | :--- |
-| `V`  |
 | `K`  |
+| `V`  |
 
 ## Hierarchy
 
@@ -19,36 +19,24 @@
 
 ## Implemented by
 
-- [`CircleView`](../classes/CircleView.md)
+- [`CircularMap`](../classes/CircularMap.md)
+- [`CircularSet`](../classes/CircularSet.md)
 
 ## Table of contents
 
 ### Properties
 
-- [capacity](Collection.md#capacity)
 - [size](Collection.md#size)
 
 ### Methods
 
-- [[iterator]](Collection.md#[iterator])
 - [clear](Collection.md#clear)
 - [entries](Collection.md#entries)
 - [forEach](Collection.md#foreach)
-- [has](Collection.md#has)
 - [keys](Collection.md#keys)
 - [values](Collection.md#values)
 
 ## Properties
-
-### capacity
-
-• **capacity**: `number`
-
-#### Defined in
-
-[types/collection.ts:10](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L10)
-
----
 
 ### size
 
@@ -56,23 +44,9 @@
 
 #### Defined in
 
-[types/collection.ts:11](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L11)
+[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L13)
 
 ## Methods
-
-### [iterator]
-
-▸ **[iterator]**(): `IterableIterator`\<`V`\>
-
-#### Returns
-
-`IterableIterator`\<`V`\>
-
-#### Defined in
-
-[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L13)
-
----
 
 ### clear
 
@@ -84,7 +58,7 @@
 
 #### Defined in
 
-[types/collection.ts:2](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L2)
+[types/collection.ts:6](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L6)
 
 ---
 
@@ -98,7 +72,7 @@
 
 #### Defined in
 
-[types/collection.ts:3](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L3)
+[types/collection.ts:7](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L7)
 
 ---
 
@@ -108,10 +82,10 @@
 
 #### Parameters
 
-| Name         | Type                                                            |
-| :----------- | :-------------------------------------------------------------- |
-| `callbackfn` | (`value`: `V`, `key`: `number`, `collection`: `this`) => `void` |
-| `thisArg?`   | `unknown`                                                       |
+| Name         | Type                                                       |
+| :----------- | :--------------------------------------------------------- |
+| `callbackfn` | (`value`: `V`, `key`: `K`, `collection`: `this`) => `void` |
+| `thisArg?`   | `unknown`                                                  |
 
 #### Returns
 
@@ -119,27 +93,7 @@
 
 #### Defined in
 
-[types/collection.ts:4](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L4)
-
----
-
-### has
-
-▸ **has**(`value`): `boolean`
-
-#### Parameters
-
-| Name    | Type |
-| :------ | :--- |
-| `value` | `V`  |
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L8)
+[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L8)
 
 ---
 
@@ -153,7 +107,7 @@
 
 #### Defined in
 
-[types/collection.ts:9](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L9)
+[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L12)
 
 ---
 
@@ -167,4 +121,4 @@
 
 #### Defined in
 
-[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L12)
+[types/collection.ts:14](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L14)

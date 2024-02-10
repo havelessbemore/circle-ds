@@ -18,26 +18,25 @@
 
 ## Implemented by
 
-- [`CircleDeque`](../classes/CircleDeque.md)
+- [`CircularLinkedDeque`](../classes/CircularLinkedDeque.md)
 
 ## Table of contents
 
 ### Properties
 
-- [capacity](Deque.md#capacity)
 - [size](Deque.md#size)
 
 ### Methods
 
 - [[iterator]](Deque.md#[iterator])
-- [back](Deque.md#back)
-- [bottom](Deque.md#bottom)
 - [clear](Deque.md#clear)
 - [entries](Deque.md#entries)
+- [first](Deque.md#first)
 - [forEach](Deque.md#foreach)
 - [front](Deque.md#front)
 - [has](Deque.md#has)
 - [keys](Deque.md#keys)
+- [last](Deque.md#last)
 - [pop](Deque.md#pop)
 - [push](Deque.md#push)
 - [shift](Deque.md#shift)
@@ -46,20 +45,6 @@
 - [values](Deque.md#values)
 
 ## Properties
-
-### capacity
-
-• **capacity**: `number`
-
-#### Inherited from
-
-[Stack](Stack.md).[capacity](Stack.md#capacity)
-
-#### Defined in
-
-[types/collection.ts:10](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L10)
-
----
 
 ### size
 
@@ -71,7 +56,7 @@
 
 #### Defined in
 
-[types/collection.ts:11](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L11)
+[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L13)
 
 ## Methods
 
@@ -89,35 +74,7 @@
 
 #### Defined in
 
-[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L13)
-
----
-
-### back
-
-▸ **back**(): `undefined` \| `V`
-
-#### Returns
-
-`undefined` \| `V`
-
-#### Defined in
-
-[types/deque.ts:5](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/deque.ts#L5)
-
----
-
-### bottom
-
-▸ **bottom**(): `undefined` \| `V`
-
-#### Returns
-
-`undefined` \| `V`
-
-#### Defined in
-
-[types/deque.ts:6](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/deque.ts#L6)
+[types/queue.ts:9](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/queue.ts#L9)
 
 ---
 
@@ -135,7 +92,7 @@
 
 #### Defined in
 
-[types/collection.ts:2](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L2)
+[types/collection.ts:6](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L6)
 
 ---
 
@@ -153,7 +110,25 @@
 
 #### Defined in
 
-[types/collection.ts:3](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L3)
+[types/collection.ts:7](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L7)
+
+---
+
+### first
+
+▸ **first**(): `undefined` \| `V`
+
+#### Returns
+
+`undefined` \| `V`
+
+#### Inherited from
+
+[Queue](Queue.md).[first](Queue.md#first)
+
+#### Defined in
+
+[types/queue.ts:4](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/queue.ts#L4)
 
 ---
 
@@ -178,7 +153,7 @@
 
 #### Defined in
 
-[types/collection.ts:4](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L4)
+[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L8)
 
 ---
 
@@ -196,7 +171,7 @@
 
 #### Defined in
 
-[types/queue.ts:24](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/queue.ts#L24)
+[types/queue.ts:5](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/queue.ts#L5)
 
 ---
 
@@ -220,7 +195,7 @@
 
 #### Defined in
 
-[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L8)
+[types/queue.ts:6](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/queue.ts#L6)
 
 ---
 
@@ -238,7 +213,25 @@
 
 #### Defined in
 
-[types/collection.ts:9](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L9)
+[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L12)
+
+---
+
+### last
+
+▸ **last**(): `undefined` \| `V`
+
+#### Returns
+
+`undefined` \| `V`
+
+#### Inherited from
+
+[Stack](Stack.md).[last](Stack.md#last)
+
+#### Defined in
+
+[types/stack.ts:5](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/stack.ts#L5)
 
 ---
 
@@ -256,13 +249,13 @@
 
 #### Defined in
 
-[types/stack.ts:4](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/stack.ts#L4)
+[types/stack.ts:6](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/stack.ts#L6)
 
 ---
 
 ### push
 
-▸ **push**(`...values`): `void`
+▸ **push**(`...values`): `number`
 
 #### Parameters
 
@@ -272,7 +265,7 @@
 
 #### Returns
 
-`void`
+`number`
 
 #### Inherited from
 
@@ -280,7 +273,7 @@
 
 #### Defined in
 
-[types/queue.ts:25](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/queue.ts#L25)
+[types/queue.ts:7](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/queue.ts#L7)
 
 ---
 
@@ -298,7 +291,7 @@
 
 #### Defined in
 
-[types/queue.ts:26](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/queue.ts#L26)
+[types/queue.ts:8](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/queue.ts#L8)
 
 ---
 
@@ -316,13 +309,13 @@
 
 #### Defined in
 
-[types/stack.ts:6](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/stack.ts#L6)
+[types/stack.ts:9](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/stack.ts#L9)
 
 ---
 
 ### unshift
 
-▸ **unshift**(`...values`): `void`
+▸ **unshift**(`...values`): `number`
 
 #### Parameters
 
@@ -332,11 +325,11 @@
 
 #### Returns
 
-`void`
+`number`
 
 #### Defined in
 
-[types/deque.ts:7](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/deque.ts#L7)
+[types/deque.ts:5](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/deque.ts#L5)
 
 ---
 
@@ -354,4 +347,4 @@
 
 #### Defined in
 
-[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L12)
+[types/collection.ts:14](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L14)

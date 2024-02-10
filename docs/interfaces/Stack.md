@@ -10,7 +10,7 @@
 
 ## Hierarchy
 
-- [`Collection`](Collection.md)\<`V`, `number`\>
+- [`Collection`](Collection.md)\<`number`, `V`\>
 
   ↳ **`Stack`**
 
@@ -18,13 +18,13 @@
 
 ## Implemented by
 
-- [`CircleStack`](../classes/CircleStack.md)
+- [`CircularLinkedStack`](../classes/CircularLinkedStack.md)
+- [`CircularStack`](../classes/CircularStack.md)
 
 ## Table of contents
 
 ### Properties
 
-- [capacity](Stack.md#capacity)
 - [size](Stack.md#size)
 
 ### Methods
@@ -35,26 +35,13 @@
 - [forEach](Stack.md#foreach)
 - [has](Stack.md#has)
 - [keys](Stack.md#keys)
+- [last](Stack.md#last)
 - [pop](Stack.md#pop)
 - [push](Stack.md#push)
 - [top](Stack.md#top)
 - [values](Stack.md#values)
 
 ## Properties
-
-### capacity
-
-• **capacity**: `number`
-
-#### Inherited from
-
-[Collection](Collection.md).[capacity](Collection.md#capacity)
-
-#### Defined in
-
-[types/collection.ts:10](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L10)
-
----
 
 ### size
 
@@ -66,7 +53,7 @@
 
 #### Defined in
 
-[types/collection.ts:11](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L11)
+[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L13)
 
 ## Methods
 
@@ -78,13 +65,9 @@
 
 `IterableIterator`\<`V`\>
 
-#### Inherited from
-
-[Collection](Collection.md).[[iterator]](Collection.md#[iterator])
-
 #### Defined in
 
-[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L13)
+[types/stack.ts:8](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/stack.ts#L8)
 
 ---
 
@@ -102,7 +85,7 @@
 
 #### Defined in
 
-[types/collection.ts:2](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L2)
+[types/collection.ts:6](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L6)
 
 ---
 
@@ -120,7 +103,7 @@
 
 #### Defined in
 
-[types/collection.ts:3](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L3)
+[types/collection.ts:7](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L7)
 
 ---
 
@@ -145,7 +128,7 @@
 
 #### Defined in
 
-[types/collection.ts:4](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L4)
+[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L8)
 
 ---
 
@@ -163,13 +146,9 @@
 
 `boolean`
 
-#### Inherited from
-
-[Collection](Collection.md).[has](Collection.md#has)
-
 #### Defined in
 
-[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L8)
+[types/stack.ts:4](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/stack.ts#L4)
 
 ---
 
@@ -187,7 +166,21 @@
 
 #### Defined in
 
-[types/collection.ts:9](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L9)
+[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L12)
+
+---
+
+### last
+
+▸ **last**(): `undefined` \| `V`
+
+#### Returns
+
+`undefined` \| `V`
+
+#### Defined in
+
+[types/stack.ts:5](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/stack.ts#L5)
 
 ---
 
@@ -201,13 +194,13 @@
 
 #### Defined in
 
-[types/stack.ts:4](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/stack.ts#L4)
+[types/stack.ts:6](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/stack.ts#L6)
 
 ---
 
 ### push
 
-▸ **push**(`...values`): `void`
+▸ **push**(`...values`): `number`
 
 #### Parameters
 
@@ -217,11 +210,11 @@
 
 #### Returns
 
-`void`
+`number`
 
 #### Defined in
 
-[types/stack.ts:5](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/stack.ts#L5)
+[types/stack.ts:7](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/stack.ts#L7)
 
 ---
 
@@ -235,7 +228,7 @@
 
 #### Defined in
 
-[types/stack.ts:6](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/stack.ts#L6)
+[types/stack.ts:9](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/stack.ts#L9)
 
 ---
 
@@ -253,4 +246,4 @@
 
 #### Defined in
 
-[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/be03be2/src/types/collection.ts#L12)
+[types/collection.ts:14](https://github.com/havelessbemore/circle-ds/blob/e0cc6e8/src/types/collection.ts#L14)

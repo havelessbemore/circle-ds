@@ -1,0 +1,764 @@
+[circle-ds](../README.md) / [Exports](../modules.md) / CircularStack
+
+# Class: CircularStack\<T\>
+
+A circular stack is similar to a traditional stack, but uses a fixed-size,
+circular buffer. When the stack reaches its maximum capacity and a new
+element is added, the oldest is discarded, thus maintaining its size.
+
+This structure efficiently utilizes memory for applications where only the
+most recent additions are of interest and older data can be discarded.
+
+**`See`**
+
+[Wikipedia](https://en.wikipedia.org/wiki/Circular_buffer)
+
+## Type parameters
+
+| Name |
+| :--- |
+| `T`  |
+
+## Hierarchy
+
+- `CircularBase`\<`T`\>
+
+  ↳ **`CircularStack`**
+
+## Implements
+
+- [`Bounded`](../interfaces/Bounded.md)\<`T`\>
+- [`Stack`](../interfaces/Stack.md)\<`T`\>
+
+## Table of contents
+
+### Constructors
+
+- [constructor](CircularStack.md#constructor)
+
+### Properties
+
+- [\_capacity](CircularStack.md#_capacity)
+
+### Accessors
+
+- [[toStringTag]](CircularStack.md#[tostringtag])
+- [capacity](CircularStack.md#capacity)
+- [size](CircularStack.md#size)
+
+### Methods
+
+- [[iterator]](CircularStack.md#[iterator])
+- [addListener](CircularStack.md#addlistener)
+- [clear](CircularStack.md#clear)
+- [emit](CircularStack.md#emit)
+- [entries](CircularStack.md#entries)
+- [evict](CircularStack.md#evict)
+- [forEach](CircularStack.md#foreach)
+- [has](CircularStack.md#has)
+- [isSequential](CircularStack.md#issequential)
+- [keys](CircularStack.md#keys)
+- [last](CircularStack.md#last)
+- [on](CircularStack.md#on)
+- [pop](CircularStack.md#pop)
+- [prependListener](CircularStack.md#prependlistener)
+- [push](CircularStack.md#push)
+- [removeListener](CircularStack.md#removelistener)
+- [sequentialReset](CircularStack.md#sequentialreset)
+- [top](CircularStack.md#top)
+- [values](CircularStack.md#values)
+
+## Constructors
+
+### constructor
+
+• **new CircularStack**\<`T`\>(): [`CircularStack`](CircularStack.md)\<`T`\>
+
+Creates a new stack. Default `capacity` is `Infinity`.
+
+#### Type parameters
+
+| Name |
+| :--- |
+| `T`  |
+
+#### Returns
+
+[`CircularStack`](CircularStack.md)\<`T`\>
+
+#### Overrides
+
+CircularBase\&lt;T\&gt;.constructor
+
+#### Defined in
+
+circle/circularStack.ts:57
+
+• **new CircularStack**\<`T`\>(`capacity?`): [`CircularStack`](CircularStack.md)\<`T`\>
+
+Creates a new stack with the given capacity.
+
+#### Type parameters
+
+| Name |
+| :--- |
+| `T`  |
+
+#### Parameters
+
+| Name        | Type               | Description           |
+| :---------- | :----------------- | :-------------------- |
+| `capacity?` | `null` \| `number` | the stack's capacity. |
+
+#### Returns
+
+[`CircularStack`](CircularStack.md)\<`T`\>
+
+#### Overrides
+
+CircularBase\&lt;T\&gt;.constructor
+
+#### Defined in
+
+circle/circularStack.ts:63
+
+• **new CircularStack**\<`T`\>(`items`): [`CircularStack`](CircularStack.md)\<`T`\>
+
+Creates a new stack from the given items. `capacity` will equal the number of items.
+
+#### Type parameters
+
+| Name |
+| :--- |
+| `T`  |
+
+#### Parameters
+
+| Name    | Type              | Description                      |
+| :------ | :---------------- | :------------------------------- |
+| `items` | `Iterable`\<`T`\> | the initial values in the stack. |
+
+#### Returns
+
+[`CircularStack`](CircularStack.md)\<`T`\>
+
+#### Overrides
+
+CircularBase\&lt;T\&gt;.constructor
+
+#### Defined in
+
+circle/circularStack.ts:69
+
+## Properties
+
+### \_capacity
+
+• `Protected` **\_capacity**: `number`
+
+The maximum number of elements that can be stored in the collection.
+
+#### Defined in
+
+circle/circularStack.ts:28
+
+## Accessors
+
+### [toStringTag]
+
+• `get` **[toStringTag]**(): `string`
+
+Return the type of the object.
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+circle/circularStack.ts:149
+
+---
+
+### capacity
+
+• `get` **capacity**(): `number`
+
+#### Returns
+
+`number`
+
+the maximum number of elements that can be stored.
+
+#### Implementation of
+
+[Bounded](../interfaces/Bounded.md).[capacity](../interfaces/Bounded.md#capacity)
+
+#### Defined in
+
+circle/circularStack.ts:105
+
+• `set` **capacity**(`capacity`): `void`
+
+Sets the maximum number of elements that can be stored.
+
+#### Parameters
+
+| Name       | Type     |
+| :--------- | :------- |
+| `capacity` | `number` |
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[Bounded](../interfaces/Bounded.md).[capacity](../interfaces/Bounded.md#capacity)
+
+#### Defined in
+
+circle/circularStack.ts:112
+
+---
+
+### size
+
+• `get` **size**(): `number`
+
+#### Returns
+
+`number`
+
+the number of elements in the collection.
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[size](../interfaces/Stack.md#size)
+
+#### Defined in
+
+circle/circularStack.ts:142
+
+## Methods
+
+### [iterator]
+
+▸ **[iterator]**(): `IterableIterator`\<`T`\>
+
+Iterate through the collection's values.
+
+**NOTE:** Unknown behavior may occur if the collection is modified during use.
+
+#### Returns
+
+`IterableIterator`\<`T`\>
+
+an iterable of values.
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[[iterator]](../interfaces/Stack.md#[iterator])
+
+#### Defined in
+
+circle/circularStack.ts:323
+
+---
+
+### addListener
+
+▸ **addListener**(`event`, `listener`): `this`
+
+Appends the listener function to the listeners array for the
+[BoundedEvent.Overflow](../modules.md#overflow) event.
+
+- No checks are made to see if the listener has already been added.
+  Multiple calls with the same of event + listener combination will
+  result in the listener being added and called multiple times.
+
+- By default, event listeners are invoked in the order they are added.
+  The `prependListener()` method can be used as an alternative to add
+  the event listener to the beginning of the listeners array.
+
+#### Parameters
+
+| Name       | Type                       | Description                                                                                                                                                                                                                          |
+| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
+
+#### Returns
+
+`this`
+
+the collection.
+
+#### Implementation of
+
+[Bounded](../interfaces/Bounded.md).[addListener](../interfaces/Bounded.md#addlistener)
+
+#### Inherited from
+
+CircularBase.addListener
+
+#### Defined in
+
+circle/circularBase.ts:41
+
+---
+
+### clear
+
+▸ **clear**(): `void`
+
+Remove all elements and resets the collection.
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[clear](../interfaces/Stack.md#clear)
+
+#### Defined in
+
+circle/circularStack.ts:156
+
+---
+
+### emit
+
+▸ **emit**(`evicted`): `void`
+
+#### Parameters
+
+| Name      | Type    |
+| :-------- | :------ |
+| `evicted` | `T`[][] |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+circle/circularStack.ts:417
+
+---
+
+### entries
+
+▸ **entries**(): `IterableIterator`\<[`number`, `T`]\>
+
+Iterate through the collection's entries.
+
+**NOTE:** Unknown behavior may occur if the collection is modified during use.
+
+#### Returns
+
+`IterableIterator`\<[`number`, `T`]\>
+
+an iterable of [key, value] pairs for every entry.
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[entries](../interfaces/Stack.md#entries)
+
+#### Defined in
+
+circle/circularStack.ts:170
+
+---
+
+### evict
+
+▸ **evict**(`count`): `T`[][]
+
+Removes a given number of elements from the stack.
+If elements are removed, the [BoundedEvent.Overflow](../modules.md#overflow) event
+is emitted one or more times.
+
+#### Parameters
+
+| Name    | Type     | Description                     |
+| :------ | :------- | :------------------------------ |
+| `count` | `number` | The number of elements to evict |
+
+#### Returns
+
+`T`[][]
+
+#### Defined in
+
+circle/circularStack.ts:431
+
+---
+
+### forEach
+
+▸ **forEach**(`callbackfn`, `thisArg?`): `void`
+
+Performs the specified action for each element in the collection.
+
+**NOTE:** Unknown behavior may occur if the collection is modified during use.
+
+#### Parameters
+
+| Name         | Type                                                              | Description                                                                                                    |
+| :----------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- |
+| `callbackfn` | (`value`: `T`, `index`: `number`, `collection`: `this`) => `void` | A function that accepts up to three arguments. It is called once per element.                                  |
+| `thisArg?`   | `unknown`                                                         | An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used. |
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[forEach](../interfaces/Stack.md#foreach)
+
+#### Defined in
+
+circle/circularStack.ts:184
+
+---
+
+### has
+
+▸ **has**(`value`): `boolean`
+
+Determines whether a given element is in the collection.
+
+**NOTE:** Unknown behavior may occur if the collection is modified during use.
+
+#### Parameters
+
+| Name    | Type | Description               |
+| :------ | :--- | :------------------------ |
+| `value` | `T`  | The element to search for |
+
+#### Returns
+
+`boolean`
+
+a boolean indicating if `value` was found or not
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[has](../interfaces/Stack.md#has)
+
+#### Defined in
+
+circle/circularStack.ts:204
+
+---
+
+### isSequential
+
+▸ **isSequential**(): `boolean`
+
+Returns whether the stack is stored sequentially in memory.
+
+#### Returns
+
+`boolean`
+
+`true` if the stack is sequential in memory, `false` otherwise.
+
+#### Defined in
+
+circle/circularStack.ts:413
+
+---
+
+### keys
+
+▸ **keys**(): `IterableIterator`\<`number`\>
+
+Iterate through the collection's keys.
+
+**NOTE:** Unknown behavior may occur if the collection is modified during use.
+
+#### Returns
+
+`IterableIterator`\<`number`\>
+
+an iterable of keys.
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[keys](../interfaces/Stack.md#keys)
+
+#### Defined in
+
+circle/circularStack.ts:221
+
+---
+
+### last
+
+▸ **last**(): `undefined` \| `T`
+
+Get the last element in the stack.
+
+Alias for [top()](CircularStack.md#top).
+
+#### Returns
+
+`undefined` \| `T`
+
+the last element, or `undefined` if empty.
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[last](../interfaces/Stack.md#last)
+
+#### Defined in
+
+circle/circularStack.ts:234
+
+---
+
+### on
+
+▸ **on**(`event`, `listener`): `this`
+
+Appends the listener function to the listeners array for the
+[BoundedEvent.Overflow](../modules.md#overflow) event.
+
+- No checks are made to see if the listener has already been added.
+  Multiple calls with the same of event + listener combination will
+  result in the listener being added and called multiple times.
+
+- By default, event listeners are invoked in the order they are added.
+  The `prependListener()` method can be used as an alternative to add
+  the event listener to the beginning of the listeners array.
+
+#### Parameters
+
+| Name       | Type                       | Description                                                                                                                                                                                                                          |
+| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
+
+#### Returns
+
+`this`
+
+the collection.
+
+#### Implementation of
+
+[Bounded](../interfaces/Bounded.md).[on](../interfaces/Bounded.md#on)
+
+#### Inherited from
+
+CircularBase.on
+
+#### Defined in
+
+circle/circularBase.ts:73
+
+---
+
+### pop
+
+▸ **pop**(): `undefined` \| `T`
+
+Removes the element at the front of the queue.
+
+#### Returns
+
+`undefined` \| `T`
+
+the front element, or `undefined` if empty.
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[pop](../interfaces/Stack.md#pop)
+
+#### Defined in
+
+circle/circularStack.ts:246
+
+---
+
+### prependListener
+
+▸ **prependListener**(`event`, `listener`): `this`
+
+Adds the listener function to the beginning of the listeners array for
+the [BoundedEvent.Overflow](../modules.md#overflow) event.
+
+- No checks are made to see if the listener has already been added.
+  Multiple calls with the same of event + listener combination will
+  result in the listener being added and called multiple times.
+
+- Alternatively, the `addListener()` method can be used to add
+  the event listener to the end of the listeners array.
+
+#### Parameters
+
+| Name       | Type                       | Description                                                                                                                                                                                                                          |
+| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
+
+#### Returns
+
+`this`
+
+the collection.
+
+#### Implementation of
+
+[Bounded](../interfaces/Bounded.md).[prependListener](../interfaces/Bounded.md#prependlistener)
+
+#### Inherited from
+
+CircularBase.prependListener
+
+#### Defined in
+
+circle/circularBase.ts:104
+
+---
+
+### push
+
+▸ **push**(`...elems`): `number`
+
+Inserts new elements at the end of the stack.
+
+#### Parameters
+
+| Name       | Type  | Description         |
+| :--------- | :---- | :------------------ |
+| `...elems` | `T`[] | Elements to insert. |
+
+#### Returns
+
+`number`
+
+The overwritten elements, if any.
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[push](../interfaces/Stack.md#push)
+
+#### Defined in
+
+circle/circularStack.ts:270
+
+---
+
+### removeListener
+
+▸ **removeListener**(`event`, `listener`): `this`
+
+Removes the specified listener from the listener array for the event.
+
+At most once instance of a listener will be removed. If a listener
+has been added multiple times for the same event, this method should
+be called once per instance.
+
+#### Parameters
+
+| Name       | Type                       | Description            |
+| :--------- | :------------------------- | :--------------------- |
+| `event`    | `"overflow"`               | The name of the event. |
+| `listener` | (`elems`: `T`[]) => `void` | The callback function. |
+
+#### Returns
+
+`this`
+
+the collection.
+
+#### Implementation of
+
+[Bounded](../interfaces/Bounded.md).[removeListener](../interfaces/Bounded.md#removelistener)
+
+#### Inherited from
+
+CircularBase.removeListener
+
+#### Defined in
+
+circle/circularBase.ts:128
+
+---
+
+### sequentialReset
+
+▸ **sequentialReset**(`capacity`): `boolean`
+
+Adjusts the stack to fit within the given capacity.
+
+Assumes the stack is A) sequential in memory and B) size \<= capacity.
+
+#### Parameters
+
+| Name       | Type     | Description       |
+| :--------- | :------- | :---------------- |
+| `capacity` | `number` | the new capacity. |
+
+#### Returns
+
+`boolean`
+
+`true` if the stack was reset, `false` otherwise.
+
+#### Defined in
+
+circle/circularStack.ts:481
+
+---
+
+### top
+
+▸ **top**(): `undefined` \| `T`
+
+Get the last element in the stack.
+
+Alias for [last()](CircularStack.md#last).
+
+#### Returns
+
+`undefined` \| `T`
+
+the last element, or `undefined` if empty.
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[top](../interfaces/Stack.md#top)
+
+#### Defined in
+
+circle/circularStack.ts:334
+
+---
+
+### values
+
+▸ **values**(): `IterableIterator`\<`T`\>
+
+Iterate through the collection's values.
+
+**NOTE:** Unknown behavior may occur if the collection is modified during use.
+
+#### Returns
+
+`IterableIterator`\<`T`\>
+
+an iterable of values.
+
+#### Implementation of
+
+[Stack](../interfaces/Stack.md).[values](../interfaces/Stack.md#values)
+
+#### Defined in
+
+circle/circularStack.ts:348
