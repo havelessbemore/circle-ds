@@ -136,7 +136,6 @@ describe(CircularBase.name, () => {
         () => callOrder.push("third"),
       ];
 
-      // Prepend listeners in reverse order to test that they are called in the order they were added
       listeners
         .reverse()
         .forEach(listener =>
