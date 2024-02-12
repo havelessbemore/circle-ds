@@ -49,15 +49,15 @@ The following is common across all collections.
 
 #### Methods
 
-- [`clear(): void`](./docs/interfaces/Collection.md#clear): Remove all items from the collection.
+- `clear(): void`: Remove all items from the collection.
 
-- [`entries(): IterableIterator<K, V>`](./docs/interfaces/Collection.md#entries): Returns an iterator of `[key/index, value]` pairs through the collection.
+- `entries(): IterableIterator<K, V>`: Returns an iterator of `[key/index, value]` pairs through the collection.
 
-- [`forEach(callbackFn: (value: V, index: K, collection: Collection<K, V>) => void, thisArg?: unknown): void`](./docs/interfaces/Collection.md#foreach): Executes the provided `callbackFn` function once for each element.
+- `forEach(callbackFn: (value: V, index: K, collection: Collection<K, V>) => void, thisArg?: unknown): void`: Executes the provided `callbackFn` function once for each element.
 
-- [`keys(): IterableIterator<K>`](./docs/interfaces/Collection.md#keys): Returns an iterator for the keys / indices in the collection.
+- `keys(): IterableIterator<K>`: Returns an iterator for the keys / indices in the collection.
 
-- [`values(): IterableIterator<V>`](./docs/interfaces/Collection.md#values): Returns an iterator for the values in the collection.
+- `values(): IterableIterator<V>`: Returns an iterator for the values in the collection.
 
 - `[Symbol.iterator](): IterableIterator`: Returns an iterator for the values or key-value pairs in the collection.
 
@@ -81,13 +81,13 @@ The following is common across all collections.
 
 - [`pop(): T | undefined`](./docs/classes/CircularDeque.md#pop): Removes and returns the last item, or `undefined` if the collection is empty.
 
-- [`push(...items: T[]): T[]`](./docs/classes/CircularDeque.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- [`push(...items: T[]): number`](./docs/classes/CircularDeque.md#push): Appends items to the collection and returns the new size. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
 - [`shift(): T | undefined`](./docs/classes/CircularDeque.md#shift): Removes and returns the first item, or `undefined` if the collection is empty.
 
 - [`top(): T | undefined`](./docs/classes/CircularDeque.md#top): Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
 
-- [`unshift(...items: T[]): T[]`](./docs/classes/CircularDeque.md#unshift): Prepends items to the collection. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- [`unshift(...items: T[]): number`](./docs/classes/CircularDeque.md#unshift): Prepends items to the collection and returns the new size. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularDeque.md#iterator): Returns an iterator for the values in the collection.
 
@@ -99,17 +99,17 @@ The following is common across all collections.
 
 #### Methods
 
-- [`add(value: T): this`](./docs/classes/CircularMap.md#add): Adds the value to the collection. If at capacity, the oldest values are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event. If an existing value is added again, then it will be treated as new.
+- [`delete(key: K): boolean`](./docs/classes/CircularMap.md#delete): Deletes the value from the collection. Returns `true` if the value exists and was removed successfully, or `false` otherwise.
 
-- [`delete(value: T): boolean`](./docs/classes/CircularMap.md#add): Deletes the value from the collection. Returns `true` if the value exists and was removed successfully, or `false` otherwise.
+- [`has(key: K): boolean`](./docs/classes/CircularMap.md#has): Checks if the collection contains a specific value.
 
-- [`has(value: T): boolean`](./docs/classes/CircularMap.md#has): Checks if the collection contains a specific value.
+- [`set(key: K, value: V): this`](./docs/classes/CircularMap.md#set): Sets the key to the given value in the collection. If at capacity, the oldest key-value pair is overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event. If an existing key is added again, then it will be treated as new.
 
-- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularSet.md#iterator): Returns an iterator for the values in the collection.
+- [`[Symbol.iterator](): IterableIterator<[K, V]>`](./docs/classes/CircularMap.md#iterator): Returns an iterator for the entries in the collection.
 
 ### [CircularQueue](./docs/classes/CircularQueue.md) & [CircularLinkedQueue](./docs/classes/CircularLinkedQueue.md)
 
-`CircularQueue` is a FIFO (First In, First Out) data structure with a fixed size.
+`CircularQueue` is a FIFO (First In, First Out) data structure with a fixed capacity.
 
 #### Constructor
 
@@ -123,7 +123,7 @@ The following is common across all collections.
 
 - [`has(value: T): boolean`](./docs/classes/CircularQueue.md#has): Checks if the collection contains a specific value.
 
-- [`push(...items: T[]): T[]`](./docs/classes/CircularQueue.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- [`push(...items: T[]): number`](./docs/classes/CircularQueue.md#push): Appends items to the collection and returns the new size. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
 - [`shift(): T | undefined`](./docs/classes/CircularQueue.md#shift): Removes and returns the first item, or `undefined` if the collection is empty.
 
@@ -139,7 +139,7 @@ The following is common across all collections.
 
 - [`add(value: T): this`](./docs/classes/CircularSet.md#add): Adds the value to the collection. If at capacity, the oldest values are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event. If an existing value is added again, then it will be treated as new.
 
-- [`delete(value: T): boolean`](./docs/classes/CircularSet.md#add): Deletes the value from the collection. Returns `true` if the value exists and was removed successfully, or `false` otherwise.
+- [`delete(value: T): boolean`](./docs/classes/CircularSet.md#delete): Deletes the value from the collection. Returns `true` if the value exists and was removed successfully, or `false` otherwise.
 
 - [`has(value: T): boolean`](./docs/classes/CircularSet.md#has): Checks if the collection contains a specific value.
 
@@ -161,7 +161,7 @@ The following is common across all collections.
 
 - [`pop(): T | undefined`](./docs/classes/CircularStack.md#pop): Removes and returns the last item, or `undefined` if the collection is empty.
 
-- [`push(...items: T[]): T[]`](./docs/classes/CircularStack.md#push): Appends items to the collection. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- [`push(...items: T[]): number`](./docs/classes/CircularStack.md#push): Appends items to the collection and returns the new size. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
 - [`top(): T | undefined`](./docs/classes/CircularStack.md#top): Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
 

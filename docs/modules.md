@@ -41,4 +41,4 @@
 
 #### Defined in
 
-[types/boundedEvent.ts:1](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/types/boundedEvent.ts#L1)
+[types/boundedEvent.ts:1](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/types/boundedEvent.ts#L1)
