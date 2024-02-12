@@ -1,7 +1,7 @@
 import EventEmitter from "events";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { CircularBase } from "./CircularBase";
+import { CircularBase } from "./circularBase";
 import { BoundedEvent } from "../types/boundedEvent";
 
 describe(CircularBase.name, () => {
