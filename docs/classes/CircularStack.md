@@ -94,7 +94,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularStack.ts:59](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L59)
+[circle/circularStack.ts:59](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L59)
 
 • **new CircularStack**\<`T`\>(`capacity?`): [`CircularStack`](CircularStack.md)\<`T`\>
 
@@ -122,7 +122,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularStack.ts:65](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L65)
+[circle/circularStack.ts:65](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L65)
 
 • **new CircularStack**\<`T`\>(`items`): [`CircularStack`](CircularStack.md)\<`T`\>
 
@@ -150,7 +150,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularStack.ts:71](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L71)
+[circle/circularStack.ts:71](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L71)
 
 ## Properties
 
@@ -162,7 +162,7 @@ The maximum number of elements that can be stored in the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:25](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L25)
+[circle/circularStack.ts:25](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L25)
 
 ___
 
@@ -174,7 +174,7 @@ Whether capacity is finite (true) or infinite (false).
 
 #### Defined in
 
-[circle/circularStack.ts:36](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L36)
+[circle/circularStack.ts:36](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L36)
 
 ## Accessors
 
@@ -190,7 +190,7 @@ Return the type of the object.
 
 #### Defined in
 
-[circle/circularStack.ts:161](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L161)
+[circle/circularStack.ts:161](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L161)
 
 ___
 
@@ -210,7 +210,7 @@ the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularStack.ts:113](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L113)
+[circle/circularStack.ts:113](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L113)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -232,7 +232,7 @@ Sets the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularStack.ts:120](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L120)
+[circle/circularStack.ts:120](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L120)
 
 ___
 
@@ -252,7 +252,7 @@ the number of elements in the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:154](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L154)
+[circle/circularStack.ts:154](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L154)
 
 ## Methods
 
@@ -276,7 +276,7 @@ an iterable of values.
 
 #### Defined in
 
-[circle/circularStack.ts:327](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L327)
+[circle/circularStack.ts:327](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L327)
 
 ___
 
@@ -299,7 +299,7 @@ Append new elements to the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:482](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L482)
+[circle/circularStack.ts:482](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L482)
 
 ___
 
@@ -341,7 +341,7 @@ CircularBase.addListener
 
 #### Defined in
 
-[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularBase.ts#L40)
+[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularBase.ts#L40)
 
 ___
 
@@ -361,7 +361,7 @@ Remove all elements from the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:168](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L168)
+[circle/circularStack.ts:168](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L168)
 
 ___
 
@@ -383,7 +383,7 @@ Emit an event containing the items evicted from the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:363](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L363)
+[circle/circularStack.ts:363](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L363)
 
 ___
 
@@ -407,7 +407,7 @@ an iterable of [key, value] pairs for every entry.
 
 #### Defined in
 
-[circle/circularStack.ts:182](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L182)
+[circle/circularStack.ts:182](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L182)
 
 ___
 
@@ -431,7 +431,7 @@ is emitted one or more times.
 
 #### Defined in
 
-[circle/circularStack.ts:374](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L374)
+[circle/circularStack.ts:374](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L374)
 
 ___
 
@@ -460,7 +460,7 @@ Performs the specified action for each element in the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:196](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L196)
+[circle/circularStack.ts:196](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L196)
 
 ___
 
@@ -490,7 +490,7 @@ a boolean indicating if `value` was found or not
 
 #### Defined in
 
-[circle/circularStack.ts:216](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L216)
+[circle/circularStack.ts:216](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L216)
 
 ___
 
@@ -508,7 +508,7 @@ Returns whether the stack is stored sequentially in memory.
 
 #### Defined in
 
-[circle/circularStack.ts:472](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L472)
+[circle/circularStack.ts:472](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L472)
 
 ___
 
@@ -532,7 +532,7 @@ an iterable of keys.
 
 #### Defined in
 
-[circle/circularStack.ts:233](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L233)
+[circle/circularStack.ts:233](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L233)
 
 ___
 
@@ -556,7 +556,7 @@ the last element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularStack.ts:246](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L246)
+[circle/circularStack.ts:246](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L246)
 
 ___
 
@@ -598,7 +598,7 @@ CircularBase.on
 
 #### Defined in
 
-[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularBase.ts#L73)
+[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularBase.ts#L73)
 
 ___
 
@@ -620,7 +620,7 @@ the top element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularStack.ts:255](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L255)
+[circle/circularStack.ts:255](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L255)
 
 ___
 
@@ -661,7 +661,7 @@ CircularBase.prependListener
 
 #### Defined in
 
-[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularBase.ts#L102)
+[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularBase.ts#L102)
 
 ___
 
@@ -689,7 +689,7 @@ The new size of the stack.
 
 #### Defined in
 
-[circle/circularStack.ts:276](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L276)
+[circle/circularStack.ts:276](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L276)
 
 ___
 
@@ -726,7 +726,7 @@ CircularBase.removeListener
 
 #### Defined in
 
-[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularBase.ts#L127)
+[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularBase.ts#L127)
 
 ___
 
@@ -752,7 +752,7 @@ Assumes the stack is A) sequential in memory and B) size \<= capacity.
 
 #### Defined in
 
-[circle/circularStack.ts:507](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L507)
+[circle/circularStack.ts:507](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L507)
 
 ___
 
@@ -776,7 +776,7 @@ the last element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularStack.ts:338](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L338)
+[circle/circularStack.ts:338](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L338)
 
 ___
 
@@ -800,4 +800,4 @@ an iterable of values.
 
 #### Defined in
 
-[circle/circularStack.ts:352](https://github.com/havelessbemore/circle-ds/blob/7c429bf/src/circle/circularStack.ts#L352)
+[circle/circularStack.ts:352](https://github.com/havelessbemore/circle-ds/blob/3a76070/src/circle/circularStack.ts#L352)
