@@ -741,6 +741,10 @@ export declare class CircularQueue<T> extends CircularBase<T> implements Bounded
      */
     protected _capacity: number;
     /* Excluded from this release type: head */
+    /**
+     * Whether capacity is finite (true) or infinite (false).
+     */
+    protected isFinite: boolean;
     /* Excluded from this release type: next */
     /* Excluded from this release type: _size */
     /* Excluded from this release type: vals */
@@ -832,11 +836,11 @@ export declare class CircularQueue<T> extends CircularBase<T> implements Bounded
      */
     keys(): IterableIterator<number>;
     /**
-     * Inserts new elements at the end of the stack.
+     * Inserts new elements at the end of the queue.
      *
      * @param elems - Elements to insert.
      *
-     * @returns The overwritten elements, if any.
+     * @returns The new size of the queue.
      */
     push(...elems: T[]): number;
     /**
@@ -861,6 +865,20 @@ export declare class CircularQueue<T> extends CircularBase<T> implements Bounded
      * @returns an iterable of values.
      */
     values(): IterableIterator<T>;
+    /**
+     * Emit an event containing the items evicted from the collection.
+     *
+     * @param evicted - The items evicted from the collection.
+     */
+    protected emit(evicted: T[]): void;
+    /**
+     * Removes a given number of elements from the queue.
+     * If elements are removed, the {@link BoundedEvent.Overflow} event
+     * is emitted one or more times.
+     *
+     * @param count - The number of elements to evict.
+     */
+    protected evict(count: number): void;
     /* Excluded from this release type: grow */
     /**
      * Returns whether the queue is stored sequentially in memory.
@@ -868,15 +886,13 @@ export declare class CircularQueue<T> extends CircularBase<T> implements Bounded
      * @returns `true` if the queue is sequential in memory, `false` otherwise.
      */
     protected isSequential(): boolean;
-    protected emit(evicted: T[][]): void;
     /**
-     * Removes a given number of elements from the queue.
-     * If elements are removed, the {@link BoundedEvent.Overflow} event
-     * is emitted one or more times.
+     * Append new elements to the collection.
      *
-     * @param count - The number of elements to evict
+     * @param elems - The elements to append.
+     * @param max - The number of elements to append.
      */
-    protected evict(count: number): T[][];
+    protected _push(elems: T[], max: number): void;
     /**
      * Adjusts the queue to fit within the given capacity.
      *
@@ -1014,6 +1030,10 @@ export declare class CircularStack<T> extends CircularBase<T> implements Bounded
      */
     protected _capacity: number;
     /* Excluded from this release type: head */
+    /**
+     * Whether capacity is finite (true) or infinite (false).
+     */
+    protected isFinite: boolean;
     /* Excluded from this release type: next */
     /* Excluded from this release type: _size */
     /* Excluded from this release type: vals */
@@ -1050,7 +1070,7 @@ export declare class CircularStack<T> extends CircularBase<T> implements Bounded
      */
     get [Symbol.toStringTag](): string;
     /**
-     * Remove all elements and resets the collection.
+     * Remove all elements from the collection.
      */
     clear(): void;
     /**
@@ -1097,9 +1117,9 @@ export declare class CircularStack<T> extends CircularBase<T> implements Bounded
      */
     last(): T | undefined;
     /**
-     * Removes the element at the front of the queue.
+     * Removes the element at the top of the stack.
      *
-     * @returns the front element, or `undefined` if empty.
+     * @returns the top element, or `undefined` if empty.
      */
     pop(): T | undefined;
     /**
@@ -1107,7 +1127,7 @@ export declare class CircularStack<T> extends CircularBase<T> implements Bounded
      *
      * @param elems - Elements to insert.
      *
-     * @returns The overwritten elements, if any.
+     * @returns The new size of the stack.
      */
     push(...elems: T[]): number;
     /**
@@ -1134,6 +1154,20 @@ export declare class CircularStack<T> extends CircularBase<T> implements Bounded
      * @returns an iterable of values.
      */
     values(): IterableIterator<T>;
+    /**
+     * Emit an event containing the items evicted from the collection.
+     *
+     * @param evicted - The items evicted from the collection.
+     */
+    protected emit(evicted: T[]): void;
+    /**
+     * Removes a given number of elements from the stack.
+     * If elements are removed, the {@link BoundedEvent.Overflow} event
+     * is emitted one or more times.
+     *
+     * @param count - The number of elements to evict.
+     */
+    protected evict(count: number): void;
     /* Excluded from this release type: grow */
     /**
      * Returns whether the stack is stored sequentially in memory.
@@ -1141,15 +1175,13 @@ export declare class CircularStack<T> extends CircularBase<T> implements Bounded
      * @returns `true` if the stack is sequential in memory, `false` otherwise.
      */
     protected isSequential(): boolean;
-    protected emit(evicted: T[][]): void;
     /**
-     * Removes a given number of elements from the stack.
-     * If elements are removed, the {@link BoundedEvent.Overflow} event
-     * is emitted one or more times.
+     * Append new elements to the collection.
      *
-     * @param count - The number of elements to evict
+     * @param elems - The elements to append.
+     * @param max - The number of elements to append.
      */
-    protected evict(count: number): T[][];
+    protected _push(elems: T[], max: number): void;
     /**
      * Adjusts the stack to fit within the given capacity.
      *

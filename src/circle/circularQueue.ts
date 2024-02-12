@@ -1,14 +1,9 @@
 import { CircularBase } from "./circularBase";
 import { BoundedEvent } from "../types/boundedEvent";
 import { Queue } from "../types/queue";
-import {
-  isArrayLength,
-  isInfinity,
-  isNull,
-  isNumber,
-  isUndefined,
-} from "../utils/is";
+import { isArrayLength, isInfinity, isNumber } from "../utils/is";
 import { Bounded } from "../types/bounded";
+import { ARRAY_MAX_LENGTH } from "../utils/constants";
 
 /**
  * A circular queue is similar to a traditional queue, but uses a fixed-size,
@@ -34,6 +29,11 @@ export class CircularQueue<T>
    * @internal
    */
   protected head: number;
+
+  /**
+   * Whether capacity is finite (true) or infinite (false).
+   */
+  protected isFinite: boolean;
 
   /**
    * The index one more than the last element.
@@ -73,31 +73,37 @@ export class CircularQueue<T>
     super();
 
     // Initialize class variables
-    this._capacity = Infinity;
+    this._capacity = ARRAY_MAX_LENGTH;
     this.head = 0;
+    this.isFinite = false;
     this._size = 0;
     this.next = 0;
     this.vals = [];
 
-    // Case 1: capacity is null, undefined or Infinity
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    // If capacity is null, undefined, or Infinity
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
 
-    // Case 2: capacity is zero or a safe positive integer
+    // If capacity is a number
     if (isNumber(capacity)) {
+      // If capacity is invalid
       if (!isArrayLength(capacity)) {
         throw new RangeError("Invalid capacity");
       }
+      // If capacity is valid
       this._capacity = capacity;
+      this.isFinite = true;
       return;
     }
 
-    // Case 3: capacity is iterable
+    // If capacity is an iterable
     for (const value of capacity as Iterable<T>) {
       this.vals.push(value);
     }
     this._capacity = this.vals.length;
+    this.isFinite = true;
     this._size = this._capacity;
   }
 
@@ -105,37 +111,41 @@ export class CircularQueue<T>
    * @returns the maximum number of elements that can be stored.
    */
   get capacity(): number {
-    return this._capacity;
+    return this.isFinite ? this._capacity : Infinity;
   }
 
   /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(capacity: number) {
-    // Convert input to a number
+    // Convert capacity to a number
     capacity = +capacity;
 
-    // Check if input is valid
-    if (!isInfinity(capacity) && !isArrayLength(capacity)) {
+    // Check capacity
+    if (isInfinity(capacity)) {
+      // If capacity is Infinity
+      capacity = ARRAY_MAX_LENGTH;
+      this.isFinite = false;
+    } else if (isArrayLength(capacity)) {
+      // If capacity is valid
+      this.isFinite = true;
+    } else {
+      // If capacity is invalid
       throw new RangeError("Invalid capacity");
     }
 
-    // Check if capacity is changing
-    if (capacity === this._capacity) {
-      return;
-    }
-
-    // Check if queue is empty
+    // Update collection
     if (this._size < 1) {
+      // If collection is empty
       this._capacity = capacity;
       this.clear();
-      return;
+    } else if (capacity < this._capacity) {
+      // If capacity is decreasing
+      this.shrink(capacity);
+    } else if (capacity > this._capacity) {
+      // If capacity is increasing
+      this.grow(capacity);
     }
-
-    // Check if queue is shrinking or growing
-    capacity < this._capacity
-      ? this.emit(this.shrink(capacity)) // shrinking
-      : this.grow(capacity); // growing
   }
 
   /**
@@ -249,55 +259,53 @@ export class CircularQueue<T>
   }
 
   /**
-   * Inserts new elements at the end of the stack.
+   * Inserts new elements at the end of the queue.
    *
    * @param elems - Elements to insert.
    *
-   * @returns The overwritten elements, if any.
+   * @returns The new size of the queue.
    */
   push(...elems: T[]): number {
-    // Base 1: No input
+    // Case 1: Zero inputs
     const N = elems.length;
     if (N < 1) {
       return this._size;
     }
 
-    // Base 2: No capacity
+    // Case 2: Zero capacity
     const capacity = this._capacity;
     if (capacity < 1) {
-      this.emit([elems]);
+      this.emit(elems);
       return this._size;
     }
 
-    // Get evicted items
+    // Case 3: Enough free space
+    const free = capacity - this._size;
+    if (free >= N) {
+      this._push(elems, N);
+      return this._size;
+    }
+
+    // Case 4: "Infinite" capacity but out of space
+    if (!this.isFinite) {
+      this._push(elems, free);
+      throw new Error("Out of memory");
+    }
+
+    // Remove old values
     const diff = N - capacity;
-    const evicted = this.evict(this.size + diff);
+    this.evict(this.size + diff);
     if (diff > 0) {
-      evicted.push(elems.splice(0, diff));
+      this.emit(elems.splice(0, diff));
     }
 
-    // Base 3: Too many inputs
-    if (diff >= 0) {
-      this.vals = elems;
-      this._size = capacity;
-      this.emit(evicted);
+    // Add new values
+    else if (diff < 0) {
+      this._push(elems, N);
       return this._size;
     }
-
-    // Add each element to the queue
-    let tail = this.next;
-    const vals = this.vals;
-    for (let i = 0; i < N; ++i) {
-      vals[tail] = elems[i];
-      if (++tail >= capacity) {
-        tail = 0;
-      }
-    }
-
-    // Update meta and emit evicted items
-    this._size += N;
-    this.next = tail;
-    this.emit(evicted);
+    this.vals = elems;
+    this._size = capacity;
     return this._size;
   }
 
@@ -343,6 +351,61 @@ export class CircularQueue<T>
     for (let ext = 0; ext < this._size; ++ext) {
       yield this.vals[(this.head + ext) % this._capacity];
     }
+  }
+
+  /**
+   * Emit an event containing the items evicted from the collection.
+   *
+   * @param evicted - The items evicted from the collection.
+   */
+  protected emit(evicted: T[]): void {
+    this.emitter.emit(BoundedEvent.Overflow, evicted);
+  }
+
+  /**
+   * Removes a given number of elements from the queue.
+   * If elements are removed, the {@link BoundedEvent.Overflow} event
+   * is emitted one or more times.
+   *
+   * @param count - The number of elements to evict.
+   */
+  protected evict(count: number): void {
+    if (count <= 0) {
+      return;
+    }
+
+    const len = this._capacity - this.head;
+    const isNonsequential = !this.isSequential();
+
+    if (isNonsequential && len > count) {
+      this.emit(this.vals.slice(this.head, this.head + count));
+      this.vals.fill(undefined as T, this.head, this.head + count);
+      this.head += count;
+      this._size -= count;
+      return;
+    }
+
+    if (isNonsequential) {
+      this.emit(this.vals.slice(this.head, this.head + len));
+      this.vals.length = this.next;
+      this.head = 0;
+      this._size -= len;
+      if (count <= len) {
+        return;
+      }
+      count -= len;
+    }
+
+    if (count >= this._size) {
+      this.emit(this.vals.slice(this.head, this.head + this._size));
+      this.clear();
+      return;
+    }
+
+    this.emit(this.vals.slice(this.head, this.head + count));
+    this.vals.fill(undefined as T, this.head, this.head + count);
+    this.head += count;
+    this._size -= count;
   }
 
   /**
@@ -408,59 +471,26 @@ export class CircularQueue<T>
     return this.head < this.next || this.next < 1;
   }
 
-  protected emit(evicted: T[][]): void {
-    const N = evicted.length;
-    for (let i = 0; i < N; ++i) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted[i]);
-    }
-  }
-
   /**
-   * Removes a given number of elements from the queue.
-   * If elements are removed, the {@link BoundedEvent.Overflow} event
-   * is emitted one or more times.
+   * Append new elements to the collection.
    *
-   * @param count - The number of elements to evict
+   * @param elems - The elements to append.
+   * @param max - The number of elements to append.
    */
-  protected evict(count: number): T[][] {
-    if (count <= 0) {
-      return [];
-    }
+  protected _push(elems: T[], max: number): void {
+    const capacity = this._capacity;
+    const vals = this.vals;
 
-    const evicted: T[][] = [];
-    const len = this._capacity - this.head;
-    const isNonsequential = !this.isSequential();
-
-    if (isNonsequential && len > count) {
-      evicted.push(this.vals.slice(this.head, this.head + count));
-      this.vals.fill(undefined as T, this.head, this.head + count);
-      this.head += count;
-      this._size -= count;
-      return evicted;
-    }
-
-    if (isNonsequential) {
-      evicted.push(this.vals.slice(this.head, this.head + len));
-      this.vals.length = this.next;
-      this.head = 0;
-      this._size -= len;
-      if (count <= len) {
-        return evicted;
+    let tail = this.next;
+    for (let i = 0; i < max; ++i) {
+      vals[tail] = elems[i];
+      if (++tail >= capacity) {
+        tail = 0;
       }
-      count -= len;
     }
 
-    if (count >= this._size) {
-      evicted.push(this.vals.slice(this.head, this.head + this._size));
-      this.clear();
-      return evicted;
-    }
-
-    evicted.push(this.vals.slice(this.head, this.head + count));
-    this.vals.fill(undefined as T, this.head, this.head + count);
-    this.head += count;
-    this._size -= count;
-    return evicted;
+    this.next = tail;
+    this._size += max;
   }
 
   /**
@@ -504,14 +534,14 @@ export class CircularQueue<T>
    *
    * @param capacity - the new capacity
    */
-  protected shrink(capacity: number): T[][] {
+  protected shrink(capacity: number): void {
     // Handle overflow
-    const evicted = this.evict(this._size - capacity);
+    this.evict(this._size - capacity);
 
     // Check if queue is sequential: [    H123456T    ]
     if (this.isSequential()) {
       this.sequentialReset(capacity);
-      return evicted;
+      return;
     }
 
     // Shift 1st half of queue: [456T....H123] -> [456T..H123]
@@ -520,6 +550,5 @@ export class CircularQueue<T>
     this.vals.length = capacity;
     this.head -= diff;
     this._capacity = capacity;
-    return evicted;
   }
 }

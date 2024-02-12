@@ -1078,6 +1078,10 @@ class CircularQueue extends CircularBase {
      */
     __publicField(this, "head");
     /**
+     * Whether capacity is finite (true) or infinite (false).
+     */
+    __publicField(this, "isFinite");
+    /**
      * The index one more than the last element.
      * @internal
      */
@@ -1092,12 +1096,14 @@ class CircularQueue extends CircularBase {
      * @internal
      */
     __publicField(this, "vals");
-    this._capacity = Infinity;
+    this._capacity = ARRAY_MAX_LENGTH;
     this.head = 0;
+    this.isFinite = false;
     this._size = 0;
     this.next = 0;
     this.vals = [];
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
     if (isNumber(capacity)) {
@@ -1105,37 +1111,43 @@ class CircularQueue extends CircularBase {
         throw new RangeError("Invalid capacity");
       }
       this._capacity = capacity;
+      this.isFinite = true;
       return;
     }
     for (const value of capacity) {
       this.vals.push(value);
     }
     this._capacity = this.vals.length;
+    this.isFinite = true;
     this._size = this._capacity;
   }
   /**
    * @returns the maximum number of elements that can be stored.
    */
   get capacity() {
-    return this._capacity;
+    return this.isFinite ? this._capacity : Infinity;
   }
   /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(capacity) {
     capacity = +capacity;
-    if (!isInfinity(capacity) && !isArrayLength(capacity)) {
+    if (isInfinity(capacity)) {
+      capacity = ARRAY_MAX_LENGTH;
+      this.isFinite = false;
+    } else if (isArrayLength(capacity)) {
+      this.isFinite = true;
+    } else {
       throw new RangeError("Invalid capacity");
-    }
-    if (capacity === this._capacity) {
-      return;
     }
     if (this._size < 1) {
       this._capacity = capacity;
       this.clear();
-      return;
+    } else if (capacity < this._capacity) {
+      this.shrink(capacity);
+    } else if (capacity > this._capacity) {
+      this.grow(capacity);
     }
-    capacity < this._capacity ? this.emit(this.shrink(capacity)) : this.grow(capacity);
   }
   /**
    *  @returns the number of elements in the collection.
@@ -1236,11 +1248,11 @@ class CircularQueue extends CircularBase {
     }
   }
   /**
-   * Inserts new elements at the end of the stack.
+   * Inserts new elements at the end of the queue.
    *
    * @param elems - Elements to insert.
    *
-   * @returns The overwritten elements, if any.
+   * @returns The new size of the queue.
    */
   push(...elems) {
     const N = elems.length;
@@ -1249,31 +1261,28 @@ class CircularQueue extends CircularBase {
     }
     const capacity = this._capacity;
     if (capacity < 1) {
-      this.emit([elems]);
+      this.emit(elems);
       return this._size;
+    }
+    const free = capacity - this._size;
+    if (free >= N) {
+      this._push(elems, N);
+      return this._size;
+    }
+    if (!this.isFinite) {
+      this._push(elems, free);
+      throw new Error("Out of memory");
     }
     const diff = N - capacity;
-    const evicted = this.evict(this.size + diff);
+    this.evict(this.size + diff);
     if (diff > 0) {
-      evicted.push(elems.splice(0, diff));
-    }
-    if (diff >= 0) {
-      this.vals = elems;
-      this._size = capacity;
-      this.emit(evicted);
+      this.emit(elems.splice(0, diff));
+    } else if (diff < 0) {
+      this._push(elems, N);
       return this._size;
     }
-    let tail = this.next;
-    const vals = this.vals;
-    for (let i = 0; i < N; ++i) {
-      vals[tail] = elems[i];
-      if (++tail >= capacity) {
-        tail = 0;
-      }
-    }
-    this._size += N;
-    this.next = tail;
-    this.emit(evicted);
+    this.vals = elems;
+    this._size = capacity;
     return this._size;
   }
   /**
@@ -1317,6 +1326,54 @@ class CircularQueue extends CircularBase {
     }
   }
   /**
+   * Emit an event containing the items evicted from the collection.
+   *
+   * @param evicted - The items evicted from the collection.
+   */
+  emit(evicted) {
+    this.emitter.emit(BoundedEvent.Overflow, evicted);
+  }
+  /**
+   * Removes a given number of elements from the queue.
+   * If elements are removed, the {@link BoundedEvent.Overflow} event
+   * is emitted one or more times.
+   *
+   * @param count - The number of elements to evict.
+   */
+  evict(count) {
+    if (count <= 0) {
+      return;
+    }
+    const len = this._capacity - this.head;
+    const isNonsequential = !this.isSequential();
+    if (isNonsequential && len > count) {
+      this.emit(this.vals.slice(this.head, this.head + count));
+      this.vals.fill(void 0, this.head, this.head + count);
+      this.head += count;
+      this._size -= count;
+      return;
+    }
+    if (isNonsequential) {
+      this.emit(this.vals.slice(this.head, this.head + len));
+      this.vals.length = this.next;
+      this.head = 0;
+      this._size -= len;
+      if (count <= len) {
+        return;
+      }
+      count -= len;
+    }
+    if (count >= this._size) {
+      this.emit(this.vals.slice(this.head, this.head + this._size));
+      this.clear();
+      return;
+    }
+    this.emit(this.vals.slice(this.head, this.head + count));
+    this.vals.fill(void 0, this.head, this.head + count);
+    this.head += count;
+    this._size -= count;
+  }
+  /**
    * Grow capacity.
    * @internal
    *
@@ -1358,53 +1415,24 @@ class CircularQueue extends CircularBase {
   isSequential() {
     return this.head < this.next || this.next < 1;
   }
-  emit(evicted) {
-    const N = evicted.length;
-    for (let i = 0; i < N; ++i) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted[i]);
-    }
-  }
   /**
-   * Removes a given number of elements from the queue.
-   * If elements are removed, the {@link BoundedEvent.Overflow} event
-   * is emitted one or more times.
+   * Append new elements to the collection.
    *
-   * @param count - The number of elements to evict
+   * @param elems - The elements to append.
+   * @param max - The number of elements to append.
    */
-  evict(count) {
-    if (count <= 0) {
-      return [];
-    }
-    const evicted = [];
-    const len = this._capacity - this.head;
-    const isNonsequential = !this.isSequential();
-    if (isNonsequential && len > count) {
-      evicted.push(this.vals.slice(this.head, this.head + count));
-      this.vals.fill(void 0, this.head, this.head + count);
-      this.head += count;
-      this._size -= count;
-      return evicted;
-    }
-    if (isNonsequential) {
-      evicted.push(this.vals.slice(this.head, this.head + len));
-      this.vals.length = this.next;
-      this.head = 0;
-      this._size -= len;
-      if (count <= len) {
-        return evicted;
+  _push(elems, max) {
+    const capacity = this._capacity;
+    const vals = this.vals;
+    let tail = this.next;
+    for (let i = 0; i < max; ++i) {
+      vals[tail] = elems[i];
+      if (++tail >= capacity) {
+        tail = 0;
       }
-      count -= len;
     }
-    if (count >= this._size) {
-      evicted.push(this.vals.slice(this.head, this.head + this._size));
-      this.clear();
-      return evicted;
-    }
-    evicted.push(this.vals.slice(this.head, this.head + count));
-    this.vals.fill(void 0, this.head, this.head + count);
-    this.head += count;
-    this._size -= count;
-    return evicted;
+    this.next = tail;
+    this._size += max;
   }
   /**
    * Adjusts the queue to fit within the given capacity.
@@ -1440,17 +1468,16 @@ class CircularQueue extends CircularBase {
    * @param capacity - the new capacity
    */
   shrink(capacity) {
-    const evicted = this.evict(this._size - capacity);
+    this.evict(this._size - capacity);
     if (this.isSequential()) {
       this.sequentialReset(capacity);
-      return evicted;
+      return;
     }
     const diff = this._capacity - capacity;
     this.vals.copyWithin(this.head - diff, this.head, this._capacity);
     this.vals.length = capacity;
     this.head -= diff;
     this._capacity = capacity;
-    return evicted;
   }
 }
 class CircularSet extends CircularBase {
@@ -1643,6 +1670,10 @@ class CircularStack extends CircularBase {
      */
     __publicField(this, "head");
     /**
+     * Whether capacity is finite (true) or infinite (false).
+     */
+    __publicField(this, "isFinite");
+    /**
      * The index one more than the last element.
      * @internal
      */
@@ -1657,12 +1688,14 @@ class CircularStack extends CircularBase {
      * @internal
      */
     __publicField(this, "vals");
-    this._capacity = Infinity;
+    this._capacity = ARRAY_MAX_LENGTH;
     this.head = 0;
+    this.isFinite = false;
     this._size = 0;
     this.next = 0;
     this.vals = [];
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
     if (isNumber(capacity)) {
@@ -1670,37 +1703,43 @@ class CircularStack extends CircularBase {
         throw new RangeError("Invalid capacity");
       }
       this._capacity = capacity;
+      this.isFinite = true;
       return;
     }
     for (const value of capacity) {
       this.vals.push(value);
     }
     this._capacity = this.vals.length;
+    this.isFinite = true;
     this._size = this._capacity;
   }
   /**
    * @returns the maximum number of elements that can be stored.
    */
   get capacity() {
-    return this._capacity;
+    return this.isFinite ? this._capacity : Infinity;
   }
   /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(capacity) {
     capacity = +capacity;
-    if (!isInfinity(capacity) && !isArrayLength(capacity)) {
+    if (isInfinity(capacity)) {
+      capacity = ARRAY_MAX_LENGTH;
+      this.isFinite = false;
+    } else if (isArrayLength(capacity)) {
+      this.isFinite = true;
+    } else {
       throw new RangeError("Invalid capacity");
-    }
-    if (capacity === this._capacity) {
-      return;
     }
     if (this._size < 1) {
       this._capacity = capacity;
       this.clear();
-      return;
+    } else if (capacity < this._capacity) {
+      this.shrink(capacity);
+    } else if (capacity > this._capacity) {
+      this.grow(capacity);
     }
-    capacity < this._capacity ? this.emit(this.shrink(capacity)) : this.grow(capacity);
   }
   /**
    *  @returns the number of elements in the collection.
@@ -1715,7 +1754,7 @@ class CircularStack extends CircularBase {
     return CircularStack.name;
   }
   /**
-   * Remove all elements and resets the collection.
+   * Remove all elements from the collection.
    */
   clear() {
     this.head = 0;
@@ -1788,24 +1827,18 @@ class CircularStack extends CircularBase {
    * @returns the last element, or `undefined` if empty.
    */
   last() {
-    if (this._size < 1) {
-      return void 0;
-    }
-    return this.vals[(this.head + this._size - 1) % this._capacity];
+    return this.top();
   }
   /**
-   * Removes the element at the front of the queue.
+   * Removes the element at the top of the stack.
    *
-   * @returns the front element, or `undefined` if empty.
+   * @returns the top element, or `undefined` if empty.
    */
   pop() {
     if (this._size <= 0) {
       return void 0;
     }
-    let tail = this.next - 1;
-    if (tail < 0) {
-      tail += this.head + this._size;
-    }
+    const tail = this.next > 0 ? this.next - 1 : this.head + this._size - 1;
     --this._size;
     this.next = tail;
     const value = this.vals[tail];
@@ -1817,7 +1850,7 @@ class CircularStack extends CircularBase {
    *
    * @param elems - Elements to insert.
    *
-   * @returns The overwritten elements, if any.
+   * @returns The new size of the stack.
    */
   push(...elems) {
     const N = elems.length;
@@ -1826,31 +1859,28 @@ class CircularStack extends CircularBase {
     }
     const capacity = this._capacity;
     if (capacity < 1) {
-      this.emit([elems]);
+      this.emit(elems);
       return this._size;
+    }
+    const free = capacity - this._size;
+    if (free >= N) {
+      this._push(elems, N);
+      return this._size;
+    }
+    if (!this.isFinite) {
+      this._push(elems, free);
+      throw new Error("Out of memory");
     }
     const diff = N - capacity;
-    const evicted = this.evict(this.size + diff);
+    this.evict(this.size + diff);
     if (diff > 0) {
-      evicted.push(elems.splice(0, diff));
-    }
-    if (diff >= 0) {
-      this.vals = elems;
-      this._size = capacity;
-      this.emit(evicted);
+      this.emit(elems.splice(0, diff));
+    } else if (diff < 0) {
+      this._push(elems, N);
       return this._size;
     }
-    let tail = this.next;
-    const vals = this.vals;
-    for (let i = 0; i < N; ++i) {
-      vals[tail] = elems[i];
-      if (++tail >= capacity) {
-        tail = 0;
-      }
-    }
-    this._size += N;
-    this.next = tail;
-    this.emit(evicted);
+    this.vals = elems;
+    this._size = capacity;
     return this._size;
   }
   /**
@@ -1887,6 +1917,54 @@ class CircularStack extends CircularBase {
     for (let ext = 0; ext < this._size; ++ext) {
       yield this.vals[(this.head + ext) % this._capacity];
     }
+  }
+  /**
+   * Emit an event containing the items evicted from the collection.
+   *
+   * @param evicted - The items evicted from the collection.
+   */
+  emit(evicted) {
+    this.emitter.emit(BoundedEvent.Overflow, evicted);
+  }
+  /**
+   * Removes a given number of elements from the stack.
+   * If elements are removed, the {@link BoundedEvent.Overflow} event
+   * is emitted one or more times.
+   *
+   * @param count - The number of elements to evict.
+   */
+  evict(count) {
+    if (count <= 0) {
+      return;
+    }
+    const len = this._capacity - this.head;
+    const isNonsequential = !this.isSequential();
+    if (isNonsequential && len > count) {
+      this.emit(this.vals.slice(this.head, this.head + count));
+      this.vals.fill(void 0, this.head, this.head + count);
+      this.head += count;
+      this._size -= count;
+      return;
+    }
+    if (isNonsequential) {
+      this.emit(this.vals.slice(this.head, this.head + len));
+      this.vals.length = this.next;
+      this.head = 0;
+      this._size -= len;
+      if (count <= len) {
+        return;
+      }
+      count -= len;
+    }
+    if (count >= this._size) {
+      this.emit(this.vals.slice(this.head, this.head + this._size));
+      this.clear();
+      return;
+    }
+    this.emit(this.vals.slice(this.head, this.head + count));
+    this.vals.fill(void 0, this.head, this.head + count);
+    this.head += count;
+    this._size -= count;
   }
   /**
    * Grow capacity.
@@ -1930,53 +2008,24 @@ class CircularStack extends CircularBase {
   isSequential() {
     return this.head < this.next || this.next < 1;
   }
-  emit(evicted) {
-    const N = evicted.length;
-    for (let i = 0; i < N; ++i) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted[i]);
-    }
-  }
   /**
-   * Removes a given number of elements from the stack.
-   * If elements are removed, the {@link BoundedEvent.Overflow} event
-   * is emitted one or more times.
+   * Append new elements to the collection.
    *
-   * @param count - The number of elements to evict
+   * @param elems - The elements to append.
+   * @param max - The number of elements to append.
    */
-  evict(count) {
-    if (count <= 0) {
-      return [];
-    }
-    const evicted = [];
-    const len = this._capacity - this.head;
-    const isNonsequential = !this.isSequential();
-    if (isNonsequential && len > count) {
-      evicted.push(this.vals.slice(this.head, this.head + count));
-      this.vals.fill(void 0, this.head, this.head + count);
-      this.head += count;
-      this._size -= count;
-      return evicted;
-    }
-    if (isNonsequential) {
-      evicted.push(this.vals.slice(this.head, this.head + len));
-      this.vals.length = this.next;
-      this.head = 0;
-      this._size -= len;
-      if (count <= len) {
-        return evicted;
+  _push(elems, max) {
+    const capacity = this._capacity;
+    const vals = this.vals;
+    let tail = this.next;
+    for (let i = 0; i < max; ++i) {
+      vals[tail] = elems[i];
+      if (++tail >= capacity) {
+        tail = 0;
       }
-      count -= len;
     }
-    if (count >= this._size) {
-      evicted.push(this.vals.slice(this.head, this.head + this._size));
-      this.clear();
-      return evicted;
-    }
-    evicted.push(this.vals.slice(this.head, this.head + count));
-    this.vals.fill(void 0, this.head, this.head + count);
-    this.head += count;
-    this._size -= count;
-    return evicted;
+    this.next = tail;
+    this._size += max;
   }
   /**
    * Adjusts the stack to fit within the given capacity.
@@ -2012,17 +2061,16 @@ class CircularStack extends CircularBase {
    * @param capacity - the new capacity
    */
   shrink(capacity) {
-    const evicted = this.evict(this._size - capacity);
+    this.evict(this._size - capacity);
     if (this.isSequential()) {
       this.sequentialReset(capacity);
-      return evicted;
+      return;
     }
     const diff = this._capacity - capacity;
     this.vals.copyWithin(this.head - diff, this.head, this._capacity);
     this.vals.length = capacity;
     this.head -= diff;
     this._capacity = capacity;
-    return evicted;
   }
 }
 export {
