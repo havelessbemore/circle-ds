@@ -9,8 +9,8 @@
 ## Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 ## Hierarchy
 
@@ -67,8 +67,8 @@ Creates a new set with `capacity` defaulted to `Infinity`.
 #### Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 #### Returns
 
@@ -80,7 +80,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularSet.ts:35](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L35)
+[circle/circularSet.ts:35](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L35)
 
 • **new CircularSet**\<`T`\>(`capacity?`): [`CircularSet`](CircularSet.md)\<`T`\>
 
@@ -89,14 +89,14 @@ Creates a new set with the given capacity.
 #### Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 #### Parameters
 
-| Name        | Type               | Description         |
-| :---------- | :----------------- | :------------------ |
-| `capacity?` | `null` \| `number` | the set's capacity. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `capacity?` | ``null`` \| `number` | the set's capacity. |
 
 #### Returns
 
@@ -108,7 +108,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularSet.ts:41](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L41)
+[circle/circularSet.ts:41](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L41)
 
 • **new CircularSet**\<`T`\>(`items`): [`CircularSet`](CircularSet.md)\<`T`\>
 
@@ -117,13 +117,13 @@ Creates a new set. Initial capacity is the number of unique items given.
 #### Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 #### Parameters
 
-| Name    | Type              | Description                     |
-| :------ | :---------------- | :------------------------------ |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `items` | `Iterable`\<`T`\> | the values to store in the set. |
 
 #### Returns
@@ -136,7 +136,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularSet.ts:47](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L47)
+[circle/circularSet.ts:47](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L47)
 
 ## Properties
 
@@ -148,7 +148,7 @@ The maximum number of elements that can be stored in the collection.
 
 #### Defined in
 
-[circle/circularSet.ts:24](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L24)
+[circle/circularSet.ts:24](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L24)
 
 ## Accessors
 
@@ -168,9 +168,9 @@ Set.[toStringTag]
 
 #### Defined in
 
-[circle/circularSet.ts:93](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L93)
+[circle/circularSet.ts:93](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L93)
 
----
+___
 
 ### capacity
 
@@ -188,7 +188,7 @@ the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularSet.ts:79](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L79)
+[circle/circularSet.ts:79](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L79)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -196,8 +196,8 @@ The maximum number of elements that can be stored in the set.
 
 #### Parameters
 
-| Name       | Type     |
-| :--------- | :------- |
+| Name | Type |
+| :------ | :------ |
 | `capacity` | `number` |
 
 #### Returns
@@ -210,9 +210,9 @@ The maximum number of elements that can be stored in the set.
 
 #### Defined in
 
-[circle/circularSet.ts:100](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L100)
+[circle/circularSet.ts:100](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L100)
 
----
+___
 
 ### size
 
@@ -230,7 +230,7 @@ the number of values in the set.
 
 #### Defined in
 
-[circle/circularSet.ts:86](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L86)
+[circle/circularSet.ts:86](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L86)
 
 ## Methods
 
@@ -254,9 +254,9 @@ Set.[iterator]
 
 #### Defined in
 
-[circle/circularSet.ts:256](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L256)
+[circle/circularSet.ts:256](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L256)
 
----
+___
 
 ### add
 
@@ -266,9 +266,9 @@ Adds the specified value to the set.
 
 #### Parameters
 
-| Name    | Type | Description       |
-| :------ | :--- | :---------------- |
-| `value` | `T`  | the value to add. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `T` | the value to add. |
 
 #### Returns
 
@@ -280,9 +280,9 @@ Set.add
 
 #### Defined in
 
-[circle/circularSet.ts:146](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L146)
+[circle/circularSet.ts:146](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L146)
 
----
+___
 
 ### addListener
 
@@ -291,19 +291,19 @@ Set.add
 Appends the listener function to the listeners array for the
 [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- By default, event listeners are invoked in the order they are added.
-  The `prependListener()` method can be used as an alternative to add
-  the event listener to the beginning of the listeners array.
+* By default, event listeners are invoked in the order they are added.
+The `prependListener()` method can be used as an alternative to add
+the event listener to the beginning of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -322,9 +322,9 @@ CircularBase.addListener
 
 #### Defined in
 
-[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularBase.ts#L40)
+[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularBase.ts#L40)
 
----
+___
 
 ### clear
 
@@ -342,9 +342,9 @@ Removes all elements from the set.
 
 #### Defined in
 
-[circle/circularSet.ts:175](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L175)
+[circle/circularSet.ts:175](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L175)
 
----
+___
 
 ### delete
 
@@ -354,9 +354,9 @@ Deletes a specified value from the set.
 
 #### Parameters
 
-| Name    | Type |
-| :------ | :--- |
-| `value` | `T`  |
+| Name | Type |
+| :------ | :------ |
+| `value` | `T` |
 
 #### Returns
 
@@ -370,9 +370,9 @@ Set.delete
 
 #### Defined in
 
-[circle/circularSet.ts:184](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L184)
+[circle/circularSet.ts:184](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L184)
 
----
+___
 
 ### entries
 
@@ -394,9 +394,9 @@ an iterable of [key, value] pairs for every entry.
 
 #### Defined in
 
-[circle/circularSet.ts:195](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L195)
+[circle/circularSet.ts:195](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L195)
 
----
+___
 
 ### forEach
 
@@ -408,10 +408,10 @@ Performs the specified action for each value in the set.
 
 #### Parameters
 
-| Name         | Type                                                | Description                                                                                            |
-| :----------- | :-------------------------------------------------- | :----------------------------------------------------------------------------------------------------- |
-| `callbackfn` | (`value`: `T`, `key`: `T`, `set`: `this`) => `void` | A function that accepts up to three arguments. It is called once per value.                            |
-| `thisArg?`   | `unknown`                                           | An object to which the `this` keyword refers to in the `callbackfn` function. Defaults to `undefined`. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `callbackfn` | (`value`: `T`, `key`: `T`, `set`: `this`) => `void` | A function that accepts up to three arguments. It is called once per value. |
+| `thisArg?` | `unknown` | An object to which the `this` keyword refers to in the `callbackfn` function. Defaults to `undefined`. |
 
 #### Returns
 
@@ -423,9 +423,9 @@ Performs the specified action for each value in the set.
 
 #### Defined in
 
-[circle/circularSet.ts:207](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L207)
+[circle/circularSet.ts:207](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L207)
 
----
+___
 
 ### has
 
@@ -435,9 +435,9 @@ Determines whether a given value is in the set.
 
 #### Parameters
 
-| Name    | Type | Description              |
-| :------ | :--- | :----------------------- |
-| `value` | `T`  | The value to search for. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `T` | The value to search for. |
 
 #### Returns
 
@@ -451,9 +451,9 @@ Set.has
 
 #### Defined in
 
-[circle/circularSet.ts:223](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L223)
+[circle/circularSet.ts:223](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L223)
 
----
+___
 
 ### keys
 
@@ -475,9 +475,9 @@ an iterable of the set's keys.
 
 #### Defined in
 
-[circle/circularSet.ts:234](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L234)
+[circle/circularSet.ts:234](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L234)
 
----
+___
 
 ### on
 
@@ -486,19 +486,19 @@ an iterable of the set's keys.
 Appends the listener function to the listeners array for the
 [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- By default, event listeners are invoked in the order they are added.
-  The `prependListener()` method can be used as an alternative to add
-  the event listener to the beginning of the listeners array.
+* By default, event listeners are invoked in the order they are added.
+The `prependListener()` method can be used as an alternative to add
+the event listener to the beginning of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -517,9 +517,9 @@ CircularBase.on
 
 #### Defined in
 
-[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularBase.ts#L73)
+[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularBase.ts#L73)
 
----
+___
 
 ### prependListener
 
@@ -528,18 +528,18 @@ CircularBase.on
 Adds the listener function to the beginning of the listeners array for
 the [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- Alternatively, the `addListener()` method can be used to add
-  the event listener to the end of the listeners array.
+* Alternatively, the `addListener()` method can be used to add
+the event listener to the end of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -558,9 +558,9 @@ CircularBase.prependListener
 
 #### Defined in
 
-[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularBase.ts#L102)
+[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularBase.ts#L102)
 
----
+___
 
 ### removeListener
 
@@ -574,9 +574,9 @@ be called once per instance.
 
 #### Parameters
 
-| Name       | Type                       | Description            |
-| :--------- | :------------------------- | :--------------------- |
-| `event`    | `"overflow"`               | The name of the event. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. |
 
 #### Returns
@@ -595,9 +595,9 @@ CircularBase.removeListener
 
 #### Defined in
 
-[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularBase.ts#L127)
+[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularBase.ts#L127)
 
----
+___
 
 ### values
 
@@ -619,4 +619,4 @@ an iterable of the set's values.
 
 #### Defined in
 
-[circle/circularSet.ts:245](https://github.com/havelessbemore/circle-ds/blob/8ac6051/src/circle/circularSet.ts#L245)
+[circle/circularSet.ts:245](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularSet.ts#L245)
