@@ -40,8 +40,10 @@
     "data",
     "data structure",
     "deque",
+    "map",
     "queue",
     "ring",
+    "set",
     "stack"
   ],
   "author": "Michael Rojas <dev.michael.rojas@gmail.com> (https://github.com/havelessbemore)",
