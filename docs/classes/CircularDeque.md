@@ -1,9 +1,9 @@
-[circle-ds](../README.md) / [Exports](../modules.md) / CircularQueue
+[circle-ds](../README.md) / [Exports](../modules.md) / CircularDeque
 
-# Class: CircularQueue\<T\>
+# Class: CircularDeque\<T\>
 
-A circular queue is similar to a traditional queue, but uses a fixed-size,
-circular buffer. When the queue reaches its maximum capacity and a new
+A circular deque is similar to a traditional deque, but uses a fixed-size,
+circular buffer. When the deque reaches its maximum capacity and a new
 element is added, the oldest is discarded, thus maintaining its size.
 
 This structure efficiently utilizes memory for applications where only the
@@ -23,60 +23,66 @@ most recent additions are of interest and older data can be discarded.
 
 - `CircularBase`\<`T`\>
 
-  ↳ **`CircularQueue`**
+  ↳ **`CircularDeque`**
 
 ## Implements
 
 - [`Bounded`](../interfaces/Bounded.md)\<`T`\>
-- [`Queue`](../interfaces/Queue.md)\<`T`\>
+- [`Deque`](../interfaces/Deque.md)\<`T`\>
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](CircularQueue.md#constructor)
+- [constructor](CircularDeque.md#constructor)
 
 ### Properties
 
-- [\_capacity](CircularQueue.md#_capacity)
-- [isFinite](CircularQueue.md#isfinite)
+- [\_capacity](CircularDeque.md#_capacity)
+- [isFinite](CircularDeque.md#isfinite)
 
 ### Accessors
 
-- [[toStringTag]](CircularQueue.md#[tostringtag])
-- [capacity](CircularQueue.md#capacity)
-- [size](CircularQueue.md#size)
+- [[toStringTag]](CircularDeque.md#[tostringtag])
+- [capacity](CircularDeque.md#capacity)
+- [size](CircularDeque.md#size)
 
 ### Methods
 
-- [[iterator]](CircularQueue.md#[iterator])
-- [\_push](CircularQueue.md#_push)
-- [addListener](CircularQueue.md#addlistener)
-- [clear](CircularQueue.md#clear)
-- [emit](CircularQueue.md#emit)
-- [entries](CircularQueue.md#entries)
-- [evict](CircularQueue.md#evict)
-- [first](CircularQueue.md#first)
-- [forEach](CircularQueue.md#foreach)
-- [front](CircularQueue.md#front)
-- [has](CircularQueue.md#has)
-- [isSequential](CircularQueue.md#issequential)
-- [keys](CircularQueue.md#keys)
-- [on](CircularQueue.md#on)
-- [prependListener](CircularQueue.md#prependlistener)
-- [push](CircularQueue.md#push)
-- [removeListener](CircularQueue.md#removelistener)
-- [sequentialReset](CircularQueue.md#sequentialreset)
-- [shift](CircularQueue.md#shift)
-- [values](CircularQueue.md#values)
+- [[iterator]](CircularDeque.md#[iterator])
+- [\_push](CircularDeque.md#_push)
+- [\_unshift](CircularDeque.md#_unshift)
+- [addListener](CircularDeque.md#addlistener)
+- [clear](CircularDeque.md#clear)
+- [emit](CircularDeque.md#emit)
+- [entries](CircularDeque.md#entries)
+- [evictHead](CircularDeque.md#evicthead)
+- [evictTail](CircularDeque.md#evicttail)
+- [first](CircularDeque.md#first)
+- [forEach](CircularDeque.md#foreach)
+- [front](CircularDeque.md#front)
+- [has](CircularDeque.md#has)
+- [isSequential](CircularDeque.md#issequential)
+- [keys](CircularDeque.md#keys)
+- [last](CircularDeque.md#last)
+- [on](CircularDeque.md#on)
+- [pop](CircularDeque.md#pop)
+- [prependListener](CircularDeque.md#prependlistener)
+- [push](CircularDeque.md#push)
+- [removeListener](CircularDeque.md#removelistener)
+- [sequentialReset](CircularDeque.md#sequentialreset)
+- [shift](CircularDeque.md#shift)
+- [top](CircularDeque.md#top)
+- [unshift](CircularDeque.md#unshift)
+- [values](CircularDeque.md#values)
 
 ## Constructors
 
 ### constructor
 
-• **new CircularQueue**\<`T`\>(): [`CircularQueue`](CircularQueue.md)\<`T`\>
+• **new CircularDeque**\<`T`\>(): [`CircularDeque`](CircularDeque.md)\<`T`\>
 
-Creates a new queue. Default `capacity` is `Infinity`.
+Creates a new deque. Default `capacity` is `Infinity`.
 
 #### Type parameters
 
@@ -86,7 +92,7 @@ Creates a new queue. Default `capacity` is `Infinity`.
 
 #### Returns
 
-[`CircularQueue`](CircularQueue.md)\<`T`\>
+[`CircularDeque`](CircularDeque.md)\<`T`\>
 
 #### Overrides
 
@@ -94,39 +100,11 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularQueue.ts:59](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L59)
+[circle/circularDeque.ts:59](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L59)
 
-• **new CircularQueue**\<`T`\>(`capacity?`): [`CircularQueue`](CircularQueue.md)\<`T`\>
+• **new CircularDeque**\<`T`\>(`capacity?`): [`CircularDeque`](CircularDeque.md)\<`T`\>
 
-Creates a new queue with the given capacity.
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `capacity?` | ``null`` \| `number` | the queue's capacity. |
-
-#### Returns
-
-[`CircularQueue`](CircularQueue.md)\<`T`\>
-
-#### Overrides
-
-CircularBase\&lt;T\&gt;.constructor
-
-#### Defined in
-
-[circle/circularQueue.ts:65](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L65)
-
-• **new CircularQueue**\<`T`\>(`items`): [`CircularQueue`](CircularQueue.md)\<`T`\>
-
-Creates a new queue from the given items. `capacity` will equal the number of items.
+Creates a new deque with the given capacity.
 
 #### Type parameters
 
@@ -138,11 +116,11 @@ Creates a new queue from the given items. `capacity` will equal the number of it
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `items` | `Iterable`\<`T`\> | the initial values in the queue. |
+| `capacity?` | ``null`` \| `number` | the deque's capacity. |
 
 #### Returns
 
-[`CircularQueue`](CircularQueue.md)\<`T`\>
+[`CircularDeque`](CircularDeque.md)\<`T`\>
 
 #### Overrides
 
@@ -150,7 +128,35 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularQueue.ts:71](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L71)
+[circle/circularDeque.ts:65](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L65)
+
+• **new CircularDeque**\<`T`\>(`items`): [`CircularDeque`](CircularDeque.md)\<`T`\>
+
+Creates a new deque from the given items. `capacity` will equal the number of items.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `items` | `Iterable`\<`T`\> | the initial values in the deque. |
+
+#### Returns
+
+[`CircularDeque`](CircularDeque.md)\<`T`\>
+
+#### Overrides
+
+CircularBase\&lt;T\&gt;.constructor
+
+#### Defined in
+
+[circle/circularDeque.ts:71](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L71)
 
 ## Properties
 
@@ -162,7 +168,7 @@ The maximum number of elements that can be stored in the collection.
 
 #### Defined in
 
-[circle/circularQueue.ts:25](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L25)
+[circle/circularDeque.ts:25](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L25)
 
 ___
 
@@ -174,7 +180,7 @@ Whether capacity is finite (true) or infinite (false).
 
 #### Defined in
 
-[circle/circularQueue.ts:36](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L36)
+[circle/circularDeque.ts:36](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L36)
 
 ## Accessors
 
@@ -190,7 +196,7 @@ Return the type of the object.
 
 #### Defined in
 
-[circle/circularQueue.ts:161](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L161)
+[circle/circularDeque.ts:161](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L161)
 
 ___
 
@@ -210,7 +216,7 @@ the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularQueue.ts:113](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L113)
+[circle/circularDeque.ts:113](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L113)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -232,7 +238,7 @@ Sets the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularQueue.ts:120](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L120)
+[circle/circularDeque.ts:120](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L120)
 
 ___
 
@@ -248,11 +254,11 @@ the number of elements in the collection.
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[size](../interfaces/Queue.md#size)
+[Deque](../interfaces/Deque.md).[size](../interfaces/Deque.md#size)
 
 #### Defined in
 
-[circle/circularQueue.ts:154](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L154)
+[circle/circularDeque.ts:154](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L154)
 
 ## Methods
 
@@ -272,11 +278,11 @@ an iterable of values.
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[[iterator]](../interfaces/Queue.md#[iterator])
+[Deque](../interfaces/Deque.md).[[iterator]](../interfaces/Deque.md#[iterator])
 
 #### Defined in
 
-[circle/circularQueue.ts:339](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L339)
+[circle/circularDeque.ts:369](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L369)
 
 ___
 
@@ -299,7 +305,30 @@ Append new elements to the collection.
 
 #### Defined in
 
-[circle/circularQueue.ts:480](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L480)
+[circle/circularDeque.ts:621](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L621)
+
+___
+
+### \_unshift
+
+▸ **_unshift**(`elems`, `num`): `void`
+
+Append new elements to the collection.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `elems` | `T`[] | The elements to append. |
+| `num` | `number` | The number of elements to append. |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[circle/circularDeque.ts:702](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L702)
 
 ___
 
@@ -357,11 +386,11 @@ Remove all elements and resets the collection.
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[clear](../interfaces/Queue.md#clear)
+[Deque](../interfaces/Deque.md).[clear](../interfaces/Deque.md#clear)
 
 #### Defined in
 
-[circle/circularQueue.ts:168](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L168)
+[circle/circularDeque.ts:168](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L168)
 
 ___
 
@@ -383,7 +412,7 @@ Emit an event containing the items evicted from the collection.
 
 #### Defined in
 
-[circle/circularQueue.ts:361](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L361)
+[circle/circularDeque.ts:456](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L456)
 
 ___
 
@@ -403,19 +432,19 @@ an iterable of [key, value] pairs for every entry.
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[entries](../interfaces/Queue.md#entries)
+[Deque](../interfaces/Deque.md).[entries](../interfaces/Deque.md#entries)
 
 #### Defined in
 
-[circle/circularQueue.ts:182](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L182)
+[circle/circularDeque.ts:182](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L182)
 
 ___
 
-### evict
+### evictHead
 
-▸ **evict**(`count`): `void`
+▸ **evictHead**(`count`): `void`
 
-Removes a given number of elements from the queue.
+Removes a given number of elements from the deque.
 If elements are removed, the [BoundedEvent.Overflow](../modules.md#overflow) event
 is emitted one or more times.
 
@@ -431,7 +460,31 @@ is emitted one or more times.
 
 #### Defined in
 
-[circle/circularQueue.ts:372](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L372)
+[circle/circularDeque.ts:467](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L467)
+
+___
+
+### evictTail
+
+▸ **evictTail**(`count`): `void`
+
+Removes a given number of elements from the deque.
+If elements are removed, the [BoundedEvent.Overflow](../modules.md#overflow) event
+is emitted one or more times.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `count` | `number` | The number of elements to evict. |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[circle/circularDeque.ts:513](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L513)
 
 ___
 
@@ -439,9 +492,9 @@ ___
 
 ▸ **first**(): `undefined` \| `T`
 
-Get the first element in the queue.
+Get the first element in the deque.
 
-Alias for [front()](CircularQueue.md#front).
+Alias for [front()](CircularDeque.md#front).
 
 #### Returns
 
@@ -451,11 +504,11 @@ the first element, or `undefined` if empty.
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[first](../interfaces/Queue.md#first)
+[Deque](../interfaces/Deque.md).[first](../interfaces/Deque.md#first)
 
 #### Defined in
 
-[circle/circularQueue.ts:195](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L195)
+[circle/circularDeque.ts:195](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L195)
 
 ___
 
@@ -480,11 +533,11 @@ Performs the specified action for each element in the collection.
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[forEach](../interfaces/Queue.md#foreach)
+[Deque](../interfaces/Deque.md).[forEach](../interfaces/Deque.md#foreach)
 
 #### Defined in
 
-[circle/circularQueue.ts:207](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L207)
+[circle/circularDeque.ts:207](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L207)
 
 ___
 
@@ -492,9 +545,9 @@ ___
 
 ▸ **front**(): `undefined` \| `T`
 
-Get the element at the front of the queue.
+Get the element at the front of the deque.
 
-Alias for [first()](CircularQueue.md#first).
+Alias for [first()](CircularDeque.md#first).
 
 #### Returns
 
@@ -504,11 +557,11 @@ the front element, or `undefined` if empty.
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[front](../interfaces/Queue.md#front)
+[Deque](../interfaces/Deque.md).[front](../interfaces/Deque.md#front)
 
 #### Defined in
 
-[circle/circularQueue.ts:225](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L225)
+[circle/circularDeque.ts:225](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L225)
 
 ___
 
@@ -534,11 +587,11 @@ a boolean indicating if `value` was found or not
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[has](../interfaces/Queue.md#has)
+[Deque](../interfaces/Deque.md).[has](../interfaces/Deque.md#has)
 
 #### Defined in
 
-[circle/circularQueue.ts:238](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L238)
+[circle/circularDeque.ts:238](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L238)
 
 ___
 
@@ -546,17 +599,17 @@ ___
 
 ▸ **isSequential**(): `boolean`
 
-Returns whether the queue is stored sequentially in memory.
+Returns whether the deque is stored sequentially in memory.
 
 #### Returns
 
 `boolean`
 
-`true` if the queue is sequential in memory, `false` otherwise.
+`true` if the deque is sequential in memory, `false` otherwise.
 
 #### Defined in
 
-[circle/circularQueue.ts:470](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L470)
+[circle/circularDeque.ts:611](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L611)
 
 ___
 
@@ -576,11 +629,35 @@ an iterable of keys.
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[keys](../interfaces/Queue.md#keys)
+[Deque](../interfaces/Deque.md).[keys](../interfaces/Deque.md#keys)
 
 #### Defined in
 
-[circle/circularQueue.ts:255](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L255)
+[circle/circularDeque.ts:255](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L255)
+
+___
+
+### last
+
+▸ **last**(): `undefined` \| `T`
+
+Get the last element in the deque.
+
+Alias for [top()](CircularDeque.md#top).
+
+#### Returns
+
+`undefined` \| `T`
+
+the last element, or `undefined` if empty.
+
+#### Implementation of
+
+[Deque](../interfaces/Deque.md).[last](../interfaces/Deque.md#last)
+
+#### Defined in
+
+[circle/circularDeque.ts:268](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L268)
 
 ___
 
@@ -623,6 +700,28 @@ CircularBase.on
 #### Defined in
 
 [circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularBase.ts#L73)
+
+___
+
+### pop
+
+▸ **pop**(): `undefined` \| `T`
+
+Removes the last element from the deque.
+
+#### Returns
+
+`undefined` \| `T`
+
+the last element, or `undefined` if empty.
+
+#### Implementation of
+
+[Deque](../interfaces/Deque.md).[pop](../interfaces/Deque.md#pop)
+
+#### Defined in
+
+[circle/circularDeque.ts:277](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L277)
 
 ___
 
@@ -671,7 +770,7 @@ ___
 
 ▸ **push**(`...elems`): `number`
 
-Inserts new elements at the end of the queue.
+Inserts new elements at the end of the deque.
 
 #### Parameters
 
@@ -683,15 +782,15 @@ Inserts new elements at the end of the queue.
 
 `number`
 
-The new size of the queue.
+The new size of the deque.
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[push](../interfaces/Queue.md#push)
+[Deque](../interfaces/Deque.md).[push](../interfaces/Deque.md#push)
 
 #### Defined in
 
-[circle/circularQueue.ts:268](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L268)
+[circle/circularDeque.ts:298](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L298)
 
 ___
 
@@ -736,9 +835,9 @@ ___
 
 ▸ **sequentialReset**(`capacity`): `boolean`
 
-Adjusts the queue to fit within the given capacity.
+Adjusts the deque to fit within the given capacity.
 
-Assumes the queue is A) sequential in memory and B) size \<= capacity.
+Assumes the deque is A) sequential in memory and B) size \<= capacity.
 
 #### Parameters
 
@@ -750,11 +849,11 @@ Assumes the queue is A) sequential in memory and B) size \<= capacity.
 
 `boolean`
 
-`true` if the queue was reset, `false` otherwise.
+`true` if the deque was reset, `false` otherwise.
 
 #### Defined in
 
-[circle/circularQueue.ts:505](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L505)
+[circle/circularDeque.ts:646](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L646)
 
 ___
 
@@ -762,7 +861,7 @@ ___
 
 ▸ **shift**(): `undefined` \| `T`
 
-Removes the element at the front of the queue.
+Removes the element at the front of the deque.
 
 #### Returns
 
@@ -772,11 +871,63 @@ the front element, or `undefined` if empty.
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[shift](../interfaces/Queue.md#shift)
+[Deque](../interfaces/Deque.md).[shift](../interfaces/Deque.md#shift)
 
 #### Defined in
 
-[circle/circularQueue.ts:317](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L317)
+[circle/circularDeque.ts:347](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L347)
+
+___
+
+### top
+
+▸ **top**(): `undefined` \| `T`
+
+Get the last element in the deque.
+
+Alias for [last()](CircularDeque.md#last).
+
+#### Returns
+
+`undefined` \| `T`
+
+the last element, or `undefined` if empty.
+
+#### Implementation of
+
+[Deque](../interfaces/Deque.md).[top](../interfaces/Deque.md#top)
+
+#### Defined in
+
+[circle/circularDeque.ts:431](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L431)
+
+___
+
+### unshift
+
+▸ **unshift**(`...elems`): `number`
+
+Inserts new elements at the end of the deque.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `...elems` | `T`[] | Elements to insert. |
+
+#### Returns
+
+`number`
+
+The new size of the deque.
+
+#### Implementation of
+
+[Deque](../interfaces/Deque.md).[unshift](../interfaces/Deque.md#unshift)
+
+#### Defined in
+
+[circle/circularDeque.ts:380](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L380)
 
 ___
 
@@ -796,8 +947,8 @@ an iterable of values.
 
 #### Implementation of
 
-[Queue](../interfaces/Queue.md).[values](../interfaces/Queue.md#values)
+[Deque](../interfaces/Deque.md).[values](../interfaces/Deque.md#values)
 
 #### Defined in
 
-[circle/circularQueue.ts:350](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularQueue.ts#L350)
+[circle/circularDeque.ts:445](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularDeque.ts#L445)

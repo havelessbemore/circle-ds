@@ -170,6 +170,232 @@ declare class CircularBase<T> {
 }
 
 /**
+ * A circular deque is similar to a traditional deque, but uses a fixed-size,
+ * circular buffer. When the deque reaches its maximum capacity and a new
+ * element is added, the oldest is discarded, thus maintaining its size.
+ *
+ * This structure efficiently utilizes memory for applications where only the
+ * most recent additions are of interest and older data can be discarded.
+ *
+ * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
+ */
+export declare class CircularDeque<T> extends CircularBase<T> implements Bounded<T>, Deque<T> {
+    /**
+     * The maximum number of elements that can be stored in the collection.
+     */
+    protected _capacity: number;
+    /* Excluded from this release type: head */
+    /**
+     * Whether capacity is finite (true) or infinite (false).
+     */
+    protected isFinite: boolean;
+    /* Excluded from this release type: next */
+    /* Excluded from this release type: _size */
+    /* Excluded from this release type: vals */
+    /**
+     * Creates a new deque. Default `capacity` is `Infinity`.
+     */
+    constructor();
+    /**
+     * Creates a new deque with the given capacity.
+     *
+     * @param capacity - the deque's capacity.
+     */
+    constructor(capacity?: number | null);
+    /**
+     * Creates a new deque from the given items. `capacity` will equal the number of items.
+     *
+     * @param items - the initial values in the deque.
+     */
+    constructor(items: Iterable<T>);
+    /**
+     * @returns the maximum number of elements that can be stored.
+     */
+    get capacity(): number;
+    /**
+     * Sets the maximum number of elements that can be stored.
+     */
+    set capacity(capacity: number);
+    /**
+     *  @returns the number of elements in the collection.
+     */
+    get size(): number;
+    /**
+     * Return the type of the object.
+     */
+    get [Symbol.toStringTag](): string;
+    /**
+     * Remove all elements and resets the collection.
+     */
+    clear(): void;
+    /**
+     * Iterate through the collection's entries.
+     *
+     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
+     *
+     * @returns an iterable of [key, value] pairs for every entry.
+     */
+    entries(): IterableIterator<[number, T]>;
+    /**
+     * Get the first element in the deque.
+     *
+     * Alias for {@link front | front()}.
+     *
+     * @returns the first element, or `undefined` if empty.
+     */
+    first(): T | undefined;
+    /**
+     * Performs the specified action for each element in the collection.
+     *
+     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
+     *
+     * @param callbackfn - A function that accepts up to three arguments. It is called once per element.
+     * @param thisArg - An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used.
+     */
+    forEach(callbackfn: (value: T, index: number, collection: this) => void, thisArg?: unknown): void;
+    /**
+     * Get the element at the front of the deque.
+     *
+     * Alias for {@link first | first()}.
+     *
+     * @returns the front element, or `undefined` if empty.
+     */
+    front(): T | undefined;
+    /**
+     * Determines whether a given element is in the collection.
+     *
+     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
+     *
+     * @param value - The element to search for
+     *
+     * @returns a boolean indicating if `value` was found or not
+     */
+    has(value: T): boolean;
+    /**
+     * Iterate through the collection's keys.
+     *
+     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
+     *
+     * @returns an iterable of keys.
+     */
+    keys(): IterableIterator<number>;
+    /**
+     * Get the last element in the deque.
+     *
+     * Alias for {@link top | top()}.
+     *
+     * @returns the last element, or `undefined` if empty.
+     */
+    last(): T | undefined;
+    /**
+     * Removes the last element from the deque.
+     *
+     * @returns the last element, or `undefined` if empty.
+     */
+    pop(): T | undefined;
+    /**
+     * Inserts new elements at the end of the deque.
+     *
+     * @param elems - Elements to insert.
+     *
+     * @returns The new size of the deque.
+     */
+    push(...elems: T[]): number;
+    /**
+     * Removes the element at the front of the deque.
+     *
+     * @returns the front element, or `undefined` if empty.
+     */
+    shift(): T | undefined;
+    /**
+     * Iterate through the collection's values.
+     *
+     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
+     *
+     * @returns an iterable of values.
+     */
+    [Symbol.iterator](): IterableIterator<T>;
+    /**
+     * Inserts new elements at the end of the deque.
+     *
+     * @param elems - Elements to insert.
+     *
+     * @returns The new size of the deque.
+     */
+    unshift(...elems: T[]): number;
+    /**
+     * Get the last element in the deque.
+     *
+     * Alias for {@link last | last()}.
+     *
+     * @returns the last element, or `undefined` if empty.
+     */
+    top(): T | undefined;
+    /**
+     * Iterate through the collection's values.
+     *
+     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
+     *
+     * @returns an iterable of values.
+     */
+    values(): IterableIterator<T>;
+    /**
+     * Emit an event containing the items evicted from the collection.
+     *
+     * @param evicted - The items evicted from the collection.
+     */
+    protected emit(evicted: T[]): void;
+    /**
+     * Removes a given number of elements from the deque.
+     * If elements are removed, the {@link BoundedEvent.Overflow} event
+     * is emitted one or more times.
+     *
+     * @param count - The number of elements to evict.
+     */
+    protected evictHead(count: number): void;
+    /**
+     * Removes a given number of elements from the deque.
+     * If elements are removed, the {@link BoundedEvent.Overflow} event
+     * is emitted one or more times.
+     *
+     * @param count - The number of elements to evict.
+     */
+    protected evictTail(count: number): void;
+    /* Excluded from this release type: grow */
+    /**
+     * Returns whether the deque is stored sequentially in memory.
+     *
+     * @returns `true` if the deque is sequential in memory, `false` otherwise.
+     */
+    protected isSequential(): boolean;
+    /**
+     * Append new elements to the collection.
+     *
+     * @param elems - The elements to append.
+     * @param max - The number of elements to append.
+     */
+    protected _push(elems: T[], max: number): void;
+    /**
+     * Adjusts the deque to fit within the given capacity.
+     *
+     * Assumes the deque is A) sequential in memory and B) size \<= capacity.
+     *
+     * @param capacity - The new capacity.
+     *
+     * @returns `true` if the deque was reset, `false` otherwise.
+     */
+    protected sequentialReset(capacity: number): boolean;
+    /* Excluded from this release type: shrink */
+    /**
+     * Append new elements to the collection.
+     *
+     * @param elems - The elements to append.
+     * @param num - The number of elements to append.
+     */
+    protected _unshift(elems: T[], num: number): void;
+}
+
+/**
  * A circular stack is similar to a traditional stack, but uses a fixed-size,
  * circular buffer. When the stack reaches its maximum capacity and a new
  * element is added, the oldest is discarded, thus maintaining its size.

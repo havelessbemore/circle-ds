@@ -16,8 +16,8 @@ most recent additions are of interest and older data can be discarded.
 ## Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 ## Hierarchy
 
@@ -81,8 +81,8 @@ Creates a new stack. Default `capacity` is `Infinity`.
 #### Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 #### Returns
 
@@ -94,7 +94,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularStack.ts:59](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L59)
+[circle/circularStack.ts:59](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L59)
 
 • **new CircularStack**\<`T`\>(`capacity?`): [`CircularStack`](CircularStack.md)\<`T`\>
 
@@ -103,14 +103,14 @@ Creates a new stack with the given capacity.
 #### Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 #### Parameters
 
-| Name        | Type               | Description           |
-| :---------- | :----------------- | :-------------------- |
-| `capacity?` | `null` \| `number` | the stack's capacity. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `capacity?` | ``null`` \| `number` | the stack's capacity. |
 
 #### Returns
 
@@ -122,7 +122,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularStack.ts:65](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L65)
+[circle/circularStack.ts:65](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L65)
 
 • **new CircularStack**\<`T`\>(`items`): [`CircularStack`](CircularStack.md)\<`T`\>
 
@@ -131,13 +131,13 @@ Creates a new stack from the given items. `capacity` will equal the number of it
 #### Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 #### Parameters
 
-| Name    | Type              | Description                      |
-| :------ | :---------------- | :------------------------------- |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `items` | `Iterable`\<`T`\> | the initial values in the stack. |
 
 #### Returns
@@ -150,7 +150,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularStack.ts:71](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L71)
+[circle/circularStack.ts:71](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L71)
 
 ## Properties
 
@@ -162,9 +162,9 @@ The maximum number of elements that can be stored in the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:25](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L25)
+[circle/circularStack.ts:25](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L25)
 
----
+___
 
 ### isFinite
 
@@ -174,7 +174,7 @@ Whether capacity is finite (true) or infinite (false).
 
 #### Defined in
 
-[circle/circularStack.ts:36](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L36)
+[circle/circularStack.ts:36](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L36)
 
 ## Accessors
 
@@ -190,9 +190,9 @@ Return the type of the object.
 
 #### Defined in
 
-[circle/circularStack.ts:161](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L161)
+[circle/circularStack.ts:161](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L161)
 
----
+___
 
 ### capacity
 
@@ -210,7 +210,7 @@ the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularStack.ts:113](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L113)
+[circle/circularStack.ts:113](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L113)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -218,8 +218,8 @@ Sets the maximum number of elements that can be stored.
 
 #### Parameters
 
-| Name       | Type     |
-| :--------- | :------- |
+| Name | Type |
+| :------ | :------ |
 | `capacity` | `number` |
 
 #### Returns
@@ -232,9 +232,9 @@ Sets the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularStack.ts:120](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L120)
+[circle/circularStack.ts:120](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L120)
 
----
+___
 
 ### size
 
@@ -252,7 +252,7 @@ the number of elements in the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:154](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L154)
+[circle/circularStack.ts:154](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L154)
 
 ## Methods
 
@@ -276,22 +276,22 @@ an iterable of values.
 
 #### Defined in
 
-[circle/circularStack.ts:327](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L327)
+[circle/circularStack.ts:327](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L327)
 
----
+___
 
 ### \_push
 
-▸ **\_push**(`elems`, `max`): `void`
+▸ **_push**(`elems`, `max`): `void`
 
 Append new elements to the collection.
 
 #### Parameters
 
-| Name    | Type     | Description                       |
-| :------ | :------- | :-------------------------------- |
-| `elems` | `T`[]    | The elements to append.           |
-| `max`   | `number` | The number of elements to append. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `elems` | `T`[] | The elements to append. |
+| `max` | `number` | The number of elements to append. |
 
 #### Returns
 
@@ -299,9 +299,9 @@ Append new elements to the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:482](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L482)
+[circle/circularStack.ts:482](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L482)
 
----
+___
 
 ### addListener
 
@@ -310,19 +310,19 @@ Append new elements to the collection.
 Appends the listener function to the listeners array for the
 [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- By default, event listeners are invoked in the order they are added.
-  The `prependListener()` method can be used as an alternative to add
-  the event listener to the beginning of the listeners array.
+* By default, event listeners are invoked in the order they are added.
+The `prependListener()` method can be used as an alternative to add
+the event listener to the beginning of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -341,9 +341,9 @@ CircularBase.addListener
 
 #### Defined in
 
-[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularBase.ts#L40)
+[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularBase.ts#L40)
 
----
+___
 
 ### clear
 
@@ -361,9 +361,9 @@ Remove all elements from the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:168](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L168)
+[circle/circularStack.ts:168](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L168)
 
----
+___
 
 ### emit
 
@@ -373,8 +373,8 @@ Emit an event containing the items evicted from the collection.
 
 #### Parameters
 
-| Name      | Type  | Description                            |
-| :-------- | :---- | :------------------------------------- |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `evicted` | `T`[] | The items evicted from the collection. |
 
 #### Returns
@@ -383,9 +383,9 @@ Emit an event containing the items evicted from the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:363](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L363)
+[circle/circularStack.ts:363](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L363)
 
----
+___
 
 ### entries
 
@@ -407,9 +407,9 @@ an iterable of [key, value] pairs for every entry.
 
 #### Defined in
 
-[circle/circularStack.ts:182](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L182)
+[circle/circularStack.ts:182](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L182)
 
----
+___
 
 ### evict
 
@@ -421,8 +421,8 @@ is emitted one or more times.
 
 #### Parameters
 
-| Name    | Type     | Description                      |
-| :------ | :------- | :------------------------------- |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `count` | `number` | The number of elements to evict. |
 
 #### Returns
@@ -431,9 +431,9 @@ is emitted one or more times.
 
 #### Defined in
 
-[circle/circularStack.ts:374](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L374)
+[circle/circularStack.ts:374](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L374)
 
----
+___
 
 ### forEach
 
@@ -445,10 +445,10 @@ Performs the specified action for each element in the collection.
 
 #### Parameters
 
-| Name         | Type                                                              | Description                                                                                                    |
-| :----------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- |
-| `callbackfn` | (`value`: `T`, `index`: `number`, `collection`: `this`) => `void` | A function that accepts up to three arguments. It is called once per element.                                  |
-| `thisArg?`   | `unknown`                                                         | An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `callbackfn` | (`value`: `T`, `index`: `number`, `collection`: `this`) => `void` | A function that accepts up to three arguments. It is called once per element. |
+| `thisArg?` | `unknown` | An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used. |
 
 #### Returns
 
@@ -460,9 +460,9 @@ Performs the specified action for each element in the collection.
 
 #### Defined in
 
-[circle/circularStack.ts:196](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L196)
+[circle/circularStack.ts:196](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L196)
 
----
+___
 
 ### has
 
@@ -474,9 +474,9 @@ Determines whether a given element is in the collection.
 
 #### Parameters
 
-| Name    | Type | Description               |
-| :------ | :--- | :------------------------ |
-| `value` | `T`  | The element to search for |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `T` | The element to search for |
 
 #### Returns
 
@@ -490,9 +490,9 @@ a boolean indicating if `value` was found or not
 
 #### Defined in
 
-[circle/circularStack.ts:216](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L216)
+[circle/circularStack.ts:216](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L216)
 
----
+___
 
 ### isSequential
 
@@ -508,9 +508,9 @@ Returns whether the stack is stored sequentially in memory.
 
 #### Defined in
 
-[circle/circularStack.ts:472](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L472)
+[circle/circularStack.ts:472](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L472)
 
----
+___
 
 ### keys
 
@@ -532,9 +532,9 @@ an iterable of keys.
 
 #### Defined in
 
-[circle/circularStack.ts:233](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L233)
+[circle/circularStack.ts:233](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L233)
 
----
+___
 
 ### last
 
@@ -556,9 +556,9 @@ the last element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularStack.ts:246](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L246)
+[circle/circularStack.ts:246](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L246)
 
----
+___
 
 ### on
 
@@ -567,19 +567,19 @@ the last element, or `undefined` if empty.
 Appends the listener function to the listeners array for the
 [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- By default, event listeners are invoked in the order they are added.
-  The `prependListener()` method can be used as an alternative to add
-  the event listener to the beginning of the listeners array.
+* By default, event listeners are invoked in the order they are added.
+The `prependListener()` method can be used as an alternative to add
+the event listener to the beginning of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -598,9 +598,9 @@ CircularBase.on
 
 #### Defined in
 
-[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularBase.ts#L73)
+[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularBase.ts#L73)
 
----
+___
 
 ### pop
 
@@ -620,9 +620,9 @@ the top element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularStack.ts:255](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L255)
+[circle/circularStack.ts:255](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L255)
 
----
+___
 
 ### prependListener
 
@@ -631,18 +631,18 @@ the top element, or `undefined` if empty.
 Adds the listener function to the beginning of the listeners array for
 the [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- Alternatively, the `addListener()` method can be used to add
-  the event listener to the end of the listeners array.
+* Alternatively, the `addListener()` method can be used to add
+the event listener to the end of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -661,9 +661,9 @@ CircularBase.prependListener
 
 #### Defined in
 
-[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularBase.ts#L102)
+[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularBase.ts#L102)
 
----
+___
 
 ### push
 
@@ -673,8 +673,8 @@ Inserts new elements at the end of the stack.
 
 #### Parameters
 
-| Name       | Type  | Description         |
-| :--------- | :---- | :------------------ |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `...elems` | `T`[] | Elements to insert. |
 
 #### Returns
@@ -689,9 +689,9 @@ The new size of the stack.
 
 #### Defined in
 
-[circle/circularStack.ts:276](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L276)
+[circle/circularStack.ts:276](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L276)
 
----
+___
 
 ### removeListener
 
@@ -705,9 +705,9 @@ be called once per instance.
 
 #### Parameters
 
-| Name       | Type                       | Description            |
-| :--------- | :------------------------- | :--------------------- |
-| `event`    | `"overflow"`               | The name of the event. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. |
 
 #### Returns
@@ -726,9 +726,9 @@ CircularBase.removeListener
 
 #### Defined in
 
-[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularBase.ts#L127)
+[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularBase.ts#L127)
 
----
+___
 
 ### sequentialReset
 
@@ -740,8 +740,8 @@ Assumes the stack is A) sequential in memory and B) size \<= capacity.
 
 #### Parameters
 
-| Name       | Type     | Description       |
-| :--------- | :------- | :---------------- |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `capacity` | `number` | the new capacity. |
 
 #### Returns
@@ -752,9 +752,9 @@ Assumes the stack is A) sequential in memory and B) size \<= capacity.
 
 #### Defined in
 
-[circle/circularStack.ts:507](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L507)
+[circle/circularStack.ts:507](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L507)
 
----
+___
 
 ### top
 
@@ -776,9 +776,9 @@ the last element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularStack.ts:338](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L338)
+[circle/circularStack.ts:338](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L338)
 
----
+___
 
 ### values
 
@@ -800,4 +800,4 @@ an iterable of values.
 
 #### Defined in
 
-[circle/circularStack.ts:352](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularStack.ts#L352)
+[circle/circularStack.ts:352](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularStack.ts#L352)

@@ -5,11 +5,12 @@
 ## Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 ## Implemented by
 
+- [`CircularDeque`](../classes/CircularDeque.md)
 - [`CircularLinkedDeque`](../classes/CircularLinkedDeque.md)
 - [`CircularLinkedQueue`](../classes/CircularLinkedQueue.md)
 - [`CircularLinkedStack`](../classes/CircularLinkedStack.md)
@@ -39,7 +40,7 @@
 
 #### Defined in
 
-[types/bounded.ts:5](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L5)
+[types/bounded.ts:5](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/types/bounded.ts#L5)
 
 ## Methods
 
@@ -50,19 +51,19 @@
 Appends the listener function to the listeners array for the
 [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- By default, event listeners are invoked in the order they are added.
-  The `prependListener()` method can be used as an alternative to add
-  the event listener to the beginning of the listeners array.
+* By default, event listeners are invoked in the order they are added.
+The `prependListener()` method can be used as an alternative to add
+the event listener to the beginning of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -73,15 +74,15 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:27](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L27)
+[types/bounded.ts:27](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/types/bounded.ts#L27)
 
 ▸ **addListener**(`event`, `listener`): `this`
 
 #### Parameters
 
-| Name       | Type                           |
-| :--------- | :----------------------------- |
-| `event`    | `"overflow"`                   |
+| Name | Type |
+| :------ | :------ |
+| `event` | ``"overflow"`` |
 | `listener` | (...`args`: `any`[]) => `void` |
 
 #### Returns
@@ -90,9 +91,9 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:31](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L31)
+[types/bounded.ts:31](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/types/bounded.ts#L31)
 
----
+___
 
 ### on
 
@@ -101,19 +102,19 @@ the collection.
 Appends the listener function to the listeners array for the
 [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- By default, event listeners are invoked in the order they are added.
-  The `prependListener()` method can be used as an alternative to add
-  the event listener to the beginning of the listeners array.
+* By default, event listeners are invoked in the order they are added.
+The `prependListener()` method can be used as an alternative to add
+the event listener to the beginning of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -124,15 +125,15 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:57](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L57)
+[types/bounded.ts:57](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/types/bounded.ts#L57)
 
 ▸ **on**(`event`, `listener`): `this`
 
 #### Parameters
 
-| Name       | Type                           |
-| :--------- | :----------------------------- |
-| `event`    | `"overflow"`                   |
+| Name | Type |
+| :------ | :------ |
+| `event` | ``"overflow"`` |
 | `listener` | (...`args`: `any`[]) => `void` |
 
 #### Returns
@@ -141,9 +142,9 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:58](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L58)
+[types/bounded.ts:58](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/types/bounded.ts#L58)
 
----
+___
 
 ### prependListener
 
@@ -152,18 +153,18 @@ the collection.
 Adds the listener function to the beginning of the listeners array for
 the [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- Alternatively, the `addListener()` method can be used to add
-  the event listener to the end of the listeners array.
+* Alternatively, the `addListener()` method can be used to add
+the event listener to the end of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -174,15 +175,15 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:83](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L83)
+[types/bounded.ts:83](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/types/bounded.ts#L83)
 
 ▸ **prependListener**(`event`, `listener`): `this`
 
 #### Parameters
 
-| Name       | Type                           |
-| :--------- | :----------------------------- |
-| `event`    | `"overflow"`                   |
+| Name | Type |
+| :------ | :------ |
+| `event` | ``"overflow"`` |
 | `listener` | (...`args`: `any`[]) => `void` |
 
 #### Returns
@@ -191,9 +192,9 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:87](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L87)
+[types/bounded.ts:87](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/types/bounded.ts#L87)
 
----
+___
 
 ### removeListener
 
@@ -207,9 +208,9 @@ be called once per instance.
 
 #### Parameters
 
-| Name       | Type                       | Description            |
-| :--------- | :------------------------- | :--------------------- |
-| `event`    | `"overflow"`               | The name of the event. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. |
 
 #### Returns
@@ -220,15 +221,15 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:105](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L105)
+[types/bounded.ts:105](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/types/bounded.ts#L105)
 
 ▸ **removeListener**(`event`, `listener`): `this`
 
 #### Parameters
 
-| Name       | Type                           |
-| :--------- | :----------------------------- |
-| `event`    | `"overflow"`                   |
+| Name | Type |
+| :------ | :------ |
+| `event` | ``"overflow"`` |
 | `listener` | (...`args`: `any`[]) => `void` |
 
 #### Returns
@@ -237,4 +238,4 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:109](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L109)
+[types/bounded.ts:109](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/types/bounded.ts#L109)

@@ -16,8 +16,8 @@ most recent additions are of interest and older data can be discarded.
 ## Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 ## Hierarchy
 
@@ -75,8 +75,8 @@ Creates a new stack with `capacity` defaulted to `Infinity`.
 #### Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 #### Returns
 
@@ -88,7 +88,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:58](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L58)
+[circle/circularLinkedQueue.ts:58](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L58)
 
 • **new CircularLinkedQueue**\<`T`\>(`capacity?`): [`CircularLinkedQueue`](CircularLinkedQueue.md)\<`T`\>
 
@@ -97,14 +97,14 @@ Creates a new stack with the given capacity.
 #### Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 #### Parameters
 
-| Name        | Type               | Description           |
-| :---------- | :----------------- | :-------------------- |
-| `capacity?` | `null` \| `number` | the stack's capacity. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `capacity?` | ``null`` \| `number` | the stack's capacity. |
 
 #### Returns
 
@@ -116,7 +116,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:64](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L64)
+[circle/circularLinkedQueue.ts:64](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L64)
 
 • **new CircularLinkedQueue**\<`T`\>(`items`): [`CircularLinkedQueue`](CircularLinkedQueue.md)\<`T`\>
 
@@ -125,13 +125,13 @@ Creates a new stack. Initial capacity is the number of items given.
 #### Type parameters
 
 | Name |
-| :--- |
-| `T`  |
+| :------ |
+| `T` |
 
 #### Parameters
 
-| Name    | Type              | Description                       |
-| :------ | :---------------- | :-------------------------------- |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `items` | `Iterable`\<`T`\> | the values to store in the stack. |
 
 #### Returns
@@ -144,7 +144,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:70](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L70)
+[circle/circularLinkedQueue.ts:70](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L70)
 
 ## Properties
 
@@ -156,7 +156,7 @@ The maximum number of elements that can be stored in the collection.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:35](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L35)
+[circle/circularLinkedQueue.ts:35](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L35)
 
 ## Accessors
 
@@ -172,9 +172,9 @@ Return the type of the object.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:124](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L124)
+[circle/circularLinkedQueue.ts:124](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L124)
 
----
+___
 
 ### capacity
 
@@ -192,7 +192,7 @@ the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:110](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L110)
+[circle/circularLinkedQueue.ts:110](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L110)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -200,8 +200,8 @@ Sets the maximum number of elements that can be stored.
 
 #### Parameters
 
-| Name       | Type     |
-| :--------- | :------- |
+| Name | Type |
+| :------ | :------ |
 | `capacity` | `number` |
 
 #### Returns
@@ -214,9 +214,9 @@ Sets the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:131](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L131)
+[circle/circularLinkedQueue.ts:131](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L131)
 
----
+___
 
 ### size
 
@@ -234,7 +234,7 @@ the number of elements in the collection.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:117](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L117)
+[circle/circularLinkedQueue.ts:117](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L117)
 
 ## Methods
 
@@ -258,9 +258,9 @@ an iterable of values.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:322](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L322)
+[circle/circularLinkedQueue.ts:322](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L322)
 
----
+___
 
 ### addListener
 
@@ -269,19 +269,19 @@ an iterable of values.
 Appends the listener function to the listeners array for the
 [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- By default, event listeners are invoked in the order they are added.
-  The `prependListener()` method can be used as an alternative to add
-  the event listener to the beginning of the listeners array.
+* By default, event listeners are invoked in the order they are added.
+The `prependListener()` method can be used as an alternative to add
+the event listener to the beginning of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -300,9 +300,9 @@ CircularBase.addListener
 
 #### Defined in
 
-[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularBase.ts#L40)
+[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularBase.ts#L40)
 
----
+___
 
 ### clear
 
@@ -320,9 +320,9 @@ Remove all elements and resets the collection.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:166](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L166)
+[circle/circularLinkedQueue.ts:166](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L166)
 
----
+___
 
 ### entries
 
@@ -344,9 +344,9 @@ an iterable of [key, value] pairs for every entry.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:180](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L180)
+[circle/circularLinkedQueue.ts:180](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L180)
 
----
+___
 
 ### first
 
@@ -368,9 +368,9 @@ the first element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:195](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L195)
+[circle/circularLinkedQueue.ts:195](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L195)
 
----
+___
 
 ### forEach
 
@@ -382,10 +382,10 @@ Performs the specified action for each element in the collection.
 
 #### Parameters
 
-| Name         | Type                                                              | Description                                                                                                    |
-| :----------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- |
-| `callbackfn` | (`value`: `T`, `index`: `number`, `collection`: `this`) => `void` | A function that accepts up to three arguments. It is called once per element.                                  |
-| `thisArg?`   | `unknown`                                                         | An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `callbackfn` | (`value`: `T`, `index`: `number`, `collection`: `this`) => `void` | A function that accepts up to three arguments. It is called once per element. |
+| `thisArg?` | `unknown` | An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used. |
 
 #### Returns
 
@@ -397,9 +397,9 @@ Performs the specified action for each element in the collection.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:207](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L207)
+[circle/circularLinkedQueue.ts:207](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L207)
 
----
+___
 
 ### front
 
@@ -421,9 +421,9 @@ the first element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:225](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L225)
+[circle/circularLinkedQueue.ts:225](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L225)
 
----
+___
 
 ### has
 
@@ -435,9 +435,9 @@ Determines whether a given element is in the collection.
 
 #### Parameters
 
-| Name    | Type | Description               |
-| :------ | :--- | :------------------------ |
-| `value` | `T`  | The element to search for |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `T` | The element to search for |
 
 #### Returns
 
@@ -451,9 +451,9 @@ a boolean indicating if `value` was found or not
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:238](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L238)
+[circle/circularLinkedQueue.ts:238](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L238)
 
----
+___
 
 ### keys
 
@@ -475,9 +475,9 @@ an iterable of keys.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:256](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L256)
+[circle/circularLinkedQueue.ts:256](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L256)
 
----
+___
 
 ### on
 
@@ -486,19 +486,19 @@ an iterable of keys.
 Appends the listener function to the listeners array for the
 [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- By default, event listeners are invoked in the order they are added.
-  The `prependListener()` method can be used as an alternative to add
-  the event listener to the beginning of the listeners array.
+* By default, event listeners are invoked in the order they are added.
+The `prependListener()` method can be used as an alternative to add
+the event listener to the beginning of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -517,9 +517,9 @@ CircularBase.on
 
 #### Defined in
 
-[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularBase.ts#L73)
+[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularBase.ts#L73)
 
----
+___
 
 ### prependListener
 
@@ -528,18 +528,18 @@ CircularBase.on
 Adds the listener function to the beginning of the listeners array for
 the [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-- No checks are made to see if the listener has already been added.
-  Multiple calls with the same of event + listener combination will
-  result in the listener being added and called multiple times.
+* No checks are made to see if the listener has already been added.
+Multiple calls with the same of event + listener combination will
+result in the listener being added and called multiple times.
 
-- Alternatively, the `addListener()` method can be used to add
-  the event listener to the end of the listeners array.
+* Alternatively, the `addListener()` method can be used to add
+the event listener to the end of the listeners array.
 
 #### Parameters
 
-| Name       | Type                       | Description                                                                                                                                                                                                                          |
-| :--------- | :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`    | `"overflow"`               | The name of the event.                                                                                                                                                                                                               |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -558,9 +558,9 @@ CircularBase.prependListener
 
 #### Defined in
 
-[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularBase.ts#L102)
+[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularBase.ts#L102)
 
----
+___
 
 ### push
 
@@ -570,8 +570,8 @@ Inserts new elements at the end of the stack.
 
 #### Parameters
 
-| Name       | Type  | Description         |
-| :--------- | :---- | :------------------ |
+| Name | Type | Description |
+| :------ | :------ | :------ |
 | `...elems` | `T`[] | Elements to insert. |
 
 #### Returns
@@ -586,9 +586,9 @@ The overwritten elements, if any.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:269](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L269)
+[circle/circularLinkedQueue.ts:269](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L269)
 
----
+___
 
 ### removeListener
 
@@ -602,9 +602,9 @@ be called once per instance.
 
 #### Parameters
 
-| Name       | Type                       | Description            |
-| :--------- | :------------------------- | :--------------------- |
-| `event`    | `"overflow"`               | The name of the event. |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `event` | ``"overflow"`` | The name of the event. |
 | `listener` | (`elems`: `T`[]) => `void` | The callback function. |
 
 #### Returns
@@ -623,9 +623,9 @@ CircularBase.removeListener
 
 #### Defined in
 
-[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularBase.ts#L127)
+[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularBase.ts#L127)
 
----
+___
 
 ### shift
 
@@ -645,9 +645,9 @@ the front element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:303](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L303)
+[circle/circularLinkedQueue.ts:303](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L303)
 
----
+___
 
 ### values
 
@@ -669,4 +669,4 @@ an iterable of values.
 
 #### Defined in
 
-[circle/circularLinkedQueue.ts:333](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/circle/circularLinkedQueue.ts#L333)
+[circle/circularLinkedQueue.ts:333](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/circle/circularLinkedQueue.ts#L333)

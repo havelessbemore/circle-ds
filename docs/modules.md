@@ -6,6 +6,7 @@
 
 ### Classes
 
+- [CircularDeque](classes/CircularDeque.md)
 - [CircularLinkedDeque](classes/CircularLinkedDeque.md)
 - [CircularLinkedQueue](classes/CircularLinkedQueue.md)
 - [CircularLinkedStack](classes/CircularLinkedStack.md)
@@ -34,10 +35,10 @@
 
 #### Type declaration
 
-| Name       | Type         |
-| :--------- | :----------- |
-| `Overflow` | `"overflow"` |
+| Name | Type |
+| :------ | :------ |
+| `Overflow` | ``"overflow"`` |
 
 #### Defined in
 
-[types/boundedEvent.ts:1](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/boundedEvent.ts#L1)
+[types/boundedEvent.ts:1](https://github.com/havelessbemore/circle-ds/blob/e0f7af3/src/types/boundedEvent.ts#L1)

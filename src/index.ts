@@ -9,6 +9,7 @@ export type { Queue } from "./types/queue";
 export type { Stack } from "./types/stack";
 
 // Classes
+export { CircularDeque } from "./circle/circularDeque";
 export { CircularLinkedDeque } from "./circle/circularLinkedDeque";
 export { CircularLinkedQueue } from "./circle/circularLinkedQueue";
 export { CircularLinkedStack } from "./circle/circularLinkedStack";
