@@ -9,9 +9,9 @@
 ## Type parameters
 
 | Name |
-| :------ |
-| `K` |
-| `V` |
+| :--- |
+| `K`  |
+| `V`  |
 
 ## Hierarchy
 
@@ -69,9 +69,9 @@ Creates a new map with `capacity` defaulted to `Infinity`.
 #### Type parameters
 
 | Name |
-| :------ |
-| `K` |
-| `V` |
+| :--- |
+| `K`  |
+| `V`  |
 
 #### Returns
 
@@ -92,15 +92,15 @@ Creates a new map with the given capacity.
 #### Type parameters
 
 | Name |
-| :------ |
-| `K` |
-| `V` |
+| :--- |
+| `K`  |
+| `V`  |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `capacity?` | ``null`` \| `number` | the map's capacity. |
+| Name        | Type               | Description         |
+| :---------- | :----------------- | :------------------ |
+| `capacity?` | `null` \| `number` | the map's capacity. |
 
 #### Returns
 
@@ -121,14 +121,14 @@ Creates a new map. Initial capacity is the number of unique items given.
 #### Type parameters
 
 | Name |
-| :------ |
-| `K` |
-| `V` |
+| :--- |
+| `K`  |
+| `V`  |
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name    | Type                     | Description                     |
+| :------ | :----------------------- | :------------------------------ |
 | `items` | `Iterable`\<[`K`, `V`]\> | the values to store in the map. |
 
 #### Returns
@@ -175,7 +175,7 @@ Map.[toStringTag]
 
 [circle/circularMap.ts:93](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularMap.ts#L93)
 
-___
+---
 
 ### capacity
 
@@ -201,8 +201,8 @@ The maximum number of elements that can be stored in the map.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name       | Type     |
+| :--------- | :------- |
 | `capacity` | `number` |
 
 #### Returns
@@ -217,7 +217,7 @@ The maximum number of elements that can be stored in the map.
 
 [circle/circularMap.ts:100](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularMap.ts#L100)
 
-___
+---
 
 ### size
 
@@ -261,7 +261,7 @@ Map.[iterator]
 
 [circle/circularMap.ts:257](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularMap.ts#L257)
 
-___
+---
 
 ### addListener
 
@@ -270,19 +270,19 @@ ___
 Appends the listener function to the listeners array for the
 [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-* No checks are made to see if the listener has already been added.
-Multiple calls with the same of event + listener combination will
-result in the listener being added and called multiple times.
+- No checks are made to see if the listener has already been added.
+  Multiple calls with the same of event + listener combination will
+  result in the listener being added and called multiple times.
 
-* By default, event listeners are invoked in the order they are added.
-The `prependListener()` method can be used as an alternative to add
-the event listener to the beginning of the listeners array.
+- By default, event listeners are invoked in the order they are added.
+  The `prependListener()` method can be used as an alternative to add
+  the event listener to the beginning of the listeners array.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `event` | ``"overflow"`` | The name of the event. |
+| Name       | Type                              | Description                                                                                                                                                                                                                          |
+| :--------- | :-------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `event`    | `"overflow"`                      | The name of the event.                                                                                                                                                                                                               |
 | `listener` | (`elems`: [`K`, `V`][]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -303,7 +303,7 @@ CircularBase.addListener
 
 [circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularBase.ts#L40)
 
-___
+---
 
 ### clear
 
@@ -323,7 +323,7 @@ Removes all elements from the map.
 
 [circle/circularMap.ts:144](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularMap.ts#L144)
 
-___
+---
 
 ### delete
 
@@ -333,9 +333,9 @@ Deletes a specified value from the map.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `K` |
+| Name  | Type |
+| :---- | :--- |
+| `key` | `K`  |
 
 #### Returns
 
@@ -351,7 +351,7 @@ Map.delete
 
 [circle/circularMap.ts:153](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularMap.ts#L153)
 
-___
+---
 
 ### entries
 
@@ -375,7 +375,7 @@ an iterable of [key, value] pairs for every entry.
 
 [circle/circularMap.ts:164](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularMap.ts#L164)
 
-___
+---
 
 ### forEach
 
@@ -387,10 +387,10 @@ Performs the specified action for each value in the map.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `callbackfn` | (`value`: `V`, `key`: `K`, `map`: `this`) => `void` | A function that accepts up to three arguments. It is called once per value. |
-| `thisArg?` | `unknown` | An object to which the `this` keyword refers to in the `callbackfn` function. Defaults to `undefined`. |
+| Name         | Type                                                | Description                                                                                            |
+| :----------- | :-------------------------------------------------- | :----------------------------------------------------------------------------------------------------- |
+| `callbackfn` | (`value`: `V`, `key`: `K`, `map`: `this`) => `void` | A function that accepts up to three arguments. It is called once per value.                            |
+| `thisArg?`   | `unknown`                                           | An object to which the `this` keyword refers to in the `callbackfn` function. Defaults to `undefined`. |
 
 #### Returns
 
@@ -404,7 +404,7 @@ Performs the specified action for each value in the map.
 
 [circle/circularMap.ts:176](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularMap.ts#L176)
 
-___
+---
 
 ### get
 
@@ -416,9 +416,9 @@ If the associated value is an object, then you will get a reference to that obje
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `K` |
+| Name  | Type |
+| :---- | :--- |
+| `key` | `K`  |
 
 #### Returns
 
@@ -434,7 +434,7 @@ Map.get
 
 [circle/circularMap.ts:192](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularMap.ts#L192)
 
-___
+---
 
 ### has
 
@@ -444,9 +444,9 @@ Determines whether a given value is in the map.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `key` | `K` | The key to search for. |
+| Name  | Type | Description            |
+| :---- | :--- | :--------------------- |
+| `key` | `K`  | The key to search for. |
 
 #### Returns
 
@@ -462,7 +462,7 @@ Map.has
 
 [circle/circularMap.ts:203](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularMap.ts#L203)
 
-___
+---
 
 ### keys
 
@@ -486,7 +486,7 @@ an iterable of the map's keys.
 
 [circle/circularMap.ts:214](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularMap.ts#L214)
 
-___
+---
 
 ### on
 
@@ -495,19 +495,19 @@ ___
 Appends the listener function to the listeners array for the
 [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-* No checks are made to see if the listener has already been added.
-Multiple calls with the same of event + listener combination will
-result in the listener being added and called multiple times.
+- No checks are made to see if the listener has already been added.
+  Multiple calls with the same of event + listener combination will
+  result in the listener being added and called multiple times.
 
-* By default, event listeners are invoked in the order they are added.
-The `prependListener()` method can be used as an alternative to add
-the event listener to the beginning of the listeners array.
+- By default, event listeners are invoked in the order they are added.
+  The `prependListener()` method can be used as an alternative to add
+  the event listener to the beginning of the listeners array.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `event` | ``"overflow"`` | The name of the event. |
+| Name       | Type                              | Description                                                                                                                                                                                                                          |
+| :--------- | :-------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `event`    | `"overflow"`                      | The name of the event.                                                                                                                                                                                                               |
 | `listener` | (`elems`: [`K`, `V`][]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -528,7 +528,7 @@ CircularBase.on
 
 [circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularBase.ts#L73)
 
-___
+---
 
 ### prependListener
 
@@ -537,18 +537,18 @@ ___
 Adds the listener function to the beginning of the listeners array for
 the [BoundedEvent.Overflow](../modules.md#overflow) event.
 
-* No checks are made to see if the listener has already been added.
-Multiple calls with the same of event + listener combination will
-result in the listener being added and called multiple times.
+- No checks are made to see if the listener has already been added.
+  Multiple calls with the same of event + listener combination will
+  result in the listener being added and called multiple times.
 
-* Alternatively, the `addListener()` method can be used to add
-the event listener to the end of the listeners array.
+- Alternatively, the `addListener()` method can be used to add
+  the event listener to the end of the listeners array.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `event` | ``"overflow"`` | The name of the event. |
+| Name       | Type                              | Description                                                                                                                                                                                                                          |
+| :--------- | :-------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `event`    | `"overflow"`                      | The name of the event.                                                                                                                                                                                                               |
 | `listener` | (`elems`: [`K`, `V`][]) => `void` | The callback function. It will receive an array of elements that have been removed due to overflow. This can happen when elements are added while the collection is at capacity, or when capacity is reduced below the current size. |
 
 #### Returns
@@ -569,7 +569,7 @@ CircularBase.prependListener
 
 [circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularBase.ts#L102)
 
-___
+---
 
 ### removeListener
 
@@ -583,9 +583,9 @@ be called once per instance.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `event` | ``"overflow"`` | The name of the event. |
+| Name       | Type                              | Description            |
+| :--------- | :-------------------------------- | :--------------------- |
+| `event`    | `"overflow"`                      | The name of the event. |
 | `listener` | (`elems`: [`K`, `V`][]) => `void` | The callback function. |
 
 #### Returns
@@ -606,7 +606,7 @@ CircularBase.removeListener
 
 [circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularBase.ts#L127)
 
-___
+---
 
 ### set
 
@@ -616,10 +616,10 @@ Sets the specified key-value pair in the map.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `key` | `K` | the key to add |
-| `value` | `V` | the key's value. |
+| Name    | Type | Description      |
+| :------ | :--- | :--------------- |
+| `key`   | `K`  | the key to add   |
+| `value` | `V`  | the key's value. |
 
 #### Returns
 
@@ -633,7 +633,7 @@ Map.set
 
 [circle/circularMap.ts:224](https://github.com/havelessbemore/circle-ds/blob/5547555/src/circle/circularMap.ts#L224)
 
-___
+---
 
 ### values
 

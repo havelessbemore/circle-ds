@@ -5,8 +5,8 @@
 ## Type parameters
 
 | Name |
-| :------ |
-| `V` |
+| :--- |
+| `V`  |
 
 ## Hierarchy
 
@@ -69,7 +69,7 @@
 
 [types/stack.ts:8](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/stack.ts#L8)
 
-___
+---
 
 ### clear
 
@@ -87,7 +87,7 @@ ___
 
 [types/collection.ts:6](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/collection.ts#L6)
 
-___
+---
 
 ### entries
 
@@ -105,7 +105,7 @@ ___
 
 [types/collection.ts:7](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/collection.ts#L7)
 
-___
+---
 
 ### forEach
 
@@ -113,10 +113,10 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name         | Type                                                            |
+| :----------- | :-------------------------------------------------------------- |
 | `callbackfn` | (`value`: `V`, `key`: `number`, `collection`: `this`) => `void` |
-| `thisArg?` | `unknown` |
+| `thisArg?`   | `unknown`                                                       |
 
 #### Returns
 
@@ -130,7 +130,7 @@ ___
 
 [types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/collection.ts#L8)
 
-___
+---
 
 ### has
 
@@ -138,9 +138,9 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `V` |
+| Name    | Type |
+| :------ | :--- |
+| `value` | `V`  |
 
 #### Returns
 
@@ -150,7 +150,7 @@ ___
 
 [types/stack.ts:4](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/stack.ts#L4)
 
-___
+---
 
 ### keys
 
@@ -168,7 +168,7 @@ ___
 
 [types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/collection.ts#L12)
 
-___
+---
 
 ### last
 
@@ -182,7 +182,7 @@ ___
 
 [types/stack.ts:5](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/stack.ts#L5)
 
-___
+---
 
 ### pop
 
@@ -196,7 +196,7 @@ ___
 
 [types/stack.ts:6](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/stack.ts#L6)
 
-___
+---
 
 ### push
 
@@ -204,8 +204,8 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name        | Type  |
+| :---------- | :---- |
 | `...values` | `V`[] |
 
 #### Returns
@@ -216,7 +216,7 @@ ___
 
 [types/stack.ts:7](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/stack.ts#L7)
 
-___
+---
 
 ### top
 
@@ -230,7 +230,7 @@ ___
 
 [types/stack.ts:9](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/stack.ts#L9)
 
-___
+---
 
 ### values
 

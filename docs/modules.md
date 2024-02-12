@@ -34,9 +34,9 @@
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `Overflow` | ``"overflow"`` |
+| Name       | Type         |
+| :--------- | :----------- |
+| `Overflow` | `"overflow"` |
 
 #### Defined in
 
