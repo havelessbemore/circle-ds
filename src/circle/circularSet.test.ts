@@ -3,5 +3,5 @@ import { test as testBoundedSet } from "../tests/boundedSet";
 
 import { CircularSet } from "./circularSet";
 
-testBoundedCollection(CircularSet);
+testBoundedCollection(CircularSet, Number.MAX_SAFE_INTEGER);
 testBoundedSet(CircularSet);

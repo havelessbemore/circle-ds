@@ -1,12 +1,6 @@
 import { CircularBase } from "./circularBase";
 import { Stack } from "../types/stack";
-import {
-  isInfinity,
-  isNull,
-  isNumber,
-  isSafeCount,
-  isUndefined,
-} from "../utils/is";
+import { isInfinity, isNumber, isSafeCount } from "../utils/is";
 import { BoundedEvent } from "..";
 import { Bounded } from "../types/bounded";
 
@@ -74,7 +68,8 @@ export class CircularLinkedStack<T>
     this._size = 0;
 
     // Case 1: capacity is null, undefined or Infinity
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
 

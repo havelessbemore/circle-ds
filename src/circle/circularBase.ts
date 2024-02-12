@@ -13,8 +13,8 @@ export class CircularBase<T> {
    */
   protected emitter: EventEmitter;
 
-  constructor() {
-    this.emitter = new EventEmitter();
+  constructor(emitter = new EventEmitter()) {
+    this.emitter = emitter;
   }
 
   /**

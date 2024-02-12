@@ -528,12 +528,11 @@ export class CircularDeque<T>
       this.emit(this.vals.slice(0, this.next));
       this.vals.fill(undefined as T, 0, this.next);
       this._size -= this.next;
-      this.next -= count;
-      if (count <= this.next) {
+      count -= this.next;
+      this.next = 0;
+      if (count <= 0) {
         return;
       }
-      this.next = 0;
-      count -= this.next;
     }
 
     const tail = this.head + this._size;

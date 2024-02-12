@@ -33,13 +33,13 @@ const BoundedEvent = {
 };
 const EventEmitter = {};
 class CircularBase {
-  constructor() {
+  constructor(emitter = new EventEmitter()) {
     /**
      * The event emitter.
      * @internal
      */
     __publicField(this, "emitter");
-    this.emitter = new EventEmitter();
+    this.emitter = emitter;
   }
   addListener(event, listener) {
     this.emitter.addListener(event, listener);
@@ -65,17 +65,11 @@ function isArrayLength(value) {
 function isInfinity(value) {
   return value === Number.POSITIVE_INFINITY;
 }
-function isNull(value) {
-  return value === null;
-}
 function isNumber(value) {
   return typeof value === "number";
 }
 function isSafeCount(value) {
   return Number.isSafeInteger(value) && value >= 0;
-}
-function isUndefined(value) {
-  return typeof value === "undefined";
 }
 class CircularDeque extends CircularBase {
   constructor(capacity) {
@@ -485,12 +479,11 @@ class CircularDeque extends CircularBase {
       this.emit(this.vals.slice(0, this.next));
       this.vals.fill(void 0, 0, this.next);
       this._size -= this.next;
-      this.next -= count;
-      if (count <= this.next) {
+      count -= this.next;
+      this.next = 0;
+      if (count <= 0) {
         return;
       }
-      this.next = 0;
-      count -= this.next;
     }
     const tail = this.head + this._size;
     if (count >= this._size) {
@@ -652,7 +645,8 @@ class CircularLinkedDeque extends CircularBase {
     this.root.next = this.root;
     this.root.prev = this.root;
     this._size = 0;
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
     if (isNumber(capacity)) {
@@ -971,7 +965,8 @@ class CircularLinkedQueue extends CircularBase {
     this.root.next = this.root;
     this._size = 0;
     this.tail = this.root;
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
     if (isNumber(capacity)) {
@@ -1214,7 +1209,8 @@ class CircularLinkedStack extends CircularBase {
     this.root.next = this.root;
     this.root.prev = this.root;
     this._size = 0;
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
     if (isNumber(capacity)) {
@@ -1451,7 +1447,8 @@ class CircularMap extends CircularBase {
     __publicField(this, "map");
     this._capacity = Infinity;
     this.map = /* @__PURE__ */ new Map();
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
     if (isNumber(capacity)) {
@@ -2054,7 +2051,8 @@ class CircularSet extends CircularBase {
     __publicField(this, "set");
     this._capacity = Infinity;
     this.set = /* @__PURE__ */ new Set();
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
     if (isNumber(capacity)) {

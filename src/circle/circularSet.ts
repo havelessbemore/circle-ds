@@ -1,13 +1,7 @@
 import { Bounded } from "../types/bounded";
 import { BoundedEvent } from "../types/boundedEvent";
 import { Collection } from "../types/collection";
-import {
-  isInfinity,
-  isNull,
-  isNumber,
-  isSafeCount,
-  isUndefined,
-} from "../utils/is";
+import { isInfinity, isNumber, isSafeCount } from "../utils/is";
 
 import { CircularBase } from "./circularBase";
 
@@ -53,7 +47,8 @@ export class CircularSet<T>
     this.set = new Set();
 
     // Case 1: capacity is null, undefined or Infinity
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
 

@@ -127,6 +127,35 @@ export function test(cls: Constructor<BoundedDeque<unknown>>) {
         expect(Array.from(deque.values())).toEqual([1, 2, 3, 4]);
       });
 
+      it("correctly updates when rotated", () => {
+        const deque = new cls(5);
+        deque.push(1, 2, 3, 4, 5);
+        deque.push(6, 7, 8);
+        expect(deque.unshift(9)).toBe(5);
+        expect(deque.size).toBe(5);
+        expect(Array.from(deque.values())).toEqual([9, 4, 5, 6, 7]);
+      });
+
+      it("correctly updates when rotated 2", () => {
+        const deque = new cls(5);
+        deque.push(1, 2, 3, 4, 5);
+        deque.push(6, 7);
+        expect(deque.size).toBe(5);
+        expect(deque.unshift(8, 9)).toBe(5);
+        expect(deque.size).toBe(5);
+        expect(Array.from(deque.values())).toEqual([8, 9, 3, 4, 5]);
+      });
+
+      it("correctly updates when rotated 3", () => {
+        const deque = new cls(5);
+        deque.push(1, 2, 3, 4, 5);
+        deque.push(6, 7);
+        expect(deque.size).toBe(5);
+        expect(deque.unshift(8, 9, 10)).toBe(5);
+        expect(deque.size).toBe(5);
+        expect(Array.from(deque.values())).toEqual([8, 9, 10, 3, 4]);
+      });
+
       it("does not discard items when adding within capacity", async () => {
         const deque = new cls(3);
         const onItemEvicted = vi.fn();

@@ -1,13 +1,7 @@
 import { CircularBase } from "./circularBase";
 import { BoundedEvent } from "../types/boundedEvent";
 import { Queue } from "../types/queue";
-import {
-  isInfinity,
-  isNull,
-  isNumber,
-  isSafeCount,
-  isUndefined,
-} from "../utils/is";
+import { isInfinity, isNumber, isSafeCount } from "../utils/is";
 import { Bounded } from "../types/bounded";
 
 interface Node<T> {
@@ -79,7 +73,8 @@ export class CircularLinkedQueue<T>
     this.tail = this.root;
 
     // Case 1: capacity is null, undefined or Infinity
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
 

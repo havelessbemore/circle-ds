@@ -3,13 +3,12 @@ import { describe, expect, it } from "vitest";
 import { Bounded } from "../types/bounded";
 import { Collection } from "../types/collection";
 import { Constructor } from "../types/constructor";
-import { ARRAY_MAX_LENGTH } from "../utils/constants";
 
 type BoundedCollection<K, V> = Collection<K, V> & Bounded<V>;
 
 export function test(
   cls: Constructor<BoundedCollection<unknown, unknown>>,
-  type?: "indexed" | "keyed"
+  maxCapacity: number
 ) {
   describe(cls.name, () => {
     describe("constructor()", () => {
@@ -67,26 +66,13 @@ export function test(
         expect([...obj.values()]).toEqual([]);
       });
 
-      if (type === "indexed") {
-        it("accepts large capacities", () => {
-          expect(() => new cls(ARRAY_MAX_LENGTH)).not.toThrow();
-        });
+      it("accepts large capacities", () => {
+        expect(() => new cls(maxCapacity)).not.toThrow();
+      });
 
-        it("rejects too large capacities", () => {
-          expect(() => new cls(ARRAY_MAX_LENGTH + 1)).toThrow();
-          expect(() => new cls(Number.MAX_SAFE_INTEGER)).toThrow();
-          expect(() => new cls(Number.MAX_VALUE)).toThrow();
-        });
-      } else if (type === "keyed") {
-        it("accepts large capacities", () => {
-          expect(() => new cls(Number.MAX_SAFE_INTEGER)).not.toThrow();
-        });
-
-        it("rejects too large capacities", () => {
-          expect(() => new cls(Number.MAX_SAFE_INTEGER + 1)).toThrow();
-          expect(() => new cls(Number.MAX_VALUE)).toThrow();
-        });
-      }
+      it("rejects too large capacities", () => {
+        expect(() => new cls(maxCapacity + 1)).toThrow();
+      });
     });
 
     describe("capacity", () => {
@@ -181,40 +167,17 @@ export function test(
         expect([...obj.values()]).toEqual([]);
       });
 
-      if (type === "indexed") {
-        it("accepts large capacities", () => {
-          const obj = new cls();
-          expect(() => (obj.capacity = ARRAY_MAX_LENGTH)).not.toThrow();
-          expect(obj.capacity).toEqual(ARRAY_MAX_LENGTH);
-          expect(obj.size).toEqual(0);
-        });
+      it("accepts large capacities", () => {
+        const obj = new cls();
+        expect(() => (obj.capacity = maxCapacity)).not.toThrow();
+        expect(obj.capacity).toEqual(maxCapacity);
+        expect(obj.size).toEqual(0);
+      });
 
-        it("rejects too large capacities", () => {
-          const obj = new cls();
-          expect(() => (obj.capacity = ARRAY_MAX_LENGTH + 1)).toThrow(
-            RangeError
-          );
-          expect(() => (obj.capacity = Number.MAX_SAFE_INTEGER)).toThrow(
-            RangeError
-          );
-          expect(() => (obj.capacity = Number.MAX_VALUE)).toThrow(RangeError);
-        });
-      } else if (type === "keyed") {
-        it("accepts large capacities", () => {
-          const obj = new cls();
-          expect(() => (obj.capacity = Number.MAX_SAFE_INTEGER)).not.toThrow();
-          expect(obj.capacity).toEqual(Number.MAX_SAFE_INTEGER);
-          expect(obj.size).toEqual(0);
-        });
-
-        it("rejects too large capacities", () => {
-          const obj = new cls();
-          expect(() => (obj.capacity = Number.MAX_SAFE_INTEGER + 1)).toThrow(
-            RangeError
-          );
-          expect(() => (obj.capacity = Number.MAX_VALUE)).toThrow(RangeError);
-        });
-      }
+      it("rejects too large capacities", () => {
+        const obj = new cls();
+        expect(() => (obj.capacity = maxCapacity + 1)).toThrow(RangeError);
+      });
     });
   });
 }

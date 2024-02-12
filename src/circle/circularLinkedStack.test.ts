@@ -3,5 +3,5 @@ import { test as testBoundedStack } from "../tests/boundedStack";
 
 import { CircularLinkedStack } from "./circularLinkedStack";
 
-testBoundedCollection(CircularLinkedStack);
+testBoundedCollection(CircularLinkedStack, Number.MAX_SAFE_INTEGER);
 testBoundedStack(CircularLinkedStack);

@@ -91,7 +91,7 @@ export declare const BoundedEvent: {
 
 declare class CircularBase<T> {
     /* Excluded from this release type: emitter */
-    constructor();
+    constructor(emitter?: EventEmitter);
     /**
      * Appends the listener function to the listeners array for the
      * {@link BoundedEvent.Overflow} event.

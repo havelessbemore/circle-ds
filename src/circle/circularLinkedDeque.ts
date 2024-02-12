@@ -1,13 +1,7 @@
 import { CircularBase } from "./circularBase";
 import { BoundedEvent } from "../types/boundedEvent";
 import { Deque } from "../types/deque";
-import {
-  isInfinity,
-  isNull,
-  isNumber,
-  isSafeCount,
-  isUndefined,
-} from "../utils/is";
+import { isInfinity, isNumber, isSafeCount } from "../utils/is";
 import { Bounded } from "../types/bounded";
 
 interface Node<T> {
@@ -74,7 +68,8 @@ export class CircularLinkedDeque<T>
     this._size = 0;
 
     // Case 1: capacity is null, undefined or Infinity
-    if (isUndefined(capacity) || isNull(capacity) || isInfinity(capacity)) {
+    capacity = capacity ?? Infinity;
+    if (isInfinity(capacity)) {
       return;
     }
 

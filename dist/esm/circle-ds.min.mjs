@@ -22,54 +22,48 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
-var q = Object.defineProperty;
-var F = (a, l, t) => l in a ? q(a, l, { enumerable: !0, configurable: !0, writable: !0, value: t }) : a[l] = t;
-var r = (a, l, t) => (F(a, typeof l != "symbol" ? l + "" : l, t), t);
-const o = {
+var E = Object.defineProperty;
+var R = (o, a, t) => a in o ? E(o, a, { enumerable: !0, configurable: !0, writable: !0, value: t }) : o[a] = t;
+var r = (o, a, t) => (R(o, typeof a != "symbol" ? a + "" : a, t), t);
+const l = {
   Overflow: "overflow"
-}, O = {};
-class _ {
-  constructor() {
+}, q = {};
+class u {
+  constructor(a = new q()) {
     /**
      * The event emitter.
      * @internal
      */
     r(this, "emitter");
-    this.emitter = new O();
+    this.emitter = a;
   }
-  addListener(l, t) {
-    return this.emitter.addListener(l, t), this;
+  addListener(a, t) {
+    return this.emitter.addListener(a, t), this;
   }
-  on(l, t) {
-    return this.emitter.on(l, t), this;
+  on(a, t) {
+    return this.emitter.on(a, t), this;
   }
-  prependListener(l, t) {
-    return this.emitter.prependListener(l, t), this;
+  prependListener(a, t) {
+    return this.emitter.prependListener(a, t), this;
   }
-  removeListener(l, t) {
-    return this.emitter.removeListener(l, t), this;
+  removeListener(a, t) {
+    return this.emitter.removeListener(a, t), this;
   }
 }
 const z = 4294967295;
-function c(a) {
-  return Number.isInteger(a) && a >= 0 && a <= z;
+function c(o) {
+  return Number.isInteger(o) && o >= 0 && o <= z;
 }
-function v(a) {
-  return a === Number.POSITIVE_INFINITY;
+function v(o) {
+  return o === Number.POSITIVE_INFINITY;
 }
-function x(a) {
-  return a === null;
+function d(o) {
+  return typeof o == "number";
 }
-function d(a) {
-  return typeof a == "number";
+function _(o) {
+  return Number.isSafeInteger(o) && o >= 0;
 }
-function u(a) {
-  return Number.isSafeInteger(a) && a >= 0;
-}
-function p(a) {
-  return typeof a > "u";
-}
-class g extends _ {
+class x extends u {
   constructor(t) {
     super();
     /**
@@ -140,7 +134,7 @@ class g extends _ {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return g.name;
+    return x.name;
   }
   /**
    * Remove all elements and resets the collection.
@@ -346,7 +340,7 @@ class g extends _ {
    * @param evicted - The items evicted from the collection.
    */
   emit(t) {
-    this.emitter.emit(o.Overflow, t);
+    this.emitter.emit(l.Overflow, t);
   }
   /**
    * Removes a given number of elements from the deque.
@@ -389,11 +383,8 @@ class g extends _ {
       this.emit(this.vals.slice(this.next - t, this.next)), this.vals.fill(void 0, this.next - t, this.next), this.next -= t, this._size -= t;
       return;
     }
-    if (i) {
-      if (this.emit(this.vals.slice(0, this.next)), this.vals.fill(void 0, 0, this.next), this._size -= this.next, this.next -= t, t <= this.next)
-        return;
-      this.next = 0, t -= this.next;
-    }
+    if (i && (this.emit(this.vals.slice(0, this.next)), this.vals.fill(void 0, 0, this.next), this._size -= this.next, t -= this.next, this.next = 0, t <= 0))
+      return;
     const s = this.head + this._size;
     if (t >= this._size) {
       this.emit(this.vals.slice(this.head, s)), this.clear();
@@ -488,7 +479,7 @@ class g extends _ {
     this.head = h, this._size += i;
   }
 }
-class m extends _ {
+class p extends u {
   constructor(t) {
     super();
     /**
@@ -505,10 +496,10 @@ class m extends _ {
      * @internal
      */
     r(this, "_size");
-    if (this._capacity = 1 / 0, this.root = { value: void 0 }, this.root.next = this.root, this.root.prev = this.root, this._size = 0, p(t) || x(t) || v(t))
+    if (this._capacity = 1 / 0, this.root = { value: void 0 }, this.root.next = this.root, this.root.prev = this.root, this._size = 0, t = t ?? 1 / 0, v(t))
       return;
     if (d(t)) {
-      if (!u(t))
+      if (!_(t))
         throw new RangeError("Invalid capacity");
       this._capacity = t;
       return;
@@ -534,13 +525,13 @@ class m extends _ {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return m.name;
+    return p.name;
   }
   /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(t) {
-    if (t = +t, !v(t) && !u(t))
+    if (t = +t, !v(t) && !_(t))
       throw new RangeError("Invalid capacity");
     if (this._size <= t) {
       this._capacity = t;
@@ -551,7 +542,7 @@ class m extends _ {
     do
       i.push(s.value), s = s.next;
     while (--this._size > t);
-    this.root.next = s, s.prev = this.root, this._capacity = t, this.emitter.emit(o.Overflow, i);
+    this.root.next = s, s.prev = this.root, this._capacity = t, this.emitter.emit(l.Overflow, i);
   }
   /**
    * Remove all elements and resets the collection.
@@ -662,12 +653,12 @@ class m extends _ {
   push(...t) {
     const i = this._capacity;
     if (i < 1)
-      return this.emitter.emit(o.Overflow, t), this._size;
+      return this.emitter.emit(l.Overflow, t), this._size;
     const s = t.length, e = this.root, h = [];
     let n = e.prev;
     for (let f = 0; f < s; ++f)
       n.next = { next: e, prev: n, value: t[f] }, n = n.next, this._size < i ? ++this._size : (h.push(e.next.value), e.next = e.next.next);
-    return e.prev = n, e.next.prev = e, h.length > 0 && this.emitter.emit(o.Overflow, h), this._size;
+    return e.prev = n, e.next.prev = e, h.length > 0 && this.emitter.emit(l.Overflow, h), this._size;
   }
   /**
    * Removes the element at the front of the queue.
@@ -710,12 +701,12 @@ class m extends _ {
   unshift(...t) {
     const i = this._capacity;
     if (i < 1)
-      return this.emitter.emit(o.Overflow, t), this._size;
+      return this.emitter.emit(l.Overflow, t), this._size;
     const s = this.root, e = [];
     let h = s.next;
     for (let n = t.length - 1; n >= 0; --n)
       h = { next: h, prev: s, value: t[n] }, h.next.prev = h, this._size < i ? ++this._size : (e.push(s.prev.value), s.prev = s.prev.prev);
-    return s.next = h, s.prev.next = s, e.length > 0 && this.emitter.emit(o.Overflow, e.reverse()), this._size;
+    return s.next = h, s.prev.next = s, e.length > 0 && this.emitter.emit(l.Overflow, e.reverse()), this._size;
   }
   /**
    * Iterate through the collection's values.
@@ -730,7 +721,7 @@ class m extends _ {
       t = t.next, yield t.value;
   }
 }
-class y extends _ {
+class g extends u {
   constructor(t) {
     super();
     /**
@@ -752,10 +743,10 @@ class y extends _ {
      * @internal
      */
     r(this, "tail");
-    if (this._capacity = 1 / 0, this.root = { value: void 0 }, this.root.next = this.root, this._size = 0, this.tail = this.root, p(t) || x(t) || v(t))
+    if (this._capacity = 1 / 0, this.root = { value: void 0 }, this.root.next = this.root, this._size = 0, this.tail = this.root, t = t ?? 1 / 0, v(t))
       return;
     if (d(t)) {
-      if (!u(t))
+      if (!_(t))
         throw new RangeError("Invalid capacity");
       this._capacity = t;
       return;
@@ -781,13 +772,13 @@ class y extends _ {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return y.name;
+    return g.name;
   }
   /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(t) {
-    if (t = +t, !v(t) && !u(t))
+    if (t = +t, !v(t) && !_(t))
       throw new RangeError("Invalid capacity");
     if (this._size <= t) {
       this._capacity = t;
@@ -798,7 +789,7 @@ class y extends _ {
     do
       i.push(s.value), s = s.next;
     while (--this._size > t);
-    this.root.next = s, this.tail = this._size > 0 ? this.tail : this.root, this._capacity = t, this.emitter.emit(o.Overflow, i);
+    this.root.next = s, this.tail = this._size > 0 ? this.tail : this.root, this._capacity = t, this.emitter.emit(l.Overflow, i);
   }
   /**
    * Remove all elements and resets the collection.
@@ -892,7 +883,7 @@ class y extends _ {
     const s = t.length, e = this.root, h = [];
     for (let n = 0; n < s; ++n)
       this.tail.next = { next: e, value: t[n] }, this.tail = this.tail.next, this._size < i ? ++this._size : (h.push(e.next.value), e.next = e.next.next);
-    return h.length > 0 && this.emitter.emit(o.Overflow, h), this._size;
+    return h.length > 0 && this.emitter.emit(l.Overflow, h), this._size;
   }
   /**
    * Removes the element at the front of the queue.
@@ -928,7 +919,7 @@ class y extends _ {
       t = t.next, yield t.value;
   }
 }
-class w extends _ {
+class m extends u {
   constructor(t) {
     super();
     /**
@@ -945,10 +936,10 @@ class w extends _ {
      * @internal
      */
     r(this, "_size");
-    if (this._capacity = 1 / 0, this.root = { value: void 0 }, this.root.next = this.root, this.root.prev = this.root, this._size = 0, p(t) || x(t) || v(t))
+    if (this._capacity = 1 / 0, this.root = { value: void 0 }, this.root.next = this.root, this.root.prev = this.root, this._size = 0, t = t ?? 1 / 0, v(t))
       return;
     if (d(t)) {
-      if (!u(t))
+      if (!_(t))
         throw new RangeError("Invalid capacity");
       this._capacity = t;
       return;
@@ -974,13 +965,13 @@ class w extends _ {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return w.name;
+    return m.name;
   }
   /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(t) {
-    if (t = +t, !v(t) && !u(t))
+    if (t = +t, !v(t) && !_(t))
       throw new RangeError("Invalid capacity");
     if (this._size <= t) {
       this._capacity = t;
@@ -991,7 +982,7 @@ class w extends _ {
     do
       i.push(s.value), s = s.next;
     while (--this._size > t);
-    this.root.next = s, s.prev = this.root, this._capacity = t, this.emitter.emit(o.Overflow, i);
+    this.root.next = s, s.prev = this.root, this._capacity = t, this.emitter.emit(l.Overflow, i);
   }
   /**
    * Remove all elements and resets the collection.
@@ -1087,7 +1078,7 @@ class w extends _ {
     let n = e.prev;
     for (let f = 0; f < s; ++f)
       n.next = { next: e, prev: n, value: t[f] }, n = n.next, this._size < i ? ++this._size : (h.push(e.next.value), e.next = e.next.next);
-    return e.prev = n, e.next.prev = e, h.length > 0 && this.emitter.emit(o.Overflow, h), this._size;
+    return e.prev = n, e.next.prev = e, h.length > 0 && this.emitter.emit(l.Overflow, h), this._size;
   }
   /**
    * Iterate through the collection's values.
@@ -1122,7 +1113,7 @@ class w extends _ {
       t = t.next, yield t.value;
   }
 }
-class S extends _ {
+class y extends u {
   constructor(t) {
     super();
     /**
@@ -1134,9 +1125,9 @@ class S extends _ {
      * @internal
      */
     r(this, "map");
-    if (this._capacity = 1 / 0, this.map = /* @__PURE__ */ new Map(), !(p(t) || x(t) || v(t))) {
+    if (this._capacity = 1 / 0, this.map = /* @__PURE__ */ new Map(), t = t ?? 1 / 0, !v(t)) {
       if (d(t)) {
-        if (!u(t))
+        if (!_(t))
           throw new RangeError("Invalid capacity");
         this._capacity = t;
         return;
@@ -1162,19 +1153,19 @@ class S extends _ {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return S.name;
+    return y.name;
   }
   /**
    * The maximum number of elements that can be stored in the map.
    */
   set capacity(t) {
-    if (t = +t, !v(t) && !u(t))
+    if (t = +t, !v(t) && !_(t))
       throw new RangeError("Invalid capacity");
     if (t === this._capacity || (this._capacity = t, this.size <= t))
       return;
     if (t === 0) {
       const e = Array.from(this.map);
-      this.clear(), this.emitter.emit(o.Overflow, e);
+      this.clear(), this.emitter.emit(l.Overflow, e);
       return;
     }
     const i = [], s = this.map.entries();
@@ -1182,7 +1173,7 @@ class S extends _ {
       const h = s.next().value;
       this.map.delete(h[0]), i.push(h);
     }
-    this.emitter.emit(o.Overflow, i);
+    this.emitter.emit(l.Overflow, i);
   }
   /**
    * Removes all elements from the map.
@@ -1258,13 +1249,13 @@ class S extends _ {
    */
   set(t, i) {
     if (this.capacity < 1)
-      return this.emitter.emit(o.Overflow, [[t, i]]), this;
+      return this.emitter.emit(l.Overflow, [[t, i]]), this;
     const s = [];
     if (!this.map.delete(t) && this.size >= this.capacity) {
       const e = this.map.entries().next().value;
       this.map.delete(e[0]), s.push(e);
     }
-    return this.map.set(t, i), s.length > 0 && this.emitter.emit(o.Overflow, s), this;
+    return this.map.set(t, i), s.length > 0 && this.emitter.emit(l.Overflow, s), this;
   }
   /**
    * Iterate through the map's values.
@@ -1287,7 +1278,7 @@ class S extends _ {
     return this.map.values();
   }
 }
-class I extends _ {
+class w extends u {
   constructor(t) {
     super();
     /**
@@ -1358,7 +1349,7 @@ class I extends _ {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return I.name;
+    return w.name;
   }
   /**
    * Remove all elements and resets the collection.
@@ -1504,7 +1495,7 @@ class I extends _ {
    * @param evicted - The items evicted from the collection.
    */
   emit(t) {
-    this.emitter.emit(o.Overflow, t);
+    this.emitter.emit(l.Overflow, t);
   }
   /**
    * Removes a given number of elements from the queue.
@@ -1605,7 +1596,7 @@ class I extends _ {
     this.vals.copyWithin(this.head - i, this.head, this._capacity), this.vals.length = t, this.head -= i, this._capacity = t;
   }
 }
-class E extends _ {
+class S extends u {
   constructor(t) {
     super();
     /**
@@ -1617,9 +1608,9 @@ class E extends _ {
      * @internal
      */
     r(this, "set");
-    if (this._capacity = 1 / 0, this.set = /* @__PURE__ */ new Set(), !(p(t) || x(t) || v(t))) {
+    if (this._capacity = 1 / 0, this.set = /* @__PURE__ */ new Set(), t = t ?? 1 / 0, !v(t)) {
       if (d(t)) {
-        if (!u(t))
+        if (!_(t))
           throw new RangeError("Invalid capacity");
         this._capacity = t;
         return;
@@ -1645,19 +1636,19 @@ class E extends _ {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return E.name;
+    return S.name;
   }
   /**
    * The maximum number of elements that can be stored in the set.
    */
   set capacity(t) {
-    if (t = +t, !v(t) && !u(t))
+    if (t = +t, !v(t) && !_(t))
       throw new RangeError("Invalid capacity");
     if (t === this._capacity || (this._capacity = t, this.size <= t))
       return;
     if (t === 0) {
       const e = Array.from(this.set);
-      this.clear(), this.emitter.emit(o.Overflow, e);
+      this.clear(), this.emitter.emit(l.Overflow, e);
       return;
     }
     const i = [], s = this.set.values();
@@ -1665,7 +1656,7 @@ class E extends _ {
       const h = s.next().value;
       this.set.delete(h), i.push(h);
     }
-    this.emitter.emit(o.Overflow, i);
+    this.emitter.emit(l.Overflow, i);
   }
   /**
    * Adds the specified value to the set.
@@ -1674,13 +1665,13 @@ class E extends _ {
    */
   add(t) {
     if (this.capacity < 1)
-      return this.emitter.emit(o.Overflow, [t]), this;
+      return this.emitter.emit(l.Overflow, [t]), this;
     const i = [];
     if (!this.set.delete(t) && this.size >= this.capacity) {
       const s = this.set.values().next().value;
       this.set.delete(s), i.push(s);
     }
-    return this.set.add(t), i.length > 0 && this.emitter.emit(o.Overflow, i), this;
+    return this.set.add(t), i.length > 0 && this.emitter.emit(l.Overflow, i), this;
   }
   /**
    * Removes all elements from the set.
@@ -1759,7 +1750,7 @@ class E extends _ {
     return this.set.values();
   }
 }
-class R extends _ {
+class I extends u {
   constructor(t) {
     super();
     /**
@@ -1830,7 +1821,7 @@ class R extends _ {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return R.name;
+    return I.name;
   }
   /**
    * Remove all elements from the collection.
@@ -1978,7 +1969,7 @@ class R extends _ {
    * @param evicted - The items evicted from the collection.
    */
   emit(t) {
-    this.emitter.emit(o.Overflow, t);
+    this.emitter.emit(l.Overflow, t);
   }
   /**
    * Removes a given number of elements from the stack.
@@ -2080,14 +2071,14 @@ class R extends _ {
   }
 }
 export {
-  o as BoundedEvent,
-  g as CircularDeque,
-  m as CircularLinkedDeque,
-  y as CircularLinkedQueue,
-  w as CircularLinkedStack,
-  S as CircularMap,
-  I as CircularQueue,
-  E as CircularSet,
-  R as CircularStack
+  l as BoundedEvent,
+  x as CircularDeque,
+  p as CircularLinkedDeque,
+  g as CircularLinkedQueue,
+  m as CircularLinkedStack,
+  y as CircularMap,
+  w as CircularQueue,
+  S as CircularSet,
+  I as CircularStack
 };
 //# sourceMappingURL=circle-ds.min.mjs.map
