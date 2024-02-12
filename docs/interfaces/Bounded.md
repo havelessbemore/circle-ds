@@ -39,7 +39,7 @@
 
 #### Defined in
 
-[types/bounded.ts:5](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/bounded.ts#L5)
+[types/bounded.ts:5](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L5)
 
 ## Methods
 
@@ -73,7 +73,7 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:27](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/bounded.ts#L27)
+[types/bounded.ts:27](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L27)
 
 ▸ **addListener**(`event`, `listener`): `this`
 
@@ -90,7 +90,7 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:31](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/bounded.ts#L31)
+[types/bounded.ts:31](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L31)
 
 ---
 
@@ -124,7 +124,7 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:57](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/bounded.ts#L57)
+[types/bounded.ts:57](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L57)
 
 ▸ **on**(`event`, `listener`): `this`
 
@@ -141,7 +141,7 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:58](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/bounded.ts#L58)
+[types/bounded.ts:58](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L58)
 
 ---
 
@@ -174,7 +174,7 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:83](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/bounded.ts#L83)
+[types/bounded.ts:83](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L83)
 
 ▸ **prependListener**(`event`, `listener`): `this`
 
@@ -191,7 +191,7 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:87](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/bounded.ts#L87)
+[types/bounded.ts:87](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L87)
 
 ---
 
@@ -220,7 +220,7 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:105](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/bounded.ts#L105)
+[types/bounded.ts:105](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L105)
 
 ▸ **removeListener**(`event`, `listener`): `this`
 
@@ -237,4 +237,4 @@ the collection.
 
 #### Defined in
 
-[types/bounded.ts:109](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/bounded.ts#L109)
+[types/bounded.ts:109](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/bounded.ts#L109)

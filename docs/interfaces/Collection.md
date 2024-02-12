@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/collection.ts#L13)
+[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/collection.ts#L13)
 
 ## Methods
 
@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[types/collection.ts:6](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/collection.ts#L6)
+[types/collection.ts:6](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/collection.ts#L6)
 
 ---
 
@@ -72,7 +72,7 @@
 
 #### Defined in
 
-[types/collection.ts:7](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/collection.ts#L7)
+[types/collection.ts:7](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/collection.ts#L7)
 
 ---
 
@@ -93,7 +93,7 @@
 
 #### Defined in
 
-[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/collection.ts#L8)
+[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/collection.ts#L8)
 
 ---
 
@@ -107,7 +107,7 @@
 
 #### Defined in
 
-[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/collection.ts#L12)
+[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/collection.ts#L12)
 
 ---
 
@@ -121,4 +121,4 @@
 
 #### Defined in
 
-[types/collection.ts:14](https://github.com/havelessbemore/circle-ds/blob/5547555/src/types/collection.ts#L14)
+[types/collection.ts:14](https://github.com/havelessbemore/circle-ds/blob/914ade2/src/types/collection.ts#L14)
