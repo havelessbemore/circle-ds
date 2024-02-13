@@ -134,6 +134,18 @@ class CircularDeque extends CircularBase {
     return this.isFinite ? this._capacity : Infinity;
   }
   /**
+   *  @returns the number of elements in the collection.
+   */
+  get size() {
+    return this._size;
+  }
+  /**
+   * Return the type of the object.
+   */
+  get [Symbol.toStringTag]() {
+    return CircularDeque.name;
+  }
+  /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(capacity) {
@@ -154,18 +166,6 @@ class CircularDeque extends CircularBase {
     } else if (capacity > this._capacity) {
       this.grow(capacity);
     }
-  }
-  /**
-   *  @returns the number of elements in the collection.
-   */
-  get size() {
-    return this._size;
-  }
-  /**
-   * Return the type of the object.
-   */
-  get [Symbol.toStringTag]() {
-    return CircularDeque.name;
   }
   /**
    * Remove all elements and resets the collection.
@@ -1685,6 +1685,18 @@ class CircularQueue extends CircularBase {
     return this.isFinite ? this._capacity : Infinity;
   }
   /**
+   *  @returns the number of elements in the collection.
+   */
+  get size() {
+    return this._size;
+  }
+  /**
+   * Return the type of the object.
+   */
+  get [Symbol.toStringTag]() {
+    return CircularQueue.name;
+  }
+  /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(capacity) {
@@ -1705,18 +1717,6 @@ class CircularQueue extends CircularBase {
     } else if (capacity > this._capacity) {
       this.grow(capacity);
     }
-  }
-  /**
-   *  @returns the number of elements in the collection.
-   */
-  get size() {
-    return this._size;
-  }
-  /**
-   * Return the type of the object.
-   */
-  get [Symbol.toStringTag]() {
-    return CircularQueue.name;
   }
   /**
    * Remove all elements and resets the collection.
@@ -2278,6 +2278,18 @@ class CircularStack extends CircularBase {
     return this.isFinite ? this._capacity : Infinity;
   }
   /**
+   *  @returns the number of elements in the collection.
+   */
+  get size() {
+    return this._size;
+  }
+  /**
+   * Return the type of the object.
+   */
+  get [Symbol.toStringTag]() {
+    return CircularStack.name;
+  }
+  /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(capacity) {
@@ -2298,18 +2310,6 @@ class CircularStack extends CircularBase {
     } else if (capacity > this._capacity) {
       this.grow(capacity);
     }
-  }
-  /**
-   *  @returns the number of elements in the collection.
-   */
-  get size() {
-    return this._size;
-  }
-  /**
-   * Return the type of the object.
-   */
-  get [Symbol.toStringTag]() {
-    return CircularStack.name;
   }
   /**
    * Remove all elements from the collection.

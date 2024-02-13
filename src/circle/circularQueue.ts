@@ -115,6 +115,20 @@ export class CircularQueue<T>
   }
 
   /**
+   *  @returns the number of elements in the collection.
+   */
+  get size(): number {
+    return this._size;
+  }
+
+  /**
+   * Return the type of the object.
+   */
+  get [Symbol.toStringTag](): string {
+    return CircularQueue.name;
+  }
+
+  /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(capacity: number) {
@@ -146,20 +160,6 @@ export class CircularQueue<T>
       // If capacity is increasing
       this.grow(capacity);
     }
-  }
-
-  /**
-   *  @returns the number of elements in the collection.
-   */
-  get size(): number {
-    return this._size;
-  }
-
-  /**
-   * Return the type of the object.
-   */
-  get [Symbol.toStringTag]() {
-    return CircularQueue.name;
   }
 
   /**

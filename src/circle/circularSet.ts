@@ -85,7 +85,7 @@ export class CircularSet<T>
   /**
    * Return the type of the object.
    */
-  get [Symbol.toStringTag]() {
+  get [Symbol.toStringTag](): string {
     return CircularSet.name;
   }
 

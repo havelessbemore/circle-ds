@@ -28,7 +28,7 @@ yarn install circle-ds
 
 ### Common
 
-The following is common across all collections.
+The following is common across all collections. See the [Collection](./docs/interfaces/Collection.md) interface for more details.
 
 #### Constructor
 
@@ -39,9 +39,9 @@ The following is common across all collections.
 
 - `capacity: number`: A positive integer that represents the maximum size of the collection. Can be updated to grow or shrink the collection. Can also be set to `Infinity`.
 
-- `size: Readonly<number>`: The number of items in the collection.
+- `get size(): number`: The number of items in the collection.
 
-- `[Symbol.toStringTag]`: A string that represents the type of the object. See [Symbol.toStringTag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toStringTag) for more details.
+- `get [Symbol.toStringTag](): string`: A string that represents the type of the object. See [Symbol.toStringTag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toStringTag) for more details.
 
 #### Events
 

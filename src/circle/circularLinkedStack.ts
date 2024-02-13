@@ -111,7 +111,7 @@ export class CircularLinkedStack<T>
   /**
    * Return the type of the object.
    */
-  get [Symbol.toStringTag]() {
+  get [Symbol.toStringTag](): string {
     return CircularLinkedStack.name;
   }
 

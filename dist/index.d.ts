@@ -1,89 +1,18 @@
 /// <reference types="node" />
 
+import { Bounded } from './types/bounded';
+import { Bounded as Bounded_2 } from '../types/bounded';
+import { Collection } from './types/collection';
+import { Collection as Collection_2 } from '../types/collection';
+import { Deque } from './types/deque';
+import { Deque as Deque_2 } from '../types/deque';
 import EventEmitter from 'events';
+import { Queue } from './types/queue';
+import { Queue as Queue_2 } from '../types/queue';
+import { Stack } from './types/stack';
+import { Stack as Stack_2 } from '../types/stack';
 
-export declare interface Bounded<T> {
-    capacity: number;
-    /**
-     * Appends the listener function to the listeners array for the
-     * {@link BoundedEvent.Overflow} event.
-     *
-     * * No checks are made to see if the listener has already been added.
-     * Multiple calls with the same of event + listener combination will
-     * result in the listener being added and called multiple times.
-     *
-     * * By default, event listeners are invoked in the order they are added.
-     * The `prependListener()` method can be used as an alternative to add
-     * the event listener to the beginning of the listeners array.
-     *
-     * @param event - The name of the event.
-     * @param listener - The callback function. It will
-     * receive an array of elements that have been removed due to overflow.
-     * This can happen when elements are added while the collection is at
-     * capacity, or when capacity is reduced below the current size.
-     *
-     * @returns the collection.
-     */
-    addListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
-    addListener(event: ValueOf<typeof BoundedEvent>, listener: (...args: any[]) => void): this;
-    /**
-     * Appends the listener function to the listeners array for the
-     * {@link BoundedEvent.Overflow} event.
-     *
-     * * No checks are made to see if the listener has already been added.
-     * Multiple calls with the same of event + listener combination will
-     * result in the listener being added and called multiple times.
-     *
-     * * By default, event listeners are invoked in the order they are added.
-     * The `prependListener()` method can be used as an alternative to add
-     * the event listener to the beginning of the listeners array.
-     *
-     * @param event - The name of the event.
-     * @param listener - The callback function. It will
-     * receive an array of elements that have been removed due to overflow.
-     * This can happen when elements are added while the collection is at
-     * capacity, or when capacity is reduced below the current size.
-     *
-     * @returns the collection.
-     */
-    on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
-    on(event: ValueOf<typeof BoundedEvent>, listener: (...args: any[]) => void): this;
-    /**
-     * Adds the listener function to the beginning of the listeners array for
-     * the {@link BoundedEvent.Overflow} event.
-     *
-     * * No checks are made to see if the listener has already been added.
-     * Multiple calls with the same of event + listener combination will
-     * result in the listener being added and called multiple times.
-     *
-     * * Alternatively, the `addListener()` method can be used to add
-     * the event listener to the end of the listeners array.
-     *
-     * @param event - The name of the event.
-     * @param listener - The callback function. It will
-     * receive an array of elements that have been removed due to overflow.
-     * This can happen when elements are added while the collection is at
-     * capacity, or when capacity is reduced below the current size.
-     *
-     * @returns the collection.
-     */
-    prependListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
-    prependListener(event: ValueOf<typeof BoundedEvent>, listener: (...args: any[]) => void): this;
-    /**
-     * Removes the specified listener from the listener array for the event.
-     *
-     * At most once instance of a listener will be removed. If a listener
-     * has been added multiple times for the same event, this method should
-     * be called once per instance.
-     *
-     * @param event - The name of the event.
-     * @param listener - The callback function.
-     *
-     * @returns the collection.
-     */
-    removeListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
-    removeListener(event: ValueOf<typeof BoundedEvent>, listener: (...args: any[]) => void): this;
-}
+export { Bounded }
 
 export declare const BoundedEvent: {
     readonly Overflow: "overflow";
@@ -179,7 +108,7 @@ declare class CircularBase<T> {
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularDeque<T> extends CircularBase<T> implements Bounded<T>, Deque<T> {
+export declare class CircularDeque<T> extends CircularBase<T> implements Bounded_2<T>, Deque<T> {
     /**
      * The maximum number of elements that can be stored in the collection.
      */
@@ -213,10 +142,6 @@ export declare class CircularDeque<T> extends CircularBase<T> implements Bounded
      */
     get capacity(): number;
     /**
-     * Sets the maximum number of elements that can be stored.
-     */
-    set capacity(capacity: number);
-    /**
      *  @returns the number of elements in the collection.
      */
     get size(): number;
@@ -224,6 +149,10 @@ export declare class CircularDeque<T> extends CircularBase<T> implements Bounded
      * Return the type of the object.
      */
     get [Symbol.toStringTag](): string;
+    /**
+     * Sets the maximum number of elements that can be stored.
+     */
+    set capacity(capacity: number);
     /**
      * Remove all elements and resets the collection.
      */
@@ -405,7 +334,7 @@ export declare class CircularDeque<T> extends CircularBase<T> implements Bounded
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularLinkedDeque<T> extends CircularBase<T> implements Bounded<T>, Deque<T> {
+export declare class CircularLinkedDeque<T> extends CircularBase<T> implements Bounded_2<T>, Deque_2<T> {
     /**
      * The maximum number of elements that can be stored in the collection.
      */
@@ -571,7 +500,7 @@ export declare class CircularLinkedDeque<T> extends CircularBase<T> implements B
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularLinkedQueue<T> extends CircularBase<T> implements Bounded<T>, Queue<T> {
+export declare class CircularLinkedQueue<T> extends CircularBase<T> implements Bounded_2<T>, Queue_2<T> {
     /**
      * The maximum number of elements that can be stored in the collection.
      */
@@ -708,7 +637,7 @@ export declare class CircularLinkedQueue<T> extends CircularBase<T> implements B
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularLinkedStack<T> extends CircularBase<T> implements Bounded<T>, Stack<T> {
+export declare class CircularLinkedStack<T> extends CircularBase<T> implements Bounded_2<T>, Stack_2<T> {
     /**
      * The maximum number of elements that can be stored in the collection.
      */
@@ -837,7 +766,7 @@ export declare class CircularLinkedStack<T> extends CircularBase<T> implements B
 /**
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularMap<K, V> extends CircularBase<[K, V]> implements Bounded<[K, V]>, Map<K, V>, Collection<K, V> {
+export declare class CircularMap<K, V> extends CircularBase<[K, V]> implements Bounded_2<[K, V]>, Map<K, V>, Collection_2<K, V> {
     /**
      * The maximum number of elements that can be stored in the collection.
      */
@@ -961,7 +890,7 @@ export declare class CircularMap<K, V> extends CircularBase<[K, V]> implements B
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularQueue<T> extends CircularBase<T> implements Bounded<T>, Queue<T> {
+export declare class CircularQueue<T> extends CircularBase<T> implements Bounded_2<T>, Queue_2<T> {
     /**
      * The maximum number of elements that can be stored in the collection.
      */
@@ -995,10 +924,6 @@ export declare class CircularQueue<T> extends CircularBase<T> implements Bounded
      */
     get capacity(): number;
     /**
-     * Sets the maximum number of elements that can be stored.
-     */
-    set capacity(capacity: number);
-    /**
      *  @returns the number of elements in the collection.
      */
     get size(): number;
@@ -1006,6 +931,10 @@ export declare class CircularQueue<T> extends CircularBase<T> implements Bounded
      * Return the type of the object.
      */
     get [Symbol.toStringTag](): string;
+    /**
+     * Sets the maximum number of elements that can be stored.
+     */
+    set capacity(capacity: number);
     /**
      * Remove all elements and resets the collection.
      */
@@ -1135,7 +1064,7 @@ export declare class CircularQueue<T> extends CircularBase<T> implements Bounded
 /**
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularSet<T> extends CircularBase<T> implements Bounded<T>, Set<T>, Collection<T, T> {
+export declare class CircularSet<T> extends CircularBase<T> implements Bounded_2<T>, Set<T>, Collection_2<T, T> {
     /**
      * The maximum number of elements that can be stored in the collection.
      */
@@ -1250,7 +1179,7 @@ export declare class CircularSet<T> extends CircularBase<T> implements Bounded<T
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularStack<T> extends CircularBase<T> implements Bounded<T>, Stack<T> {
+export declare class CircularStack<T> extends CircularBase<T> implements Bounded_2<T>, Stack_2<T> {
     /**
      * The maximum number of elements that can be stored in the collection.
      */
@@ -1284,10 +1213,6 @@ export declare class CircularStack<T> extends CircularBase<T> implements Bounded
      */
     get capacity(): number;
     /**
-     * Sets the maximum number of elements that can be stored.
-     */
-    set capacity(capacity: number);
-    /**
      *  @returns the number of elements in the collection.
      */
     get size(): number;
@@ -1295,6 +1220,10 @@ export declare class CircularStack<T> extends CircularBase<T> implements Bounded
      * Return the type of the object.
      */
     get [Symbol.toStringTag](): string;
+    /**
+     * Sets the maximum number of elements that can be stored.
+     */
+    set capacity(capacity: number);
     /**
      * Remove all elements from the collection.
      */
@@ -1421,18 +1350,9 @@ export declare class CircularStack<T> extends CircularBase<T> implements Bounded
     /* Excluded from this release type: shrink */
 }
 
-export declare interface Collection<K, V> {
-    clear(): void;
-    entries(): IterableIterator<[K, V]>;
-    forEach(callbackfn: (value: V, key: K, collection: this) => void, thisArg?: unknown): void;
-    keys(): IterableIterator<K>;
-    size: Readonly<number>;
-    values(): IterableIterator<V>;
-}
+export { Collection }
 
-export declare interface Deque<V> extends Queue<V>, Stack<V> {
-    unshift(...values: V[]): number;
-}
+export { Deque }
 
 declare interface Node_2<T> {
     next: Node_2<T>;
@@ -1451,24 +1371,8 @@ declare interface Node_4<T> {
     value: T;
 }
 
-export declare interface Queue<V> extends Collection<number, V> {
-    first(): V | undefined;
-    front(): V | undefined;
-    has(value: V): boolean;
-    push(...values: V[]): number;
-    shift(): V | undefined;
-    [Symbol.iterator](): IterableIterator<V>;
-}
+export { Queue }
 
-export declare interface Stack<V> extends Collection<number, V> {
-    has(value: V): boolean;
-    last(): V | undefined;
-    pop(): V | undefined;
-    push(...values: V[]): number;
-    [Symbol.iterator](): IterableIterator<V>;
-    top(): V | undefined;
-}
-
-declare type ValueOf<T> = T[keyof T];
+export { Stack }
 
 export { }

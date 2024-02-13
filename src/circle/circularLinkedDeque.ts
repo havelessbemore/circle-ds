@@ -110,7 +110,7 @@ export class CircularLinkedDeque<T>
   /**
    * Return the type of the object.
    */
-  get [Symbol.toStringTag]() {
+  get [Symbol.toStringTag](): string {
     return CircularLinkedDeque.name;
   }
 

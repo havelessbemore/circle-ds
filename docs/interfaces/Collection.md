@@ -24,8 +24,9 @@
 
 ## Table of contents
 
-### Properties
+### Accessors
 
+- [[toStringTag]](Collection.md#[tostringtag])
 - [size](Collection.md#size)
 
 ### Methods
@@ -36,15 +37,33 @@
 - [keys](Collection.md#keys)
 - [values](Collection.md#values)
 
-## Properties
+## Accessors
 
-### size
+### [toStringTag]
 
-• **size**: `number`
+• `get` **[toStringTag]**(): `string`
+
+#### Returns
+
+`string`
 
 #### Defined in
 
-[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L13)
+[types/collection.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L7)
+
+___
+
+### size
+
+• `get` **size**(): `number`
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+[types/collection.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L6)
 
 ## Methods
 
@@ -58,7 +77,7 @@
 
 #### Defined in
 
-[types/collection.ts:6](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L6)
+[types/collection.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L8)
 
 ___
 
@@ -72,7 +91,7 @@ ___
 
 #### Defined in
 
-[types/collection.ts:7](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L7)
+[types/collection.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L9)
 
 ___
 
@@ -93,7 +112,7 @@ ___
 
 #### Defined in
 
-[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L8)
+[types/collection.d.ts:10](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L10)
 
 ___
 
@@ -107,7 +126,7 @@ ___
 
 #### Defined in
 
-[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L12)
+[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L14)
 
 ___
 
@@ -121,4 +140,4 @@ ___
 
 #### Defined in
 
-[types/collection.ts:14](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L14)
+[types/collection.d.ts:15](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L15)

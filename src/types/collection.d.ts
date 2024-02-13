@@ -3,6 +3,8 @@ export interface CollectionConstructor<K, V> {
 }
 
 export interface Collection<K, V> {
+  get size(): number;
+  get [Symbol.toStringTag](): string;
   clear(): void;
   entries(): IterableIterator<[K, V]>;
   forEach(
@@ -10,6 +12,5 @@ export interface Collection<K, V> {
     thisArg?: unknown
   ): void;
   keys(): IterableIterator<K>;
-  size: Readonly<number>;
   values(): IterableIterator<V>;
 }

@@ -113,18 +113,6 @@ class x extends u {
     return this.isFinite ? this._capacity : 1 / 0;
   }
   /**
-   * Sets the maximum number of elements that can be stored.
-   */
-  set capacity(t) {
-    if (t = +t, v(t))
-      t = z, this.isFinite = !1;
-    else if (c(t))
-      this.isFinite = !0;
-    else
-      throw new RangeError("Invalid capacity");
-    this._size < 1 ? (this._capacity = t, this.clear()) : t < this._capacity ? this.shrink(t) : t > this._capacity && this.grow(t);
-  }
-  /**
    *  @returns the number of elements in the collection.
    */
   get size() {
@@ -135,6 +123,18 @@ class x extends u {
    */
   get [Symbol.toStringTag]() {
     return x.name;
+  }
+  /**
+   * Sets the maximum number of elements that can be stored.
+   */
+  set capacity(t) {
+    if (t = +t, v(t))
+      t = z, this.isFinite = !1;
+    else if (c(t))
+      this.isFinite = !0;
+    else
+      throw new RangeError("Invalid capacity");
+    this._size < 1 ? (this._capacity = t, this.clear()) : t < this._capacity ? this.shrink(t) : t > this._capacity && this.grow(t);
   }
   /**
    * Remove all elements and resets the collection.
@@ -1328,18 +1328,6 @@ class w extends u {
     return this.isFinite ? this._capacity : 1 / 0;
   }
   /**
-   * Sets the maximum number of elements that can be stored.
-   */
-  set capacity(t) {
-    if (t = +t, v(t))
-      t = z, this.isFinite = !1;
-    else if (c(t))
-      this.isFinite = !0;
-    else
-      throw new RangeError("Invalid capacity");
-    this._size < 1 ? (this._capacity = t, this.clear()) : t < this._capacity ? this.shrink(t) : t > this._capacity && this.grow(t);
-  }
-  /**
    *  @returns the number of elements in the collection.
    */
   get size() {
@@ -1350,6 +1338,18 @@ class w extends u {
    */
   get [Symbol.toStringTag]() {
     return w.name;
+  }
+  /**
+   * Sets the maximum number of elements that can be stored.
+   */
+  set capacity(t) {
+    if (t = +t, v(t))
+      t = z, this.isFinite = !1;
+    else if (c(t))
+      this.isFinite = !0;
+    else
+      throw new RangeError("Invalid capacity");
+    this._size < 1 ? (this._capacity = t, this.clear()) : t < this._capacity ? this.shrink(t) : t > this._capacity && this.grow(t);
   }
   /**
    * Remove all elements and resets the collection.
@@ -1800,18 +1800,6 @@ class I extends u {
     return this.isFinite ? this._capacity : 1 / 0;
   }
   /**
-   * Sets the maximum number of elements that can be stored.
-   */
-  set capacity(t) {
-    if (t = +t, v(t))
-      t = z, this.isFinite = !1;
-    else if (c(t))
-      this.isFinite = !0;
-    else
-      throw new RangeError("Invalid capacity");
-    this._size < 1 ? (this._capacity = t, this.clear()) : t < this._capacity ? this.shrink(t) : t > this._capacity && this.grow(t);
-  }
-  /**
    *  @returns the number of elements in the collection.
    */
   get size() {
@@ -1822,6 +1810,18 @@ class I extends u {
    */
   get [Symbol.toStringTag]() {
     return I.name;
+  }
+  /**
+   * Sets the maximum number of elements that can be stored.
+   */
+  set capacity(t) {
+    if (t = +t, v(t))
+      t = z, this.isFinite = !1;
+    else if (c(t))
+      this.isFinite = !0;
+    else
+      throw new RangeError("Invalid capacity");
+    this._size < 1 ? (this._capacity = t, this.clear()) : t < this._capacity ? this.shrink(t) : t > this._capacity && this.grow(t);
   }
   /**
    * Remove all elements from the collection.

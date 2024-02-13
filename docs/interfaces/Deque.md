@@ -23,8 +23,9 @@
 
 ## Table of contents
 
-### Properties
+### Accessors
 
+- [[toStringTag]](Deque.md#[tostringtag])
 - [size](Deque.md#size)
 
 ### Methods
@@ -45,19 +46,41 @@
 - [unshift](Deque.md#unshift)
 - [values](Deque.md#values)
 
-## Properties
+## Accessors
 
-### size
+### [toStringTag]
 
-• **size**: `number`
+• `get` **[toStringTag]**(): `string`
+
+#### Returns
+
+`string`
 
 #### Inherited from
 
-[Stack](Stack.md).[size](Stack.md#size)
+Queue.[toStringTag]
 
 #### Defined in
 
-[types/collection.ts:13](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L13)
+[types/collection.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L7)
+
+___
+
+### size
+
+• `get` **size**(): `number`
+
+#### Returns
+
+`number`
+
+#### Inherited from
+
+Queue.size
+
+#### Defined in
+
+[types/collection.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L6)
 
 ## Methods
 
@@ -75,7 +98,7 @@
 
 #### Defined in
 
-[types/queue.ts:9](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/queue.ts#L9)
+[types/queue.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L9)
 
 ___
 
@@ -93,7 +116,7 @@ ___
 
 #### Defined in
 
-[types/collection.ts:6](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L6)
+[types/collection.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L8)
 
 ___
 
@@ -111,7 +134,7 @@ ___
 
 #### Defined in
 
-[types/collection.ts:7](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L7)
+[types/collection.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L9)
 
 ___
 
@@ -129,7 +152,7 @@ ___
 
 #### Defined in
 
-[types/queue.ts:4](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/queue.ts#L4)
+[types/queue.d.ts:4](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L4)
 
 ___
 
@@ -154,7 +177,7 @@ ___
 
 #### Defined in
 
-[types/collection.ts:8](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L8)
+[types/collection.d.ts:10](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L10)
 
 ___
 
@@ -172,7 +195,7 @@ ___
 
 #### Defined in
 
-[types/queue.ts:5](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/queue.ts#L5)
+[types/queue.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L5)
 
 ___
 
@@ -196,7 +219,7 @@ ___
 
 #### Defined in
 
-[types/queue.ts:6](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/queue.ts#L6)
+[types/queue.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L6)
 
 ___
 
@@ -214,7 +237,7 @@ ___
 
 #### Defined in
 
-[types/collection.ts:12](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L12)
+[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L14)
 
 ___
 
@@ -232,7 +255,7 @@ ___
 
 #### Defined in
 
-[types/stack.ts:5](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/stack.ts#L5)
+[types/stack.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/stack.d.ts#L5)
 
 ___
 
@@ -250,7 +273,7 @@ ___
 
 #### Defined in
 
-[types/stack.ts:6](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/stack.ts#L6)
+[types/stack.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/stack.d.ts#L6)
 
 ___
 
@@ -274,7 +297,7 @@ ___
 
 #### Defined in
 
-[types/queue.ts:7](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/queue.ts#L7)
+[types/queue.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L7)
 
 ___
 
@@ -292,7 +315,7 @@ ___
 
 #### Defined in
 
-[types/queue.ts:8](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/queue.ts#L8)
+[types/queue.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L8)
 
 ___
 
@@ -310,7 +333,7 @@ ___
 
 #### Defined in
 
-[types/stack.ts:9](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/stack.ts#L9)
+[types/stack.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/stack.d.ts#L9)
 
 ___
 
@@ -330,7 +353,7 @@ ___
 
 #### Defined in
 
-[types/deque.ts:5](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/deque.ts#L5)
+[types/deque.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/deque.d.ts#L5)
 
 ___
 
@@ -348,4 +371,4 @@ ___
 
 #### Defined in
 
-[types/collection.ts:14](https://github.com/havelessbemore/circle-ds/blob/400181e/src/types/collection.ts#L14)
+[types/collection.d.ts:15](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L15)
