@@ -1,5 +1,3 @@
-import { isNumber } from "./is";
-
 /**
  * Restricts a value to a range defined by [min, max].
  *

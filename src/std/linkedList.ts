@@ -1,6 +1,5 @@
 import { Collection } from "../types/collection";
 import { ARGS_MAX_LENGTH } from "../utils/constants";
-import { isNumber } from "../utils/is";
 import { chunk } from "../utils/iterable";
 import { clamp, toInteger } from "../utils/math";
 

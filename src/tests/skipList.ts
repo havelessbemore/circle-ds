@@ -220,19 +220,19 @@ export function test(cls: Constructor<SkipList<unknown>>) {
       });
 
       it("should handle coercible non-numeric indices", () => {
-        // @ts-ignore
-        expect(list.at(null)).toBe(0);
-        // @ts-ignore
-        expect(list.at("5")).toBe(5);
-        // @ts-ignore
-        expect(list.at("-1")).toBe(9);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        expect(list.at(null as any)).toBe(0);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        expect(list.at("5" as any)).toBe(5);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        expect(list.at("-1" as any)).toBe(9);
       });
 
       it("should return undefined for non-numeric indices", () => {
-        // @ts-ignore
-        expect(list.at(undefined)).toBeUndefined();
-        // @ts-ignore
-        expect(list.at("invalid")).toBeUndefined();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        expect(list.at(undefined as any)).toBeUndefined();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        expect(list.at("invalid" as any)).toBeUndefined();
       });
 
       it("should return the first element when index is 0", () => {
