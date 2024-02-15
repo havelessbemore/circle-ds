@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { clamp, log } from "./math";
+import { clamp, log, toInteger } from "./math";
 
 describe("clamp()", () => {
   test("returns min if value is below the minimum", () => {
@@ -93,9 +93,65 @@ describe("log()", () => {
   });
 
   test("returns Infinity for log of 0 with any base except 1 and 0", () => {
-    // This case is more conceptual since log(0) is -Infinity mathematically,
-    // but handling might vary depending on function implementation specifics.
-    // Depending on implementation, this might return -Infinity or similar behavior, so adjust as needed.
     expect(log(0, 2)).toBe(-Infinity);
+  });
+});
+
+describe("toInteger()", () => {
+  test("converts numeric strings to integers", () => {
+    expect(toInteger("123")).toBe(123);
+    expect(toInteger("123.456")).toBe(123);
+  });
+
+  test("converts floating point numbers to integers", () => {
+    expect(toInteger(123.456)).toBe(123);
+    expect(toInteger(-123.456)).toBe(-123);
+  });
+
+  test("returns default value for non-numeric strings", () => {
+    expect(toInteger("abc", 10)).toBe(10);
+    expect(toInteger("123abc", 10)).toBe(10);
+  });
+
+  test("handles boolean values correctly", () => {
+    expect(toInteger(true)).toBe(1);
+    expect(toInteger(false)).toBe(0);
+  });
+
+  test("returns 0 for null", () => {
+    expect(toInteger(null, 10)).toBe(0);
+  });
+
+  test("returns default value for undefined", () => {
+    expect(toInteger(undefined, 10)).toBe(10);
+  });
+
+  test("returns default value for NaN", () => {
+    expect(toInteger(NaN, 10)).toBe(10);
+  });
+
+  test("returns Infinity for Infinity", () => {
+    expect(toInteger(-Infinity, 10)).toBe(-Infinity);
+    expect(toInteger(Infinity, 10)).toBe(Infinity);
+  });
+
+  test("converts arrays and objects to default value", () => {
+    expect(toInteger([1, 2, 3], 10)).toBe(10); // Array
+    expect(toInteger({ a: 1 }, 10)).toBe(10); // Object
+  });
+
+  test("handles empty string and strings with only whitespace as 0", () => {
+    expect(toInteger("")).toBe(0);
+    expect(toInteger(" ", 10)).toBe(0);
+  });
+
+  test("handles hexadecimal and scientific notation correctly", () => {
+    expect(toInteger("0x10")).toBe(16); // Hexadecimal
+    expect(toInteger("1e2")).toBe(100); // Scientific notation
+  });
+
+  test("uses 0 as default value when not specified", () => {
+    expect(toInteger("abc")).toBe(0);
+    expect(toInteger(null)).toBe(0);
   });
 });

@@ -2,7 +2,7 @@ import { Collection } from "../types/collection";
 import { ARGS_MAX_LENGTH } from "../utils/constants";
 import { isArrayLength, isIterable, isNumber } from "../utils/is";
 import { chunk } from "../utils/iterable";
-import { log } from "../utils/math";
+import { clamp, log, toInteger } from "../utils/math";
 
 export interface SkipListNode<T> {
   next: SkipListNode<T>[];
@@ -95,7 +95,7 @@ export class SkipList<T> implements Collection<number, T> {
 
   at(index: number): T | undefined {
     const i = this.tryIndex(index);
-    return i == null ? undefined : this.getNode(i).value;
+    return i == undefined ? undefined : this.getNode(i).value;
   }
 
   clear(): void {
@@ -109,7 +109,7 @@ export class SkipList<T> implements Collection<number, T> {
 
   delete(index: number): boolean {
     const i = this.tryIndex(index);
-    if (i == null) {
+    if (i == undefined) {
       return false;
     }
     this.remove(this.stackTo(this.getRootStack(), i - 1));
@@ -122,6 +122,27 @@ export class SkipList<T> implements Collection<number, T> {
       node = node.next[0];
       yield [i, node.value];
     }
+  }
+
+  fill(value: T, start?: number, end?: number): this {
+    // Sanitize start
+    const size = this._size;
+    start = toInteger(start, 0);
+    start = clamp(start, -size, size);
+    start += start >= 0 ? 0 : size;
+
+    // Sanitize end
+    end = toInteger(end, size);
+    end = clamp(end, -size, size);
+    end += end >= 0 ? 0 : size;
+
+    // Update values
+    for (let node = this.getNode(start); start < end; ++start) {
+      node.value = value;
+      node = node.next[0];
+    }
+
+    return this;
   }
 
   forEach(
@@ -181,13 +202,15 @@ export class SkipList<T> implements Collection<number, T> {
     return this._size;
   }
 
-  set(index: number, value: T): boolean {
+  set(index: number, value: T): T | undefined {
     const i = this.tryIndex(index);
-    if (i == null) {
-      return false;
+    if (i == undefined) {
+      return undefined;
     }
-    this.getNode(i).value = value;
-    return true;
+    const node = this.getNode(i);
+    const prevValue = node.value;
+    node.value = value;
+    return prevValue;
   }
 
   shift(): T | undefined {
@@ -197,6 +220,27 @@ export class SkipList<T> implements Collection<number, T> {
     const node = this.root.next[0];
     this.remove(this.getRootStack());
     return node.value;
+  }
+
+  slice(start?: number, end?: number): SkipList<T> {
+    // Sanitize start
+    const size = this._size;
+    start = toInteger(start, 0);
+    start = clamp(start, -size, size);
+    start += start >= 0 ? 0 : size;
+
+    // Sanitize end
+    end = toInteger(end, size);
+    end = clamp(end, -size, size);
+    end += end >= 0 ? 0 : size;
+
+    const out = new SkipList<T>({ maxLevel: this._maxLevel, p: this._p });
+    for (let prev = this.getNode(start - 1); start < end; ++start) {
+      out.push(prev.next[0].value);
+      prev = prev.next[0];
+    }
+
+    return out;
   }
 
   splice(start: number, deleteCount?: number, ...items: T[]): SkipList<T> {
@@ -213,9 +257,13 @@ export class SkipList<T> implements Collection<number, T> {
     deleteCount = isNumber(deleteCount) ? Math.trunc(deleteCount) : 0;
     deleteCount = Math.max(0, Math.min(this._size - start, deleteCount));
 
+    // Create output list
+    const out = new SkipList<T>({ maxLevel: this._maxLevel, p: this._p });
+
     // Delete values
     const stack = this.stackTo(this.getRootStack(), start - 1);
     for (let i = 0; i < deleteCount; ++i) {
+      out.push(stack[0][1].next[0].value);
       this.remove(stack);
     }
 
@@ -225,7 +273,7 @@ export class SkipList<T> implements Collection<number, T> {
       this.insert(items[i], stack);
     }
 
-    return new SkipList<T>({ maxLevel: this._maxLevel, p: this._p });
+    return out;
   }
 
   [Symbol.iterator](): IterableIterator<T> {

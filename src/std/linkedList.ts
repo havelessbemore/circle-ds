@@ -2,7 +2,7 @@ import { Collection } from "../types/collection";
 import { ARGS_MAX_LENGTH } from "../utils/constants";
 import { isNumber } from "../utils/is";
 import { chunk } from "../utils/iterable";
-import { clamp } from "../utils/math";
+import { clamp, toInteger } from "../utils/math";
 
 export interface Node<T> {
   next: Node<T>;
@@ -63,12 +63,12 @@ export class LinkedList<T> implements Collection<number, T> {
   fill(value: T, start?: number, end?: number): this {
     // Sanitize start
     const size = this._size;
-    start = this.tryInteger(start, 0);
+    start = toInteger(start, 0);
     start = clamp(start, -size, size);
     start += start >= 0 ? 0 : size;
 
     // Sanitize end
-    end = this.tryInteger(end, size);
+    end = toInteger(end, size);
     end = clamp(end, -size, size);
     end += end >= 0 ? 0 : size;
 
@@ -151,18 +151,17 @@ export class LinkedList<T> implements Collection<number, T> {
   slice(start?: number, end?: number): LinkedList<T> {
     // Sanitize start
     const size = this._size;
-    start = this.tryInteger(start, 0);
+    start = toInteger(start, 0);
     start = clamp(start, -size, size);
     start += start >= 0 ? 0 : size;
 
     // Sanitize end
-    end = this.tryInteger(end, size);
+    end = toInteger(end, size);
     end = clamp(end, -size, size);
     end += end >= 0 ? 0 : size;
 
     const out = new LinkedList<T>();
-    let prev = this.getNode(start - 1);
-    while (start++ < end) {
+    for (let prev = this.getNode(start - 1); start < end; ++start) {
       out.push(prev.next.value);
       prev = prev.next;
     }
@@ -173,12 +172,12 @@ export class LinkedList<T> implements Collection<number, T> {
   splice(start: number, deleteCount?: number, ...items: T[]): LinkedList<T> {
     // Sanitize start
     const size = this._size;
-    start = this.tryInteger(start, 0);
+    start = toInteger(start, 0);
     start = clamp(start, -size, size);
     start += start >= 0 ? 0 : size;
 
     // Sanitize deleteCount
-    deleteCount = this.tryInteger(deleteCount, 0);
+    deleteCount = toInteger(deleteCount, 0);
     deleteCount = clamp(deleteCount, 0, size - start);
 
     // Delete values
@@ -262,13 +261,5 @@ export class LinkedList<T> implements Collection<number, T> {
 
     // If negative, treat as index + size
     return index < 0 ? index + size : index;
-  }
-
-  protected tryInteger(value: number | undefined, def: number): number {
-    if (value == undefined) {
-      return def;
-    }
-    value = +value!;
-    return isNumber(value) ? Math.trunc(value) : def;
   }
 }

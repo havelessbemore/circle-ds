@@ -131,7 +131,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         expect(Array.from(list)).toEqual([]);
       });
 
-      it("should empty the skip list", () => {
+      it("should empty the list", () => {
         list.clear();
         expect(list.size).toBe(0);
         expect(Array.from(list)).toEqual([]);
@@ -152,7 +152,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         expect(Array.from(list)).toEqual([100]);
       });
 
-      it("after clear, the skip list should be able to be repopulated", () => {
+      it("after clear, the list should be able to be repopulated", () => {
         list.clear();
 
         for (let i = 10; i < 20; i++) {
@@ -239,12 +239,12 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         expect(list.has(1)).toBe(false);
       });
 
-      it("maintains the skip list order", () => {
+      it("maintains the list order", () => {
         list.delete(2);
         expect(Array.from(list)).toEqual([1, 2, 4, 5]);
       });
 
-      it("sequential deletes reduce the skip list size correctly", () => {
+      it("sequential deletes reduce the list size correctly", () => {
         list.delete(1);
         expect(list.size).toBe(4);
         expect(list.has(2)).toBe(false);
@@ -300,7 +300,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         expect(index).toBe(expectedEntries.length);
       });
 
-      it("should reflect changes to the skip list", () => {
+      it("should reflect changes to the list", () => {
         list5.push(5);
         const entriesAfterInsertion = Array.from(list5.entries());
         expect(entriesAfterInsertion).toContainEqual([5, 5]);
@@ -333,10 +333,10 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("fill()", () => {
-      let list: LinkedList<number>;
+      let list: LinkedList<unknown>;
 
       beforeEach(() => {
-        list = new LinkedList<number>();
+        list = new cls();
         list.push(1, 2, 3, 4, 5);
       });
 
@@ -499,7 +499,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         expect(list.has(23)).toBe(false);
       });
 
-      it("has() works correctly at the boundaries of the skip list", () => {
+      it("has() works correctly at the boundaries of the list", () => {
         expect(list.has(2)).toBe(true);
         expect(list.has(17)).toBe(true);
       });
@@ -575,7 +575,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         expect(Array.from(list.keys())).toEqual([]);
       });
 
-      it("should reflect changes to the skip list", () => {
+      it("should reflect changes to the list", () => {
         list.push(60);
         const keysAfterInsertion = Array.from(list.keys());
         expect(keysAfterInsertion).toEqual([0, 1, 2, 3, 4, 5]);
@@ -652,7 +652,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         expect(list.size).toBe(4);
       });
 
-      it("updates the skip list correctly after multiple pops", () => {
+      it("updates the list correctly after multiple pops", () => {
         for (let i = 5; i > 0; --i) {
           expect(list.pop()).toBe(5 * i);
           expect(list.size).toBe(i - 1);
@@ -676,7 +676,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         expect(Array.from(list.values())).toEqual([1]);
       });
 
-      it("correctly updates the skip list size", () => {
+      it("correctly updates the list size", () => {
         const list = new cls();
         list.push(5);
         list.push(10);
@@ -746,7 +746,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         expect(list.at(-5)).toBe(101);
       });
 
-      it("does not change the size of the skip list", () => {
+      it("does not change the size of the list", () => {
         const initialSize = list.size;
         list.set(1, 98);
         expect(list.size).toBe(initialSize);
@@ -759,7 +759,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         expect(list.at(list.size - 1)).toBe(105);
       });
 
-      it("maintains the skip list order", () => {
+      it("maintains the list order", () => {
         list.set(2, 50);
         expect(Array.from(list)).toEqual([1, 2, 50, 4, 5]);
       });
@@ -786,7 +786,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         expect(list.size).toBe(4);
       });
 
-      it("updates the skip list correctly after multiple shifts", () => {
+      it("updates the list correctly after multiple shifts", () => {
         for (let i = 1; i <= 5; ++i) {
           expect(list.shift()).toBe(5 * i);
           expect(list.size).toBe(5 - i);
@@ -868,7 +868,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
         list.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
       });
 
-      it("on an empty skip list returns an empty array", () => {
+      it("on an empty list returns an empty array", () => {
         const list = new cls();
         const removed = list.splice(0, 1);
         expect(Array.from(removed)).toEqual([]);

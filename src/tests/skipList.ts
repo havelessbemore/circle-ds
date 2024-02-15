@@ -453,6 +453,63 @@ export function test(cls: Constructor<SkipList<unknown>>) {
       });
     });
 
+    describe("fill()", () => {
+      let list: SkipList<unknown>;
+
+      beforeEach(() => {
+        list = new cls();
+        list.push(1, 2, 3, 4, 5);
+      });
+
+      it("updates all values when start and end are undefined", () => {
+        list.fill(0);
+        expect(Array.from(list)).toEqual([0, 0, 0, 0, 0]);
+      });
+
+      it("updates values in a specified range", () => {
+        list.fill(1, 1, 3);
+        expect(Array.from(list)).toEqual([1, 1, 1, 4, 5]);
+      });
+
+      it("handles negative start and end indices", () => {
+        list.fill(2, -4, -2);
+        expect(Array.from(list)).toEqual([1, 2, 2, 4, 5]);
+      });
+
+      it("adjusts start and end indices beyond list bounds to valid range", () => {
+        list.fill(3, -10, 10);
+        expect(Array.from(list)).toEqual([3, 3, 3, 3, 3]);
+      });
+
+      it("does nothing if start equals end", () => {
+        const original = Array.from(list);
+        list.fill(4, 2, 2);
+        expect(Array.from(list)).toEqual(original);
+      });
+
+      it("does nothing if start is greater than end", () => {
+        const original = Array.from(list);
+        list.fill(4, 3, 2);
+        expect(Array.from(list)).toEqual(original);
+      });
+
+      it("works correctly when end is undefined", () => {
+        list.fill(5, 3);
+        expect(Array.from(list)).toEqual([1, 2, 3, 5, 5]);
+      });
+
+      it("fills the entire list when start is negative and exceeds list size", () => {
+        list.fill(6, -6);
+        expect(Array.from(list)).toEqual([6, 6, 6, 6, 6]);
+      });
+
+      it("maintains the list size", () => {
+        const originalSize = list.size;
+        list.fill(7, 1, 4);
+        expect(list.size).toBe(originalSize);
+      });
+    });
+
     describe("forEach()", () => {
       let list5: SkipList<number>;
 
@@ -781,53 +838,51 @@ export function test(cls: Constructor<SkipList<unknown>>) {
     });
 
     describe("set()", () => {
-      let skipList: SkipList<unknown>;
+      let list: SkipList<unknown>;
 
       beforeEach(() => {
-        skipList = new cls({ maxLevel: 4 });
-        skipList.push(1, 2, 3, 4, 5);
+        list = new cls({ maxLevel: 4 });
+        list.push(1, 2, 3, 4, 5);
       });
 
       it("updates the value at a specific index", () => {
-        expect(skipList.set(2, 99)).toBe(true);
-        expect(skipList.at(2)).toBe(99);
+        expect(list.set(2, 99)).toBe(3);
+        expect(list.at(2)).toBe(99);
       });
 
-      it("returns false for index < -size", () => {
-        expect(skipList.set(-6, 100)).toBe(false);
-        expect(skipList.set(-10, 100)).toBe(false);
+      it("returns undefined for index < -size", () => {
+        expect(list.set(-6, 100)).toBe(undefined);
+        expect(list.set(-10, 100)).toBe(undefined);
       });
 
-      it("returns false for index >= size", () => {
-        expect(skipList.set(5, 100)).toBe(false);
-        expect(skipList.set(10, 100)).toBe(false);
+      it("returns undefined for index >= size", () => {
+        expect(list.set(5, 100)).toBe(undefined);
+        expect(list.set(10, 100)).toBe(undefined);
       });
 
       it("wraps around for negative indices", () => {
-        expect(skipList.set(-1, 99)).toBe(true);
-        expect(skipList.at(-1)).toBe(99);
-        expect(skipList.set(-5, 101)).toBe(true);
-        expect(skipList.at(-5)).toBe(101);
+        expect(list.set(-1, 99)).toBe(5);
+        expect(list.at(-1)).toBe(99);
+        expect(list.set(-5, 101)).toBe(1);
+        expect(list.at(-5)).toBe(101);
       });
 
       it("does not change the size of the skip list", () => {
-        const initialSize = skipList.size;
-        skipList.set(1, 98);
-        expect(skipList.size).toBe(initialSize);
+        const initialSize = list.size;
+        list.set(1, 98);
+        expect(list.size).toBe(initialSize);
       });
 
       it("allows updating the first and last elements", () => {
-        const firstIndexSuccess = skipList.set(0, 101);
-        const lastIndexSuccess = skipList.set(skipList.size - 1, 105);
-        expect(firstIndexSuccess).toBe(true);
-        expect(lastIndexSuccess).toBe(true);
-        expect(skipList.at(0)).toBe(101);
-        expect(skipList.at(skipList.size - 1)).toBe(105);
+        expect(list.set(0, 101)).toBe(1);
+        expect(list.set(list.size - 1, 105)).toBe(5);
+        expect(list.at(0)).toBe(101);
+        expect(list.at(list.size - 1)).toBe(105);
       });
 
       it("maintains the skip list order", () => {
-        skipList.set(2, 50);
-        expect(Array.from(skipList)).toEqual([1, 2, 50, 4, 5]);
+        list.set(2, 50);
+        expect(Array.from(list)).toEqual([1, 2, 50, 4, 5]);
       });
     });
 
@@ -868,56 +923,198 @@ export function test(cls: Constructor<SkipList<unknown>>) {
       });
     });
 
-    describe("splice()", () => {
-      let skipList: SkipList<unknown>;
+    describe("slice()", () => {
+      let list: SkipList<unknown>;
 
       beforeEach(() => {
-        skipList = new cls({ maxLevel: 4 });
-        skipList.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        list = new cls();
+        list.push(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
       });
 
-      it("on an empty skip list returns an empty array", () => {
-        const skipList = new cls();
-        const removed = skipList.splice(0, 1);
+      it("on an empty list returns an empty list", () => {
+        const list = new cls();
+        const sliced = list.slice(0, 1);
+        expect(Array.from(sliced)).toEqual([]);
+      });
+
+      it("does not modify the original list", () => {
+        list.slice(2, 5);
+        expect(list.size).toEqual(10);
+      });
+
+      it("extracts the correct segment", () => {
+        const sliced = list.slice(3, 7);
+        expect(Array.from(sliced)).toEqual([3, 4, 5, 6]);
+      });
+
+      it("extracts full list if no parameters", () => {
+        const list = new cls();
+        const sliced = list.slice();
+        expect(Array.from(sliced)).toEqual(Array.from(list));
+      });
+
+      it("with no end parameter extracts until the end of the list", () => {
+        const sliced = list.slice(5);
+        expect(Array.from(sliced)).toEqual([5, 6, 7, 8, 9]);
+      });
+
+      it("with negative start and end extracts the correct segment", () => {
+        const sliced = list.slice(-7, -3);
+        expect(Array.from(sliced)).toEqual([3, 4, 5, 6]);
+      });
+
+      it("with start greater than end returns an empty list", () => {
+        const sliced = list.slice(7, 3);
+        expect(Array.from(sliced)).toEqual([]);
+      });
+
+      it("with start equal to end returns an empty list", () => {
+        const sliced = list.slice(5, 5);
+        expect(Array.from(sliced)).toEqual([]);
+      });
+
+      it("with out-of-bounds start or end adjusts to valid range", () => {
+        let sliced = list.slice(-15, 3);
+        expect(Array.from(sliced)).toEqual([0, 1, 2]);
+        sliced = list.slice(7, 15);
+        expect(Array.from(sliced)).toEqual([7, 8, 9]);
+      });
+    });
+
+    describe("splice()", () => {
+      let list: SkipList<unknown>;
+
+      beforeEach(() => {
+        list = new cls({ maxLevel: 4 });
+        list.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+      });
+
+      it("on an empty list returns an empty array", () => {
+        const list = new cls();
+        const removed = list.splice(0, 1);
         expect(Array.from(removed)).toEqual([]);
-        expect(skipList.size).toBe(0);
+        expect(list.size).toBe(0);
       });
 
       it("removes the correct elements and returns them", () => {
-        const removed = skipList.splice(3, 2);
-        //expect(Array.from(removed)).toEqual([4, 5]);
-        expect(Array.from(skipList)).toEqual([1, 2, 3, 6, 7, 8, 9, 10]);
+        const removed = list.splice(3, 2);
+        expect(Array.from(removed)).toEqual([4, 5]);
+        expect(Array.from(list)).toEqual([1, 2, 3, 6, 7, 8, 9, 10]);
       });
 
       it("with deleteCount greater than elements remaining removes only available elements", () => {
-        const removed = skipList.splice(8, 5);
-        //expect(Array.from(removed)).toEqual([9, 10]);
-        expect(Array.from(skipList)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+        const removed = list.splice(8, 5);
+        expect(Array.from(removed)).toEqual([9, 10]);
+        expect(Array.from(list)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
       });
 
       it("with no deleteCount removes no elements", () => {
-        const removed = skipList.splice(5);
+        const removed = list.splice(5);
         expect(Array.from(removed)).toEqual([]);
-        expect(Array.from(skipList)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        expect(Array.from(list)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
       });
 
       it("with zero deleteCount removes no elements", () => {
-        const removed = skipList.splice(5, 0);
+        const removed = list.splice(5, 0);
         expect(Array.from(removed)).toEqual([]);
-        expect(Array.from(skipList)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        expect(Array.from(list)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
       });
 
       it("returns an empty list if start is out of bounds", () => {
-        const removed = skipList.splice(15, 1);
+        const removed = list.splice(15, 1);
         expect(Array.from(removed)).toEqual([]);
-        expect(Array.from(skipList)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        expect(Array.from(list)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
       });
 
       it("sequential calls remove elements correctly", () => {
-        skipList.splice(1, 1);
-        skipList.splice(2, 2);
-        expect(skipList.size).toBe(7);
-        expect(Array.from(skipList)).toEqual([1, 3, 6, 7, 8, 9, 10]);
+        list.splice(1, 1);
+        list.splice(2, 2);
+        expect(list.size).toBe(7);
+        expect(Array.from(list)).toEqual([1, 3, 6, 7, 8, 9, 10]);
+      });
+
+      it("inserts multiple items without specifying deleteCount", () => {
+        list.splice(3, undefined, 20, 21);
+        expect(Array.from(list)).toEqual([
+          1, 2, 3, 20, 21, 4, 5, 6, 7, 8, 9, 10,
+        ]);
+        expect(list.size).toBe(12);
+      });
+
+      it("inserts new items at the specified start index without deletion", () => {
+        list.splice(2, 0, 6, 7);
+        expect(Array.from(list)).toEqual([1, 2, 6, 7, 3, 4, 5, 6, 7, 8, 9, 10]);
+        expect(list.size).toBe(12);
+      });
+
+      it("inserts new items at the start of the list", () => {
+        list.splice(0, 0, 8, 9);
+        expect(Array.from(list)).toEqual([8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        expect(list.size).toBe(12);
+      });
+
+      it("inserts new items at the end of the list", () => {
+        list.splice(list.size, 0, 11, 12);
+        expect(Array.from(list)).toEqual([
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+        ]);
+        expect(list.size).toBe(12);
+      });
+
+      it("handles negative start index for insertion", () => {
+        list.splice(-3, 0, 11, 12);
+        expect(Array.from(list)).toEqual([
+          1, 2, 3, 4, 5, 6, 7, 11, 12, 8, 9, 10,
+        ]);
+        expect(list.size).toBe(12);
+      });
+
+      it("adjusts start index beyond list size to list end for insertion", () => {
+        list.splice(10, 0, 14, 15);
+        expect(Array.from(list)).toEqual([
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 15,
+        ]);
+        expect(list.size).toBe(12);
+      });
+
+      it("inserts items when start index is negative and beyond list size", () => {
+        list.splice(-10, 0, 14, 15);
+        expect(Array.from(list)).toEqual([
+          14, 15, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        ]);
+        expect(list.size).toBe(12);
+      });
+
+      it("maintains list integrity with simultaneous deletion and insertion", () => {
+        list.splice(2, 2, 18, 19);
+        expect(Array.from(list)).toEqual([1, 2, 18, 19, 5, 6, 7, 8, 9, 10]);
+        expect(list.size).toBe(10);
+      });
+
+      it("maintains list integrity with more deletions than insertion", () => {
+        list.splice(2, 5, 18, 19);
+        expect(Array.from(list)).toEqual([1, 2, 18, 19, 8, 9, 10]);
+        expect(list.size).toBe(7);
+      });
+
+      it("maintains list integrity with less deletions than insertion", () => {
+        list.splice(2, 2, 18, 19, 20, 21);
+        expect(Array.from(list)).toEqual([
+          1, 2, 18, 19, 20, 21, 5, 6, 7, 8, 9, 10,
+        ]);
+        expect(list.size).toBe(12);
+      });
+
+      it("can insert items when deleting until end of list", () => {
+        list.splice(4, 100, 11, 12);
+        expect(Array.from(list)).toEqual([1, 2, 3, 4, 11, 12]);
+        expect(list.size).toBe(6);
+      });
+
+      it("can insert items when deleting entire list", () => {
+        list.splice(0, 100, 3, 2, 1);
+        expect(Array.from(list)).toEqual([3, 2, 1]);
+        expect(list.size).toBe(3);
       });
     });
 

@@ -1,3 +1,5 @@
+import { isNumber } from "./is";
+
 /**
  * Restricts a value to a range defined by [min, max].
  *
@@ -23,4 +25,15 @@ export function clamp(value: number, min: number, max: number): number {
  */
 export function log(value: number, base: number): number {
   return value >= 0 && base > 0 ? Math.log(value) / Math.log(base) : NaN;
+}
+
+/**
+ * Converts a value into an integer.
+ *
+ * @param value - the value to convert.
+ * @param defaultValue - the value to return if conversion fails. Defaults to 0.
+ */
+export function toInteger(value?: unknown, defaultValue = 0): number {
+  value = +value!;
+  return isNaN(value as number) ? defaultValue : Math.trunc(value as number);
 }
