@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Constructor } from "../types/constructor";
-import { SkipList, SkipListConfig } from "../standard/skipList";
+import { SkipList, SkipListConfig } from "../std/skipList";
+import { ARRAY_MAX_LENGTH } from "../utils/constants";
 
 export function test(cls: Constructor<SkipList<unknown>>) {
   describe(cls.name, () => {
@@ -91,6 +92,96 @@ export function test(cls: Constructor<SkipList<unknown>>) {
         expect(list.size).toBe(3);
         expect(list.maxLevel).toBe(1);
         expect(list.p).toBe(0.2);
+      });
+    });
+
+    describe(".maxLevel", () => {
+      let skipList: SkipList<unknown>;
+
+      beforeEach(() => {
+        skipList = new cls({ maxLevel: 4, p: 0.75 });
+      });
+
+      it("initial maxLevel is respected", () => {
+        expect(skipList.maxLevel).toBe(4);
+      });
+
+      it("rejects values too low", () => {
+        expect(() => (skipList.maxLevel = -1)).toThrow(RangeError);
+        expect(() => (skipList.maxLevel = 0)).toThrow(RangeError);
+      });
+
+      it("rejects values too large", () => {
+        expect(() => (skipList.maxLevel = ARRAY_MAX_LENGTH + 1)).toThrow(
+          RangeError
+        );
+      });
+
+      it("rejects fractional values", () => {
+        expect(() => (skipList.maxLevel = 2.5)).toThrow(RangeError);
+        expect(() => (skipList.maxLevel = 10.0001)).toThrow(RangeError);
+      });
+
+      it("accepts valid values", () => {
+        expect(() => (skipList.maxLevel = 1)).not.toThrow();
+        expect(() => (skipList.maxLevel = 100)).not.toThrow();
+        expect(() => (skipList.maxLevel = ARRAY_MAX_LENGTH)).not.toThrow();
+      });
+
+      it("inserted nodes do not exceed initial maxLevel", () => {
+        for (let i = 0; i < 100; ++i) {
+          skipList.push(i);
+        }
+        expect(skipList.levels).toBeLessThanOrEqual(4);
+      });
+
+      it("changing maxLevel affects structure", () => {
+        skipList.maxLevel = 6;
+        expect(skipList.maxLevel).toBe(6);
+        for (let i = 100; i < 200; ++i) {
+          skipList.push(i);
+        }
+        expect(skipList.levels).toBeLessThanOrEqual(6);
+      });
+
+      it("reducing maxLevel removes excessive levels", () => {
+        for (let i = 0; i < 100; ++i) {
+          skipList.push(i);
+        }
+        skipList.maxLevel = 2;
+        expect(skipList.maxLevel).toBe(2);
+        expect(skipList.levels).toBeLessThanOrEqual(2);
+      });
+    });
+
+    describe(".p", () => {
+      let skipList: SkipList<unknown>;
+
+      beforeEach(() => {
+        skipList = new cls({ maxLevel: 4, p: 0.75 });
+      });
+
+      it("initial p is respected", () => {
+        expect(skipList.p).toBe(0.75);
+      });
+
+      it("rejects values too low", () => {
+        expect(() => (skipList.p = -1)).toThrow(RangeError);
+        expect(() => (skipList.p = -0.1)).toThrow(RangeError);
+        expect(() => (skipList.p = -0.001)).toThrow(RangeError);
+      });
+
+      it("rejects values too large", () => {
+        expect(() => (skipList.p = 1.001)).toThrow(RangeError);
+        expect(() => (skipList.p = 2)).toThrow(RangeError);
+      });
+
+      it("accepts valid values", () => {
+        expect(() => (skipList.p = 0)).not.toThrow();
+        expect(() => (skipList.p = 0.001)).not.toThrow();
+        expect(() => (skipList.p = 0.5)).not.toThrow();
+        expect(() => (skipList.p = 0.999)).not.toThrow();
+        expect(() => (skipList.p = 1)).not.toThrow();
       });
     });
 
@@ -210,6 +301,80 @@ export function test(cls: Constructor<SkipList<unknown>>) {
         list.push(4);
         expect(list.size).toBe(1);
         expect(Array.from(list.values())).toEqual([4]);
+      });
+    });
+
+    describe("delete()", () => {
+      let skipList: SkipList<unknown>;
+
+      beforeEach(() => {
+        skipList = new cls({ maxLevel: 4 });
+        skipList.push(1, 2, 3, 4, 5);
+      });
+
+      it("removes the element at a specific index", () => {
+        expect(skipList.delete(2)).toBe(true);
+        expect(skipList.size).toBe(4);
+        expect(skipList.has(3)).toBe(false);
+        expect(Array.from(skipList)).toEqual([1, 2, 4, 5]);
+      });
+
+      it("does not update the size when failed", () => {
+        const size = skipList.size;
+        skipList.delete(10);
+        expect(skipList.size).toBe(size);
+      });
+
+      it("updates size when succeeded", () => {
+        const size = skipList.size;
+        skipList.delete(1);
+        expect(skipList.size).toBe(size - 1);
+      });
+
+      it("removes the first element", () => {
+        expect(skipList.delete(0)).toBe(true);
+        expect(skipList.size).toBe(4);
+        expect(Array.from(skipList)).toEqual([2, 3, 4, 5]);
+      });
+
+      it("removes last element", () => {
+        expect(skipList.delete(skipList.size - 1)).toBe(true);
+        expect(skipList.size).toBe(4);
+        expect(Array.from(skipList)).toEqual([1, 2, 3, 4]);
+      });
+
+      it("returns false for index < -size", () => {
+        expect(skipList.delete(-6)).toBe(false);
+        expect(skipList.delete(-10)).toBe(false);
+      });
+
+      it("returns false for index >= size", () => {
+        expect(skipList.delete(5)).toBe(false);
+        expect(skipList.delete(10)).toBe(false);
+      });
+
+      it("wraps around for negative indices", () => {
+        expect(skipList.delete(-1)).toBe(true);
+        expect(skipList.has(5)).toBe(false);
+        expect(skipList.delete(-4)).toBe(true);
+        expect(skipList.has(1)).toBe(false);
+      });
+
+      it("maintains the skip list order", () => {
+        skipList.delete(2);
+        expect(Array.from(skipList)).toEqual([1, 2, 4, 5]);
+      });
+
+      it("sequential deletes reduce the skip list size correctly", () => {
+        skipList.delete(1);
+        expect(skipList.size).toBe(4);
+        expect(skipList.has(2)).toBe(false);
+
+        skipList.delete(1);
+        expect(skipList.size).toBe(3);
+        expect(skipList.has(3)).toBe(false);
+
+        expect(Array.from(skipList)).toEqual([1, 4, 5]);
       });
     });
 
@@ -615,6 +780,57 @@ export function test(cls: Constructor<SkipList<unknown>>) {
       });
     });
 
+    describe("set()", () => {
+      let skipList: SkipList<unknown>;
+
+      beforeEach(() => {
+        skipList = new cls({ maxLevel: 4 });
+        skipList.push(1, 2, 3, 4, 5);
+      });
+
+      it("updates the value at a specific index", () => {
+        expect(skipList.set(2, 99)).toBe(true);
+        expect(skipList.at(2)).toBe(99);
+      });
+
+      it("returns false for index < -size", () => {
+        expect(skipList.set(-6, 100)).toBe(false);
+        expect(skipList.set(-10, 100)).toBe(false);
+      });
+
+      it("returns false for index >= size", () => {
+        expect(skipList.set(5, 100)).toBe(false);
+        expect(skipList.set(10, 100)).toBe(false);
+      });
+
+      it("wraps around for negative indices", () => {
+        expect(skipList.set(-1, 99)).toBe(true);
+        expect(skipList.at(-1)).toBe(99);
+        expect(skipList.set(-5, 101)).toBe(true);
+        expect(skipList.at(-5)).toBe(101);
+      });
+
+      it("does not change the size of the skip list", () => {
+        const initialSize = skipList.size;
+        skipList.set(1, 98);
+        expect(skipList.size).toBe(initialSize);
+      });
+
+      it("allows updating the first and last elements", () => {
+        const firstIndexSuccess = skipList.set(0, 101);
+        const lastIndexSuccess = skipList.set(skipList.size - 1, 105);
+        expect(firstIndexSuccess).toBe(true);
+        expect(lastIndexSuccess).toBe(true);
+        expect(skipList.at(0)).toBe(101);
+        expect(skipList.at(skipList.size - 1)).toBe(105);
+      });
+
+      it("maintains the skip list order", () => {
+        skipList.set(2, 50);
+        expect(Array.from(skipList)).toEqual([1, 2, 50, 4, 5]);
+      });
+    });
+
     describe("shift()", () => {
       let skipList: SkipList<number>;
 
@@ -649,6 +865,59 @@ export function test(cls: Constructor<SkipList<unknown>>) {
         skipList.clear();
         expect(skipList.shift()).toBeUndefined();
         expect(skipList.size).toBe(0);
+      });
+    });
+
+    describe("splice()", () => {
+      let skipList: SkipList<unknown>;
+
+      beforeEach(() => {
+        skipList = new cls({ maxLevel: 4 });
+        skipList.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+      });
+
+      it("on an empty skip list returns an empty array", () => {
+        const skipList = new cls();
+        const removed = skipList.splice(0, 1);
+        expect(Array.from(removed)).toEqual([]);
+        expect(skipList.size).toBe(0);
+      });
+
+      it("removes the correct elements and returns them", () => {
+        const removed = skipList.splice(3, 2);
+        //expect(Array.from(removed)).toEqual([4, 5]);
+        expect(Array.from(skipList)).toEqual([1, 2, 3, 6, 7, 8, 9, 10]);
+      });
+
+      it("with deleteCount greater than elements remaining removes only available elements", () => {
+        const removed = skipList.splice(8, 5);
+        //expect(Array.from(removed)).toEqual([9, 10]);
+        expect(Array.from(skipList)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+      });
+
+      it("with no deleteCount removes no elements", () => {
+        const removed = skipList.splice(5);
+        expect(Array.from(removed)).toEqual([]);
+        expect(Array.from(skipList)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      });
+
+      it("with zero deleteCount removes no elements", () => {
+        const removed = skipList.splice(5, 0);
+        expect(Array.from(removed)).toEqual([]);
+        expect(Array.from(skipList)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      });
+
+      it("returns an empty list if start is out of bounds", () => {
+        const removed = skipList.splice(15, 1);
+        expect(Array.from(removed)).toEqual([]);
+        expect(Array.from(skipList)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      });
+
+      it("sequential calls remove elements correctly", () => {
+        skipList.splice(1, 1);
+        skipList.splice(2, 2);
+        expect(skipList.size).toBe(7);
+        expect(Array.from(skipList)).toEqual([1, 3, 6, 7, 8, 9, 10]);
       });
     });
 
