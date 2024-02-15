@@ -1,14 +1,14 @@
 import { Collection } from "..";
 import { ARGS_MAX_LENGTH } from "../utils/constants";
-import { isIterable } from "../utils/is";
+import { isArrayLength, isIterable } from "../utils/is";
 import { chunk } from "../utils/iterable";
+import { log } from "../utils/math";
 
 export interface SkipListNode<T> {
-  down?: SkipListNode<T>;
-  next: SkipListNode<T>;
-  prev: SkipListNode<T>;
+  next: SkipListNode<T>[];
+  prev: SkipListNode<T>[];
   value: T;
-  width: number;
+  width: number[];
 }
 
 export interface SkipListConfig {
@@ -17,12 +17,11 @@ export interface SkipListConfig {
 }
 
 export class SkipList<T> implements Collection<number, T> {
-  protected bottom!: SkipListNode<T>;
   protected level!: number;
   protected _maxLevel!: number;
   protected _p!: number;
+  protected root!: SkipListNode<T>;
   protected _size!: number;
-  protected top!: SkipListNode<T>;
 
   constructor();
   constructor(values: Iterable<T>);
@@ -37,8 +36,7 @@ export class SkipList<T> implements Collection<number, T> {
     config = config ?? {};
     this.p = config.p ?? 0.5;
     this.maxLevel =
-      config.maxLevel ??
-      Math.ceil(Math.log(Number.MAX_SAFE_INTEGER) / Math.log(1 / this._p));
+      config.maxLevel ?? Math.ceil(log(Number.MAX_SAFE_INTEGER, 1 / this._p));
     for (const array of chunk(values, ARGS_MAX_LENGTH)) {
       this.push(...array);
     }
@@ -60,30 +58,32 @@ export class SkipList<T> implements Collection<number, T> {
     return SkipList.name;
   }
 
-  set maxLevel(maxDepth: number) {
-    // Convert to number
-    maxDepth + maxDepth;
+  set maxLevel(maxLevel: number) {
+    // Convert input to number
+    maxLevel = +maxLevel;
 
     // If input is invalid
-    if (!Number.isSafeInteger(maxDepth) || (maxDepth as number) < 1) {
+    if (!isArrayLength(maxLevel)) {
       throw new RangeError("Invalid maxLevel");
     }
 
-    // Update input
-    this._maxLevel = maxDepth;
+    // Update
+    this._maxLevel = maxLevel;
 
-    // Remove excess levels
-    while (this.level > maxDepth) {
-      this.top = this.top.down!;
-      --this.level;
-    }
+    // Remove any excess levels
+    this.shrink(maxLevel);
   }
 
   set p(p: number) {
+    // Convert input to number
     p = +p;
+
+    // If input is invalid
     if (isNaN(p) || p < 0 || p > 1) {
       throw new RangeError("Invalid p");
     }
+
+    // Update
     this._p = p;
   }
 
@@ -92,7 +92,7 @@ export class SkipList<T> implements Collection<number, T> {
     index = +index;
 
     // Check if an integer
-    if (!Number.isSafeInteger(index)) {
+    if (!Number.isInteger(index)) {
       return undefined;
     }
 
@@ -108,13 +108,14 @@ export class SkipList<T> implements Collection<number, T> {
 
     // Find index
     let i = -1;
-    let node = this.top;
+    let node = this.root;
+    let lvl = this.level - 1;
     do {
-      if (i + node.width <= index) {
-        i += node.width;
-        node = node.next;
+      if (i + node.width[lvl] > index) {
+        --lvl;
       } else {
-        node = node.down!;
+        i += node.width[lvl];
+        node = node.next[lvl];
       }
     } while (i < index);
 
@@ -123,16 +124,18 @@ export class SkipList<T> implements Collection<number, T> {
   }
 
   clear(): void {
-    this.bottom = this._genNode();
-    this.level = 1;
     this._size = 0;
-    this.top = this.bottom;
+    this.level = 1;
+    this.root = this.initNode(1, undefined as T);
+    this.root.next[0] = this.root;
+    this.root.prev[0] = this.root;
+    this.root.width[0] = 1;
   }
 
   *entries(): IterableIterator<[number, T]> {
-    let node = this.bottom;
+    let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next;
+      node = node.next[0];
       yield [i, node.value];
     }
   }
@@ -141,18 +144,18 @@ export class SkipList<T> implements Collection<number, T> {
     callbackfn: (value: T, index: number, list: this) => void,
     thisArg?: unknown
   ): void {
-    let node = this.bottom;
+    let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next;
+      node = node.next[0];
       callbackfn.call(thisArg, node.value, i, this);
     }
   }
 
   has(value: T): boolean {
     const N = this._size;
-    let node = this.bottom;
+    let node = this.root;
     for (let i = 0; i < N; ++i) {
-      node = node.next;
+      node = node.next[0];
       if (node.value === value) {
         return true;
       }
@@ -167,48 +170,77 @@ export class SkipList<T> implements Collection<number, T> {
   }
 
   pop(): T | undefined {
+    // Check if list is empty
     if (this._size < 1) {
       return undefined;
     }
 
-    const stack = this._getTailStack();
-    const value = stack[0][1].value;
-    const N = stack.length;
-
-    for (let i = 0; i < N && stack[i][1].next.value === value; ++i) {
-      const node = stack[i][1];
-      node.prev.next = node.next;
-      node.next.prev = node.prev;
+    // Remove value
+    const root = this.root;
+    const node = root.prev[0];
+    const N = node.next.length;
+    for (let i = 0; i < N; ++i) {
+      const prev = node.prev[i];
+      const next = node.next[i];
+      prev.next[i] = next;
+      if (prev === next) {
+        this.shrink(i);
+        break;
+      }
+      next.prev[i] = prev;
+      prev.width[i] += node.width[i] - 1;
     }
 
+    // Update remaining widths
+    for (let i = N; i < this.level; ++i) {
+      --root.prev[i].width[i];
+    }
+
+    // Update size and return value
     --this._size;
-    return value;
+    return node.value;
   }
 
   push(...values: T[]): number {
-    for (const value of values) {
-      this._insert(this._size, value, this._getTailStack());
+    if (values.length > 0) {
+      const N = values.length;
+      const stack = this.getTailStack();
+      for (let i = 0; i < N; ++i) {
+        this.insert(values[i], stack);
+      }
     }
     return this._size;
   }
 
   shift(): T | undefined {
+    // Check if list is empty
     if (this._size < 1) {
       return undefined;
     }
 
-    const stack = this._getHeadStack();
-    const value = stack[0][1].next.value;
-    const N = stack.length;
-
-    for (let i = 0; i < N && stack[i][1].next.value === value; ++i) {
-      const prev = stack[i][1];
-      prev.next = prev.next.next;
-      prev.next.prev = prev;
+    // Remove value
+    const root = this.root;
+    const node = root.next[0];
+    const N = node.next.length;
+    for (let i = 0; i < N; ++i) {
+      const next = node.next[i];
+      root.next[i] = next;
+      if (root === next) {
+        this.shrink(i);
+        break;
+      }
+      next.prev[i] = root;
+      root.width[i] += node.width[i] - 1;
     }
 
+    // Update remaining widths
+    for (let i = N; i < this.level; ++i) {
+      --root.width[i];
+    }
+
+    // Update size and return value
     --this._size;
-    return value;
+    return node.value;
   }
 
   [Symbol.iterator](): IterableIterator<T> {
@@ -216,83 +248,111 @@ export class SkipList<T> implements Collection<number, T> {
   }
 
   unshift(...values: T[]): number {
-    for (let i = values.length - 1; i >= 0; --i) {
-      this._insert(0, values[i], this._getHeadStack());
+    if (values.length > 0) {
+      const N = values.length;
+      const stack = this.getHeadStack();
+      for (let i = 0; i < N; ++i) {
+        this.insert(values[i], stack);
+      }
     }
     return this._size;
   }
 
   *values(): IterableIterator<T> {
-    let node = this.bottom;
+    let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next;
+      node = node.next[0];
       yield node.value;
     }
   }
 
-  protected _genNode(value?: T, width = 1): SkipListNode<T> {
-    const node = { value, width } as SkipListNode<T>;
-    node.prev = node;
-    node.next = node;
-    return node;
+  protected getHeadStack(): [number, SkipListNode<T>][] {
+    return new Array(this.level).fill([-1, this.root]);
   }
 
-  protected _getHeadStack(): [number, SkipListNode<T>][] {
-    let n = this.level;
-    const stack: [number, SkipListNode<T>][] = new Array(n).fill([]);
-    for (let node = this.top; --n >= 0; node = node.down!) {
-      stack[n] = [-1, node];
+  protected getTailStack(): [number, SkipListNode<T>][] {
+    const N = this.level;
+    const root = this.root;
+    const size = this._size;
+    const stack: [number, SkipListNode<T>][] = new Array(N);
+    for (let i = 0; i < N; ++i) {
+      const prev = root.prev[i];
+      stack[i] = [size - prev.width[i], prev];
     }
     return stack;
   }
 
-  protected _getTailStack(): [number, SkipListNode<T>][] {
-    let n = this.level;
-    const stack: [number, SkipListNode<T>][] = new Array(n).fill([]);
-    for (let node = this.top; --n >= 0; node = node.down!) {
-      stack[n] = [this._size - node.prev.width, node.prev];
-    }
-    return stack;
+  protected initNode(level: number, value: T): SkipListNode<T> {
+    return {
+      next: new Array(level),
+      prev: new Array(level),
+      value,
+      width: new Array(level),
+    };
   }
 
-  protected _insert(
-    index: number,
-    value: T,
-    stack: [number, SkipListNode<T>][]
-  ): void {
-    const randomLevel = this.randomLevel();
+  protected insert(value: T, stack: [number, SkipListNode<T>][]): void {
+    const root = this.root;
+    const index = stack[0][0] + 1;
+    const nodeLvl = this.randomLevel();
+    const node = this.initNode(nodeLvl, value);
 
-    for (let i = this.level; i < randomLevel; ++i) {
-      const node = this._genNode(undefined, this._size + 1);
-      node.down = this.top;
-      stack.push([-1, node]);
-      this.top = node;
-      ++this.level;
+    let listLvl = this.level;
+    if (listLvl < nodeLvl) {
+      root.next.length = nodeLvl;
+      root.next.fill(root, listLvl, nodeLvl);
+      root.prev.length = nodeLvl;
+      root.prev.fill(root, listLvl, nodeLvl);
+      root.width.length = nodeLvl;
+      root.width.fill(this._size + 1, listLvl, nodeLvl);
+      stack.length = nodeLvl;
+      stack.fill([-1, root], listLvl, nodeLvl);
+      listLvl = nodeLvl;
+      this.level = listLvl;
     }
 
-    let down: SkipListNode<T> | undefined = undefined;
-    for (let i = 0; i < randomLevel; ++i) {
-      const [prevI, prev] = stack[i];
-      const next = prev.next;
-      const diff = index - prevI;
-      down = { value, next, prev, down } as SkipListNode<T>;
-      down.width = prev.width - diff + 1;
-      prev.width = diff;
-      prev.next = down;
-      next.prev = down;
+    for (let i = 0; i < nodeLvl; ++i) {
+      const [prevIndex, prev] = stack[i];
+      const next = prev.next[i];
+      const diff = index - prevIndex;
+      node.next[i] = next;
+      node.prev[i] = prev;
+      node.width[i] = prev.width[i] - diff + 1;
+      prev.width[i] = diff;
+      prev.next[i] = node;
+      next.prev[i] = node;
+      stack[i] = [index, node];
+    }
+
+    for (let i = nodeLvl; i < listLvl; ++i) {
+      ++stack[i][1].width[i];
     }
 
     ++this._size;
-    for (let i = randomLevel; i < this.level; ++i) {
-      ++stack[i][1].width;
-    }
   }
 
-  private randomLevel(): number {
+  protected randomLevel(): number {
     let level = 1;
     while (Math.random() < this._p && level < this._maxLevel) {
       ++level;
     }
     return level;
+  }
+
+  protected shrink(level: number): boolean {
+    if (level < 1 || level >= this.level) {
+      return false;
+    }
+    const root = this.root;
+    let node = root;
+    do {
+      const next = root.next[level];
+      root.next.length = level;
+      root.prev.length = level;
+      root.width.length = level;
+      node = next;
+    } while (node !== root);
+    this.level = level;
+    return true;
   }
 }
