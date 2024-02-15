@@ -376,6 +376,26 @@ export function test(cls: Constructor<SkipList<unknown>>) {
 
         expect(Array.from(skipList)).toEqual([1, 4, 5]);
       });
+
+      it("should remove empty levels as items are deleted", () => {
+        skipList = new cls({ maxLevel: 5, p: 0.75 });
+        const firsts = new Array(6).fill(0);
+
+        let maxLevel = 0;
+        for (let i = 0; i < 10; ++i) {
+          skipList.push(i);
+          if (skipList.levels > maxLevel) {
+            firsts.fill(i, maxLevel + 1, skipList.levels);
+            maxLevel = skipList.levels;
+          }
+        }
+
+        for (let i = firsts[maxLevel]; i < 10; ++i) {
+          skipList.delete(-1);
+        }
+
+        expect(skipList.levels).toBeLessThan(maxLevel);
+      });
     });
 
     describe("entries()", () => {

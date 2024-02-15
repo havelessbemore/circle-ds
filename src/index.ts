@@ -20,3 +20,4 @@ export { CircularStack } from "./circle/circularStack";
 
 // Standard Classes
 export { LinkedList } from "./std/linkedList";
+export { SkipList } from "./std/skipList";
