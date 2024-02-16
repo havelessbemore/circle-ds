@@ -1,8 +1,6 @@
 import { List } from "../types/list";
-import { ARGS_MAX_LENGTH } from "../utils/constants";
 import { isArrayLength, isIterable, isNumber } from "../utils/is";
-import { chunk } from "../utils/iterable";
-import { clamp, log, toInteger } from "../utils/math";
+import { clamp, log, randomRun, toInteger } from "../utils/math";
 
 /**
  * Configuration options for creating a SkipList instance.
@@ -26,11 +24,11 @@ export interface SkipListConfig {
   p?: number;
 
   /**
-   * The size to use to calculate the optimal max level. Ignored
+   * The size used to calculate the optimal max level. Ignored
    * if `maxLevel` is specified.
    *
-   * Optional. If not provided, a default value is used, such as
-   * the maximum size supported by the implementation.
+   * Optional. If not provided, a default value is used (e.g. the
+   * implementation's maximum supported size).
    */
   size?: number;
 }
@@ -109,11 +107,14 @@ export class SkipList<T> implements List<T> {
       values = [];
     }
     config = config ?? {};
-    const size = config.size ?? Number.MAX_SAFE_INTEGER;
     this.p = config.p ?? 0.5;
+    const size = config.size ?? Number.MAX_SAFE_INTEGER;
     this.maxLevel = config.maxLevel ?? Math.ceil(log(size, 1 / this._p));
-    for (const array of chunk(values, ARGS_MAX_LENGTH)) {
-      this.push(...array);
+
+    // Insert values, if any
+    const stack = this.getRootStack();
+    for (const value of values) {
+      this.insert(value, stack);
     }
   }
 
@@ -480,7 +481,7 @@ export class SkipList<T> implements List<T> {
   protected insert(value: T, stack: [number, SkipListNode<T>][]): void {
     const root = this.root;
     const index = stack[0][0] + 1;
-    const nodeLvl = this.randomLevel();
+    const nodeLvl = randomRun(this._p, this._maxLevel, 1);
     const node = this.initNode(nodeLvl, value);
 
     if (this._levels < nodeLvl) {
@@ -508,17 +509,6 @@ export class SkipList<T> implements List<T> {
     }
 
     ++this._size;
-  }
-
-  /**
-   * @internal
-   */
-  protected randomLevel(): number {
-    let level = 1;
-    while (Math.random() < this._p && level < this._maxLevel) {
-      ++level;
-    }
-    return level;
   }
 
   /**

@@ -1,6 +1,6 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
-import { clamp, log, toInteger } from "./math";
+import { clamp, log, randomRun, toInteger } from "./math";
 
 describe("clamp()", () => {
   test("returns min if value is below the minimum", () => {
@@ -94,6 +94,43 @@ describe("log()", () => {
 
   test("returns Infinity for log of 0 with any base except 1 and 0", () => {
     expect(log(0, 2)).toBe(-Infinity);
+  });
+});
+
+describe("randomRun()", () => {
+  test("returns min if randomFn always >= p", () => {
+    const mockRandomFn = () => 0.6;
+    expect(randomRun(0.5, Infinity, 0, mockRandomFn)).toBe(0);
+  });
+
+  test("increments min until randomFn < p", () => {
+    let counter = 0;
+    const mockRandomFn = () => {
+      return ++counter <= 3 ? 0.1 : 0.6;
+    };
+    expect(randomRun(0.5, Infinity, 0, mockRandomFn)).toBe(3);
+  });
+
+  test("respects the max limit", () => {
+    const mockRandomFn = () => 0.1; // Always less than p
+    expect(randomRun(0.5, 5, 0, mockRandomFn)).toBe(5);
+  });
+
+  test("works with non-default min value", () => {
+    const mockRandomFn = () => 0.4;
+    expect(randomRun(0.5, 10, 5, mockRandomFn)).toBe(10);
+  });
+
+  test("returns min immediately if min >= max", () => {
+    const mockRandomFn = vi.fn(); // Not expected to be called
+    expect(randomRun(0.5, 0, 5, mockRandomFn)).toBe(5);
+    expect(mockRandomFn).not.toHaveBeenCalled();
+  });
+
+  test("handles p values outside [0, 1] range", () => {
+    const mockRandomFn = () => 0.3;
+    expect(randomRun(1.2, 10, 0, mockRandomFn)).toBe(10);
+    expect(randomRun(-0.1, 10, 0, mockRandomFn)).toBe(0);
   });
 });
 
