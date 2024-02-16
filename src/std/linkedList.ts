@@ -188,17 +188,27 @@ export class LinkedList<T> implements List<T> {
     deleteCount = toInteger(deleteCount, 0);
     deleteCount = clamp(deleteCount, 0, size - start);
 
-    // Delete values
+    // Create output list
     const out = new LinkedList<T>();
+
+    // Replace values
+    const itemCount = items.length;
     let prev = this.getNode(start - 1);
-    for (let i = 0; i < deleteCount; ++i) {
+    const replaceCount = Math.min(deleteCount, itemCount);
+    for (let i = 0; i < replaceCount; ++i) {
+      prev = prev.next;
+      out.push(prev.value);
+      prev.value = items[i];
+    }
+
+    // Delete values
+    for (let i = replaceCount; i < deleteCount; ++i) {
       out.push(prev.next.value);
       this.remove(prev.next);
     }
 
     // Add new values
-    const N = items.length;
-    for (let i = 0; i < N; ++i) {
+    for (let i = replaceCount; i < itemCount; ++i) {
       prev = this.insert(items[i], prev);
     }
 

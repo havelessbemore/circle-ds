@@ -1,5 +1,5 @@
 import { List } from "../types/list";
-import { isArrayLength, isIterable, isNumber } from "../utils/is";
+import { isArrayLength, isIterable } from "../utils/is";
 import { clamp, log, randomRun, toInteger } from "../utils/math";
 
 /**
@@ -327,31 +327,38 @@ export class SkipList<T> implements List<T> {
 
   splice(start: number, deleteCount?: number, ...items: T[]): SkipList<T> {
     // Sanitize start
-    start = +start;
-    start = isNumber(start) ? Math.trunc(start) : 0;
-    start = Math.max(-this._size, Math.min(this._size, start));
-    if (start < 0) {
-      start += this._size;
-    }
+    const size = this._size;
+    start = toInteger(start, 0);
+    start = clamp(start, -size, size);
+    start += start >= 0 ? 0 : size;
 
     // Sanitize deleteCount
-    deleteCount = +deleteCount!;
-    deleteCount = isNumber(deleteCount) ? Math.trunc(deleteCount) : 0;
-    deleteCount = Math.max(0, Math.min(this._size - start, deleteCount));
+    deleteCount = toInteger(deleteCount, 0);
+    deleteCount = clamp(deleteCount, 0, size - start);
 
     // Create output list
     const out = new SkipList<T>({ maxLevel: this._maxLevel, p: this._p });
 
-    // Delete values
+    // Replace values
+    const itemCount = items.length;
+    const replaceCount = Math.min(deleteCount, itemCount);
     const stack = this.stackNext(this.getRootStack(), start - 1);
-    for (let i = 0; i < deleteCount; ++i) {
+    let prev = stack[0].node;
+    for (let i = 0; i < replaceCount; ++i) {
+      prev = prev.levels[0].next;
+      out.push(prev.value);
+      prev.value = items[i];
+    }
+    this.stackNext(stack, start - 1 + replaceCount);
+
+    // Delete values
+    for (let i = replaceCount; i < deleteCount; ++i) {
       out.push(stack[0].node.levels[0].next.value);
       this.remove(stack);
     }
 
     // Add new values
-    const N = items.length;
-    for (let i = 0; i < N; ++i) {
+    for (let i = replaceCount; i < itemCount; ++i) {
       this.insert(items[i], stack);
     }
 
