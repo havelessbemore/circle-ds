@@ -27,8 +27,6 @@ import { ValueOf } from "./valueOf";
  *
  * Implementers of this interface should ensure thread safety and consistency of the
  * collection's state, especially when dealing with asynchronous event listeners.
- *
- * @template T - The type of elements held in the collection.
  */
 export interface Bounded<T> {
   /**

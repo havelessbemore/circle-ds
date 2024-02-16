@@ -1181,7 +1181,7 @@ export function test(cls: Constructor<SkipList<unknown>>) {
           skipList.unshift(value);
           expect(skipList.size).toBe(idx + 1);
         });
-        expect(Array.from(skipList)).toEqual(values.toReversed());
+        expect(Array.from(skipList)).toEqual(values.reverse());
       });
 
       it("prepends multiple elements to an empty list", () => {

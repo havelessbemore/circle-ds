@@ -16,7 +16,5 @@
  * type Example = { a: number; b: string; c: boolean };
  * type ValueOfExample = ValueOf<Example>; // Equivalent to number | string | boolean
  * ```
- *
- * @template T - The object type from which value types are extracted.
  */
 export type ValueOf<T> = T[keyof T];

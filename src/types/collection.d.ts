@@ -6,9 +6,6 @@ export interface CollectionConstructor<K, V> {
  * Represents a generic collection of key-value pairs with various utility methods
  * to manipulate and interact with the collection. This interface abstracts common
  * functionality found in data structures like deques, lists, maps, queues, etc.
- *
- * @template K - The type of keys maintained by this collection.
- * @template V - The type of mapped values.
  */
 export interface Collection<K, V> {
   /**

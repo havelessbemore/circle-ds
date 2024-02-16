@@ -13,7 +13,6 @@
  * or when working with higher-order components in frameworks that support
  * component class types.
  *
- * @template T - The type of object that the constructor creates. Defaults to `object`.
  * @param args - An array of arguments of any type that the constructor accepts.
  * @returns An instance of type `T`, as produced by the constructor function.
  */

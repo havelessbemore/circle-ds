@@ -7,10 +7,6 @@ import { Stack } from "./stack";
  * This interface extends both the `Queue` and `Stack` interfaces to inherit
  * standard queue and stack behaviors, respectively, and introduces additional
  * functionality specific to deques.
- *
- * @template V - The type of elements held in the deque.
- * @extends {Queue<V>} - Provides basic queue (FIFO - First In, First Out) operations.
- * @extends {Stack<V>} - Provides basic stack (LIFO - Last In, First Out) operations.
  */
 export interface Deque<V> extends Queue<V>, Stack<V> {
   /**
