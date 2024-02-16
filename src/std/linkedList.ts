@@ -1,4 +1,4 @@
-import { Collection } from "../types/collection";
+import { List } from "../types/list";
 import { ARGS_MAX_LENGTH } from "../utils/constants";
 import { chunk } from "../utils/iterable";
 import { clamp, toInteger } from "../utils/math";
@@ -9,7 +9,7 @@ export interface Node<T> {
   value: T;
 }
 
-export class LinkedList<T> implements Collection<number, T> {
+export class LinkedList<T> implements List<T> {
   protected root!: Node<T>;
   protected _size!: number;
 

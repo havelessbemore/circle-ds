@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Constructor } from "../types/constructor";
-import { LinkedList } from "../std/linkedList";
+import { List } from "../types/list";
 
-export function test(cls: Constructor<LinkedList<unknown>>) {
+export function test(cls: Constructor<List<unknown>>) {
   describe(cls.name, () => {
-    let list: LinkedList<number>;
+    let list: List<number>;
 
     beforeEach(() => {
-      list = new cls() as LinkedList<number>;
+      list = new cls() as List<number>;
       list.push(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
     });
 
@@ -184,7 +184,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("delete()", () => {
-      let list: LinkedList<unknown>;
+      let list: List<unknown>;
 
       beforeEach(() => {
         list = new cls();
@@ -258,10 +258,10 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("entries()", () => {
-      let list5: LinkedList<number>;
+      let list5: List<number>;
 
       beforeEach(() => {
-        list5 = new cls() as LinkedList<number>;
+        list5 = new cls() as List<number>;
         for (let i = 0; i < 5; i++) {
           list5.push(i);
         }
@@ -333,7 +333,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("fill()", () => {
-      let list: LinkedList<unknown>;
+      let list: List<unknown>;
 
       beforeEach(() => {
         list = new cls();
@@ -390,10 +390,10 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("forEach()", () => {
-      let list5: LinkedList<number>;
+      let list5: List<number>;
 
       beforeEach(() => {
-        list5 = new cls() as LinkedList<number>;
+        list5 = new cls() as List<number>;
         for (let i = 0; i < 5; i++) {
           list5.push(i);
         }
@@ -441,7 +441,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
       });
 
       it("works correctly after removing and adding elements", () => {
-        const list = new cls() as LinkedList<number>;
+        const list = new cls() as List<number>;
         list.push(1, 2, 3);
         list.shift();
         list.push(4);
@@ -451,7 +451,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
       });
 
       it("maintains the correct order of elements", () => {
-        const list = new cls() as LinkedList<number>;
+        const list = new cls() as List<number>;
         list.push(3, 2, 1);
         list.shift();
         list.push(4);
@@ -462,10 +462,10 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("has()", () => {
-      let list: LinkedList<number>;
+      let list: List<number>;
 
       beforeEach(() => {
-        list = new cls() as LinkedList<number>;
+        list = new cls() as List<number>;
         list.push(2, 3, 5, 7, 11, 13, 17);
       });
 
@@ -552,10 +552,10 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("keys()", () => {
-      let list: LinkedList<number>;
+      let list: List<number>;
 
       beforeEach(() => {
-        list = new cls() as LinkedList<number>;
+        list = new cls() as List<number>;
         list.push(10, 20, 30, 40, 50);
       });
 
@@ -633,10 +633,10 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("pop()", () => {
-      let list: LinkedList<number>;
+      let list: List<number>;
 
       beforeEach(() => {
-        list = new cls() as LinkedList<number>;
+        list = new cls() as List<number>;
         list.push(5, 10, 15, 20, 25);
       });
 
@@ -717,7 +717,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("set()", () => {
-      let list: LinkedList<unknown>;
+      let list: List<unknown>;
 
       beforeEach(() => {
         list = new cls();
@@ -766,10 +766,10 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("shift()", () => {
-      let list: LinkedList<number>;
+      let list: List<number>;
 
       beforeEach(() => {
-        list = new cls() as LinkedList<number>;
+        list = new cls() as List<number>;
         list.push(5, 10, 15, 20, 25);
       });
 
@@ -803,7 +803,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("slice()", () => {
-      let list: LinkedList<unknown>;
+      let list: List<unknown>;
 
       beforeEach(() => {
         list = new cls();
@@ -861,7 +861,7 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("splice()", () => {
-      let list: LinkedList<unknown>;
+      let list: List<unknown>;
 
       beforeEach(() => {
         list = new cls();
@@ -998,10 +998,10 @@ export function test(cls: Constructor<LinkedList<unknown>>) {
     });
 
     describe("unshift()", () => {
-      let list: LinkedList<number>;
+      let list: List<number>;
 
       beforeEach(() => {
-        list = new cls() as LinkedList<number>;
+        list = new cls() as List<number>;
       });
 
       it("accepts zero elements", () => {

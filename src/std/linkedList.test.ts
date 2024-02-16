@@ -1,5 +1,5 @@
-import { test as testLinkedList } from "../tests/linkedList";
+import { test as testList } from "../tests/list";
 
 import { LinkedList } from "./linkedList";
 
-testLinkedList(LinkedList);
+testList(LinkedList);

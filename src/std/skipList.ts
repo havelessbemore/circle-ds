@@ -1,4 +1,4 @@
-import { Collection } from "../types/collection";
+import { List } from "../types/list";
 import { ARGS_MAX_LENGTH } from "../utils/constants";
 import { isArrayLength, isIterable, isNumber } from "../utils/is";
 import { chunk } from "../utils/iterable";
@@ -16,7 +16,7 @@ export interface SkipListConfig {
   p?: number;
 }
 
-export class SkipList<T> implements Collection<number, T> {
+export class SkipList<T> implements List<T> {
   protected _levels!: number;
   protected _maxLevel!: number;
   protected _p!: number;

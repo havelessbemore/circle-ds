@@ -1,4 +1,4 @@
 {
-  "*.ts": ["npm run lint", "npm run format"],
+  "*.ts": ["npm run format", "npm run lint"],
   "./**/*.{html,json}": "npm run format"
 }
