@@ -43,35 +43,34 @@ export interface SkipListConfig {
  * of the list, facilitating fast searches, insertions, and deletions.
  */
 export interface SkipListNode<T> {
-  /**
-   * An array of pointers to the next node at each level.
-   */
-  next: SkipListNode<T>[];
-
-  /**
-   * An array of pointers to the previous node at each level.
-   */
-  prev: SkipListNode<T>[];
+  levels: {
+    /**
+     * Pointer to the next node at this level.
+     */
+    next: SkipListNode<T>;
+    /**
+     * Pointer to the previous node at this level.
+     */
+    prev: SkipListNode<T>;
+    /**
+     * The distance to the next node at this level.
+     */
+    width: number;
+  }[];
 
   /**
    * The value stored in the node.
    */
   value: T;
-
-  /**
-   * An array representing the distance to the next node
-   * at each level, used to facilitate indexing and efficient operations.
-   */
-  width: number[];
 }
 
 /**
  * @internal
  */
-interface Finger<T> {
-  index: number[];
-  node: SkipListNode<T>[];
-}
+export type SkipStack<T> = {
+  index: number;
+  node: SkipListNode<T>;
+}[];
 
 /**
  * Implements a skip list data structure.
@@ -186,9 +185,7 @@ export class SkipList<T> implements List<T> {
     this._size = 0;
     this._levels = 1;
     this.root = this.initNode(1, undefined as T);
-    this.root.next[0] = this.root;
-    this.root.prev[0] = this.root;
-    this.root.width[0] = 1;
+    this.root.levels[0] = { next: this.root, prev: this.root, width: 1 };
   }
 
   delete(index: number): boolean {
@@ -196,14 +193,14 @@ export class SkipList<T> implements List<T> {
     if (i == undefined) {
       return false;
     }
-    this.remove(this.stackTo(this.getRootStack(), i - 1));
+    this.remove(this.stackNext(this.getRootStack(), i - 1));
     return true;
   }
 
   *entries(): IterableIterator<[number, T]> {
     let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next[0];
+      node = node.levels[0].next;
       yield [i, node.value];
     }
   }
@@ -223,7 +220,7 @@ export class SkipList<T> implements List<T> {
     // Update values
     for (let node = this.getNode(start); start < end; ++start) {
       node.value = value;
-      node = node.next[0];
+      node = node.levels[0].next;
     }
 
     return this;
@@ -235,7 +232,7 @@ export class SkipList<T> implements List<T> {
   ): void {
     let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next[0];
+      node = node.levels[0].next;
       callbackfn.call(thisArg, node.value, i, this);
     }
   }
@@ -244,7 +241,7 @@ export class SkipList<T> implements List<T> {
     const N = this._size;
     let node = this.root;
     for (let i = 0; i < N; ++i) {
-      node = node.next[0];
+      node = node.levels[0].next;
       if (node.value === value) {
         return true;
       }
@@ -262,7 +259,7 @@ export class SkipList<T> implements List<T> {
     if (this._size < 1) {
       return undefined;
     }
-    const node = this.root.prev[0];
+    const node = this.root.levels[0].prev;
     const finger = this.getTailStack();
     this.stackPrev(finger);
     this.stackPrev(finger);
@@ -301,7 +298,7 @@ export class SkipList<T> implements List<T> {
     if (this._size < 1) {
       return undefined;
     }
-    const node = this.root.next[0];
+    const node = this.root.levels[0].next;
     this.remove(this.getRootStack());
     return node.value;
   }
@@ -320,8 +317,9 @@ export class SkipList<T> implements List<T> {
 
     const out = new SkipList<T>({ maxLevel: this._maxLevel, p: this._p });
     for (let prev = this.getNode(start - 1); start < end; ++start) {
-      out.push(prev.next[0].value);
-      prev = prev.next[0];
+      const curr = prev.levels[0].next;
+      out.push(curr.value);
+      prev = curr;
     }
 
     return out;
@@ -345,16 +343,16 @@ export class SkipList<T> implements List<T> {
     const out = new SkipList<T>({ maxLevel: this._maxLevel, p: this._p });
 
     // Delete values
-    const finger = this.stackTo(this.getRootStack(), start - 1);
+    const stack = this.stackNext(this.getRootStack(), start - 1);
     for (let i = 0; i < deleteCount; ++i) {
-      out.push(finger.node[0].next[0].value);
-      this.remove(finger);
+      out.push(stack[0].node.levels[0].next.value);
+      this.remove(stack);
     }
 
     // Add new values
     const N = items.length;
     for (let i = 0; i < N; ++i) {
-      this.insert(items[i], finger);
+      this.insert(items[i], stack);
     }
 
     return out;
@@ -382,7 +380,7 @@ export class SkipList<T> implements List<T> {
   *values(): IterableIterator<T> {
     let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next[0];
+      node = node.levels[0].next;
       yield node.value;
     }
   }
@@ -392,13 +390,10 @@ export class SkipList<T> implements List<T> {
    */
   protected expand(level: number): void {
     const root = this.root;
-    const curLevel = this._levels;
-    root.next.length = level;
-    root.next.fill(root, curLevel, level);
-    root.prev.length = level;
-    root.prev.fill(root, curLevel, level);
-    root.width.length = level;
-    root.width.fill(this._size + 1, curLevel, level);
+    const width = this._size + 1;
+    for (let lvl = this._levels; lvl < level; ++lvl) {
+      root.levels[lvl] = { next: root, prev: root, width };
+    }
     this._levels = level;
   }
 
@@ -411,11 +406,12 @@ export class SkipList<T> implements List<T> {
     let lvl = this._levels - 1;
 
     while (i < index) {
-      if (i + node.width[lvl] > index) {
+      const { next, width } = node.levels[lvl];
+      if (i + width > index) {
         --lvl;
       } else {
-        i += node.width[lvl];
-        node = node.next[lvl];
+        i += width;
+        node = next;
       }
     }
 
@@ -425,23 +421,20 @@ export class SkipList<T> implements List<T> {
   /**
    * @internal
    */
-  protected getRootStack(): Finger<T> {
-    return {
-      index: new Array(this._levels).fill(-1),
-      node: new Array(this._levels).fill(this.root),
-    };
+  protected getRootStack(): SkipStack<T> {
+    return new Array(this._levels).fill({ index: -1, node: this.root });
   }
 
   /**
    * @internal
    */
-  protected stackTo(finger: Finger<T>, index: number): Finger<T> {
-    let i = finger.index[0];
+  protected stackNext(stack: SkipStack<T>, target: number): SkipStack<T> {
+    let index = stack[0].index;
 
-    if (i == index) {
-      return finger;
+    if (index == target) {
+      return stack;
     }
-    if (i > index) {
+    if (index > target) {
       throw new Error("Invalid input");
     }
 
@@ -449,83 +442,72 @@ export class SkipList<T> implements List<T> {
     let node: SkipListNode<T>;
     do {
       --lvl;
-      i = finger.index[lvl];
-      node = finger.node[lvl];
-    } while (lvl > 0 && i + node.width[lvl] > index);
+      index = stack[lvl].index;
+      node = stack[lvl].node;
+    } while (lvl > 0 && index + node.levels[lvl].width > target);
 
-    while (i < index) {
-      if (i + node.width[lvl] > index) {
-        finger.index[lvl] = i;
-        finger.node[lvl] = node;
+    while (index < target) {
+      const { next, width } = node.levels[lvl];
+      if (index + width > target) {
+        stack[lvl] = { index, node };
         --lvl;
       } else {
-        i += node.width[lvl];
-        node = node.next[lvl];
+        index += width;
+        node = next;
       }
     }
 
-    ++lvl;
-    finger.index.fill(i, 0, lvl);
-    finger.node.fill(node, 0, lvl);
-    return finger;
+    stack.fill({ index, node }, 0, lvl + 1);
+    return stack;
   }
 
   /**
    * @internal
    */
-  protected getTailStack(): Finger<T> {
-    return {
-      index: new Array(this._levels).fill(this._size),
-      node: new Array(this._levels).fill(this.root),
-    };
+  protected getTailStack(): SkipStack<T> {
+    return new Array(this._levels).fill({ index: this._size, node: this.root });
   }
 
   /**
    * @internal
    */
-  protected initNode(level: number, value: T): SkipListNode<T> {
+  protected initNode(levels: number, value: T): SkipListNode<T> {
     return {
-      next: new Array(level),
-      prev: new Array(level),
+      levels: new Array(levels),
       value,
-      width: new Array(level),
     };
   }
 
   /**
    * @internal
    */
-  protected insert(value: T, finger: Finger<T>): void {
+  protected insert(value: T, stack: SkipStack<T>): void {
     const root = this.root;
-    const index = finger.index[0] + 1;
+    const index = stack[0].index + 1;
     const nodeLvl = randomRun(this._p, this._maxLevel, 1);
     const node = this.initNode(nodeLvl, value);
 
     if (this._levels < nodeLvl) {
-      finger.index.length = nodeLvl;
-      finger.index.fill(-1, this._levels, nodeLvl);
-      finger.node.length = nodeLvl;
-      finger.node.fill(root, this._levels, nodeLvl);
+      stack.length = nodeLvl;
+      stack.fill({ index: -1, node: root }, this._levels, nodeLvl);
       this.expand(nodeLvl);
     }
 
     for (let lvl = 0; lvl < nodeLvl; ++lvl) {
-      const prev = finger.node[lvl];
-      const next = prev.next[lvl];
-      const diff = index - finger.index[lvl];
-      node.next[lvl] = next;
-      node.prev[lvl] = prev;
-      node.width[lvl] = prev.width[lvl] - diff + 1;
-      prev.width[lvl] = diff;
-      prev.next[lvl] = node;
-      next.prev[lvl] = node;
-      finger.index[lvl] = index;
-      finger.node[lvl] = node;
+      const prev = stack[lvl].node;
+      const prevLvl = prev.levels[lvl];
+      const next = prevLvl.next;
+      const diff = index - stack[lvl].index;
+      node.levels[lvl] = { next, prev, width: prevLvl.width - diff + 1 };
+      prevLvl.width = diff;
+      prevLvl.next = node;
+      next.levels[lvl].prev = node;
+      stack[lvl] = { index, node };
     }
 
     const levels = this._levels;
     for (let lvl = nodeLvl; lvl < levels; ++lvl) {
-      ++finger.node[lvl].width[lvl];
+      ++stack[lvl].node.levels[lvl].width;
     }
 
     ++this._size;
@@ -534,26 +516,25 @@ export class SkipList<T> implements List<T> {
   /**
    * @internal
    */
-  protected remove(finger: Finger<T>): void {
-    const node = finger.node[0].next[0];
-    const N = node.next.length;
+  protected remove(stack: SkipStack<T>): void {
+    const node = stack[0].node.levels[0].next;
+    const N = node.levels.length;
 
     for (let lvl = 0; lvl < N; ++lvl) {
-      const prev = node.prev[lvl];
-      const next = node.next[lvl];
-      prev.next[lvl] = next;
+      const { next, prev, width } = node.levels[lvl];
+      prev.levels[lvl].next = next;
       if (prev === next && lvl > 0) {
         this.shrink(lvl);
         --this._size;
         return;
       }
-      next.prev[lvl] = prev;
-      prev.width[lvl] += node.width[lvl] - 1;
+      next.levels[lvl].prev = prev;
+      prev.levels[lvl].width += width - 1;
     }
 
     const levels = this._levels;
     for (let lvl = N; lvl < levels; ++lvl) {
-      --finger.node[lvl].width[lvl];
+      --stack[lvl].node.levels[lvl].width;
     }
 
     --this._size;
@@ -566,10 +547,8 @@ export class SkipList<T> implements List<T> {
     const root = this.root;
     let node = root;
     do {
-      const next = node.next[level];
-      node.next.length = level;
-      node.prev.length = level;
-      node.width.length = level;
+      const next = node.levels[level].next;
+      node.levels.length = level;
       node = next;
     } while (node !== root);
     this._levels = level;
@@ -578,14 +557,15 @@ export class SkipList<T> implements List<T> {
   /**
    * @internal
    */
-  protected stackPrev(finger: Finger<T>): void {
-    const index = finger.index[0];
-    const node = finger.node[0];
-    const N = node.next.length;
+  protected stackPrev(stack: SkipStack<T>): void {
+    const { index, node } = stack[0];
+    const N = node.levels.length;
     for (let lvl = 0; lvl < N; ++lvl) {
-      const prev = node.prev[lvl];
-      finger.index[lvl] = index - prev.width[lvl];
-      finger.node[lvl] = prev;
+      const prev = node.levels[lvl].prev;
+      stack[lvl] = {
+        index: index - prev.levels[lvl].width,
+        node: prev,
+      };
     }
   }
 
