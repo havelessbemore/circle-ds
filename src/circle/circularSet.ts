@@ -62,9 +62,7 @@ export class CircularSet<T>
     }
 
     // Case 3: capacity is iterable
-    for (const value of capacity as Iterable<T>) {
-      this.set.add(value);
-    }
+    this.set = new Set(capacity as Iterable<T>);
     this._capacity = this.set.size;
   }
 

@@ -1,28 +1,64 @@
 import { BoundedEvent } from "..";
 import { ValueOf } from "./valueOf";
 
+/**
+ * A bounded collection restricts the number of elements it can hold to a
+ * specified capacity. When an attempt is made to add elements beyond this
+ * capacity, the collection may either throw an error or remove existing elements
+ * to make room for the new ones. If the latter, 'Overflow' events should be triggered.
+ *
+ * The interface provides methods to manage event listeners for two types of events:
+ * - `Overflow`: Emitted when elements are removed from the collection due to it
+ *   exceeding its capacity. Listeners receive an array of the removed
+ *   elements as an argument. Removed elements may be sent across 1 or more
+ *   event instances.
+ * - General events: Allows for listening to other events within the
+ *   collection. The nature of these events is determined by the concrete
+ *   implementation of the interface.
+ *
+ * Methods include:
+ * - `addListener` and `on`: Attach a listener to the end of the listeners array for a
+ *   specified event. If a listener is added multiple times, it will be invoked multiple
+ *   times per event.
+ * - `prependListener`: Similar to `addListener`, but adds the listener to the beginning
+ *   of the listeners array.
+ * - `removeListener`: Removes a listener for a specified event. If the listener was added
+ *   multiple times, each call removes one instance.
+ *
+ * Implementers of this interface should ensure thread safety and consistency of the
+ * collection's state, especially when dealing with asynchronous event listeners.
+ *
+ * @template T - The type of elements held in the collection.
+ */
 export interface Bounded<T> {
+  /**
+   * Represents the maximum number of elements that the collection can hold. Once
+   * capacity is reached, no additional elements can be added without removing
+   * existing elements first. This is integral to the behavior of bounded collections,
+   * providing a way to manage size.
+   *
+   * 1. Capacity should be a non-negative integer.
+   *
+   * 1. Implementers may choose to support dynamic capacity updates.
+   *
+   * 1. Implementers may choose to accept positive infinity (`Number.POSITIVE_INFINITY`) as
+   * a valid capacity. This would effectively remove the upper limit on the collection size,
+   * allowing it to grow unbounded. That said, size may still be constrained by the
+   * implementation. For example, a simple array-based collection would be
+   * limited to an array's maximum length (2^32 - 1 in JavaScript).
+   */
   capacity: number;
 
   /**
-   * Appends the listener function to the listeners array for the
-   * {@link BoundedEvent.Overflow} event.
+   * Attaches a listener to the end of the listeners array for the specified event.
+   * If the same listener is added multiple times for the same event, it will be invoked
+   * multiple times when the event is emitted.
    *
-   * * No checks are made to see if the listener has already been added.
-   * Multiple calls with the same of event + listener combination will
-   * result in the listener being added and called multiple times.
-   *
-   * * By default, event listeners are invoked in the order they are added.
-   * The `prependListener()` method can be used as an alternative to add
-   * the event listener to the beginning of the listeners array.
-   *
-   * @param event - The name of the event.
-   * @param listener - The callback function. It will
-   * receive an array of elements that have been removed due to overflow.
-   * This can happen when elements are added while the collection is at
-   * capacity, or when capacity is reduced below the current size.
-   *
-   * @returns the collection.
+   * @param event - The specific event to listen for. Use `BoundedEvent.Overflow` for
+   * overflow-specific handling or other events as defined by the implementation.
+   * @param listener - The callback function to execute when the event occurs.
+   * For `BoundedEvent.Overflow`, it receives an array of elements removed due to overflow.
+   * @returns The instance of the collection, allowing for method chaining.
    */
   addListener(
     event: typeof BoundedEvent.Overflow,
@@ -35,24 +71,8 @@ export interface Bounded<T> {
   ): this;
 
   /**
-   * Appends the listener function to the listeners array for the
-   * {@link BoundedEvent.Overflow} event.
-   *
-   * * No checks are made to see if the listener has already been added.
-   * Multiple calls with the same of event + listener combination will
-   * result in the listener being added and called multiple times.
-   *
-   * * By default, event listeners are invoked in the order they are added.
-   * The `prependListener()` method can be used as an alternative to add
-   * the event listener to the beginning of the listeners array.
-   *
-   * @param event - The name of the event.
-   * @param listener - The callback function. It will
-   * receive an array of elements that have been removed due to overflow.
-   * This can happen when elements are added while the collection is at
-   * capacity, or when capacity is reduced below the current size.
-   *
-   * @returns the collection.
+   * An alias to `addListener`, providing a semantic way to register event listeners.
+   * Follows the same behavior and signature as `addListener`.
    */
   on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
   on(
@@ -62,23 +82,14 @@ export interface Bounded<T> {
   ): this;
 
   /**
-   * Adds the listener function to the beginning of the listeners array for
-   * the {@link BoundedEvent.Overflow} event.
+   * Adds the listener function to the beginning of the listeners array for the specified
+   * event, ensuring that it is among the first to be called when the event is emitted.
    *
-   * * No checks are made to see if the listener has already been added.
-   * Multiple calls with the same of event + listener combination will
-   * result in the listener being added and called multiple times.
-   *
-   * * Alternatively, the `addListener()` method can be used to add
-   * the event listener to the end of the listeners array.
-   *
-   * @param event - The name of the event.
-   * @param listener - The callback function. It will
-   * receive an array of elements that have been removed due to overflow.
-   * This can happen when elements are added while the collection is at
-   * capacity, or when capacity is reduced below the current size.
-   *
-   * @returns the collection.
+   * @param event - The specific event to listen for. Use `BoundedEvent.Overflow` for
+   * overflow-specific handling or other events as defined by the implementation.
+   * @param listener - The callback function to execute when the event occurs.
+   * For `BoundedEvent.Overflow`, it receives an array of elements removed due to overflow.
+   * @returns The instance of the collection, allowing for method chaining.
    */
   prependListener(
     event: typeof BoundedEvent.Overflow,
@@ -92,15 +103,13 @@ export interface Bounded<T> {
 
   /**
    * Removes the specified listener from the listener array for the event.
+   * Only one instance of the listener is removed per call. If the listener was
+   * added multiple times for the same event, multiple calls are required to remove
+   * each instance.
    *
-   * At most once instance of a listener will be removed. If a listener
-   * has been added multiple times for the same event, this method should
-   * be called once per instance.
-   *
-   * @param event - The name of the event.
-   * @param listener - The callback function.
-   *
-   * @returns the collection.
+   * @param event - The specific event from which to remove the listener.
+   * @param listener - The callback function to remove from the event's listeners array.
+   * @returns The instance of the collection, allowing for method chaining.
    */
   removeListener(
     event: typeof BoundedEvent.Overflow,

@@ -62,9 +62,7 @@ export class CircularMap<K, V>
     }
 
     // Case 3: capacity is iterable
-    for (const [key, value] of capacity as Iterable<[K, V]>) {
-      this.map.set(key, value);
-    }
+    this.map = new Map(capacity as Iterable<[K, V]>);
     this._capacity = this.map.size;
   }
 

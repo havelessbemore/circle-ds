@@ -4,6 +4,14 @@ import { isArrayLength, isIterable, isNumber } from "../utils/is";
 import { chunk } from "../utils/iterable";
 import { clamp, log, toInteger } from "../utils/math";
 
+export interface SkipListConfig {
+  maxLevel?: number;
+  p?: number;
+}
+
+/**
+ * @internal
+ */
 export interface SkipListNode<T> {
   next: SkipListNode<T>[];
   prev: SkipListNode<T>[];
@@ -11,16 +19,26 @@ export interface SkipListNode<T> {
   width: number[];
 }
 
-export interface SkipListConfig {
-  maxLevel?: number;
-  p?: number;
-}
-
 export class SkipList<T> implements List<T> {
+  /**
+   * @internal
+   */
   protected _levels!: number;
+  /**
+   * @internal
+   */
   protected _maxLevel!: number;
+  /**
+   * @internal
+   */
   protected _p!: number;
+  /**
+   * @internal
+   */
   protected root!: SkipListNode<T>;
+  /**
+   * @internal
+   */
   protected _size!: number;
 
   constructor();
@@ -303,6 +321,9 @@ export class SkipList<T> implements List<T> {
     }
   }
 
+  /**
+   * @internal
+   */
   protected expand(level: number): void {
     const root = this.root;
     const curLevel = this._levels;
@@ -315,6 +336,9 @@ export class SkipList<T> implements List<T> {
     this._levels = level;
   }
 
+  /**
+   * @internal
+   */
   protected getNode(index: number): SkipListNode<T> {
     let i = -1;
     let node = this.root;
@@ -332,10 +356,16 @@ export class SkipList<T> implements List<T> {
     return node;
   }
 
+  /**
+   * @internal
+   */
   protected getRootStack(): [number, SkipListNode<T>][] {
     return new Array(this._levels).fill([-1, this.root]);
   }
 
+  /**
+   * @internal
+   */
   protected stackTo(
     stack: [number, SkipListNode<T>][],
     index: number
@@ -368,10 +398,16 @@ export class SkipList<T> implements List<T> {
     return stack;
   }
 
+  /**
+   * @internal
+   */
   protected getTailStack(): [number, SkipListNode<T>][] {
     return new Array(this._levels).fill([this._size, this.root]);
   }
 
+  /**
+   * @internal
+   */
   protected initNode(level: number, value: T): SkipListNode<T> {
     return {
       next: new Array(level),
@@ -381,6 +417,9 @@ export class SkipList<T> implements List<T> {
     };
   }
 
+  /**
+   * @internal
+   */
   protected insert(value: T, stack: [number, SkipListNode<T>][]): void {
     const root = this.root;
     const index = stack[0][0] + 1;
@@ -414,6 +453,9 @@ export class SkipList<T> implements List<T> {
     ++this._size;
   }
 
+  /**
+   * @internal
+   */
   protected randomLevel(): number {
     let level = 1;
     while (Math.random() < this._p && level < this._maxLevel) {
@@ -422,6 +464,9 @@ export class SkipList<T> implements List<T> {
     return level;
   }
 
+  /**
+   * @internal
+   */
   protected remove(stack: [number, SkipListNode<T>][]): void {
     const node = stack[0][1].next[0];
     const N = node.next.length;
@@ -447,6 +492,9 @@ export class SkipList<T> implements List<T> {
     --this._size;
   }
 
+  /**
+   * @internal
+   */
   protected shrink(level: number): void {
     const root = this.root;
     let node = root;
@@ -460,6 +508,9 @@ export class SkipList<T> implements List<T> {
     this._levels = level;
   }
 
+  /**
+   * @internal
+   */
   protected stackPrev(stack: [number, SkipListNode<T>][]): void {
     const [index, node] = stack[0];
     const N = node.next.length;
@@ -469,6 +520,9 @@ export class SkipList<T> implements List<T> {
     }
   }
 
+  /**
+   * @internal
+   */
   protected tryIndex(index: number): number | undefined {
     // Conver to number
     index = +index;

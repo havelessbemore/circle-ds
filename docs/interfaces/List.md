@@ -1,6 +1,6 @@
-[circle-ds](../README.md) / [Exports](../modules.md) / Queue
+[circle-ds](../README.md) / [Exports](../modules.md) / List
 
-# Interface: Queue\<V\>
+# Interface: List\<V\>
 
 Represents a generic collection of key-value pairs with various utility methods
 to manipulate and interact with the collection. This interface abstracts common
@@ -16,35 +16,39 @@ functionality found in data structures like deques, lists, maps, queues, etc.
 
 - [`Collection`](Collection.md)\<`number`, `V`\>
 
-  ↳ **`Queue`**
-
-  ↳↳ [`Deque`](Deque.md)
+  ↳ **`List`**
 
 ## Implemented by
 
-- [`CircularLinkedQueue`](../classes/CircularLinkedQueue.md)
-- [`CircularQueue`](../classes/CircularQueue.md)
+- [`LinkedList`](../classes/LinkedList.md)
+- [`SkipList`](../classes/SkipList.md)
 
 ## Table of contents
 
 ### Accessors
 
-- [[toStringTag]](Queue.md#[tostringtag])
-- [size](Queue.md#size)
+- [[toStringTag]](List.md#[tostringtag])
+- [size](List.md#size)
 
 ### Methods
 
-- [[iterator]](Queue.md#[iterator])
-- [clear](Queue.md#clear)
-- [entries](Queue.md#entries)
-- [first](Queue.md#first)
-- [forEach](Queue.md#foreach)
-- [front](Queue.md#front)
-- [has](Queue.md#has)
-- [keys](Queue.md#keys)
-- [push](Queue.md#push)
-- [shift](Queue.md#shift)
-- [values](Queue.md#values)
+- [[iterator]](List.md#[iterator])
+- [at](List.md#at)
+- [clear](List.md#clear)
+- [delete](List.md#delete)
+- [entries](List.md#entries)
+- [fill](List.md#fill)
+- [forEach](List.md#foreach)
+- [has](List.md#has)
+- [keys](List.md#keys)
+- [pop](List.md#pop)
+- [push](List.md#push)
+- [set](List.md#set)
+- [shift](List.md#shift)
+- [slice](List.md#slice)
+- [splice](List.md#splice)
+- [unshift](List.md#unshift)
+- [values](List.md#values)
 
 ## Accessors
 
@@ -98,7 +102,27 @@ Collection.size
 
 #### Defined in
 
-[types/queue.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L9)
+[types/list.ts:15](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L15)
+
+___
+
+### at
+
+▸ **at**(`index`): `undefined` \| `V`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `index` | `number` |
+
+#### Returns
+
+`undefined` \| `V`
+
+#### Defined in
+
+[types/list.ts:4](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L4)
 
 ___
 
@@ -119,6 +143,26 @@ Removes all elements from the `Collection`, effectively resetting it.
 #### Defined in
 
 [types/collection.d.ts:27](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L27)
+
+___
+
+### delete
+
+▸ **delete**(`index`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `index` | `number` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[types/list.ts:5](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L5)
 
 ___
 
@@ -145,17 +189,25 @@ An iterable iterator for the entries of the collection.
 
 ___
 
-### first
+### fill
 
-▸ **first**(): `undefined` \| `V`
+▸ **fill**(`value`, `start?`, `end?`): `this`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `V` |
+| `start?` | `number` |
+| `end?` | `number` |
 
 #### Returns
 
-`undefined` \| `V`
+`this`
 
 #### Defined in
 
-[types/queue.d.ts:4](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L4)
+[types/list.ts:6](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L6)
 
 ___
 
@@ -186,20 +238,6 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 ___
 
-### front
-
-▸ **front**(): `undefined` \| `V`
-
-#### Returns
-
-`undefined` \| `V`
-
-#### Defined in
-
-[types/queue.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L5)
-
-___
-
 ### has
 
 ▸ **has**(`value`): `boolean`
@@ -216,7 +254,7 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L6)
+[types/list.ts:7](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L7)
 
 ___
 
@@ -243,6 +281,20 @@ An iterable iterator for the keys of the collection.
 
 ___
 
+### pop
+
+▸ **pop**(): `undefined` \| `V`
+
+#### Returns
+
+`undefined` \| `V`
+
+#### Defined in
+
+[types/list.ts:8](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L8)
+
+___
+
 ### push
 
 ▸ **push**(`...values`): `number`
@@ -259,7 +311,28 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L7)
+[types/list.ts:9](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L9)
+
+___
+
+### set
+
+▸ **set**(`index`, `value`): `undefined` \| `V`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `index` | `number` |
+| `value` | `V` |
+
+#### Returns
+
+`undefined` \| `V`
+
+#### Defined in
+
+[types/list.ts:10](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L10)
 
 ___
 
@@ -273,7 +346,70 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L8)
+[types/list.ts:11](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L11)
+
+___
+
+### slice
+
+▸ **slice**(`start?`, `end?`): [`List`](List.md)\<`V`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `start?` | `number` |
+| `end?` | `number` |
+
+#### Returns
+
+[`List`](List.md)\<`V`\>
+
+#### Defined in
+
+[types/list.ts:12](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L12)
+
+___
+
+### splice
+
+▸ **splice**(`start`, `deleteCount?`, `...items`): [`List`](List.md)\<`V`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `start` | `number` |
+| `deleteCount?` | `number` |
+| `...items` | `V`[] |
+
+#### Returns
+
+[`List`](List.md)\<`V`\>
+
+#### Defined in
+
+[types/list.ts:13](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L13)
+
+___
+
+### unshift
+
+▸ **unshift**(`...values`): `number`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...values` | `V`[] |
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+[types/list.ts:14](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/list.ts#L14)
 
 ___
 

@@ -2,11 +2,17 @@
 
 # Interface: Deque\<V\>
 
+Represents a double-ended queue (deque) that supports queue and stack operations,
+allowing elements to be added or removed from both the front and back of the collection.
+This interface extends both the `Queue` and `Stack` interfaces to inherit
+standard queue and stack behaviors, respectively, and introduces additional
+functionality specific to deques.
+
 ## Type parameters
 
-| Name |
-| :------ |
-| `V` |
+| Name | Description |
+| :------ | :------ |
+| `V` | The type of elements held in the deque. |
 
 ## Hierarchy
 
@@ -52,6 +58,8 @@
 
 • `get` **[toStringTag]**(): `string`
 
+A string tag for the `Collection` class that is used in `Object.prototype.toString`.
+
 #### Returns
 
 `string`
@@ -62,13 +70,15 @@ Queue.[toStringTag]
 
 #### Defined in
 
-[types/collection.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L7)
+[types/collection.d.ts:22](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L22)
 
 ___
 
 ### size
 
 • `get` **size**(): `number`
+
+Gets the number of elements contained in the `Collection`.
 
 #### Returns
 
@@ -80,7 +90,7 @@ Queue.size
 
 #### Defined in
 
-[types/collection.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L6)
+[types/collection.d.ts:17](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L17)
 
 ## Methods
 
@@ -98,13 +108,15 @@ Queue.size
 
 #### Defined in
 
-[types/queue.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L9)
+[types/queue.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L9)
 
 ___
 
 ### clear
 
 ▸ **clear**(): `void`
+
+Removes all elements from the `Collection`, effectively resetting it.
 
 #### Returns
 
@@ -116,7 +128,7 @@ ___
 
 #### Defined in
 
-[types/collection.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L8)
+[types/collection.d.ts:27](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L27)
 
 ___
 
@@ -124,9 +136,14 @@ ___
 
 ▸ **entries**(): `IterableIterator`\<[`number`, `V`]\>
 
+Returns a new iterator object that contains an array of `[key, value]`
+pairs for each element in the `Collection`.
+
 #### Returns
 
 `IterableIterator`\<[`number`, `V`]\>
+
+An iterable iterator for the entries of the collection.
 
 #### Inherited from
 
@@ -134,7 +151,7 @@ ___
 
 #### Defined in
 
-[types/collection.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L9)
+[types/collection.d.ts:35](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L35)
 
 ___
 
@@ -152,7 +169,7 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:4](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L4)
+[types/queue.d.ts:4](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L4)
 
 ___
 
@@ -160,12 +177,14 @@ ___
 
 ▸ **forEach**(`callbackfn`, `thisArg?`): `void`
 
+Executes a provided function once for each key-value pair in the `Collection`.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `callbackfn` | (`value`: `V`, `key`: `number`, `collection`: `this`) => `void` |
-| `thisArg?` | `unknown` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `callbackfn` | (`value`: `V`, `key`: `number`, `collection`: `this`) => `void` | A function to execute for each element, receiving the value, key, and collection instance as arguments. |
+| `thisArg?` | `unknown` | An optional value to use as `this` when executing `callbackfn`. |
 
 #### Returns
 
@@ -177,7 +196,7 @@ ___
 
 #### Defined in
 
-[types/collection.d.ts:10](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L10)
+[types/collection.d.ts:44](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L44)
 
 ___
 
@@ -195,7 +214,7 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L5)
+[types/queue.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L5)
 
 ___
 
@@ -219,7 +238,7 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L6)
+[types/queue.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L6)
 
 ___
 
@@ -227,9 +246,14 @@ ___
 
 ▸ **keys**(): `IterableIterator`\<`number`\>
 
+Returns a new iterator that contains the keys for each element
+in the `Collection`.
+
 #### Returns
 
 `IterableIterator`\<`number`\>
+
+An iterable iterator for the keys of the collection.
 
 #### Inherited from
 
@@ -237,7 +261,7 @@ ___
 
 #### Defined in
 
-[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L14)
+[types/collection.d.ts:55](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L55)
 
 ___
 
@@ -255,7 +279,7 @@ ___
 
 #### Defined in
 
-[types/stack.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/stack.d.ts#L5)
+[types/stack.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/stack.d.ts#L5)
 
 ___
 
@@ -273,7 +297,7 @@ ___
 
 #### Defined in
 
-[types/stack.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/stack.d.ts#L6)
+[types/stack.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/stack.d.ts#L6)
 
 ___
 
@@ -297,7 +321,7 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L7)
+[types/queue.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L7)
 
 ___
 
@@ -315,7 +339,7 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/queue.d.ts#L8)
+[types/queue.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L8)
 
 ___
 
@@ -333,7 +357,7 @@ ___
 
 #### Defined in
 
-[types/stack.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/stack.d.ts#L9)
+[types/stack.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/stack.d.ts#L9)
 
 ___
 
@@ -341,19 +365,26 @@ ___
 
 ▸ **unshift**(`...values`): `number`
 
+Adds one or more elements to the front of the deque and returns the new length.
+
+This method allows for efficient front-end insertion, complementing the `push`
+method inherited from the `Stack` interface for back-end insertion.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `...values` | `V`[] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `...values` | `V`[] | The elements to add to the front of the deque. |
 
 #### Returns
 
 `number`
 
+- The new length of the deque after the elements are added.
+
 #### Defined in
 
-[types/deque.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/deque.d.ts#L5)
+[types/deque.d.ts:25](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/deque.d.ts#L25)
 
 ___
 
@@ -361,9 +392,14 @@ ___
 
 ▸ **values**(): `IterableIterator`\<`V`\>
 
+Returns a new iterator that contains the values for each element
+in the `Collection`.
+
 #### Returns
 
 `IterableIterator`\<`V`\>
+
+An iterable iterator for the values of the collection.
 
 #### Inherited from
 
@@ -371,4 +407,4 @@ ___
 
 #### Defined in
 
-[types/collection.d.ts:15](https://github.com/havelessbemore/circle-ds/blob/c874f95/src/types/collection.d.ts#L15)
+[types/collection.d.ts:63](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L63)

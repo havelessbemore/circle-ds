@@ -3,6 +3,9 @@ import { ARGS_MAX_LENGTH } from "../utils/constants";
 import { chunk } from "../utils/iterable";
 import { clamp, toInteger } from "../utils/math";
 
+/**
+ * @internal
+ */
 export interface Node<T> {
   next: Node<T>;
   prev: Node<T>;
@@ -10,7 +13,13 @@ export interface Node<T> {
 }
 
 export class LinkedList<T> implements List<T> {
+  /**
+   * @internal
+   */
   protected root!: Node<T>;
+  /**
+   * @internal
+   */
   protected _size!: number;
 
   constructor();
@@ -217,6 +226,9 @@ export class LinkedList<T> implements List<T> {
     }
   }
 
+  /**
+   * @internal
+   */
   protected getNode(index: number): Node<T> {
     let node = this.root;
     const half = this._size / 2;
@@ -232,6 +244,9 @@ export class LinkedList<T> implements List<T> {
     return node;
   }
 
+  /**
+   * @internal
+   */
   protected insert(value: T, prev: Node<T>): Node<T> {
     const node = { value } as Node<T>;
     node.prev = prev;
@@ -242,12 +257,18 @@ export class LinkedList<T> implements List<T> {
     return node;
   }
 
+  /**
+   * @internal
+   */
   protected remove(node: Node<T>): void {
     node.prev.next = node.next;
     node.next.prev = node.prev;
     --this._size;
   }
 
+  /**
+   * @internal
+   */
   protected tryIndex(index: number): number | undefined {
     // Conver to number
     index = +index;

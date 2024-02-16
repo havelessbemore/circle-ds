@@ -5,11 +5,9 @@ import {
   isFunction,
   isInfinity,
   isIterable,
-  isNull,
   isNumber,
   isSafeCount,
   isSymbol,
-  isUndefined,
 } from "./is";
 import { ARRAY_MAX_LENGTH } from "./constants";
 
@@ -183,43 +181,6 @@ describe("isIterable()", () => {
   });
 });
 
-describe("isNull()", () => {
-  test("returns true for null", () => {
-    expect(isNull(null)).toBe(true);
-  });
-
-  test("returns false for undefined", () => {
-    expect(isNull(undefined)).toBe(false);
-  });
-
-  test("returns false for numbers", () => {
-    expect(isNull(0)).toBe(false);
-    expect(isNull(1)).toBe(false);
-    expect(isNull(-1)).toBe(false);
-    expect(isNull(Number.NaN)).toBe(false);
-  });
-
-  test("returns false for strings", () => {
-    expect(isNull("")).toBe(false);
-    expect(isNull("null")).toBe(false);
-  });
-
-  test("returns false for boolean values", () => {
-    expect(isNull(true)).toBe(false);
-    expect(isNull(false)).toBe(false);
-  });
-
-  test("returns false for objects", () => {
-    expect(isNull({})).toBe(false);
-    expect(isNull([])).toBe(false);
-  });
-
-  test("returns false for function and symbol", () => {
-    expect(isNull(() => {})).toBe(false);
-    expect(isNull(Symbol())).toBe(false);
-  });
-});
-
 describe("isNumber()", () => {
   test("returns true for integers", () => {
     expect(isNumber(1)).toBe(true);
@@ -319,43 +280,5 @@ describe("isSymbol()", () => {
   test("returns false for null and undefined", () => {
     expect(isSymbol(null)).toBe(false);
     expect(isSymbol(undefined)).toBe(false);
-  });
-});
-
-describe("isUndefined()", () => {
-  test("returns true for undefined", () => {
-    expect(isUndefined(undefined)).toBe(true);
-  });
-
-  test("returns false for null", () => {
-    expect(isUndefined(null)).toBe(false);
-  });
-
-  test("returns false for all types of numbers", () => {
-    expect(isUndefined(0)).toBe(false);
-    expect(isUndefined(1)).toBe(false);
-    expect(isUndefined(-1)).toBe(false);
-    expect(isUndefined(NaN)).toBe(false);
-    expect(isUndefined(Infinity)).toBe(false);
-  });
-
-  test("returns false for strings", () => {
-    expect(isUndefined("")).toBe(false);
-    expect(isUndefined("undefined")).toBe(false);
-  });
-
-  test("returns false for boolean values", () => {
-    expect(isUndefined(true)).toBe(false);
-    expect(isUndefined(false)).toBe(false);
-  });
-
-  test("returns false for objects", () => {
-    expect(isUndefined({})).toBe(false);
-    expect(isUndefined([])).toBe(false);
-  });
-
-  test("returns false for function and symbol", () => {
-    expect(isUndefined(() => {})).toBe(false);
-    expect(isUndefined(Symbol())).toBe(false);
   });
 });

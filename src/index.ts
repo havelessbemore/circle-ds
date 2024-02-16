@@ -5,6 +5,7 @@ export { BoundedEvent } from "./types/boundedEvent";
 export type { Bounded } from "./types/bounded";
 export type { Collection } from "./types/collection";
 export type { Deque } from "./types/deque";
+export type { List } from "./types/list";
 export type { Queue } from "./types/queue";
 export type { Stack } from "./types/stack";
 
@@ -20,4 +21,4 @@ export { CircularStack } from "./circle/circularStack";
 
 // Standard Classes
 export { LinkedList } from "./std/linkedList";
-export { SkipList } from "./std/skipList";
+export { SkipList, SkipListConfig } from "./std/skipList";
