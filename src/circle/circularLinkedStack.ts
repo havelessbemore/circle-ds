@@ -3,12 +3,7 @@ import { Stack } from "../types/stack";
 import { isInfinity, isNumber, isSafeCount } from "../utils/is";
 import { BoundedEvent } from "..";
 import { Bounded } from "../types/bounded";
-
-interface Node<T> {
-  next: Node<T>;
-  prev: Node<T>;
-  value: T;
-}
+import { DoublyLinkedNode as Node } from "../types/doublyLinkedNode";
 
 /**
  * A circular stack is similar to a traditional stack, but uses a fixed-size,
@@ -263,12 +258,19 @@ export class CircularLinkedStack<T>
    * @returns The overwritten elements, if any.
    */
   push(...elems: T[]): number {
-    const capacity = this._capacity;
-    if (capacity < 1) {
+    // Case 1: No values
+    const N = elems.length;
+    if (N < 1) {
       return this._size;
     }
 
-    const N = elems.length;
+    // Case 2: Zero capacity
+    const capacity = this._capacity;
+    if (capacity < 1) {
+      this.emitter.emit(BoundedEvent.Overflow, elems);
+      return this._size;
+    }
+
     const root = this.root;
     const evicted: T[] = [];
 

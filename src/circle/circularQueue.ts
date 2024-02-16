@@ -33,6 +33,7 @@ export class CircularQueue<T>
 
   /**
    * Whether capacity is finite (true) or infinite (false).
+   * @internal
    */
   protected isFinite: boolean;
 
@@ -356,6 +357,7 @@ export class CircularQueue<T>
 
   /**
    * Emit an event containing the items evicted from the collection.
+   * @internal
    *
    * @param evicted - The items evicted from the collection.
    */
@@ -367,6 +369,7 @@ export class CircularQueue<T>
    * Removes a given number of elements from the queue.
    * If elements are removed, the {@link BoundedEvent.Overflow} event
    * is emitted one or more times.
+   * @internal
    *
    * @param count - The number of elements to evict.
    */
@@ -465,6 +468,7 @@ export class CircularQueue<T>
 
   /**
    * Returns whether the queue is stored sequentially in memory.
+   * @internal
    *
    * @returns `true` if the queue is sequential in memory, `false` otherwise.
    */
@@ -474,6 +478,7 @@ export class CircularQueue<T>
 
   /**
    * Append new elements to the collection.
+   * @internal
    *
    * @param elems - The elements to append.
    * @param max - The number of elements to append.
@@ -496,6 +501,7 @@ export class CircularQueue<T>
 
   /**
    * Adjusts the queue to fit within the given capacity.
+   * @internal
    *
    * Assumes the queue is A) sequential in memory and B) size \<= capacity.
    *

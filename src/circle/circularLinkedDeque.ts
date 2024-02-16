@@ -3,12 +3,7 @@ import { BoundedEvent } from "../types/boundedEvent";
 import { Deque } from "../types/deque";
 import { isInfinity, isNumber, isSafeCount } from "../utils/is";
 import { Bounded } from "../types/bounded";
-
-interface Node<T> {
-  next: Node<T>;
-  prev: Node<T>;
-  value: T;
-}
+import { DoublyLinkedNode as Node } from "../types/doublyLinkedNode";
 
 /**
  * A circular stack is similar to a traditional stack, but uses a fixed-size,
@@ -363,6 +358,13 @@ export class CircularLinkedDeque<T>
    * @returns The overwritten elements, if any.
    */
   unshift(...elems: T[]): number {
+    // Case 1: No values
+    const N = elems.length;
+    if (N < 1) {
+      return this._size;
+    }
+
+    // Case 2: Zero capacity
     const capacity = this._capacity;
     if (capacity < 1) {
       this.emitter.emit(BoundedEvent.Overflow, elems);

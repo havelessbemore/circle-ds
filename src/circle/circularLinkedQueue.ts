@@ -3,11 +3,7 @@ import { BoundedEvent } from "../types/boundedEvent";
 import { Queue } from "../types/queue";
 import { isInfinity, isNumber, isSafeCount } from "../utils/is";
 import { Bounded } from "../types/bounded";
-
-interface Node<T> {
-  next: Node<T>;
-  value: T;
-}
+import { LinkedNode as Node } from "../types/linkedNode";
 
 /**
  * A circular queue is similar to a traditional queue, but uses a fixed-size,
@@ -265,6 +261,7 @@ export class CircularLinkedQueue<T>
   push(...elems: T[]): number {
     const capacity = this._capacity;
     if (capacity < 1) {
+      this.emitter.emit(BoundedEvent.Overflow, elems);
       return this._size;
     }
 

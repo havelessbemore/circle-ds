@@ -605,6 +605,7 @@ export class CircularDeque<T>
 
   /**
    * Returns whether the deque is stored sequentially in memory.
+   * @internal
    *
    * @returns `true` if the deque is sequential in memory, `false` otherwise.
    */
@@ -614,6 +615,7 @@ export class CircularDeque<T>
 
   /**
    * Append new elements to the collection.
+   * @internal
    *
    * @param elems - The elements to append.
    * @param max - The number of elements to append.
@@ -636,6 +638,7 @@ export class CircularDeque<T>
 
   /**
    * Adjusts the deque to fit within the given capacity.
+   * @internal
    *
    * Assumes the deque is A) sequential in memory and B) size \<= capacity.
    *
@@ -695,6 +698,7 @@ export class CircularDeque<T>
 
   /**
    * Append new elements to the collection.
+   * @internal
    *
    * @param elems - The elements to append.
    * @param num - The number of elements to append.

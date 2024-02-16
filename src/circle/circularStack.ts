@@ -358,6 +358,7 @@ export class CircularStack<T>
 
   /**
    * Emit an event containing the items evicted from the collection.
+   * @internal
    *
    * @param evicted - The items evicted from the collection.
    */
@@ -367,6 +368,8 @@ export class CircularStack<T>
 
   /**
    * Removes a given number of elements from the stack.
+   * @internal
+   *
    * If elements are removed, the {@link BoundedEvent.Overflow} event
    * is emitted one or more times.
    *
@@ -467,6 +470,7 @@ export class CircularStack<T>
 
   /**
    * Returns whether the stack is stored sequentially in memory.
+   * @internal
    *
    * @returns `true` if the stack is sequential in memory, `false` otherwise.
    */
@@ -476,6 +480,7 @@ export class CircularStack<T>
 
   /**
    * Append new elements to the collection.
+   * @internal
    *
    * @param elems - The elements to append.
    * @param max - The number of elements to append.
@@ -498,6 +503,7 @@ export class CircularStack<T>
 
   /**
    * Adjusts the stack to fit within the given capacity.
+   * @internal
    *
    * Assumes the stack is A) sequential in memory and B) size \<= capacity.
    *
