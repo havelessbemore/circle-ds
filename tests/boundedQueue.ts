@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { Bounded } from "../types/bounded";
-import { BoundedEvent } from "../types/boundedEvent";
-import { Constructor } from "../types/constructor";
-import { Queue } from "../types/queue";
+import { Bounded } from "../src/types/bounded";
+import { BoundedEvent } from "../src/types/boundedEvent";
+import { Constructor } from "../src/types/constructor";
+import { Queue } from "../src/types/queue";
 
 type BoundedQueue<T> = Queue<T> & Bounded<T>;
 

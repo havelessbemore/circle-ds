@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Constructor } from "../types/constructor";
-import { SkipList, SkipListConfig } from "../std/skipList";
-import { ARRAY_MAX_LENGTH } from "../utils/constants";
+import { Constructor } from "../src/types/constructor";
+import { SkipList, SkipListConfig } from "../src/std/skipList";
+import { ARRAY_MAX_LENGTH } from "../src/utils/constants";
 
 export function test(cls: Constructor<SkipList<unknown>>) {
   describe(cls.name, () => {

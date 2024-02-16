@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { Bounded } from "../types/bounded";
-import { BoundedEvent } from "../types/boundedEvent";
-import { Constructor } from "../types/constructor";
-import { Deque } from "../types/deque";
+import { Bounded } from "../src/types/bounded";
+import { BoundedEvent } from "../src/types/boundedEvent";
+import { Constructor } from "../src/types/constructor";
+import { Deque } from "../src/types/deque";
 
 import { test as testQueue } from "./boundedQueue";
 import { test as testStack } from "./boundedStack";

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import { Bounded } from "../types/bounded";
-import { Collection } from "../types/collection";
-import { Constructor } from "../types/constructor";
+import { Bounded } from "../src/types/bounded";
+import { Collection } from "../src/types/collection";
+import { Constructor } from "../src/types/constructor";
 
 type BoundedCollection<K, V> = Collection<K, V> & Bounded<V>;
 

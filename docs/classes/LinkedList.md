@@ -69,7 +69,7 @@ of collections.
 
 #### Defined in
 
-[std/linkedList.ts:25](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L25)
+[std/linkedList.ts:25](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L25)
 
 • **new LinkedList**\<`T`\>(`values`): [`LinkedList`](LinkedList.md)\<`T`\>
 
@@ -91,7 +91,7 @@ of collections.
 
 #### Defined in
 
-[std/linkedList.ts:26](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L26)
+[std/linkedList.ts:26](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L26)
 
 ## Accessors
 
@@ -111,7 +111,7 @@ List.[toStringTag]
 
 #### Defined in
 
-[std/linkedList.ts:38](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L38)
+[std/linkedList.ts:38](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L38)
 
 ___
 
@@ -131,7 +131,7 @@ List.size
 
 #### Defined in
 
-[std/linkedList.ts:34](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L34)
+[std/linkedList.ts:34](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L34)
 
 ## Methods
 
@@ -151,7 +151,7 @@ Returns the default iterator through the list's elements.
 
 #### Defined in
 
-[std/linkedList.ts:208](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L208)
+[std/linkedList.ts:208](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L208)
 
 ___
 
@@ -179,7 +179,7 @@ Retrieves the element at the specified index in the list.
 
 #### Defined in
 
-[std/linkedList.ts:42](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L42)
+[std/linkedList.ts:42](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L42)
 
 ___
 
@@ -199,7 +199,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[std/linkedList.ts:47](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L47)
+[std/linkedList.ts:47](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L47)
 
 ___
 
@@ -228,7 +228,7 @@ Subsequent elements are shifted one position towards the start of the list.
 
 #### Defined in
 
-[std/linkedList.ts:54](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L54)
+[std/linkedList.ts:54](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L54)
 
 ___
 
@@ -251,7 +251,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[std/linkedList.ts:63](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L63)
+[std/linkedList.ts:63](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L63)
 
 ___
 
@@ -282,7 +282,7 @@ to an end index (exclusive).
 
 #### Defined in
 
-[std/linkedList.ts:71](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L71)
+[std/linkedList.ts:71](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L71)
 
 ___
 
@@ -309,7 +309,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[std/linkedList.ts:92](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L92)
+[std/linkedList.ts:92](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L92)
 
 ___
 
@@ -337,7 +337,7 @@ Determines whether a specific element exists within the list.
 
 #### Defined in
 
-[std/linkedList.ts:103](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L103)
+[std/linkedList.ts:103](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L103)
 
 ___
 
@@ -360,7 +360,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[std/linkedList.ts:115](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L115)
+[std/linkedList.ts:115](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L115)
 
 ___
 
@@ -382,7 +382,7 @@ Removes and returns the last element of the list.
 
 #### Defined in
 
-[std/linkedList.ts:121](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L121)
+[std/linkedList.ts:121](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L121)
 
 ___
 
@@ -411,7 +411,7 @@ and returns the new list length.
 
 #### Defined in
 
-[std/linkedList.ts:130](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L130)
+[std/linkedList.ts:130](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L130)
 
 ___
 
@@ -440,7 +440,7 @@ Replaces the element at the specified index with a new value.
 
 #### Defined in
 
-[std/linkedList.ts:139](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L139)
+[std/linkedList.ts:139](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L139)
 
 ___
 
@@ -463,7 +463,7 @@ Subsequent elements are shifted one position towards the start of the list.
 
 #### Defined in
 
-[std/linkedList.ts:150](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L150)
+[std/linkedList.ts:150](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L150)
 
 ___
 
@@ -493,7 +493,7 @@ to end index (exclusive) into a new list. Does not modify the existing list.
 
 #### Defined in
 
-[std/linkedList.ts:159](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L159)
+[std/linkedList.ts:159](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L159)
 
 ___
 
@@ -524,7 +524,7 @@ and/or adding new elements at a given index.
 
 #### Defined in
 
-[std/linkedList.ts:180](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L180)
+[std/linkedList.ts:180](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L180)
 
 ___
 
@@ -553,7 +553,7 @@ and returns the new list length.
 
 #### Defined in
 
-[std/linkedList.ts:212](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L212)
+[std/linkedList.ts:212](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L212)
 
 ___
 
@@ -576,4 +576,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[std/linkedList.ts:221](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/std/linkedList.ts#L221)
+[std/linkedList.ts:221](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/linkedList.ts#L221)

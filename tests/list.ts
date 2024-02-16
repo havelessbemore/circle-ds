@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Constructor } from "../types/constructor";
-import { List } from "../types/list";
+import { Constructor } from "../src/types/constructor";
+import { List } from "../src/types/list";
 
 export function test(cls: Constructor<List<unknown>>) {
   describe(cls.name, () => {

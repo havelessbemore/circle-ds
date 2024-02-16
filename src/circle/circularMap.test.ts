@@ -1,5 +1,5 @@
-import { test as testBoundedCollection } from "../tests/boundedCollection";
-import { test as testBoundedMap } from "../tests/boundedMap";
+import { test as testBoundedCollection } from "../../tests/boundedCollection";
+import { test as testBoundedMap } from "../../tests/boundedMap";
 
 import { CircularMap } from "./circularMap";
 

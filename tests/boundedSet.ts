@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { Bounded } from "../types/bounded";
-import { BoundedEvent } from "../types/boundedEvent";
-import { Constructor } from "../types/constructor";
+import { Bounded } from "../src/types/bounded";
+import { BoundedEvent } from "../src/types/boundedEvent";
+import { Constructor } from "../src/types/constructor";
 
 type BoundedSet<T> = Set<T> & Bounded<T>;
 
