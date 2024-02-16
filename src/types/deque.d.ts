@@ -16,7 +16,7 @@ export interface Deque<V> extends Queue<V>, Stack<V> {
    * method inherited from the `Stack` interface for back-end insertion.
    *
    * @param values - The elements to add to the front of the deque.
-   * @returns {number} - The new length of the deque after the elements are added.
+   * @returns - The new length of the deque after the elements are added.
    */
   unshift(...values: V[]): number;
 }

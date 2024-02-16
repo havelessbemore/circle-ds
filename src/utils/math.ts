@@ -11,7 +11,7 @@
  * @param min - The minimum allowable value of the range.
  * @param max - The maximum allowable value of the range.
  * @returns The clamped value within the specified range.
- * @throws {RangeError} If `min` is greater than `max`.
+ * @throws `RangeError` If `min` is greater than `max`.
  */
 export function clamp(value: number, min: number, max: number): number {
   if (min > max) {

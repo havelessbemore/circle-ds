@@ -17,7 +17,7 @@
  *
  * @param source - The original iterable to be chunked. Can be any iterable object (e.g., Array, Set, or a custom iterable).
  * @param chunkSize - The maximum size of each chunk. Must be a positive integer; non-integer values are truncated.
- * @returns {IterableIterator<T[]>} An iterable iterator that yields each chunk as an array of elements.
+ * @returns - An iterable iterator that yields each chunk as an array of elements.
  */
 export function* chunk<T>(
   source: Iterable<T>,
