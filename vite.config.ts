@@ -48,7 +48,7 @@ const config = defineConfig({
   ],
   test: {
     coverage: {
-      exclude: ["src/tests/**"],
+      exclude: ["src/tests/**", "**/*.d.ts"],
     },
   },
 });
