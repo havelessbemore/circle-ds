@@ -1,4 +1,5 @@
 import { List } from "../types/list";
+import { SkipListNode as Node } from "../types/skipListNode";
 import { isArrayLength, isIterable } from "../utils/is";
 import { clamp, log, randomRun, toInteger } from "../utils/math";
 
@@ -35,41 +36,10 @@ export interface SkipListConfig {
 
 /**
  * @internal
- * Represents a node within a SkipList.
- *
- * This internal interface defines the structure of nodes in the skip list,
- * including forward and backward pointers, the node's value, and the span
- * (width) between node levels. Each node may participate in multiple levels
- * of the list, facilitating fast searches, insertions, and deletions.
- */
-export interface SkipListNode<T> {
-  levels: {
-    /**
-     * Pointer to the next node at this level.
-     */
-    next: SkipListNode<T>;
-    /**
-     * Pointer to the previous node at this level.
-     */
-    prev: SkipListNode<T>;
-    /**
-     * The distance to the next node at this level.
-     */
-    width: number;
-  }[];
-
-  /**
-   * The value stored in the node.
-   */
-  value: T;
-}
-
-/**
- * @internal
  */
 export type SkipStack<T> = {
   index: number;
-  node: SkipListNode<T>;
+  node: Node<T>;
 }[];
 
 /**
@@ -97,7 +67,7 @@ export class SkipList<T> implements List<T> {
   /**
    * @internal
    */
-  protected root!: SkipListNode<T>;
+  protected root!: Node<T>;
   /**
    * @internal
    */
@@ -407,7 +377,7 @@ export class SkipList<T> implements List<T> {
   /**
    * @internal
    */
-  protected getNode(index: number): SkipListNode<T> {
+  protected getNode(index: number): Node<T> {
     let i = -1;
     let node = this.root;
     let lvl = this._levels - 1;
@@ -446,7 +416,7 @@ export class SkipList<T> implements List<T> {
     }
 
     let lvl = this._levels;
-    let node: SkipListNode<T>;
+    let node: Node<T>;
     do {
       --lvl;
       index = stack[lvl].index;
@@ -478,7 +448,7 @@ export class SkipList<T> implements List<T> {
   /**
    * @internal
    */
-  protected initNode(levels: number, value: T): SkipListNode<T> {
+  protected initNode(levels: number, value: T): Node<T> {
     return {
       levels: new Array(levels),
       value,

@@ -1,16 +1,8 @@
+import { DoublyLinkedNode as Node } from "../types/doublyLinkedNode";
 import { List } from "../types/list";
 import { ARGS_MAX_LENGTH } from "../utils/constants";
 import { chunk } from "../utils/iterable";
 import { clamp, toInteger } from "../utils/math";
-
-/**
- * @internal
- */
-export interface Node<T> {
-  next: Node<T>;
-  prev: Node<T>;
-  value: T;
-}
 
 export class LinkedList<T> implements List<T> {
   /**

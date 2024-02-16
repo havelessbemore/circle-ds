@@ -38,6 +38,7 @@ collection's state, especially when dealing with asynchronous event listeners.
 
 - [`CircularDeque`](../classes/CircularDeque.md)
 - [`CircularLinkedDeque`](../classes/CircularLinkedDeque.md)
+- [`CircularLinkedList`](../classes/CircularLinkedList.md)
 - [`CircularLinkedQueue`](../classes/CircularLinkedQueue.md)
 - [`CircularLinkedStack`](../classes/CircularLinkedStack.md)
 - [`CircularMap`](../classes/CircularMap.md)
@@ -81,7 +82,7 @@ limited to an array's maximum length (2^32 - 1 in JavaScript).
 
 #### Defined in
 
-[types/bounded.d.ts:48](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/bounded.d.ts#L48)
+[types/bounded.d.ts:48](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/bounded.d.ts#L48)
 
 ## Methods
 
@@ -108,7 +109,7 @@ The instance of the collection, allowing for method chaining.
 
 #### Defined in
 
-[types/bounded.d.ts:61](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/bounded.d.ts#L61)
+[types/bounded.d.ts:61](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/bounded.d.ts#L61)
 
 ▸ **addListener**(`event`, `listener`): `this`
 
@@ -125,7 +126,7 @@ The instance of the collection, allowing for method chaining.
 
 #### Defined in
 
-[types/bounded.d.ts:65](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/bounded.d.ts#L65)
+[types/bounded.d.ts:65](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/bounded.d.ts#L65)
 
 ___
 
@@ -149,7 +150,7 @@ Follows the same behavior and signature as `addListener`.
 
 #### Defined in
 
-[types/bounded.d.ts:75](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/bounded.d.ts#L75)
+[types/bounded.d.ts:75](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/bounded.d.ts#L75)
 
 ▸ **on**(`event`, `listener`): `this`
 
@@ -166,7 +167,7 @@ Follows the same behavior and signature as `addListener`.
 
 #### Defined in
 
-[types/bounded.d.ts:76](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/bounded.d.ts#L76)
+[types/bounded.d.ts:76](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/bounded.d.ts#L76)
 
 ___
 
@@ -192,7 +193,7 @@ The instance of the collection, allowing for method chaining.
 
 #### Defined in
 
-[types/bounded.d.ts:92](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/bounded.d.ts#L92)
+[types/bounded.d.ts:92](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/bounded.d.ts#L92)
 
 ▸ **prependListener**(`event`, `listener`): `this`
 
@@ -209,7 +210,7 @@ The instance of the collection, allowing for method chaining.
 
 #### Defined in
 
-[types/bounded.d.ts:96](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/bounded.d.ts#L96)
+[types/bounded.d.ts:96](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/bounded.d.ts#L96)
 
 ___
 
@@ -237,7 +238,7 @@ The instance of the collection, allowing for method chaining.
 
 #### Defined in
 
-[types/bounded.d.ts:112](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/bounded.d.ts#L112)
+[types/bounded.d.ts:112](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/bounded.d.ts#L112)
 
 ▸ **removeListener**(`event`, `listener`): `this`
 
@@ -254,4 +255,4 @@ The instance of the collection, allowing for method chaining.
 
 #### Defined in
 
-[types/bounded.d.ts:116](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/bounded.d.ts#L116)
+[types/bounded.d.ts:116](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/bounded.d.ts#L116)

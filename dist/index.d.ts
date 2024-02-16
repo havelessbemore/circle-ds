@@ -6,7 +6,11 @@ import { Collection } from './types/collection';
 import { Collection as Collection_2 } from '../types/collection';
 import { Deque } from './types/deque';
 import { Deque as Deque_2 } from '../types/deque';
+import { DoublyLinkedNode } from '../types/doublyLinkedNode';
 import EventEmitter from 'events';
+import { LinkedNode } from '../types/linkedNode';
+import { List } from './types/list';
+import { List as List_2 } from '../types/list';
 import { Queue } from './types/queue';
 import { Queue as Queue_2 } from '../types/queue';
 import { Stack } from './types/stack';
@@ -14,6 +18,26 @@ import { Stack as Stack_2 } from '../types/stack';
 
 export { Bounded }
 
+/**
+ * An enumeration of event types supported by {@link Bounded} collections.
+ *
+ * This object defines a set of constants representing event names that can
+ * be emitted by instances of collections implementing the {@link Bounded} interface.
+ * These events signify specific actions or changes in the state of the collection.
+ *
+ * Defined events include:
+ * - `Overflow`: Indicates that the collection has reached its capacity, and
+ *   as a result, one or more elements have been removed to accommodate new elements.
+ *   This event is triggered during operations that add elements to the collection when
+ *   it exceeds its capacity, or when capacity is updated below the collection's current
+ *   size. Listeners attached to this event will receive an array of elements that were
+ *   removed due to the overflow. Removed elements may be sent across 1 or more event
+ *   instances.
+ *
+ * This object is marked as `const` to ensure that its properties are read-only,
+ * preventing modification of event names which could lead to inconsistencies in
+ * event handling across the application.
+ */
 export declare const BoundedEvent: {
     readonly Overflow: "overflow";
 };
@@ -109,10 +133,7 @@ declare class CircularBase<T> {
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularDeque<T> extends CircularBase<T> implements Bounded_2<T>, Deque<T> {
-    /**
-     * The maximum number of elements that can be stored in the collection.
-     */
-    protected _capacity: number;
+    /* Excluded from this release type: _capacity */
     /* Excluded from this release type: head */
     /**
      * Whether capacity is finite (true) or infinite (false).
@@ -291,37 +312,11 @@ export declare class CircularDeque<T> extends CircularBase<T> implements Bounded
      */
     protected evictTail(count: number): void;
     /* Excluded from this release type: grow */
-    /**
-     * Returns whether the deque is stored sequentially in memory.
-     *
-     * @returns `true` if the deque is sequential in memory, `false` otherwise.
-     */
-    protected isSequential(): boolean;
-    /**
-     * Append new elements to the collection.
-     *
-     * @param elems - The elements to append.
-     * @param max - The number of elements to append.
-     */
-    protected _push(elems: T[], max: number): void;
-    /**
-     * Adjusts the deque to fit within the given capacity.
-     *
-     * Assumes the deque is A) sequential in memory and B) size \<= capacity.
-     *
-     * @param capacity - The new capacity.
-     *
-     * @returns `true` if the deque was reset, `false` otherwise.
-     */
-    protected sequentialReset(capacity: number): boolean;
+    /* Excluded from this release type: isSequential */
+    /* Excluded from this release type: _push */
+    /* Excluded from this release type: sequentialReset */
     /* Excluded from this release type: shrink */
-    /**
-     * Append new elements to the collection.
-     *
-     * @param elems - The elements to append.
-     * @param num - The number of elements to append.
-     */
-    protected _unshift(elems: T[], num: number): void;
+    /* Excluded from this release type: _unshift */
 }
 
 /**
@@ -335,10 +330,7 @@ export declare class CircularDeque<T> extends CircularBase<T> implements Bounded
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularLinkedDeque<T> extends CircularBase<T> implements Bounded_2<T>, Deque_2<T> {
-    /**
-     * The maximum number of elements that can be stored in the collection.
-     */
-    protected _capacity: number;
+    /* Excluded from this release type: _capacity */
     /* Excluded from this release type: root */
     /* Excluded from this release type: _size */
     /**
@@ -490,6 +482,56 @@ export declare class CircularLinkedDeque<T> extends CircularBase<T> implements B
     values(): IterableIterator<T>;
 }
 
+export declare class CircularLinkedList<T> extends CircularBase<T> implements Bounded<T>, List_2<T> {
+    /* Excluded from this release type: _capacity */
+    /* Excluded from this release type: root */
+    /* Excluded from this release type: _size */
+    /**
+     * Creates a new queue with `capacity` defaulted to `Infinity`.
+     */
+    constructor();
+    /**
+     * Creates a new queue with the given capacity.
+     *
+     * @param capacity - the queue's capacity.
+     */
+    constructor(capacity?: number | null);
+    /**
+     * Creates a new queue. Initial capacity is the number of items given.
+     *
+     * @param items - the values to store in the queue.
+     */
+    constructor(items: Iterable<T>);
+    get capacity(): number;
+    get size(): number;
+    get [Symbol.toStringTag](): string;
+    set capacity(capacity: number);
+    at(index: number): T | undefined;
+    clear(): void;
+    delete(index: number): boolean;
+    entries(): IterableIterator<[number, T]>;
+    fill(value: T, start?: number, end?: number): this;
+    forEach(callbackfn: (value: T, index: number, list: this) => void, thisArg?: unknown): void;
+    has(value: T): boolean;
+    keys(): IterableIterator<number>;
+    pop(): T | undefined;
+    push(...values: T[]): number;
+    set(index: number, value: T): T | undefined;
+    shift(): T | undefined;
+    slice(start?: number, end?: number): CircularLinkedList<T>;
+    splice(start: number, deleteCount?: number, ...items: T[]): CircularLinkedList<T>;
+    [Symbol.iterator](): IterableIterator<T>;
+    unshift(...values: T[]): number;
+    values(): IterableIterator<T>;
+    /* Excluded from this release type: append */
+    /* Excluded from this release type: getNode */
+    /* Excluded from this release type: moveLeft */
+    /* Excluded from this release type: moveRight */
+    /* Excluded from this release type: prepend */
+    /* Excluded from this release type: remove */
+    /* Excluded from this release type: tryIndex */
+}
+
 /**
  * A circular queue is similar to a traditional queue, but uses a fixed-size,
  * circular buffer. When the queue reaches its maximum capacity and a new
@@ -501,10 +543,7 @@ export declare class CircularLinkedDeque<T> extends CircularBase<T> implements B
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularLinkedQueue<T> extends CircularBase<T> implements Bounded_2<T>, Queue_2<T> {
-    /**
-     * The maximum number of elements that can be stored in the collection.
-     */
-    protected _capacity: number;
+    /* Excluded from this release type: _capacity */
     /* Excluded from this release type: root */
     /* Excluded from this release type: _size */
     /* Excluded from this release type: tail */
@@ -638,10 +677,7 @@ export declare class CircularLinkedQueue<T> extends CircularBase<T> implements B
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularLinkedStack<T> extends CircularBase<T> implements Bounded_2<T>, Stack_2<T> {
-    /**
-     * The maximum number of elements that can be stored in the collection.
-     */
-    protected _capacity: number;
+    /* Excluded from this release type: _capacity */
     /* Excluded from this release type: root */
     /* Excluded from this release type: _size */
     /**
@@ -767,10 +803,7 @@ export declare class CircularLinkedStack<T> extends CircularBase<T> implements B
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularMap<K, V> extends CircularBase<[K, V]> implements Bounded_2<[K, V]>, Map<K, V>, Collection_2<K, V> {
-    /**
-     * The maximum number of elements that can be stored in the collection.
-     */
-    protected _capacity: number;
+    /* Excluded from this release type: _capacity */
     /* Excluded from this release type: map */
     /**
      * Creates a new map with `capacity` defaulted to `Infinity`.
@@ -891,15 +924,9 @@ export declare class CircularMap<K, V> extends CircularBase<[K, V]> implements B
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularQueue<T> extends CircularBase<T> implements Bounded_2<T>, Queue_2<T> {
-    /**
-     * The maximum number of elements that can be stored in the collection.
-     */
-    protected _capacity: number;
+    /* Excluded from this release type: _capacity */
     /* Excluded from this release type: head */
-    /**
-     * Whether capacity is finite (true) or infinite (false).
-     */
-    protected isFinite: boolean;
+    /* Excluded from this release type: isFinite */
     /* Excluded from this release type: next */
     /* Excluded from this release type: _size */
     /* Excluded from this release type: vals */
@@ -1020,44 +1047,12 @@ export declare class CircularQueue<T> extends CircularBase<T> implements Bounded
      * @returns an iterable of values.
      */
     values(): IterableIterator<T>;
-    /**
-     * Emit an event containing the items evicted from the collection.
-     *
-     * @param evicted - The items evicted from the collection.
-     */
-    protected emit(evicted: T[]): void;
-    /**
-     * Removes a given number of elements from the queue.
-     * If elements are removed, the {@link BoundedEvent.Overflow} event
-     * is emitted one or more times.
-     *
-     * @param count - The number of elements to evict.
-     */
-    protected evict(count: number): void;
+    /* Excluded from this release type: emit */
+    /* Excluded from this release type: evict */
     /* Excluded from this release type: grow */
-    /**
-     * Returns whether the queue is stored sequentially in memory.
-     *
-     * @returns `true` if the queue is sequential in memory, `false` otherwise.
-     */
-    protected isSequential(): boolean;
-    /**
-     * Append new elements to the collection.
-     *
-     * @param elems - The elements to append.
-     * @param max - The number of elements to append.
-     */
-    protected _push(elems: T[], max: number): void;
-    /**
-     * Adjusts the queue to fit within the given capacity.
-     *
-     * Assumes the queue is A) sequential in memory and B) size \<= capacity.
-     *
-     * @param capacity - The new capacity.
-     *
-     * @returns `true` if the queue was reset, `false` otherwise.
-     */
-    protected sequentialReset(capacity: number): boolean;
+    /* Excluded from this release type: isSequential */
+    /* Excluded from this release type: _push */
+    /* Excluded from this release type: sequentialReset */
     /* Excluded from this release type: shrink */
 }
 
@@ -1065,10 +1060,7 @@ export declare class CircularQueue<T> extends CircularBase<T> implements Bounded
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularSet<T> extends CircularBase<T> implements Bounded_2<T>, Set<T>, Collection_2<T, T> {
-    /**
-     * The maximum number of elements that can be stored in the collection.
-     */
-    protected _capacity: number;
+    /* Excluded from this release type: _capacity */
     /* Excluded from this release type: set */
     /**
      * Creates a new set with `capacity` defaulted to `Infinity`.
@@ -1180,10 +1172,7 @@ export declare class CircularSet<T> extends CircularBase<T> implements Bounded_2
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularStack<T> extends CircularBase<T> implements Bounded_2<T>, Stack_2<T> {
-    /**
-     * The maximum number of elements that can be stored in the collection.
-     */
-    protected _capacity: number;
+    /* Excluded from this release type: _capacity */
     /* Excluded from this release type: head */
     /**
      * Whether capacity is finite (true) or infinite (false).
@@ -1309,44 +1298,12 @@ export declare class CircularStack<T> extends CircularBase<T> implements Bounded
      * @returns an iterable of values.
      */
     values(): IterableIterator<T>;
-    /**
-     * Emit an event containing the items evicted from the collection.
-     *
-     * @param evicted - The items evicted from the collection.
-     */
-    protected emit(evicted: T[]): void;
-    /**
-     * Removes a given number of elements from the stack.
-     * If elements are removed, the {@link BoundedEvent.Overflow} event
-     * is emitted one or more times.
-     *
-     * @param count - The number of elements to evict.
-     */
-    protected evict(count: number): void;
+    /* Excluded from this release type: emit */
+    /* Excluded from this release type: evict */
     /* Excluded from this release type: grow */
-    /**
-     * Returns whether the stack is stored sequentially in memory.
-     *
-     * @returns `true` if the stack is sequential in memory, `false` otherwise.
-     */
-    protected isSequential(): boolean;
-    /**
-     * Append new elements to the collection.
-     *
-     * @param elems - The elements to append.
-     * @param max - The number of elements to append.
-     */
-    protected _push(elems: T[], max: number): void;
-    /**
-     * Adjusts the stack to fit within the given capacity.
-     *
-     * Assumes the stack is A) sequential in memory and B) size \<= capacity.
-     *
-     * @param capacity - the new capacity.
-     *
-     * @returns `true` if the stack was reset, `false` otherwise.
-     */
-    protected sequentialReset(capacity: number): boolean;
+    /* Excluded from this release type: isSequential */
+    /* Excluded from this release type: _push */
+    /* Excluded from this release type: sequentialReset */
     /* Excluded from this release type: shrink */
 }
 
@@ -1354,22 +1311,7 @@ export { Collection }
 
 export { Deque }
 
-declare interface Node_2<T> {
-    next: Node_2<T>;
-    prev: Node_2<T>;
-    value: T;
-}
-
-declare interface Node_3<T> {
-    next: Node_3<T>;
-    value: T;
-}
-
-declare interface Node_4<T> {
-    next: Node_4<T>;
-    prev: Node_4<T>;
-    value: T;
-}
+export { List }
 
 export { Queue }
 

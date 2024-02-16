@@ -30,10 +30,6 @@
 
 - [constructor](CircularSet.md#constructor)
 
-### Properties
-
-- [\_capacity](CircularSet.md#_capacity)
-
 ### Accessors
 
 - [[toStringTag]](CircularSet.md#[tostringtag])
@@ -80,7 +76,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularSet.ts:29](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L29)
+[circle/circularSet.ts:30](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L30)
 
 • **new CircularSet**\<`T`\>(`capacity?`): [`CircularSet`](CircularSet.md)\<`T`\>
 
@@ -108,7 +104,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularSet.ts:35](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L35)
+[circle/circularSet.ts:36](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L36)
 
 • **new CircularSet**\<`T`\>(`items`): [`CircularSet`](CircularSet.md)\<`T`\>
 
@@ -136,19 +132,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularSet.ts:41](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L41)
-
-## Properties
-
-### \_capacity
-
-• `Protected` **\_capacity**: `number`
-
-The maximum number of elements that can be stored in the collection.
-
-#### Defined in
-
-[circle/circularSet.ts:18](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L18)
+[circle/circularSet.ts:42](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L42)
 
 ## Accessors
 
@@ -168,7 +152,7 @@ Set.[toStringTag]
 
 #### Defined in
 
-[circle/circularSet.ts:86](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L86)
+[circle/circularSet.ts:87](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L87)
 
 ___
 
@@ -188,7 +172,7 @@ the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularSet.ts:72](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L72)
+[circle/circularSet.ts:73](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L73)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -210,7 +194,7 @@ The maximum number of elements that can be stored in the set.
 
 #### Defined in
 
-[circle/circularSet.ts:93](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L93)
+[circle/circularSet.ts:94](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L94)
 
 ___
 
@@ -230,7 +214,7 @@ Set.size
 
 #### Defined in
 
-[circle/circularSet.ts:79](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L79)
+[circle/circularSet.ts:80](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L80)
 
 ## Methods
 
@@ -254,7 +238,7 @@ Set.[iterator]
 
 #### Defined in
 
-[circle/circularSet.ts:249](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L249)
+[circle/circularSet.ts:250](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L250)
 
 ___
 
@@ -280,7 +264,7 @@ Set.add
 
 #### Defined in
 
-[circle/circularSet.ts:139](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L139)
+[circle/circularSet.ts:140](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L140)
 
 ___
 
@@ -322,7 +306,7 @@ CircularBase.addListener
 
 #### Defined in
 
-[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularBase.ts#L40)
+[circle/circularBase.ts:36](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularBase.ts#L36)
 
 ___
 
@@ -342,7 +326,7 @@ Removes all elements from the set.
 
 #### Defined in
 
-[circle/circularSet.ts:168](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L168)
+[circle/circularSet.ts:169](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L169)
 
 ___
 
@@ -370,7 +354,7 @@ Set.delete
 
 #### Defined in
 
-[circle/circularSet.ts:177](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L177)
+[circle/circularSet.ts:178](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L178)
 
 ___
 
@@ -394,7 +378,7 @@ an iterable of [key, value] pairs for every entry.
 
 #### Defined in
 
-[circle/circularSet.ts:188](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L188)
+[circle/circularSet.ts:189](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L189)
 
 ___
 
@@ -423,7 +407,7 @@ Performs the specified action for each value in the set.
 
 #### Defined in
 
-[circle/circularSet.ts:200](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L200)
+[circle/circularSet.ts:201](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L201)
 
 ___
 
@@ -451,7 +435,7 @@ Set.has
 
 #### Defined in
 
-[circle/circularSet.ts:216](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L216)
+[circle/circularSet.ts:217](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L217)
 
 ___
 
@@ -475,7 +459,7 @@ an iterable of the set's keys.
 
 #### Defined in
 
-[circle/circularSet.ts:227](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L227)
+[circle/circularSet.ts:228](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L228)
 
 ___
 
@@ -517,7 +501,7 @@ CircularBase.on
 
 #### Defined in
 
-[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularBase.ts#L73)
+[circle/circularBase.ts:69](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularBase.ts#L69)
 
 ___
 
@@ -558,7 +542,7 @@ CircularBase.prependListener
 
 #### Defined in
 
-[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularBase.ts#L102)
+[circle/circularBase.ts:98](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularBase.ts#L98)
 
 ___
 
@@ -595,7 +579,7 @@ CircularBase.removeListener
 
 #### Defined in
 
-[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularBase.ts#L127)
+[circle/circularBase.ts:123](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularBase.ts#L123)
 
 ___
 
@@ -619,4 +603,4 @@ an iterable of the set's values.
 
 #### Defined in
 
-[circle/circularSet.ts:238](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularSet.ts#L238)
+[circle/circularSet.ts:239](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/circle/circularSet.ts#L239)

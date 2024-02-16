@@ -57,7 +57,7 @@ A string tag for the `Collection` class that is used in `Object.prototype.toStri
 
 #### Defined in
 
-[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/collection.d.ts#L19)
+[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/collection.d.ts#L19)
 
 ___
 
@@ -73,7 +73,7 @@ Gets the number of elements contained in the `Collection`.
 
 #### Defined in
 
-[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/collection.d.ts#L14)
+[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/collection.d.ts#L14)
 
 ## Methods
 
@@ -89,7 +89,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/collection.d.ts#L24)
+[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/collection.d.ts#L24)
 
 ___
 
@@ -108,7 +108,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/collection.d.ts#L32)
+[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/collection.d.ts#L32)
 
 ___
 
@@ -131,7 +131,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/collection.d.ts#L41)
+[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/collection.d.ts#L41)
 
 ___
 
@@ -150,7 +150,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/collection.d.ts#L52)
+[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/collection.d.ts#L52)
 
 ___
 
@@ -169,4 +169,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/types/collection.d.ts#L60)
+[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/collection.d.ts#L60)
