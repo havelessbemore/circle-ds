@@ -68,7 +68,7 @@ Collection.[toStringTag]
 
 #### Defined in
 
-[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L19)
+[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L19)
 
 ___
 
@@ -88,7 +88,7 @@ Collection.size
 
 #### Defined in
 
-[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L14)
+[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L14)
 
 ## Methods
 
@@ -102,7 +102,7 @@ Collection.size
 
 #### Defined in
 
-[types/list.ts:15](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L15)
+[types/list.d.ts:15](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L15)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[types/list.ts:4](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L4)
+[types/list.d.ts:4](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L4)
 
 ___
 
@@ -142,7 +142,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L24)
+[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L24)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[types/list.ts:5](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L5)
+[types/list.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L5)
 
 ___
 
@@ -185,7 +185,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L32)
+[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L32)
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-[types/list.ts:6](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L6)
+[types/list.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L6)
 
 ___
 
@@ -234,7 +234,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L41)
+[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L41)
 
 ___
 
@@ -254,7 +254,7 @@ ___
 
 #### Defined in
 
-[types/list.ts:7](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L7)
+[types/list.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L7)
 
 ___
 
@@ -277,7 +277,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L52)
+[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L52)
 
 ___
 
@@ -291,7 +291,7 @@ ___
 
 #### Defined in
 
-[types/list.ts:8](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L8)
+[types/list.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L8)
 
 ___
 
@@ -311,7 +311,7 @@ ___
 
 #### Defined in
 
-[types/list.ts:9](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L9)
+[types/list.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L9)
 
 ___
 
@@ -332,7 +332,7 @@ ___
 
 #### Defined in
 
-[types/list.ts:10](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L10)
+[types/list.d.ts:10](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L10)
 
 ___
 
@@ -346,7 +346,7 @@ ___
 
 #### Defined in
 
-[types/list.ts:11](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L11)
+[types/list.d.ts:11](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L11)
 
 ___
 
@@ -367,7 +367,7 @@ ___
 
 #### Defined in
 
-[types/list.ts:12](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L12)
+[types/list.d.ts:12](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L12)
 
 ___
 
@@ -389,7 +389,7 @@ ___
 
 #### Defined in
 
-[types/list.ts:13](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L13)
+[types/list.d.ts:13](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L13)
 
 ___
 
@@ -409,7 +409,7 @@ ___
 
 #### Defined in
 
-[types/list.ts:14](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/list.ts#L14)
+[types/list.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/list.d.ts#L14)
 
 ___
 
@@ -432,4 +432,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L60)
+[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L60)
