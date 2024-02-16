@@ -56,6 +56,7 @@ export interface Bounded<T> {
    * overflow-specific handling or other events as defined by the implementation.
    * @param listener - The callback function to execute when the event occurs.
    * For `BoundedEvent.Overflow`, it receives an array of elements removed due to overflow.
+   *
    * @returns The instance of the collection, allowing for method chaining.
    */
   addListener(
@@ -87,6 +88,7 @@ export interface Bounded<T> {
    * overflow-specific handling or other events as defined by the implementation.
    * @param listener - The callback function to execute when the event occurs.
    * For `BoundedEvent.Overflow`, it receives an array of elements removed due to overflow.
+   *
    * @returns The instance of the collection, allowing for method chaining.
    */
   prependListener(
@@ -107,6 +109,7 @@ export interface Bounded<T> {
    *
    * @param event - The specific event from which to remove the listener.
    * @param listener - The callback function to remove from the event's listeners array.
+   *
    * @returns The instance of the collection, allowing for method chaining.
    */
   removeListener(

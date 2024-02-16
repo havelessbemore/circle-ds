@@ -14,7 +14,8 @@ export interface List<V> extends Collection<number, V> {
    * Retrieves the element at the specified index in the list.
    *
    * @param index - The zero-based index of the element to retrieve.
-   * @returns - The element at the specified index, or `undefined` if the index is out of bounds.
+   *
+   * @returns The element at the specified index, or `undefined` if the index is out of bounds.
    */
   at(index: number): V | undefined;
 
@@ -23,7 +24,8 @@ export interface List<V> extends Collection<number, V> {
    * Subsequent elements are shifted one position towards the start of the list.
    *
    * @param index - The zero-based index of the element to delete.
-   * @returns - `true` if the element was successfully deleted, `false` otherwise.
+   *
+   * @returns `true` if the element was successfully deleted, `false` otherwise.
    */
   delete(index: number): boolean;
 
@@ -34,7 +36,8 @@ export interface List<V> extends Collection<number, V> {
    * @param value - The value to fill the list with.
    * @param start - The start index. Defaults to 0.
    * @param end - The end index. Defaults to the list's length.
-   * @returns - The instance of the list for chaining.
+   *
+   * @returns The instance of the list for chaining.
    */
   fill(value: V, start?: number, end?: number): this;
 
@@ -42,14 +45,15 @@ export interface List<V> extends Collection<number, V> {
    * Determines whether a specific element exists within the list.
    *
    * @param value - The value to locate.
-   * @returns - `true` if the value exists, `false` otherwise.
+   *
+   * @returns `true` if the value exists, `false` otherwise.
    */
   has(value: V): boolean;
 
   /**
    * Removes and returns the last element of the list.
    *
-   * @returns - The last element of the list, or `undefined` if the list is empty.
+   * @returns The last element of the list, or `undefined` if the list is empty.
    */
   pop(): V | undefined;
 
@@ -58,7 +62,8 @@ export interface List<V> extends Collection<number, V> {
    * and returns the new list length.
    *
    * @param values - The elements to add.
-   * @returns - The new length of the list.
+   *
+   * @returns The new length of the list.
    */
   push(...values: V[]): number;
 
@@ -67,7 +72,8 @@ export interface List<V> extends Collection<number, V> {
    *
    * @param index - The zero-based index of the element to replace.
    * @param value - The new value to set at the specified index.
-   * @returns - The previous value at the index if replaced, otherwise `undefined`.
+   *
+   * @returns The previous value at the index if replaced, otherwise `undefined`.
    */
   set(index: number, value: V): V | undefined;
 
@@ -75,7 +81,7 @@ export interface List<V> extends Collection<number, V> {
    * Removes and returns the first element of the list.
    * Subsequent elements are shifted one position towards the start of the list.
    *
-   * @returns - The first element of the list, or `undefined` if the list is empty.
+   * @returns The first element of the list, or `undefined` if the list is empty.
    */
   shift(): V | undefined;
 
@@ -85,7 +91,8 @@ export interface List<V> extends Collection<number, V> {
    *
    * @param start - The start index. Defaults to 0.
    * @param end - The end index. Defaults to the list's length.
-   * @returns - A new list containing the specified elements.
+   *
+   * @returns A new list containing the specified elements.
    */
   slice(start?: number, end?: number): List<V>;
 
@@ -96,7 +103,8 @@ export interface List<V> extends Collection<number, V> {
    * @param start - The zero-based index at which to start changing the list.
    * @param deleteCount - The number of elements to remove from the list. Defaults to 0.
    * @param items - The elements to add to the list beginning at start index. Defaults to [].
-   * @returns - A new list containing the deleted elements, if any.
+   *
+   * @returns A new list containing the deleted elements, if any.
    */
   splice(start: number, deleteCount?: number, ...items: V[]): List<V>;
 
@@ -105,7 +113,8 @@ export interface List<V> extends Collection<number, V> {
    * and returns the new list length.
    *
    * @param values - The elements to add to the beginning of the list.
-   * @returns - The new length of the list.
+   *
+   * @returns The new length of the list.
    */
   unshift(...values: V[]): number;
 

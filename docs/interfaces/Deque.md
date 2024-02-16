@@ -70,7 +70,7 @@ Queue.[toStringTag]
 
 #### Defined in
 
-[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/collection.d.ts#L19)
+[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/collection.d.ts#L19)
 
 ___
 
@@ -90,7 +90,7 @@ Queue.size
 
 #### Defined in
 
-[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/collection.d.ts#L14)
+[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/collection.d.ts#L14)
 
 ## Methods
 
@@ -110,7 +110,7 @@ Returns the default iterator through the queue's elements.
 
 #### Defined in
 
-[types/queue.d.ts:62](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/queue.d.ts#L62)
+[types/queue.d.ts:61](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/queue.d.ts#L61)
 
 ___
 
@@ -130,7 +130,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/collection.d.ts#L24)
+[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/collection.d.ts#L24)
 
 ___
 
@@ -153,7 +153,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/collection.d.ts#L32)
+[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/collection.d.ts#L32)
 
 ___
 
@@ -167,8 +167,7 @@ Retrieves the first element added to the queue without removing it.
 
 `undefined` \| `V`
 
-- The first element of the queue,
-or `undefined` if the queue is empty.
+The first element of the queue, or `undefined` if the queue is empty.
 
 #### Inherited from
 
@@ -176,7 +175,7 @@ or `undefined` if the queue is empty.
 
 #### Defined in
 
-[types/queue.d.ts:20](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/queue.d.ts#L20)
+[types/queue.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/queue.d.ts#L19)
 
 ___
 
@@ -203,7 +202,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/collection.d.ts#L41)
+[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/collection.d.ts#L41)
 
 ___
 
@@ -221,8 +220,7 @@ be processed next.
 
 `undefined` \| `V`
 
-- The element at the front of the queue,
-or `undefined` if the queue is empty.
+The element at the front of the queue, or `undefined` if the queue is empty.
 
 #### Inherited from
 
@@ -230,7 +228,7 @@ or `undefined` if the queue is empty.
 
 #### Defined in
 
-[types/queue.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/queue.d.ts#L32)
+[types/queue.d.ts:30](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/queue.d.ts#L30)
 
 ___
 
@@ -250,7 +248,7 @@ Determines whether a specific element exists within the queue.
 
 `boolean`
 
-- `true` if the value exists, `false` otherwise.
+`true` if the value exists, `false` otherwise.
 
 #### Inherited from
 
@@ -258,7 +256,7 @@ Determines whether a specific element exists within the queue.
 
 #### Defined in
 
-[types/queue.d.ts:40](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/queue.d.ts#L40)
+[types/queue.d.ts:39](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/queue.d.ts#L39)
 
 ___
 
@@ -281,7 +279,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/collection.d.ts#L52)
+[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/collection.d.ts#L52)
 
 ___
 
@@ -295,8 +293,7 @@ Retrieves the last element added to the stack without removing it.
 
 `undefined` \| `V`
 
-- The last element of the stack,
-or `undefined` if the stack is empty.
+The last element of the stack, or `undefined` if the stack is empty.
 
 #### Inherited from
 
@@ -304,7 +301,7 @@ or `undefined` if the stack is empty.
 
 #### Defined in
 
-[types/stack.d.ts:28](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/stack.d.ts#L28)
+[types/stack.d.ts:28](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/stack.d.ts#L28)
 
 ___
 
@@ -318,8 +315,7 @@ Removes the last element added to the stack and returns it.
 
 `undefined` \| `V`
 
-- The last element of the stack,
-or `undefined` if the stack is empty.
+The last element of the stack, or `undefined` if the stack is empty.
 
 #### Inherited from
 
@@ -327,7 +323,7 @@ or `undefined` if the stack is empty.
 
 #### Defined in
 
-[types/stack.d.ts:36](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/stack.d.ts#L36)
+[types/stack.d.ts:35](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/stack.d.ts#L35)
 
 ___
 
@@ -348,7 +344,7 @@ and returns the queue's new length.
 
 `number`
 
-- The new length of the queue.
+The new length of the queue.
 
 #### Inherited from
 
@@ -356,7 +352,7 @@ and returns the queue's new length.
 
 #### Defined in
 
-[types/queue.d.ts:49](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/queue.d.ts#L49)
+[types/queue.d.ts:49](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/queue.d.ts#L49)
 
 ___
 
@@ -370,8 +366,7 @@ Removes and returns the first element of the queue.
 
 `undefined` \| `V`
 
-- The first element of the queue,
-or `undefined` if the queue is empty.
+The first element of the queue, or `undefined` if the queue is empty.
 
 #### Inherited from
 
@@ -379,7 +374,7 @@ or `undefined` if the queue is empty.
 
 #### Defined in
 
-[types/queue.d.ts:57](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/queue.d.ts#L57)
+[types/queue.d.ts:56](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/queue.d.ts#L56)
 
 ___
 
@@ -396,8 +391,7 @@ preferred over "last" to describe the most recently added element.
 
 `undefined` \| `V`
 
-- The element at the top of the stack,
-or `undefined` if the stack is empty.
+The element at the top of the stack, or `undefined` if the stack is empty.
 
 #### Inherited from
 
@@ -405,7 +399,7 @@ or `undefined` if the stack is empty.
 
 #### Defined in
 
-[types/stack.d.ts:61](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/stack.d.ts#L61)
+[types/stack.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/stack.d.ts#L60)
 
 ___
 
@@ -428,11 +422,11 @@ method inherited from the `Stack` interface for back-end insertion.
 
 `number`
 
-- The new length of the deque after the elements are added.
+The new length of the deque after the elements are added.
 
 #### Defined in
 
-[types/deque.d.ts:21](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/deque.d.ts#L21)
+[types/deque.d.ts:22](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/deque.d.ts#L22)
 
 ___
 
@@ -455,4 +449,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/collection.d.ts#L60)
+[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/442493d/src/types/collection.d.ts#L60)

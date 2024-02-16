@@ -10,7 +10,9 @@
  * @param value - The numerical value to clamp.
  * @param min - The minimum allowable value of the range.
  * @param max - The maximum allowable value of the range.
+ *
  * @returns The clamped value within the specified range.
+ *
  * @throws `RangeError` If `min` is greater than `max`.
  */
 export function clamp(value: number, min: number, max: number): number {
@@ -33,6 +35,7 @@ export function clamp(value: number, min: number, max: number): number {
  *
  * @param value - The numerical value for which to calculate the logarithm. Must be positive.
  * @param base - The base of the logarithm. Must be positive.
+ *
  * @returns The calculated logarithm of the value with the given base, or `NaN` for invalid inputs.
  */
 export function log(value: number, base: number): number {
@@ -56,7 +59,7 @@ export function log(value: number, base: number): number {
  * @param min - The starting value of the run. Defaults to 0.
  * @param randomFn - A function that generates a random number. Defaults to `Math.random`.
  *
- * @returns - The length of the run.
+ * @returns The length of the run.
  */
 export function randomRun(
   p = 0.5,
@@ -82,6 +85,7 @@ export function randomRun(
  *
  * @param value - The value to convert to an integer. This can be of any type.
  * @param defaultValue - The fallback value to return if conversion fails. Defaults to 0.
+ *
  * @returns The converted integer, or `defaultValue` if conversion is not possible.
  */
 export function toInteger(value?: unknown, defaultValue = 0): number {

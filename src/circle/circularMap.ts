@@ -75,7 +75,7 @@ export class CircularMap<K, V>
   }
 
   /**
-   *  @returns the number of values in the map.
+   * @returns the number of values in the map.
    */
   get size(): number {
     return this.map.size;

@@ -12,6 +12,7 @@
  *
  * @param a - The first element to compare.
  * @param b - The second element to compare.
+ *
  * @returns A number indicating the relative order of the two arguments:
  * - A negative number if `a` should come before `b`.
  * - Zero if `a` and `b` are considered equal in terms of ordering.

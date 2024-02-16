@@ -95,7 +95,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularDeque.ts:60](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L60)
+[circle/circularDeque.ts:60](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L60)
 
 • **new CircularDeque**\<`T`\>(`capacity?`): [`CircularDeque`](CircularDeque.md)\<`T`\>
 
@@ -123,7 +123,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularDeque.ts:66](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L66)
+[circle/circularDeque.ts:66](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L66)
 
 • **new CircularDeque**\<`T`\>(`items`): [`CircularDeque`](CircularDeque.md)\<`T`\>
 
@@ -151,7 +151,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularDeque.ts:72](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L72)
+[circle/circularDeque.ts:72](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L72)
 
 ## Properties
 
@@ -163,7 +163,7 @@ Whether capacity is finite (true) or infinite (false).
 
 #### Defined in
 
-[circle/circularDeque.ts:37](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L37)
+[circle/circularDeque.ts:37](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L37)
 
 ## Accessors
 
@@ -183,7 +183,7 @@ Deque.[toStringTag]
 
 #### Defined in
 
-[circle/circularDeque.ts:128](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L128)
+[circle/circularDeque.ts:128](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L128)
 
 ___
 
@@ -203,7 +203,7 @@ the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularDeque.ts:114](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L114)
+[circle/circularDeque.ts:114](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L114)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -225,7 +225,7 @@ Sets the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularDeque.ts:135](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L135)
+[circle/circularDeque.ts:135](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L135)
 
 ___
 
@@ -245,7 +245,7 @@ Deque.size
 
 #### Defined in
 
-[circle/circularDeque.ts:121](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L121)
+[circle/circularDeque.ts:121](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L121)
 
 ## Methods
 
@@ -269,7 +269,7 @@ an iterable of values.
 
 #### Defined in
 
-[circle/circularDeque.ts:370](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L370)
+[circle/circularDeque.ts:370](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L370)
 
 ___
 
@@ -311,7 +311,7 @@ CircularBase.addListener
 
 #### Defined in
 
-[circle/circularBase.ts:36](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularBase.ts#L36)
+[circle/circularBase.ts:36](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularBase.ts#L36)
 
 ___
 
@@ -331,7 +331,7 @@ Remove all elements and resets the collection.
 
 #### Defined in
 
-[circle/circularDeque.ts:169](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L169)
+[circle/circularDeque.ts:169](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L169)
 
 ___
 
@@ -353,7 +353,7 @@ Emit an event containing the items evicted from the collection.
 
 #### Defined in
 
-[circle/circularDeque.ts:457](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L457)
+[circle/circularDeque.ts:457](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L457)
 
 ___
 
@@ -377,7 +377,7 @@ an iterable of [key, value] pairs for every entry.
 
 #### Defined in
 
-[circle/circularDeque.ts:183](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L183)
+[circle/circularDeque.ts:183](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L183)
 
 ___
 
@@ -401,7 +401,7 @@ is emitted one or more times.
 
 #### Defined in
 
-[circle/circularDeque.ts:468](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L468)
+[circle/circularDeque.ts:468](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L468)
 
 ___
 
@@ -425,7 +425,7 @@ is emitted one or more times.
 
 #### Defined in
 
-[circle/circularDeque.ts:514](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L514)
+[circle/circularDeque.ts:514](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L514)
 
 ___
 
@@ -449,7 +449,7 @@ the first element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularDeque.ts:196](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L196)
+[circle/circularDeque.ts:196](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L196)
 
 ___
 
@@ -478,7 +478,7 @@ Performs the specified action for each element in the collection.
 
 #### Defined in
 
-[circle/circularDeque.ts:208](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L208)
+[circle/circularDeque.ts:208](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L208)
 
 ___
 
@@ -502,7 +502,7 @@ the front element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularDeque.ts:226](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L226)
+[circle/circularDeque.ts:226](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L226)
 
 ___
 
@@ -532,7 +532,7 @@ a boolean indicating if `value` was found or not
 
 #### Defined in
 
-[circle/circularDeque.ts:239](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L239)
+[circle/circularDeque.ts:239](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L239)
 
 ___
 
@@ -556,7 +556,7 @@ an iterable of keys.
 
 #### Defined in
 
-[circle/circularDeque.ts:256](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L256)
+[circle/circularDeque.ts:256](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L256)
 
 ___
 
@@ -580,7 +580,7 @@ the last element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularDeque.ts:269](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L269)
+[circle/circularDeque.ts:269](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L269)
 
 ___
 
@@ -622,7 +622,7 @@ CircularBase.on
 
 #### Defined in
 
-[circle/circularBase.ts:69](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularBase.ts#L69)
+[circle/circularBase.ts:69](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularBase.ts#L69)
 
 ___
 
@@ -644,7 +644,7 @@ the last element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularDeque.ts:278](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L278)
+[circle/circularDeque.ts:278](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L278)
 
 ___
 
@@ -685,7 +685,7 @@ CircularBase.prependListener
 
 #### Defined in
 
-[circle/circularBase.ts:98](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularBase.ts#L98)
+[circle/circularBase.ts:98](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularBase.ts#L98)
 
 ___
 
@@ -713,7 +713,7 @@ The new size of the deque.
 
 #### Defined in
 
-[circle/circularDeque.ts:299](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L299)
+[circle/circularDeque.ts:299](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L299)
 
 ___
 
@@ -750,7 +750,7 @@ CircularBase.removeListener
 
 #### Defined in
 
-[circle/circularBase.ts:123](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularBase.ts#L123)
+[circle/circularBase.ts:123](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularBase.ts#L123)
 
 ___
 
@@ -772,7 +772,7 @@ the front element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularDeque.ts:348](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L348)
+[circle/circularDeque.ts:348](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L348)
 
 ___
 
@@ -796,7 +796,7 @@ the last element, or `undefined` if empty.
 
 #### Defined in
 
-[circle/circularDeque.ts:432](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L432)
+[circle/circularDeque.ts:432](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L432)
 
 ___
 
@@ -824,7 +824,7 @@ The new size of the deque.
 
 #### Defined in
 
-[circle/circularDeque.ts:381](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L381)
+[circle/circularDeque.ts:381](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L381)
 
 ___
 
@@ -848,4 +848,4 @@ an iterable of values.
 
 #### Defined in
 
-[circle/circularDeque.ts:446](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/circle/circularDeque.ts#L446)
+[circle/circularDeque.ts:446](https://github.com/havelessbemore/circle-ds/blob/442493d/src/circle/circularDeque.ts#L446)

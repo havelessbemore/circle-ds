@@ -14,6 +14,7 @@
  * component class types.
  *
  * @param args - An array of arguments of any type that the constructor accepts.
+ *
  * @returns An instance of type `T`, as produced by the constructor function.
  */
 export type Constructor<T = object> = new (...args: unknown[]) => T;

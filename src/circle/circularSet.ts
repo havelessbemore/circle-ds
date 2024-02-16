@@ -75,7 +75,7 @@ export class CircularSet<T>
   }
 
   /**
-   *  @returns the number of values in the set.
+   * @returns the number of values in the set.
    */
   get size(): number {
     return this.set.size;

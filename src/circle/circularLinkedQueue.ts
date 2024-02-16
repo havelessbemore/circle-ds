@@ -104,7 +104,7 @@ export class CircularLinkedQueue<T>
   }
 
   /**
-   *  @returns the number of elements in the collection.
+   * @returns the number of elements in the collection.
    */
   get size(): number {
     return this._size;

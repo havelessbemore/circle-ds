@@ -14,8 +14,7 @@ export interface Queue<V> extends Collection<number, V> {
   /**
    * Retrieves the first element added to the queue without removing it.
    *
-   * @returns - The first element of the queue,
-   * or `undefined` if the queue is empty.
+   * @returns The first element of the queue, or `undefined` if the queue is empty.
    */
   first(): V | undefined;
 
@@ -26,8 +25,7 @@ export interface Queue<V> extends Collection<number, V> {
    * preferred over "first" to describe the element that was added earliest and will
    * be processed next.
    *
-   * @returns - The element at the front of the queue,
-   * or `undefined` if the queue is empty.
+   * @returns The element at the front of the queue, or `undefined` if the queue is empty.
    */
   front(): V | undefined;
 
@@ -35,7 +33,8 @@ export interface Queue<V> extends Collection<number, V> {
    * Determines whether a specific element exists within the queue.
    *
    * @param value - The value to locate.
-   * @returns - `true` if the value exists, `false` otherwise.
+   *
+   * @returns `true` if the value exists, `false` otherwise.
    */
   has(value: V): boolean;
 
@@ -44,15 +43,15 @@ export interface Queue<V> extends Collection<number, V> {
    * and returns the queue's new length.
    *
    * @param values - The elements to add.
-   * @returns - The new length of the queue.
+   *
+   * @returns The new length of the queue.
    */
   push(...values: V[]): number;
 
   /**
    * Removes and returns the first element of the queue.
    *
-   * @returns - The first element of the queue,
-   * or `undefined` if the queue is empty.
+   * @returns The first element of the queue, or `undefined` if the queue is empty.
    */
   shift(): V | undefined;
 

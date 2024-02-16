@@ -7,6 +7,7 @@ import { ARRAY_MAX_LENGTH } from "./constants";
  * that could result in a `RangeError` due to invalid array size.
  *
  * @param value - The value to check.
+ *
  * @returns `true` if the value is an integer within the `[0, ARRAY_MAX_LENGTH]` range, `false` otherwise.
  */
 export function isArrayLength(value: unknown): value is number {
@@ -21,6 +22,7 @@ export function isArrayLength(value: unknown): value is number {
  * Determines whether the provided value is a function.
  *
  * @param value - The value to check.
+ *
  * @returns `true` if the value is a function, `false` otherwise.
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -32,6 +34,7 @@ export function isFunction(value: unknown): value is Function {
  * Checks if a given value is positive infinity.
  *
  * @param value - The value to check.
+ *
  * @returns `true` if the value is positive infinity, `false` otherwise.
  */
 export function isInfinity(value: unknown): boolean {
@@ -45,6 +48,7 @@ export function isInfinity(value: unknown): boolean {
  * in a `for...of` loop or with spread syntax.
  *
  * @param value - The value to check.
+ *
  * @returns `true` if the value implements the iterable protocol, `false` otherwise.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,6 +63,7 @@ export function isIterable(value: any): value is Iterable<unknown> {
  * checks if those values are not desirable.
  *
  * @param value - The value to check.
+ *
  * @returns `true` if the value is of type number, `false` otherwise.
  */
 export function isNumber(value: unknown): value is number {
@@ -72,6 +77,7 @@ export function isNumber(value: unknown): value is number {
  * integer range to prevent precision loss.
  *
  * @param value - The value to check.
+ *
  * @returns `true` if the value is a safe integer and non-negative, `false` otherwise.
  */
 export function isSafeCount(value: unknown): value is number {
@@ -82,6 +88,7 @@ export function isSafeCount(value: unknown): value is number {
  * Determines whether the provided value is a symbol.
  *
  * @param value - The value to check.
+ *
  * @returns `true` if the value is a symbol, `false` otherwise.
  */
 export function isSymbol(value: unknown): value is symbol {

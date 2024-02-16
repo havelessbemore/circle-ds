@@ -15,23 +15,22 @@ export interface Stack<V> extends Collection<number, V> {
    * Determines whether an element exists within the stack.
    *
    * @param value - The value to locate.
-   * @returns - `true` if the value exists, 'false' otherwise.
+   *
+   * @returns `true` if the value exists, 'false' otherwise.
    */
   has(value: V): boolean;
 
   /**
    * Retrieves the last element added to the stack without removing it.
    *
-   * @returns - The last element of the stack,
-   * or `undefined` if the stack is empty.
+   * @returns The last element of the stack, or `undefined` if the stack is empty.
    */
   last(): V | undefined;
 
   /**
    * Removes the last element added to the stack and returns it.
    *
-   * @returns - The last element of the stack,
-   * or `undefined` if the stack is empty.
+   * @returns The last element of the stack, or `undefined` if the stack is empty.
    */
   pop(): V | undefined;
 
@@ -40,7 +39,8 @@ export interface Stack<V> extends Collection<number, V> {
    * and returns the stack's new length.
    *
    * @param values - The elements to add.
-   * @returns - The new length of the stack.
+   *
+   * @returns The new length of the stack.
    */
   push(...values: V[]): number;
 
@@ -55,8 +55,7 @@ export interface Stack<V> extends Collection<number, V> {
    * This method provides semantic clarity in contexts where the term "top" is
    * preferred over "last" to describe the most recently added element.
    *
-   * @returns - The element at the top of the stack,
-   * or `undefined` if the stack is empty.
+   * @returns The element at the top of the stack, or `undefined` if the stack is empty.
    */
   top(): V | undefined;
 }
