@@ -69,7 +69,7 @@ Collection.[toStringTag]
 
 #### Defined in
 
-[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L19)
+[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L19)
 
 ___
 
@@ -89,7 +89,7 @@ Collection.size
 
 #### Defined in
 
-[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L14)
+[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L14)
 
 ## Methods
 
@@ -97,8 +97,7 @@ Collection.size
 
 ▸ **[iterator]**(): `IterableIterator`\<`V`\>
 
-Returns an iterable iterator that allows iteration
-through the stack's elements.
+Returns the default iterator through the stack's elements.
 
 #### Returns
 
@@ -106,7 +105,7 @@ through the stack's elements.
 
 #### Defined in
 
-[types/stack.d.ts:51](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L51)
+[types/stack.d.ts:50](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/stack.d.ts#L50)
 
 ___
 
@@ -126,7 +125,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L24)
+[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L24)
 
 ___
 
@@ -149,7 +148,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L32)
+[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L32)
 
 ___
 
@@ -176,7 +175,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L41)
+[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L41)
 
 ___
 
@@ -200,7 +199,7 @@ Determines whether an element exists within the stack.
 
 #### Defined in
 
-[types/stack.d.ts:20](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L20)
+[types/stack.d.ts:20](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/stack.d.ts#L20)
 
 ___
 
@@ -223,7 +222,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L52)
+[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L52)
 
 ___
 
@@ -242,7 +241,7 @@ or `undefined` if the stack is empty.
 
 #### Defined in
 
-[types/stack.d.ts:28](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L28)
+[types/stack.d.ts:28](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/stack.d.ts#L28)
 
 ___
 
@@ -261,7 +260,7 @@ or `undefined` if the stack is empty.
 
 #### Defined in
 
-[types/stack.d.ts:36](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L36)
+[types/stack.d.ts:36](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/stack.d.ts#L36)
 
 ___
 
@@ -286,7 +285,7 @@ and returns the stack's new length.
 
 #### Defined in
 
-[types/stack.d.ts:45](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L45)
+[types/stack.d.ts:45](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/stack.d.ts#L45)
 
 ___
 
@@ -308,7 +307,7 @@ or `undefined` if the stack is empty.
 
 #### Defined in
 
-[types/stack.d.ts:62](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L62)
+[types/stack.d.ts:61](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/stack.d.ts#L61)
 
 ___
 
@@ -331,4 +330,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L60)
+[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L60)

@@ -57,8 +57,7 @@ export interface Queue<V> extends Collection<number, V> {
   shift(): V | undefined;
 
   /**
-   * Returns an iterable iterator that allows iteration
-   * through the queue's elements.
+   * Returns the default iterator through the queue's elements.
    */
   [Symbol.iterator](): IterableIterator<V>;
 }

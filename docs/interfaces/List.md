@@ -2,9 +2,13 @@
 
 # Interface: List\<V\>
 
-Represents a generic collection of key-value pairs with various utility methods
-to manipulate and interact with the collection. This interface abstracts common
-functionality found in data structures like deques, lists, maps, queues, etc.
+Represents a generic list collection of elements, allowing for indexed
+access, modification, and iteration. This interface extends the
+`Collection` interface by adding list-specific operations.
+
+The `List` interface supports both sequential and random access to elements,
+making it suitable for a wide range of applications that require manipulation
+of collections.
 
 ## Type parameters
 
@@ -68,7 +72,7 @@ Collection.[toStringTag]
 
 #### Defined in
 
-[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L19)
+[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L19)
 
 ___
 
@@ -88,7 +92,7 @@ Collection.size
 
 #### Defined in
 
-[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L14)
+[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L14)
 
 ## Methods
 
@@ -96,13 +100,15 @@ Collection.size
 
 ▸ **[iterator]**(): `IterableIterator`\<`V`\>
 
+Returns the default iterator through the list's elements.
+
 #### Returns
 
 `IterableIterator`\<`V`\>
 
 #### Defined in
 
-[types/list.d.ts:15](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L15)
+[types/list.d.ts:115](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L115)
 
 ___
 
@@ -110,19 +116,23 @@ ___
 
 ▸ **at**(`index`): `undefined` \| `V`
 
+Retrieves the element at the specified index in the list.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `index` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `index` | `number` | The zero-based index of the element to retrieve. |
 
 #### Returns
 
 `undefined` \| `V`
 
+- The element at the specified index, or `undefined` if the index is out of bounds.
+
 #### Defined in
 
-[types/list.d.ts:4](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L4)
+[types/list.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L19)
 
 ___
 
@@ -142,7 +152,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L24)
+[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L24)
 
 ___
 
@@ -150,19 +160,24 @@ ___
 
 ▸ **delete**(`index`): `boolean`
 
+Deletes the element at the specified index.
+Subsequent elements are shifted one position towards the start of the list.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `index` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `index` | `number` | The zero-based index of the element to delete. |
 
 #### Returns
 
 `boolean`
 
+- `true` if the element was successfully deleted, `false` otherwise.
+
 #### Defined in
 
-[types/list.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L5)
+[types/list.d.ts:28](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L28)
 
 ___
 
@@ -185,7 +200,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L32)
+[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L32)
 
 ___
 
@@ -193,21 +208,26 @@ ___
 
 ▸ **fill**(`value`, `start?`, `end?`): `this`
 
+Fills the list with the specified value from a start index (inclusive)
+to an end index (exclusive).
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `V` |
-| `start?` | `number` |
-| `end?` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `V` | The value to fill the list with. |
+| `start?` | `number` | The start index. Defaults to 0. |
+| `end?` | `number` | The end index. Defaults to the list's length. |
 
 #### Returns
 
 `this`
 
+- The instance of the list for chaining.
+
 #### Defined in
 
-[types/list.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L6)
+[types/list.d.ts:39](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L39)
 
 ___
 
@@ -234,7 +254,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L41)
+[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L41)
 
 ___
 
@@ -242,19 +262,23 @@ ___
 
 ▸ **has**(`value`): `boolean`
 
+Determines whether a specific element exists within the list.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `V` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `V` | The value to locate. |
 
 #### Returns
 
 `boolean`
 
+- `true` if the value exists, `false` otherwise.
+
 #### Defined in
 
-[types/list.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L7)
+[types/list.d.ts:47](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L47)
 
 ___
 
@@ -277,7 +301,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L52)
+[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L52)
 
 ___
 
@@ -285,13 +309,17 @@ ___
 
 ▸ **pop**(): `undefined` \| `V`
 
+Removes and returns the last element of the list.
+
 #### Returns
 
 `undefined` \| `V`
 
+- The last element of the list, or `undefined` if the list is empty.
+
 #### Defined in
 
-[types/list.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L8)
+[types/list.d.ts:54](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L54)
 
 ___
 
@@ -299,19 +327,24 @@ ___
 
 ▸ **push**(`...values`): `number`
 
+Adds one or more elements to the end of the list
+and returns the new list length.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `...values` | `V`[] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `...values` | `V`[] | The elements to add. |
 
 #### Returns
 
 `number`
 
+- The new length of the list.
+
 #### Defined in
 
-[types/list.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L9)
+[types/list.d.ts:63](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L63)
 
 ___
 
@@ -319,20 +352,24 @@ ___
 
 ▸ **set**(`index`, `value`): `undefined` \| `V`
 
+Replaces the element at the specified index with a new value.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `index` | `number` |
-| `value` | `V` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `index` | `number` | The zero-based index of the element to replace. |
+| `value` | `V` | The new value to set at the specified index. |
 
 #### Returns
 
 `undefined` \| `V`
 
+- The previous value at the index if replaced, otherwise `undefined`.
+
 #### Defined in
 
-[types/list.d.ts:10](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L10)
+[types/list.d.ts:72](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L72)
 
 ___
 
@@ -340,13 +377,18 @@ ___
 
 ▸ **shift**(): `undefined` \| `V`
 
+Removes and returns the first element of the list.
+Subsequent elements are shifted one position towards the start of the list.
+
 #### Returns
 
 `undefined` \| `V`
 
+- The first element of the list, or `undefined` if the list is empty.
+
 #### Defined in
 
-[types/list.d.ts:11](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L11)
+[types/list.d.ts:80](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L80)
 
 ___
 
@@ -354,20 +396,25 @@ ___
 
 ▸ **slice**(`start?`, `end?`): [`List`](List.md)\<`V`\>
 
+Creates a shallow copy of the list from start index (inclusive)
+to end index (exclusive) into a new list. Does not modify the existing list.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `start?` | `number` |
-| `end?` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `start?` | `number` | The start index. Defaults to 0. |
+| `end?` | `number` | The end index. Defaults to the list's length. |
 
 #### Returns
 
 [`List`](List.md)\<`V`\>
 
+- A new list containing the specified elements.
+
 #### Defined in
 
-[types/list.d.ts:12](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L12)
+[types/list.d.ts:90](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L90)
 
 ___
 
@@ -375,21 +422,26 @@ ___
 
 ▸ **splice**(`start`, `deleteCount?`, `...items`): [`List`](List.md)\<`V`\>
 
+Changes the contents of the list by removing existing elements
+and/or adding new elements at a given index.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `start` | `number` |
-| `deleteCount?` | `number` |
-| `...items` | `V`[] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `start` | `number` | The zero-based index at which to start changing the list. |
+| `deleteCount?` | `number` | The number of elements to remove from the list. Defaults to 0. |
+| `...items` | `V`[] | The elements to add to the list beginning at start index. Defaults to []. |
 
 #### Returns
 
 [`List`](List.md)\<`V`\>
 
+- A new list containing the deleted elements, if any.
+
 #### Defined in
 
-[types/list.d.ts:13](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L13)
+[types/list.d.ts:101](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L101)
 
 ___
 
@@ -397,19 +449,24 @@ ___
 
 ▸ **unshift**(`...values`): `number`
 
+Adds one or more elements to the beginning of the list
+and returns the new list length.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `...values` | `V`[] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `...values` | `V`[] | The elements to add to the beginning of the list. |
 
 #### Returns
 
 `number`
 
+- The new length of the list.
+
 #### Defined in
 
-[types/list.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/list.d.ts#L14)
+[types/list.d.ts:110](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/list.d.ts#L110)
 
 ___
 
@@ -432,4 +489,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L60)
+[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/b475bd2/src/types/collection.d.ts#L60)

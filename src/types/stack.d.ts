@@ -45,8 +45,7 @@ export interface Stack<V> extends Collection<number, V> {
   push(...values: V[]): number;
 
   /**
-   * Returns an iterable iterator that allows iteration
-   * through the stack's elements.
+   * Returns the default iterator through the stack's elements.
    */
   [Symbol.iterator](): IterableIterator<V>;
 
