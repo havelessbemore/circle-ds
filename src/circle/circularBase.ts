@@ -2,10 +2,6 @@ import EventEmitter from "events";
 import { BoundedEvent } from "../types/boundedEvent";
 import { ValueOf } from "../types/valueOf";
 
-export interface BoundedConstructor<T> {
-  new (capacity?: number | null): CircularBase<T>;
-}
-
 export class CircularBase<T> {
   /**
    * The event emitter.

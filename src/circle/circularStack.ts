@@ -21,6 +21,7 @@ export class CircularStack<T>
 {
   /**
    * The maximum number of elements that can be stored in the collection.
+   * @internal
    */
   protected _capacity: number;
 
