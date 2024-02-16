@@ -83,7 +83,7 @@ CircularBase\&lt;[K, V]\&gt;.constructor
 
 #### Defined in
 
-[circle/circularMap.ts:29](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L29)
+[circle/circularMap.ts:29](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L29)
 
 • **new CircularMap**\<`K`, `V`\>(`capacity?`): [`CircularMap`](CircularMap.md)\<`K`, `V`\>
 
@@ -112,7 +112,7 @@ CircularBase\&lt;[K, V]\&gt;.constructor
 
 #### Defined in
 
-[circle/circularMap.ts:35](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L35)
+[circle/circularMap.ts:35](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L35)
 
 • **new CircularMap**\<`K`, `V`\>(`items`): [`CircularMap`](CircularMap.md)\<`K`, `V`\>
 
@@ -141,7 +141,7 @@ CircularBase\&lt;[K, V]\&gt;.constructor
 
 #### Defined in
 
-[circle/circularMap.ts:41](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L41)
+[circle/circularMap.ts:41](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L41)
 
 ## Properties
 
@@ -153,7 +153,7 @@ The maximum number of elements that can be stored in the collection.
 
 #### Defined in
 
-[circle/circularMap.ts:18](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L18)
+[circle/circularMap.ts:18](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L18)
 
 ## Accessors
 
@@ -173,7 +173,7 @@ Map.[toStringTag]
 
 #### Defined in
 
-[circle/circularMap.ts:86](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L86)
+[circle/circularMap.ts:86](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L86)
 
 ___
 
@@ -193,7 +193,7 @@ the maximum number of elements that can be stored.
 
 #### Defined in
 
-[circle/circularMap.ts:72](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L72)
+[circle/circularMap.ts:72](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L72)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -215,7 +215,7 @@ The maximum number of elements that can be stored in the map.
 
 #### Defined in
 
-[circle/circularMap.ts:93](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L93)
+[circle/circularMap.ts:93](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L93)
 
 ___
 
@@ -235,7 +235,7 @@ Map.size
 
 #### Defined in
 
-[circle/circularMap.ts:79](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L79)
+[circle/circularMap.ts:79](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L79)
 
 ## Methods
 
@@ -259,7 +259,7 @@ Map.[iterator]
 
 #### Defined in
 
-[circle/circularMap.ts:250](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L250)
+[circle/circularMap.ts:250](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L250)
 
 ___
 
@@ -301,7 +301,7 @@ CircularBase.addListener
 
 #### Defined in
 
-[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularBase.ts#L40)
+[circle/circularBase.ts:40](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularBase.ts#L40)
 
 ___
 
@@ -321,7 +321,7 @@ Removes all elements from the map.
 
 #### Defined in
 
-[circle/circularMap.ts:137](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L137)
+[circle/circularMap.ts:137](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L137)
 
 ___
 
@@ -349,7 +349,7 @@ Map.delete
 
 #### Defined in
 
-[circle/circularMap.ts:146](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L146)
+[circle/circularMap.ts:146](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L146)
 
 ___
 
@@ -373,7 +373,7 @@ an iterable of [key, value] pairs for every entry.
 
 #### Defined in
 
-[circle/circularMap.ts:157](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L157)
+[circle/circularMap.ts:157](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L157)
 
 ___
 
@@ -402,7 +402,7 @@ Performs the specified action for each value in the map.
 
 #### Defined in
 
-[circle/circularMap.ts:169](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L169)
+[circle/circularMap.ts:169](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L169)
 
 ___
 
@@ -432,7 +432,7 @@ Map.get
 
 #### Defined in
 
-[circle/circularMap.ts:185](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L185)
+[circle/circularMap.ts:185](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L185)
 
 ___
 
@@ -460,7 +460,7 @@ Map.has
 
 #### Defined in
 
-[circle/circularMap.ts:196](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L196)
+[circle/circularMap.ts:196](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L196)
 
 ___
 
@@ -484,7 +484,7 @@ an iterable of the map's keys.
 
 #### Defined in
 
-[circle/circularMap.ts:207](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L207)
+[circle/circularMap.ts:207](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L207)
 
 ___
 
@@ -526,7 +526,7 @@ CircularBase.on
 
 #### Defined in
 
-[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularBase.ts#L73)
+[circle/circularBase.ts:73](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularBase.ts#L73)
 
 ___
 
@@ -567,7 +567,7 @@ CircularBase.prependListener
 
 #### Defined in
 
-[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularBase.ts#L102)
+[circle/circularBase.ts:102](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularBase.ts#L102)
 
 ___
 
@@ -604,7 +604,7 @@ CircularBase.removeListener
 
 #### Defined in
 
-[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularBase.ts#L127)
+[circle/circularBase.ts:127](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularBase.ts#L127)
 
 ___
 
@@ -631,7 +631,7 @@ Map.set
 
 #### Defined in
 
-[circle/circularMap.ts:217](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L217)
+[circle/circularMap.ts:217](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L217)
 
 ___
 
@@ -655,4 +655,4 @@ an iterable of the map's values.
 
 #### Defined in
 
-[circle/circularMap.ts:261](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/circle/circularMap.ts#L261)
+[circle/circularMap.ts:261](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/circle/circularMap.ts#L261)

@@ -2,13 +2,13 @@
 
 # Class: SkipList\<T\>
 
-Represents a generic list collection of elements, allowing for indexed
-access, modification, and iteration. This interface extends the
-`Collection` interface by adding list-specific operations.
+Implements a skip list data structure.
 
-The `List` interface supports both sequential and random access to elements,
-making it suitable for a wide range of applications that require manipulation
-of collections.
+A skip list is a probabilistic alternative to balanced trees, using multiple
+layers of linked lists to achieve logarithmic time complexity for its operations.
+
+This class implements the `List<T>` interface, providing compatibility with list-based
+operations and expectations.
 
 ## Type parameters
 
@@ -72,7 +72,7 @@ of collections.
 
 #### Defined in
 
-[std/skipList.ts:44](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L44)
+[std/skipList.ts:101](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L101)
 
 • **new SkipList**\<`T`\>(`values`): [`SkipList`](SkipList.md)\<`T`\>
 
@@ -94,7 +94,7 @@ of collections.
 
 #### Defined in
 
-[std/skipList.ts:45](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L45)
+[std/skipList.ts:102](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L102)
 
 • **new SkipList**\<`T`\>(`config`): [`SkipList`](SkipList.md)\<`T`\>
 
@@ -116,7 +116,7 @@ of collections.
 
 #### Defined in
 
-[std/skipList.ts:46](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L46)
+[std/skipList.ts:103](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L103)
 
 • **new SkipList**\<`T`\>(`values`, `config`): [`SkipList`](SkipList.md)\<`T`\>
 
@@ -139,7 +139,7 @@ of collections.
 
 #### Defined in
 
-[std/skipList.ts:47](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L47)
+[std/skipList.ts:104](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L104)
 
 ## Accessors
 
@@ -159,7 +159,7 @@ List.[toStringTag]
 
 #### Defined in
 
-[std/skipList.ts:79](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L79)
+[std/skipList.ts:136](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L136)
 
 ___
 
@@ -173,7 +173,7 @@ ___
 
 #### Defined in
 
-[std/skipList.ts:63](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L63)
+[std/skipList.ts:120](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L120)
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-[std/skipList.ts:67](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L67)
+[std/skipList.ts:124](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L124)
 
 • `set` **maxLevel**(`maxLevel`): `void`
 
@@ -203,7 +203,7 @@ ___
 
 #### Defined in
 
-[std/skipList.ts:83](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L83)
+[std/skipList.ts:140](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L140)
 
 ___
 
@@ -217,7 +217,7 @@ ___
 
 #### Defined in
 
-[std/skipList.ts:71](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L71)
+[std/skipList.ts:128](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L128)
 
 • `set` **p**(`p`): `void`
 
@@ -233,7 +233,7 @@ ___
 
 #### Defined in
 
-[std/skipList.ts:101](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L101)
+[std/skipList.ts:158](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L158)
 
 ___
 
@@ -253,7 +253,7 @@ List.size
 
 #### Defined in
 
-[std/skipList.ts:75](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L75)
+[std/skipList.ts:132](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L132)
 
 ## Methods
 
@@ -273,7 +273,7 @@ Returns the default iterator through the list's elements.
 
 #### Defined in
 
-[std/skipList.ts:297](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L297)
+[std/skipList.ts:354](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L354)
 
 ___
 
@@ -301,7 +301,7 @@ Retrieves the element at the specified index in the list.
 
 #### Defined in
 
-[std/skipList.ts:114](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L114)
+[std/skipList.ts:171](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L171)
 
 ___
 
@@ -321,7 +321,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[std/skipList.ts:119](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L119)
+[std/skipList.ts:176](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L176)
 
 ___
 
@@ -350,7 +350,7 @@ Subsequent elements are shifted one position towards the start of the list.
 
 #### Defined in
 
-[std/skipList.ts:128](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L128)
+[std/skipList.ts:185](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L185)
 
 ___
 
@@ -373,7 +373,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[std/skipList.ts:137](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L137)
+[std/skipList.ts:194](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L194)
 
 ___
 
@@ -404,7 +404,7 @@ to an end index (exclusive).
 
 #### Defined in
 
-[std/skipList.ts:145](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L145)
+[std/skipList.ts:202](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L202)
 
 ___
 
@@ -431,7 +431,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[std/skipList.ts:166](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L166)
+[std/skipList.ts:223](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L223)
 
 ___
 
@@ -459,7 +459,7 @@ Determines whether a specific element exists within the list.
 
 #### Defined in
 
-[std/skipList.ts:177](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L177)
+[std/skipList.ts:234](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L234)
 
 ___
 
@@ -482,7 +482,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[std/skipList.ts:189](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L189)
+[std/skipList.ts:246](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L246)
 
 ___
 
@@ -504,7 +504,7 @@ Removes and returns the last element of the list.
 
 #### Defined in
 
-[std/skipList.ts:195](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L195)
+[std/skipList.ts:252](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L252)
 
 ___
 
@@ -533,7 +533,7 @@ and returns the new list length.
 
 #### Defined in
 
-[std/skipList.ts:207](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L207)
+[std/skipList.ts:264](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L264)
 
 ___
 
@@ -562,7 +562,7 @@ Replaces the element at the specified index with a new value.
 
 #### Defined in
 
-[std/skipList.ts:223](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L223)
+[std/skipList.ts:280](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L280)
 
 ___
 
@@ -585,7 +585,7 @@ Subsequent elements are shifted one position towards the start of the list.
 
 #### Defined in
 
-[std/skipList.ts:234](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L234)
+[std/skipList.ts:291](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L291)
 
 ___
 
@@ -615,7 +615,7 @@ to end index (exclusive) into a new list. Does not modify the existing list.
 
 #### Defined in
 
-[std/skipList.ts:243](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L243)
+[std/skipList.ts:300](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L300)
 
 ___
 
@@ -646,7 +646,7 @@ and/or adding new elements at a given index.
 
 #### Defined in
 
-[std/skipList.ts:264](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L264)
+[std/skipList.ts:321](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L321)
 
 ___
 
@@ -675,7 +675,7 @@ and returns the new list length.
 
 #### Defined in
 
-[std/skipList.ts:301](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L301)
+[std/skipList.ts:358](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L358)
 
 ___
 
@@ -698,4 +698,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[std/skipList.ts:316](https://github.com/havelessbemore/circle-ds/blob/33e7292/src/std/skipList.ts#L316)
+[std/skipList.ts:373](https://github.com/havelessbemore/circle-ds/blob/d2834c1/src/std/skipList.ts#L373)

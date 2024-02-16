@@ -4,21 +4,78 @@ import { isArrayLength, isIterable, isNumber } from "../utils/is";
 import { chunk } from "../utils/iterable";
 import { clamp, log, toInteger } from "../utils/math";
 
+/**
+ * Configuration options for creating a SkipList instance.
+ */
 export interface SkipListConfig {
+  /**
+   * The maximum number of levels in the skip list.
+   *
+   * Optional. If not provided, a default value is calculated
+   * based on the probability factor `p` and `size`
+   */
   maxLevel?: number;
+
+  /**
+   * The probability factor used to randomly determine the levels
+   * of new nodes. Should be a value between 0 and 1, where a lower
+   * value results in fewer levels on average.
+   *
+   * Optional; If not specified, a default value is used (e.g. 0.5).
+   */
   p?: number;
+
+  /**
+   * The size to use to calculate the optimal max level. Ignored
+   * if `maxLevel` is specified.
+   *
+   * Optional. If not provided, a default value is used, such as
+   * the maximum size supported by the implementation.
+   */
+  size?: number;
 }
 
 /**
  * @internal
+ * Represents a node within a SkipList.
+ *
+ * This internal interface defines the structure of nodes in the skip list,
+ * including forward and backward pointers, the node's value, and the span
+ * (width) between node levels. Each node may participate in multiple levels
+ * of the list, facilitating fast searches, insertions, and deletions.
  */
 export interface SkipListNode<T> {
+  /**
+   * An array of pointers to the next node at each level.
+   */
   next: SkipListNode<T>[];
+
+  /**
+   * An array of pointers to the previous node at each level.
+   */
   prev: SkipListNode<T>[];
+
+  /**
+   * The value stored in the node.
+   */
   value: T;
+
+  /**
+   * An array representing the distance to the next node
+   * at each level, used to facilitate indexing and efficient operations.
+   */
   width: number[];
 }
 
+/**
+ * Implements a skip list data structure.
+ *
+ * A skip list is a probabilistic alternative to balanced trees, using multiple
+ * layers of linked lists to achieve logarithmic time complexity for its operations.
+ *
+ * This class implements the `List<T>` interface, providing compatibility with list-based
+ * operations and expectations.
+ */
 export class SkipList<T> implements List<T> {
   /**
    * @internal
@@ -52,9 +109,9 @@ export class SkipList<T> implements List<T> {
       values = [];
     }
     config = config ?? {};
+    const size = config.size ?? Number.MAX_SAFE_INTEGER;
     this.p = config.p ?? 0.5;
-    this.maxLevel =
-      config.maxLevel ?? Math.ceil(log(Number.MAX_SAFE_INTEGER, 1 / this._p));
+    this.maxLevel = config.maxLevel ?? Math.ceil(log(size, 1 / this._p));
     for (const array of chunk(values, ARGS_MAX_LENGTH)) {
       this.push(...array);
     }
