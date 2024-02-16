@@ -1040,7 +1040,7 @@ export function test(cls: Constructor<List<unknown>>) {
           list.unshift(value);
           expect(list.size).toBe(idx + 1);
         });
-        expect(Array.from(list)).toEqual(values.toReversed());
+        expect(Array.from(list)).toEqual(values.reverse());
       });
 
       it("prepends multiple elements to an empty list", () => {

@@ -17,7 +17,7 @@
 
 #### Defined in
 
-[std/skipList.ts:8](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/std/skipList.ts#L8)
+[std/skipList.ts:8](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/std/skipList.ts#L8)
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 #### Defined in
 
-[std/skipList.ts:9](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/std/skipList.ts#L9)
+[std/skipList.ts:9](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/std/skipList.ts#L9)

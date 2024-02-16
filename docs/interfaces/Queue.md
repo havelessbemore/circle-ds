@@ -8,9 +8,9 @@ functionality found in data structures like deques, lists, maps, queues, etc.
 
 ## Type parameters
 
-| Name | Description |
-| :------ | :------ |
-| `V` | The type of keys maintained by this collection. |
+| Name |
+| :------ |
+| `V` |
 
 ## Hierarchy
 
@@ -64,7 +64,7 @@ Collection.[toStringTag]
 
 #### Defined in
 
-[types/collection.d.ts:22](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L22)
+[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L19)
 
 ___
 
@@ -84,7 +84,7 @@ Collection.size
 
 #### Defined in
 
-[types/collection.d.ts:17](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L17)
+[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L14)
 
 ## Methods
 
@@ -98,7 +98,7 @@ Collection.size
 
 #### Defined in
 
-[types/queue.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L9)
+[types/queue.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/queue.d.ts#L9)
 
 ___
 
@@ -118,7 +118,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[types/collection.d.ts:27](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L27)
+[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L24)
 
 ___
 
@@ -141,7 +141,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:35](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L35)
+[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L32)
 
 ___
 
@@ -155,7 +155,7 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:4](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L4)
+[types/queue.d.ts:4](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/queue.d.ts#L4)
 
 ___
 
@@ -182,7 +182,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[types/collection.d.ts:44](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L44)
+[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L41)
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L5)
+[types/queue.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/queue.d.ts#L5)
 
 ___
 
@@ -216,7 +216,7 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L6)
+[types/queue.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/queue.d.ts#L6)
 
 ___
 
@@ -239,7 +239,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:55](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L55)
+[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L52)
 
 ___
 
@@ -259,7 +259,7 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L7)
+[types/queue.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/queue.d.ts#L7)
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-[types/queue.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/queue.d.ts#L8)
+[types/queue.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/queue.d.ts#L8)
 
 ___
 
@@ -296,4 +296,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:63](https://github.com/havelessbemore/circle-ds/blob/8db0c0d/src/types/collection.d.ts#L63)
+[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/a2fd13f/src/types/collection.d.ts#L60)
