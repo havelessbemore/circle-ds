@@ -2,9 +2,14 @@
 
 # Interface: Queue\<V\>
 
-Represents a generic collection of key-value pairs with various utility methods
-to manipulate and interact with the collection. This interface abstracts common
-functionality found in data structures like deques, lists, maps, queues, etc.
+Represents a queue collection of elements. A queue allows elements to be
+added to the end and removed from the front, adhering to the FIFO
+(First In, First Out) principle. This interface extends the `Collection` interface
+and specifies additional queue-specific operations.
+
+Queues are commonly used in scenarios where you need to process elements in the order
+they were added, such as task scheduling, buffering data streams, and breadth-first
+graph traversal.
 
 ## Type parameters
 
@@ -64,7 +69,7 @@ Collection.[toStringTag]
 
 #### Defined in
 
-[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L19)
+[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L19)
 
 ___
 
@@ -84,7 +89,7 @@ Collection.size
 
 #### Defined in
 
-[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L14)
+[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L14)
 
 ## Methods
 
@@ -92,13 +97,16 @@ Collection.size
 
 ▸ **[iterator]**(): `IterableIterator`\<`V`\>
 
+Returns an iterable iterator that allows iteration
+through the queue's elements.
+
 #### Returns
 
 `IterableIterator`\<`V`\>
 
 #### Defined in
 
-[types/queue.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/queue.d.ts#L9)
+[types/queue.d.ts:63](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/queue.d.ts#L63)
 
 ___
 
@@ -118,7 +126,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L24)
+[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L24)
 
 ___
 
@@ -141,7 +149,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L32)
+[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L32)
 
 ___
 
@@ -149,13 +157,18 @@ ___
 
 ▸ **first**(): `undefined` \| `V`
 
+Retrieves the first element added to the queue without removing it.
+
 #### Returns
 
 `undefined` \| `V`
 
+- The first element of the queue,
+or `undefined` if the queue is empty.
+
 #### Defined in
 
-[types/queue.d.ts:4](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/queue.d.ts#L4)
+[types/queue.d.ts:20](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/queue.d.ts#L20)
 
 ___
 
@@ -182,7 +195,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L41)
+[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L41)
 
 ___
 
@@ -190,13 +203,22 @@ ___
 
 ▸ **front**(): `undefined` \| `V`
 
+Retrieves the element at the front of the queue without removing it.
+
+This method provides semantic clarity in contexts where the term "front" is
+preferred over "first" to describe the element that was added earliest and will
+be processed next.
+
 #### Returns
 
 `undefined` \| `V`
 
+- The element at the front of the queue,
+or `undefined` if the queue is empty.
+
 #### Defined in
 
-[types/queue.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/queue.d.ts#L5)
+[types/queue.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/queue.d.ts#L32)
 
 ___
 
@@ -204,19 +226,23 @@ ___
 
 ▸ **has**(`value`): `boolean`
 
+Determines whether a specific element exists within the queue.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `V` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `V` | The value to locate. |
 
 #### Returns
 
 `boolean`
 
+- `true` if the value exists, `false` otherwise.
+
 #### Defined in
 
-[types/queue.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/queue.d.ts#L6)
+[types/queue.d.ts:40](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/queue.d.ts#L40)
 
 ___
 
@@ -239,7 +265,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L52)
+[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L52)
 
 ___
 
@@ -247,19 +273,24 @@ ___
 
 ▸ **push**(`...values`): `number`
 
+Adds one or more elements to the end of the queue
+and returns the queue's new length.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `...values` | `V`[] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `...values` | `V`[] | The elements to add. |
 
 #### Returns
 
 `number`
 
+- The new length of the queue.
+
 #### Defined in
 
-[types/queue.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/queue.d.ts#L7)
+[types/queue.d.ts:49](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/queue.d.ts#L49)
 
 ___
 
@@ -267,13 +298,18 @@ ___
 
 ▸ **shift**(): `undefined` \| `V`
 
+Removes and returns the first element of the queue.
+
 #### Returns
 
 `undefined` \| `V`
 
+- The first element of the queue,
+or `undefined` if the queue is empty.
+
 #### Defined in
 
-[types/queue.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/queue.d.ts#L8)
+[types/queue.d.ts:57](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/queue.d.ts#L57)
 
 ___
 
@@ -296,4 +332,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L60)
+[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L60)

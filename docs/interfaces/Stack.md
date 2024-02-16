@@ -2,9 +2,14 @@
 
 # Interface: Stack\<V\>
 
-Represents a generic collection of key-value pairs with various utility methods
-to manipulate and interact with the collection. This interface abstracts common
-functionality found in data structures like deques, lists, maps, queues, etc.
+Represents a stack collection of elements. A stack allows elements to be
+added and removed from the end of the collection only, following the
+LIFO (Last In, First Out) principle. This interface extends the `Collection`
+interface and specifies additional stack-specific operations.
+
+Stacks are commonly used in scenarios where you need to temporarily store and
+retrieve elements in a reverse order of their addition, such as in
+undo mechanisms, parsing algorithms, and temporary buffers.
 
 ## Type parameters
 
@@ -64,7 +69,7 @@ Collection.[toStringTag]
 
 #### Defined in
 
-[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L19)
+[types/collection.d.ts:19](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L19)
 
 ___
 
@@ -84,7 +89,7 @@ Collection.size
 
 #### Defined in
 
-[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L14)
+[types/collection.d.ts:14](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L14)
 
 ## Methods
 
@@ -92,13 +97,16 @@ Collection.size
 
 ▸ **[iterator]**(): `IterableIterator`\<`V`\>
 
+Returns an iterable iterator that allows iteration
+through the stack's elements.
+
 #### Returns
 
 `IterableIterator`\<`V`\>
 
 #### Defined in
 
-[types/stack.d.ts:8](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/stack.d.ts#L8)
+[types/stack.d.ts:51](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L51)
 
 ___
 
@@ -118,7 +126,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L24)
+[types/collection.d.ts:24](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L24)
 
 ___
 
@@ -141,7 +149,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L32)
+[types/collection.d.ts:32](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L32)
 
 ___
 
@@ -168,7 +176,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L41)
+[types/collection.d.ts:41](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L41)
 
 ___
 
@@ -176,19 +184,23 @@ ___
 
 ▸ **has**(`value`): `boolean`
 
+Determines whether an element exists within the stack.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `V` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `V` | The value to locate. |
 
 #### Returns
 
 `boolean`
 
+- `true` if the value exists, 'false' otherwise.
+
 #### Defined in
 
-[types/stack.d.ts:4](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/stack.d.ts#L4)
+[types/stack.d.ts:20](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L20)
 
 ___
 
@@ -211,7 +223,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L52)
+[types/collection.d.ts:52](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L52)
 
 ___
 
@@ -219,13 +231,18 @@ ___
 
 ▸ **last**(): `undefined` \| `V`
 
+Retrieves the last element added to the stack without removing it.
+
 #### Returns
 
 `undefined` \| `V`
 
+- The last element of the stack,
+or `undefined` if the stack is empty.
+
 #### Defined in
 
-[types/stack.d.ts:5](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/stack.d.ts#L5)
+[types/stack.d.ts:28](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L28)
 
 ___
 
@@ -233,13 +250,18 @@ ___
 
 ▸ **pop**(): `undefined` \| `V`
 
+Removes the last element added to the stack and returns it.
+
 #### Returns
 
 `undefined` \| `V`
 
+- The last element of the stack,
+or `undefined` if the stack is empty.
+
 #### Defined in
 
-[types/stack.d.ts:6](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/stack.d.ts#L6)
+[types/stack.d.ts:36](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L36)
 
 ___
 
@@ -247,19 +269,24 @@ ___
 
 ▸ **push**(`...values`): `number`
 
+Adds one or more elements to the end of the stack
+and returns the stack's new length.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `...values` | `V`[] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `...values` | `V`[] | The elements to add. |
 
 #### Returns
 
 `number`
 
+- The new length of the stack.
+
 #### Defined in
 
-[types/stack.d.ts:7](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/stack.d.ts#L7)
+[types/stack.d.ts:45](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L45)
 
 ___
 
@@ -267,13 +294,21 @@ ___
 
 ▸ **top**(): `undefined` \| `V`
 
+Retrieves the element at the top of the stack without removing it.
+
+This method provides semantic clarity in contexts where the term "top" is
+preferred over "last" to describe the most recently added element.
+
 #### Returns
 
 `undefined` \| `V`
 
+- The element at the top of the stack,
+or `undefined` if the stack is empty.
+
 #### Defined in
 
-[types/stack.d.ts:9](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/stack.d.ts#L9)
+[types/stack.d.ts:62](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/stack.d.ts#L62)
 
 ___
 
@@ -296,4 +331,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/f0ada2f/src/types/collection.d.ts#L60)
+[types/collection.d.ts:60](https://github.com/havelessbemore/circle-ds/blob/de49230/src/types/collection.d.ts#L60)
