@@ -1,6 +1,6 @@
 # Circle DS
 
-A suite of circular data structures, including deques, maps, queues, sets and stacks. Use circular buffers with ease.
+A suite of circular data structures, including deques, lists, maps, queues, sets and stacks. Use circular buffers with ease.
 
 [![Version](https://img.shields.io/npm/v/circle-ds.svg)](https://www.npmjs.com/package/circle-ds)
 [![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)](https://github.com/havelessbemore/circle-ds/graphs/commit-activity)
@@ -32,8 +32,8 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 #### Constructor
 
-- `constructor()`: Initialize an empty collection of infinite capacity.
-- `constructor(capacity: number)`: Initialize an empty collection with the given capacity.
+- `new ()`: Initialize an empty collection of infinite capacity.
+- `new (capacity: number)`: Initialize an empty collection with the given capacity.
 
 #### Properties
 
@@ -67,7 +67,7 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 #### Constructor
 
-- `CircularDeque<T>(items: Iterable<T>)`: Initialize a full deque with the given items.
+- `new <T>(items: Iterable<T>)`: Initialize a full deque with the given items.
 
 #### Methods
 
@@ -91,11 +91,45 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularDeque.md#iterator): Returns an iterator for the values in the collection.
 
+### [CircularLinkedList](./docs/classes/CircularLinkedList.md)
+
+`CircularLinkedList` is a list of elements allowing for indexed access, modification, and iteration.
+
+#### Constructor
+
+- `new <T>(items: Iterable<T>)`: Initialize a full list with the given items.
+
+#### Methods
+
+- [`at(index: number): V | undefined`](./docs/classes/CircularLinkedList.md#at): Retrieves the element at the specified index in the list.
+
+- [`delete(index: number): boolean`](./docs/classes/CircularLinkedList.md#delete): Deletes the element at the specified index.
+
+- [`fill(value: V, start?: number, end?: number): this`](./docs/classes/CircularLinkedList.md#fill): Fills the list with the specified value from start index (inclusive) to end index (exclusive).
+
+- [`has(value: T): boolean`](./docs/classes/CircularLinkedList.md#has): Checks if the collection contains a specific value.
+
+- [`pop(): T | undefined`](./docs/classes/CircularLinkedList.md#pop): Removes and returns the last item, or `undefined` if the collection is empty.
+
+- [`push(...items: T[]): number`](./docs/classes/CircularLinkedList.md#push): Appends items to the collection and returns the new size. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+
+- [`set(index: number, value: V): V | undefined`](./docs/classes/CircularLinkedList.md#set): Replaces the element at the specified index with a new value. Returns the previous value if it succeeds, otherwise `undefined`.
+
+- [`shift(): T | undefined`](./docs/classes/CircularLinkedList.md#shift): Removes and returns the first item, or `undefined` if the collection is empty.
+
+- [`slice(start?: number, end?: number): CircularLinkedList<V>`](./docs/classes/CircularLinkedList.md#slice): Creates a shallow copy of the list from start index (inclusive) to end index (exclusive) into a new list. Does not modify the existing list.
+
+- [`splice(start: number, deleteCount?: number, ...items: V[]): CircularLinkedList<V>`](./docs/classes/CircularLinkedList.md#splice): Changes the contents of the list by removing existing elements and/or adding new elements at a given index.
+
+- [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularLinkedList.md#iterator): Returns an iterator for the values in the collection.
+
+- [`unshift(...items: T[]): number`](./docs/classes/CircularLinkedList.md#unshift): Prepends items to the collection and returns the new size. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+
 ### [CircularMap](./docs/classes/CircularMap.md)
 
 #### Constructor
 
-- `CircularMap<K, V>(items: Iterable<[K, V]>)`: Initialize a full map with the given items. Capacity will be the number of unique keys given.
+- `new <K, V>(items: Iterable<[K, V]>)`: Initialize a full map with the given items. Capacity will be the number of unique keys given.
 
 #### Methods
 
@@ -113,7 +147,7 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 #### Constructor
 
-- `CircularQueue<T>(items: Iterable<T>)`: Initialize a full queue with the given items.
+- `new <T>(items: Iterable<T>)`: Initialize a full queue with the given items.
 
 #### Methods
 
@@ -133,7 +167,7 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 #### Constructor
 
-- `CircularSet<T>(items: Iterable<T>)`: Initialize a full set with the given items. Capacity will be the number of unique items given.
+- `new <T>(items: Iterable<T>)`: Initialize a full set with the given items. Capacity will be the number of unique items given.
 
 #### Methods
 
@@ -151,7 +185,7 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 #### Constructor
 
-- `CircularStack<T>(items: Iterable<T>)`: Initialize a full stack with the given items.
+- `new <T>(items: Iterable<T>)`: Initialize a full stack with the given items.
 
 #### Methods
 

@@ -62,4 +62,4 @@ event handling across the application.
 
 #### Defined in
 
-[types/boundedEvent.ts:21](https://github.com/havelessbemore/circle-ds/blob/7b7e632/src/types/boundedEvent.ts#L21)
+[types/boundedEvent.ts:21](https://github.com/havelessbemore/circle-ds/blob/0f72cf6/src/types/boundedEvent.ts#L21)
