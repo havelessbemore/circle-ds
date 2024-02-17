@@ -11,6 +11,7 @@ export type { Stack } from "./types/stack";
 
 // Circular Classes
 export { CircularDeque } from "./circle/circularDeque";
+export { CircularDoublyLinkedList } from "./circle/circularDoublyLinkedList";
 export { CircularLinkedDeque } from "./circle/circularLinkedDeque";
 export { CircularLinkedList } from "./circle/circularLinkedList";
 export { CircularLinkedQueue } from "./circle/circularLinkedQueue";

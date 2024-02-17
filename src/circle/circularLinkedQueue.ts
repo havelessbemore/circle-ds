@@ -139,8 +139,8 @@ export class CircularLinkedQueue<T>
     const items: T[] = [];
     let head = this.root.next;
     do {
-      items.push(head.value);
-      head = head.next;
+      items.push(head!.value);
+      head = head!.next;
     } while (--this._size > capacity);
     this.root.next = head;
     this.tail = this._size > 0 ? this.tail : this.root;
@@ -172,7 +172,7 @@ export class CircularLinkedQueue<T>
   *entries(): IterableIterator<[number, T]> {
     let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next;
+      node = node.next!;
       yield [i, node.value];
     }
   }
@@ -185,7 +185,7 @@ export class CircularLinkedQueue<T>
    * @returns the first element, or `undefined` if empty.
    */
   first(): T | undefined {
-    return this.root.next.value;
+    return this.root.next?.value;
   }
 
   /**
@@ -202,7 +202,7 @@ export class CircularLinkedQueue<T>
   ): void {
     let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next;
+      node = node.next!;
       callbackfn.call(thisArg, node.value, i, this);
     }
   }
@@ -215,7 +215,7 @@ export class CircularLinkedQueue<T>
    * @returns the first element, or `undefined` if empty.
    */
   front(): T | undefined {
-    return this.root.next.value;
+    return this.root.next?.value;
   }
 
   /**
@@ -230,7 +230,7 @@ export class CircularLinkedQueue<T>
   has(value: T): boolean {
     let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next;
+      node = node.next!;
       if (node.value === value) {
         return true;
       }
@@ -275,8 +275,8 @@ export class CircularLinkedQueue<T>
       if (this._size < capacity) {
         ++this._size;
       } else {
-        evicted.push(root.next.value);
-        root.next = root.next.next;
+        evicted.push(root.next!.value);
+        root.next = root.next!.next;
       }
     }
 
@@ -298,11 +298,11 @@ export class CircularLinkedQueue<T>
       return undefined;
     }
     const head = this.root.next;
-    this.root.next = head.next;
+    this.root.next = head!.next;
     if (--this._size < 1) {
       this.tail = this.root;
     }
-    return head.value;
+    return head!.value;
   }
 
   /**
@@ -326,7 +326,7 @@ export class CircularLinkedQueue<T>
   *values(): IterableIterator<T> {
     let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next;
+      node = node.next!;
       yield node.value;
     }
   }

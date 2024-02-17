@@ -1,6 +1,6 @@
 import { Stack } from "../types/stack";
 import { Bounded } from "../types/bounded";
-import { BoundedEvent, CircularLinkedList } from "..";
+import { BoundedEvent, CircularDoublyLinkedList } from "..";
 
 /**
  * A circular stack is similar to a traditional stack, but uses a fixed-size,
@@ -13,7 +13,10 @@ import { BoundedEvent, CircularLinkedList } from "..";
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export class CircularLinkedStack<T> implements Bounded<T>, Stack<T> {
-  protected list: CircularLinkedList<T>;
+  /**
+   * @internal
+   */
+  protected list: CircularDoublyLinkedList<T>;
 
   /**
    * Creates a new stack with `capacity` defaulted to `Infinity`.
@@ -32,7 +35,7 @@ export class CircularLinkedStack<T> implements Bounded<T>, Stack<T> {
    */
   constructor(items: Iterable<T>);
   constructor(capacity?: number | null | Iterable<T>) {
-    this.list = new CircularLinkedList(capacity as number);
+    this.list = new CircularDoublyLinkedList(capacity as number);
   }
 
   get capacity(): number {

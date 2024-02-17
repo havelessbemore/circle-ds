@@ -1,6 +1,8 @@
 import { BoundedEvent } from "../types/boundedEvent";
 import { Bounded } from "../types/bounded";
-import { CircularLinkedList, Deque } from "..";
+import { Deque } from "../types/deque";
+
+import { CircularDoublyLinkedList } from "./circularDoublyLinkedList";
 
 /**
  * A circular deque is similar to a traditional deque, but uses a fixed-size,
@@ -13,7 +15,10 @@ import { CircularLinkedList, Deque } from "..";
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export class CircularLinkedDeque<T> implements Bounded<T>, Deque<T> {
-  protected list: CircularLinkedList<T>;
+  /**
+   * @internal
+   */
+  protected list: CircularDoublyLinkedList<T>;
 
   /**
    * Creates a new stack with `capacity` defaulted to `Infinity`.
@@ -32,7 +37,7 @@ export class CircularLinkedDeque<T> implements Bounded<T>, Deque<T> {
    */
   constructor(items: Iterable<T>);
   constructor(capacity?: number | null | Iterable<T>) {
-    this.list = new CircularLinkedList(capacity as number);
+    this.list = new CircularDoublyLinkedList(capacity as number);
   }
 
   get capacity(): number {
