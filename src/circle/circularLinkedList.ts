@@ -1,7 +1,17 @@
 import { Bounded, BoundedEvent } from "..";
-import { DoublyLinkedNode as Node } from "../types/doublyLinkedNode";
+import { LinkedNode as Node } from "../types/linkedNode";
 import { List } from "../types/list";
 import { isInfinity, isNumber, isSafeCount } from "../utils/is";
+import {
+  cut,
+  entries,
+  get,
+  has,
+  keys,
+  toArray,
+  toList,
+  values,
+} from "../utils/linkedNode";
 import { clamp, toInteger } from "../utils/math";
 import { CircularBase } from "./circularBase";
 
@@ -22,6 +32,10 @@ export class CircularLinkedList<T>
    * @internal
    */
   protected _size!: number;
+  /**
+   * @internal
+   */
+  protected tail!: Node<T>;
 
   /**
    * Creates a new queue with `capacity` defaulted to `Infinity`.
@@ -62,15 +76,11 @@ export class CircularLinkedList<T>
     }
 
     // Case 3: capacity is iterable
-    let tail = this.root;
-    for (const value of capacity as Iterable<T>) {
-      tail.next = { prev: tail, value } as Node<T>;
-      tail = tail.next;
-      ++this._size;
-    }
-    tail.next = this.root;
-    this.root.prev = tail;
-    this._capacity = this._size;
+    const [head, tail, size] = toList(capacity as Iterable<T>);
+    this.root.next = head;
+    this.tail = tail ?? this.root;
+    this._capacity = size;
+    this._size = size;
   }
 
   get capacity(): number {
@@ -101,49 +111,52 @@ export class CircularLinkedList<T>
     }
 
     // Shrink
-    const items: T[] = [];
-    let head = this.root.next;
-    do {
-      items.push(head.value);
-      head = head.next;
-    } while (--this._size > capacity);
-    this.root.next = head;
-    head.prev = this.root;
+    const diff = this._size - capacity;
+    const [head] = cut(this.root, diff);
+    this._size -= diff;
+    if (this._size <= 0) {
+      this.tail = this.root;
+    }
 
     // Update capacity
     this._capacity = capacity;
 
     // Emit discarded items
-    this.emitter.emit(BoundedEvent.Overflow, items);
+    this.emitter.emit(BoundedEvent.Overflow, toArray(head));
   }
 
   at(index: number): T | undefined {
     const i = this.tryIndex(index);
-    return i == undefined ? undefined : this.getNode(i).value;
+    return i == undefined ? undefined : get(this.root, i + 1)!.value;
   }
 
   clear(): void {
     this._size = 0;
     this.root = { value: undefined } as Node<T>;
-    this.root.next = this.root;
-    this.root.prev = this.root;
+    this.tail = this.root;
   }
 
   delete(index: number): boolean {
+    // Check index
     index = this.tryIndex(index)!;
     if (index == undefined) {
       return false;
     }
-    this.remove(this.getNode(index));
+
+    // Delete node
+    const prev = get(this.root, index)!;
+    prev.next = prev.next!.next;
+
+    // Update tail
+    if (index == --this._size) {
+      this.tail = prev;
+    }
+
     return true;
   }
 
-  *entries(): IterableIterator<[number, T]> {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      yield [i, node.value];
-    }
+  entries(): IterableIterator<[number, T]> {
+    return entries(this.root.next);
   }
 
   fill(value: T, start?: number, end?: number): this {
@@ -159,9 +172,9 @@ export class CircularLinkedList<T>
     end += end >= 0 ? 0 : size;
 
     // Update values
-    for (let node = this.getNode(start); start < end; ++start) {
-      node.value = value;
-      node = node.next;
+    for (let node = get(this.root, start + 1); start < end; ++start) {
+      node!.value = value;
+      node = node!.next;
     }
 
     return this;
@@ -173,80 +186,85 @@ export class CircularLinkedList<T>
   ): void {
     let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next;
+      node = node.next!;
       callbackfn.call(thisArg, node.value, i, this);
     }
   }
 
   has(value: T): boolean {
-    const N = this._size;
-    let node = this.root;
-    for (let i = 0; i < N; ++i) {
-      node = node.next;
-      if (node.value === value) {
-        return true;
-      }
-    }
-    return false;
+    return has(this.root.next, value);
   }
 
-  *keys(): IterableIterator<number> {
-    for (let i = 0; i < this._size; ++i) {
-      yield i;
-    }
+  keys(): IterableIterator<number> {
+    return keys(this.root.next);
   }
 
   pop(): T | undefined {
-    if (this._size < 1) {
+    if (this._size <= 0) {
       return undefined;
     }
-    const node = this.root.prev;
-    this.remove(node);
-    return node.value;
+    const value = this.tail.value;
+    this.tail = get(this.root, --this._size)!;
+    this.tail.next = undefined;
+    return value;
   }
 
   push(...values: T[]): number {
     // Case 1: No values
     const N = values.length;
-    if (N < 1) {
+    if (N <= 0) {
       return this._size;
     }
 
     // Case 2: Zero capacity
     const capacity = this._capacity;
-    if (capacity < 1) {
+    if (capacity <= 0) {
       this.emitter.emit(BoundedEvent.Overflow, values);
       return this._size;
     }
 
     // Add values
-    this.append(this.root.prev, values);
+    this.tail = this.append(this.tail, values);
 
     // Return size
     return this._size;
   }
 
   set(index: number, value: T): T | undefined {
+    // Check index
     const i = this.tryIndex(index);
     if (i == undefined) {
       return undefined;
     }
-    const node = this.getNode(i);
+
+    // Update node
+    const node = get(this.root, i + 1)!;
     const prevValue = node.value;
     node.value = value;
+
     return prevValue;
   }
 
   shift(): T | undefined {
-    if (this._size < 1) {
+    if (this._size <= 0) {
       return undefined;
     }
-    const node = this.root.next;
-    this.remove(node);
-    return node.value;
+    const head = this.root.next!;
+    this.root.next = head.next;
+    if (--this._size <= 0) {
+      this.tail = this.root;
+    }
+    return head.value;
   }
 
   slice(start?: number, end?: number): CircularLinkedList<T> {
+    const out = new CircularLinkedList<T>();
+
+    // Check size
+    if (this._size <= 0) {
+      return out;
+    }
+
     // Sanitize start
     const size = this._size;
     start = toInteger(start, 0);
@@ -258,10 +276,10 @@ export class CircularLinkedList<T>
     end = clamp(end, -size, size);
     end += end >= 0 ? 0 : size;
 
-    const out = new CircularLinkedList<T>();
-    for (let prev = this.getNode(start - 1); start < end; ++start) {
-      out.push(prev.next.value);
-      prev = prev.next;
+    // Add values to output
+    for (let node = get(this.root, start)!; start < end; ++start) {
+      node = node.next!;
+      out.push(node.value);
     }
 
     return out;
@@ -272,6 +290,11 @@ export class CircularLinkedList<T>
     deleteCount?: number,
     ...items: T[]
   ): CircularLinkedList<T> {
+    const out = new CircularLinkedList<T>();
+    if (this._size <= 0) {
+      return out;
+    }
+
     // Sanitize start
     const size = this._size;
     start = toInteger(start, 0);
@@ -282,86 +305,85 @@ export class CircularLinkedList<T>
     deleteCount = toInteger(deleteCount, 0);
     deleteCount = clamp(deleteCount, 0, size - start);
 
-    // Create output list
-    const out = new CircularLinkedList<T>();
+    // Get prev node
+    let prev = get(this.root, start)!;
 
-    // Replace values
-    const itemCount = items.length;
-    let prev = this.getNode(start - 1);
-    const replaceCount = Math.min(deleteCount, itemCount);
-    for (let i = 0; i < replaceCount; ++i) {
-      prev = prev.next;
-      out.push(prev.value);
-      prev.value = items[i];
-    }
+    // Delete values
+    const [head, tail] = cut(prev, deleteCount);
+    this._size -= deleteCount;
+    out.root.next = head;
+    out.tail = tail ?? out.root;
+    out._size = deleteCount;
 
     // Add values
-    if (deleteCount <= replaceCount) {
-      this.append(prev, items, replaceCount);
-      return out;
+    prev = this.append(prev, items);
+
+    // Update tail
+    if (prev.next == null) {
+      this.tail = prev;
     }
-
-    // Attach out tail to segment head
-    let tail = out.root.prev;
-    prev.next.prev = tail;
-    tail.next = prev.next;
-
-    // Find segment tail
-    const diff = deleteCount - replaceCount;
-    tail = this.moveRight(prev, diff);
-
-    // Delete segment from list
-    prev.next = tail.next;
-    tail.next.prev = prev;
-    this._size -= diff;
-
-    // Attach segment tail to out root
-    tail.next = out.root;
-    out.root.prev = tail;
-    out._size += diff;
 
     return out;
   }
 
   [Symbol.iterator](): IterableIterator<T> {
-    return this.values();
+    return values(this.root.next);
   }
 
   unshift(...values: T[]): number {
     // Case 1: No values
-    const N = values.length;
-    if (N < 1) {
+    let N = values.length;
+    if (N <= 0) {
       return this._size;
     }
 
-    // Case 2: Zero capacity
+    // Case 2: No capacity
     const capacity = this._capacity;
-    if (capacity < 1) {
+    if (capacity <= 0) {
       this.emitter.emit(BoundedEvent.Overflow, values);
       return this._size;
     }
 
-    // Add values
-    this.prepend(this.root.next, values);
+    // Reduce input
+    const diff = N <= capacity ? 0 : N - capacity;
+    N -= diff;
 
-    // Return size
+    // Case 3: Discard list overflow
+    if (this._size + N > capacity) {
+      this._size = capacity - N;
+      const prev = get(this.root, this._size)!;
+      this.emitter.emit(BoundedEvent.Overflow, toArray(prev.next));
+      prev.next = undefined;
+      this.tail = prev;
+    }
+
+    // Discard input overflow
+    if (diff > 0) {
+      this.emitter.emit(BoundedEvent.Overflow, values.slice(N));
+      values.length = N;
+    }
+
+    // Add values
+    const [head, tail] = toList(values);
+    tail!.next = this.root.next;
+    this.root.next = head;
+    if (this._size <= 0) {
+      this.tail = tail!;
+    }
+    this._size += N;
     return this._size;
   }
 
-  *values(): IterableIterator<T> {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      yield node.value;
-    }
+  values(): IterableIterator<T> {
+    return values(this.root.next);
   }
 
   /**
    * @internal
    */
-  protected append(prev: Node<T>, values: T[], minIndex = 0): Node<T> {
+  protected append(tail: Node<T>, values: T[], minIndex = 0): Node<T> {
     const root = this.root;
-    const next = prev.next;
+    const next = tail.next;
     const evicted: T[] = [];
     const capacity = this._capacity;
 
@@ -369,19 +391,17 @@ export class CircularLinkedList<T>
     let size = this._size;
     const N = values.length;
     for (let i = minIndex; i < N; ++i) {
-      const curr = { prev, value: values[i] } as Node<T>;
-      prev.next = curr;
-      prev = curr;
+      const curr = { value: values[i] } as Node<T>;
+      tail.next = curr;
+      tail = curr;
       if (size < capacity) {
         ++size;
       } else {
-        evicted.push(root.next.value);
-        root.next = root.next.next;
+        evicted.push(root.next!.value);
+        root.next = root.next!.next;
       }
     }
-    prev.next = next;
-    next.prev = prev;
-    root.next.prev = root;
+    tail.next = next;
 
     // Emit evicted items
     if (evicted.length > 0) {
@@ -392,85 +412,7 @@ export class CircularLinkedList<T>
     this._size = size;
 
     // Return last node
-    return prev;
-  }
-
-  /**
-   * @internal
-   */
-  protected getNode(index: number): Node<T> {
-    const node = this.root;
-    const half = this._size / 2;
-    return index <= half
-      ? this.moveRight(node, index + 1)
-      : this.moveLeft(node, this._size - index);
-  }
-
-  /**
-   * @internal
-   */
-  protected moveLeft(node: Node<T>, steps: number): Node<T> {
-    for (let i = 0; i < steps; ++i) {
-      node = node.prev;
-    }
-    return node;
-  }
-
-  /**
-   * @internal
-   */
-  protected moveRight(node: Node<T>, steps: number): Node<T> {
-    for (let i = 0; i < steps; ++i) {
-      node = node.next;
-    }
-    return node;
-  }
-
-  /**
-   * @internal
-   */
-  protected prepend(next: Node<T>, values: T[]): Node<T> {
-    const root = this.root;
-    const prev = next.prev;
-    const evicted: T[] = [];
-    const capacity = this._capacity;
-
-    // Add values
-    let size = this._size;
-    for (let i = values.length - 1; i >= 0; --i) {
-      const curr = { next, value: values[i] } as Node<T>;
-      next.prev = curr;
-      next = curr;
-      if (size < capacity) {
-        ++size;
-      } else {
-        evicted.push(root.prev.value);
-        root.prev = root.prev.prev;
-      }
-    }
-    next.prev = prev;
-    prev.next = next;
-    root.prev.next = root;
-
-    // Emit evicted items
-    if (evicted.length > 0) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted.reverse());
-    }
-
-    // Update size
-    this._size = size;
-
-    // Return last node
-    return next;
-  }
-
-  /**
-   * @internal
-   */
-  protected remove(node: Node<T>): void {
-    node.prev.next = node.next;
-    node.next.prev = node.prev;
-    --this._size;
+    return tail;
   }
 
   /**
