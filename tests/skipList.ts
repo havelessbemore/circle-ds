@@ -5,7 +5,7 @@ import { SkipList, SkipListConfig } from "../src/std/skipList";
 import { ARRAY_MAX_LENGTH } from "../src/utils/constants";
 
 export function test(cls: Constructor<SkipList<unknown>>) {
-  describe(cls.name, () => {
+  describe(`${cls.name} | SkipList`, () => {
     let list: SkipList<number>;
 
     beforeEach(() => {

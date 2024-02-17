@@ -7,7 +7,7 @@ import { Constructor } from "../src/types/constructor";
 type BoundedSet<T> = Set<T> & Bounded<T>;
 
 export function test(cls: Constructor<BoundedSet<unknown>>) {
-  describe(cls.name, () => {
+  describe(`${cls.name} | BoundedSet`, () => {
     describe("constructor()", () => {
       it("accepts an element", () => {
         const set = new cls([1]);

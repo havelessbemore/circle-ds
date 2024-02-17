@@ -8,7 +8,7 @@ import { List } from "../src/types/list";
 type BoundedList<T> = List<T> & Bounded<T>;
 
 export function test(cls: Constructor<BoundedList<unknown>>) {
-  describe(cls.name, () => {
+  describe(`${cls.name} | BoundedList`, () => {
     describe("constructor()", () => {
       it("sets capacity to 0 if 0 element given", () => {
         const queue = new cls([]);

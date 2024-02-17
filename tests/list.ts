@@ -4,7 +4,7 @@ import { Constructor } from "../src/types/constructor";
 import { List } from "../src/types/list";
 
 export function test(cls: Constructor<List<unknown>>) {
-  describe(cls.name, () => {
+  describe(`${cls.name} | List`, () => {
     let list: List<number>;
 
     beforeEach(() => {

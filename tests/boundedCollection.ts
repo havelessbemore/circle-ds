@@ -10,7 +10,7 @@ export function test(
   cls: Constructor<BoundedCollection<unknown, unknown>>,
   maxCapacity: number
 ) {
-  describe(cls.name, () => {
+  describe(`${cls.name} | BoundedCollection`, () => {
     describe("constructor()", () => {
       it("accepts no parameters", () => {
         const obj = new cls();

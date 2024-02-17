@@ -8,7 +8,7 @@ import { Queue } from "../src/types/queue";
 type BoundedQueue<T> = Queue<T> & Bounded<T>;
 
 export function test(cls: Constructor<BoundedQueue<unknown>>) {
-  describe(cls.name, () => {
+  describe(`${cls.name} | BoundedQueue`, () => {
     describe("constructor()", () => {
       it("accepts an element", () => {
         const queue = new cls([1]);

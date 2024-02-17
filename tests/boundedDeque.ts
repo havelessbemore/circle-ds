@@ -14,7 +14,7 @@ export function test(cls: Constructor<BoundedDeque<unknown>>) {
   testQueue(cls);
   testStack(cls);
 
-  describe(cls.name, () => {
+  describe(`${cls.name} | BoundedDeque`, () => {
     describe("unshift()", () => {
       it("accepts zero elements", () => {
         const deque = new cls(5);

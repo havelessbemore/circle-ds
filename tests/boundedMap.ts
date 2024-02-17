@@ -7,7 +7,7 @@ import { Constructor } from "../src/types/constructor";
 type BoundedMap<K, V> = Map<K, V> & Bounded<[K, V]>;
 
 export function test(cls: Constructor<BoundedMap<unknown, unknown>>) {
-  describe(cls.name, () => {
+  describe(`${cls.name} | BoundedMap`, () => {
     describe("constructor()", () => {
       it("accepts an entry", () => {
         const entries = [["key", "value"]];

@@ -8,7 +8,7 @@ import { Stack } from "../src/types/stack";
 type BoundedStack<T> = Stack<T> & Bounded<T>;
 
 export function test(cls: Constructor<BoundedStack<unknown>>) {
-  describe(cls.name, () => {
+  describe(`${cls.name} | BoundedStack`, () => {
     describe("constructor()", () => {
       it("accepts an element", () => {
         const stack = new cls([1]);
