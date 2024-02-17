@@ -137,7 +137,7 @@ class CircularDeque extends CircularBase {
     return this.isFinite ? this._capacity : Infinity;
   }
   /**
-   *  @returns the number of elements in the collection.
+   * @returns the number of elements in the collection.
    */
   get size() {
     return this._size;
@@ -630,326 +630,6 @@ class CircularDeque extends CircularBase {
     this._size += num;
   }
 }
-class CircularLinkedDeque extends CircularBase {
-  constructor(capacity) {
-    super();
-    /**
-     * The maximum number of elements that can be stored in the collection.
-     * @internal
-     */
-    __publicField(this, "_capacity");
-    /**
-     * The root of the collection.
-     * @internal
-     */
-    __publicField(this, "root");
-    /**
-     * The number of elements in the collection.
-     * @internal
-     */
-    __publicField(this, "_size");
-    this._capacity = Infinity;
-    this.root = { value: void 0 };
-    this.root.next = this.root;
-    this.root.prev = this.root;
-    this._size = 0;
-    capacity = capacity ?? Infinity;
-    if (isInfinity(capacity)) {
-      return;
-    }
-    if (isNumber(capacity)) {
-      if (!isSafeCount(capacity)) {
-        throw new RangeError("Invalid capacity");
-      }
-      this._capacity = capacity;
-      return;
-    }
-    let tail = this.root.prev;
-    for (const value of capacity) {
-      tail.next = { next: this.root, prev: tail, value };
-      tail = tail.next;
-      this.root.prev = tail;
-      ++this._size;
-    }
-    this._capacity = this._size;
-  }
-  /**
-   * @returns the maximum number of elements that can be stored.
-   */
-  get capacity() {
-    return this._capacity;
-  }
-  /**
-   *  @returns the number of elements in the collection.
-   */
-  get size() {
-    return this._size;
-  }
-  /**
-   * Return the type of the object.
-   */
-  get [Symbol.toStringTag]() {
-    return CircularLinkedDeque.name;
-  }
-  /**
-   * Sets the maximum number of elements that can be stored.
-   */
-  set capacity(capacity) {
-    capacity = +capacity;
-    if (!isInfinity(capacity) && !isSafeCount(capacity)) {
-      throw new RangeError("Invalid capacity");
-    }
-    if (this._size <= capacity) {
-      this._capacity = capacity;
-      return;
-    }
-    const items = [];
-    let head = this.root.next;
-    do {
-      items.push(head.value);
-      head = head.next;
-    } while (--this._size > capacity);
-    this.root.next = head;
-    head.prev = this.root;
-    this._capacity = capacity;
-    this.emitter.emit(BoundedEvent.Overflow, items);
-  }
-  /**
-   * Remove all elements and resets the collection.
-   */
-  clear() {
-    this._size = 0;
-    this.root = { value: void 0 };
-    this.root.next = this.root;
-    this.root.prev = this.root;
-  }
-  /**
-   * Iterate through the collection's entries.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of [key, value] pairs for every entry.
-   */
-  *entries() {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      yield [i, node.value];
-    }
-  }
-  /**
-   * Get the first element in the queue.
-   *
-   * Alias for {@link top | top()}.
-   *
-   * @returns the first element, or `undefined` if empty.
-   */
-  first() {
-    return this.root.next.value;
-  }
-  /**
-   * Performs the specified action for each element in the collection.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @param callbackfn - A function that accepts up to three arguments. It is called once per element.
-   * @param thisArg - An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used.
-   */
-  forEach(callbackfn, thisArg) {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      callbackfn.call(thisArg, node.value, i, this);
-    }
-  }
-  /**
-   * Get the element at the front of the queue.
-   *
-   * Alias for {@link top | top()}.
-   *
-   * @returns the first element, or `undefined` if empty.
-   */
-  front() {
-    return this.root.next.value;
-  }
-  /**
-   * Determines whether a given element is in the collection.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @param value - The element to search for
-   *
-   * @returns a boolean indicating if `value` was found or not
-   */
-  has(value) {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      if (node.value === value) {
-        return true;
-      }
-    }
-    return false;
-  }
-  /**
-   * Iterate through the collection's keys.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of keys.
-   */
-  *keys() {
-    for (let i = 0; i < this._size; ++i) {
-      yield i;
-    }
-  }
-  /**
-   * Get the last element pushed onto the stack.
-   *
-   * Alias for {@link top | top()}.
-   *
-   * @returns the last element, or `undefined` if empty.
-   */
-  last() {
-    return this.root.prev.value;
-  }
-  /**
-   * Removes the top element from the stack and returns it.
-   *
-   * @returns the top element, or `undefined` if empty.
-   */
-  pop() {
-    if (this._size < 1) {
-      return void 0;
-    }
-    const node = this.root.prev;
-    this.root.prev = node.prev;
-    node.prev.next = this.root;
-    --this._size;
-    return node.value;
-  }
-  /**
-   * Inserts new elements at the end of the stack.
-   *
-   * @param elems - Elements to insert.
-   *
-   * @returns The overwritten elements, if any.
-   */
-  push(...elems) {
-    const capacity = this._capacity;
-    if (capacity < 1) {
-      this.emitter.emit(BoundedEvent.Overflow, elems);
-      return this._size;
-    }
-    const N = elems.length;
-    const root = this.root;
-    const evicted = [];
-    let tail = root.prev;
-    for (let i = 0; i < N; ++i) {
-      tail.next = { next: root, prev: tail, value: elems[i] };
-      tail = tail.next;
-      if (this._size < capacity) {
-        ++this._size;
-      } else {
-        evicted.push(root.next.value);
-        root.next = root.next.next;
-      }
-    }
-    root.prev = tail;
-    root.next.prev = root;
-    if (evicted.length > 0) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted);
-    }
-    return this._size;
-  }
-  /**
-   * Removes the element at the front of the queue.
-   *
-   * @returns the front element, or `undefined` if empty.
-   */
-  shift() {
-    if (this._size < 1) {
-      return void 0;
-    }
-    const head = this.root.next.next;
-    const value = head.prev.value;
-    this.root.next = head;
-    head.prev = this.root;
-    --this._size;
-    return value;
-  }
-  /**
-   * Iterate through the collection's values.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of values.
-   */
-  [Symbol.iterator]() {
-    return this.values();
-  }
-  /**
-   * Get the last element pushed onto the stack.
-   *
-   * Alias for {@link top | top()}.
-   *
-   * @returns the last element, or `undefined` if empty.
-   */
-  top() {
-    return this.root.prev.value;
-  }
-  /**
-   * Inserts new elements at the front of the queue.
-   *
-   * @param elems - Elements to insert.
-   *
-   * @returns The overwritten elements, if any.
-   */
-  unshift(...elems) {
-    const N = elems.length;
-    if (N < 1) {
-      return this._size;
-    }
-    const capacity = this._capacity;
-    if (capacity < 1) {
-      this.emitter.emit(BoundedEvent.Overflow, elems);
-      return this._size;
-    }
-    const root = this.root;
-    const evicted = [];
-    let head = root.next;
-    for (let i = elems.length - 1; i >= 0; --i) {
-      head = { next: head, prev: root, value: elems[i] };
-      head.next.prev = head;
-      if (this._size < capacity) {
-        ++this._size;
-      } else {
-        evicted.push(root.prev.value);
-        root.prev = root.prev.prev;
-      }
-    }
-    root.next = head;
-    root.prev.next = root;
-    if (evicted.length > 0) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted.reverse());
-    }
-    return this._size;
-  }
-  /**
-   * Iterate through the collection's values.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of values.
-   */
-  *values() {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      yield node.value;
-    }
-  }
-}
 function clamp(value, min, max) {
   if (min > max) {
     throw new RangeError("Invalid clamp range; min must be <= max");
@@ -963,7 +643,7 @@ function toInteger(value, defaultValue = 0) {
   value = +value;
   return isNaN(value) ? defaultValue : Math.trunc(value);
 }
-class CircularLinkedList extends CircularBase {
+class CircularDoublyLinkedList extends CircularBase {
   constructor(capacity) {
     super();
     /**
@@ -1009,7 +689,7 @@ class CircularLinkedList extends CircularBase {
     return this._size;
   }
   get [Symbol.toStringTag]() {
-    return CircularLinkedList.name;
+    return CircularDoublyLinkedList.name;
   }
   set capacity(capacity) {
     capacity = +capacity;
@@ -1101,17 +781,17 @@ class CircularLinkedList extends CircularBase {
     this.remove(node);
     return node.value;
   }
-  push(...values) {
-    const N = values.length;
+  push(...values2) {
+    const N = values2.length;
     if (N < 1) {
       return this._size;
     }
     const capacity = this._capacity;
     if (capacity < 1) {
-      this.emitter.emit(BoundedEvent.Overflow, values);
+      this.emitter.emit(BoundedEvent.Overflow, values2);
       return this._size;
     }
-    this.append(this.root.prev, values);
+    this.append(this.root.prev, values2);
     return this._size;
   }
   set(index, value) {
@@ -1140,7 +820,7 @@ class CircularLinkedList extends CircularBase {
     end = toInteger(end, size);
     end = clamp(end, -size, size);
     end += end >= 0 ? 0 : size;
-    const out = new CircularLinkedList();
+    const out = new CircularDoublyLinkedList();
     for (let prev = this.getNode(start - 1); start < end; ++start) {
       out.push(prev.next.value);
       prev = prev.next;
@@ -1154,7 +834,7 @@ class CircularLinkedList extends CircularBase {
     start += start >= 0 ? 0 : size;
     deleteCount = toInteger(deleteCount, 0);
     deleteCount = clamp(deleteCount, 0, size - start);
-    const out = new CircularLinkedList();
+    const out = new CircularDoublyLinkedList();
     const itemCount = items.length;
     let prev = this.getNode(start - 1);
     const replaceCount = Math.min(deleteCount, itemCount);
@@ -1183,17 +863,17 @@ class CircularLinkedList extends CircularBase {
   [Symbol.iterator]() {
     return this.values();
   }
-  unshift(...values) {
-    const N = values.length;
+  unshift(...values2) {
+    const N = values2.length;
     if (N < 1) {
       return this._size;
     }
     const capacity = this._capacity;
     if (capacity < 1) {
-      this.emitter.emit(BoundedEvent.Overflow, values);
+      this.emitter.emit(BoundedEvent.Overflow, values2);
       return this._size;
     }
-    this.prepend(this.root.next, values);
+    this.prepend(this.root.next, values2);
     return this._size;
   }
   *values() {
@@ -1206,15 +886,15 @@ class CircularLinkedList extends CircularBase {
   /**
    * @internal
    */
-  append(prev, values, minIndex = 0) {
+  append(prev, values2, minIndex = 0) {
     const root = this.root;
     const next = prev.next;
     const evicted = [];
     const capacity = this._capacity;
     let size = this._size;
-    const N = values.length;
+    const N = values2.length;
     for (let i = minIndex; i < N; ++i) {
-      const curr = { prev, value: values[i] };
+      const curr = { prev, value: values2[i] };
       prev.next = curr;
       prev = curr;
       if (size < capacity) {
@@ -1262,14 +942,14 @@ class CircularLinkedList extends CircularBase {
   /**
    * @internal
    */
-  prepend(next, values) {
+  prepend(next, values2) {
     const root = this.root;
     const prev = next.prev;
     const evicted = [];
     const capacity = this._capacity;
     let size = this._size;
-    for (let i = values.length - 1; i >= 0; --i) {
-      const curr = { next, value: values[i] };
+    for (let i = values2.length - 1; i >= 0; --i) {
+      const curr = { next, value: values2[i] };
       next.prev = curr;
       next = curr;
       if (size < capacity) {
@@ -1308,7 +988,154 @@ class CircularLinkedList extends CircularBase {
     return index < 0 ? index + size : index;
   }
 }
-class CircularLinkedQueue extends CircularBase {
+class CircularLinkedDeque {
+  constructor(capacity) {
+    /**
+     * @internal
+     */
+    __publicField(this, "list");
+    this.list = new CircularDoublyLinkedList(capacity);
+  }
+  get capacity() {
+    return this.list.capacity;
+  }
+  get size() {
+    return this.list.size;
+  }
+  get [Symbol.toStringTag]() {
+    return CircularLinkedDeque.name;
+  }
+  set capacity(capacity) {
+    this.list.capacity = capacity;
+  }
+  first() {
+    return this.list.at(0);
+  }
+  front() {
+    return this.list.at(0);
+  }
+  clear() {
+    this.list.clear();
+  }
+  entries() {
+    return this.list.entries();
+  }
+  forEach(callbackfn, thisArg) {
+    this.list.forEach((v, i) => callbackfn.call(thisArg, v, i, this), thisArg);
+  }
+  has(value) {
+    return this.list.has(value);
+  }
+  keys() {
+    return this.list.keys();
+  }
+  last() {
+    return this.list.at(-1);
+  }
+  pop() {
+    return this.list.pop();
+  }
+  push(...elems) {
+    return this.list.push(...elems);
+  }
+  shift() {
+    return this.list.shift();
+  }
+  [Symbol.iterator]() {
+    return this.values();
+  }
+  top() {
+    return this.list.at(-1);
+  }
+  unshift(...elems) {
+    return this.list.unshift(...elems);
+  }
+  values() {
+    return this.list.values();
+  }
+  addListener(event, listener) {
+    this.list.addListener(event, listener);
+    return this;
+  }
+  on(event, listener) {
+    this.list.on(event, listener);
+    return this;
+  }
+  prependListener(event, listener) {
+    this.list.prependListener(event, listener);
+    return this;
+  }
+  removeListener(event, listener) {
+    this.list.removeListener(event, listener);
+    return this;
+  }
+}
+function cut(root, count) {
+  if (count <= 0) {
+    return [void 0, void 0];
+  }
+  const head = root.next;
+  const tail = get(head, count - 1);
+  root.next = tail.next;
+  tail.next = void 0;
+  return [head, tail];
+}
+function* entries(head, end) {
+  for (let i = 0; head != end; ++i) {
+    yield [i, head.value];
+    head = head.next;
+  }
+}
+function get(head, index) {
+  if (index < 0) {
+    return void 0;
+  }
+  for (let i = 0; i < index; ++i) {
+    head = head.next;
+  }
+  return head;
+}
+function has(head, value, end) {
+  while (head != end) {
+    if (head.value === value) {
+      return true;
+    }
+    head = head.next;
+  }
+  return false;
+}
+function* keys(head, end) {
+  for (let i = 0; head != end; ++i) {
+    yield i;
+    head = head.next;
+  }
+}
+function toArray(head, end) {
+  const array = [];
+  while (head != end) {
+    array.push(head.value);
+    head = head.next;
+  }
+  return array;
+}
+function toList(values2) {
+  const root = {};
+  let count = 0;
+  let tail = root;
+  for (const value of values2) {
+    tail.next = { value };
+    tail = tail.next;
+    ++count;
+  }
+  return root.next == null ? [void 0, void 0, 0] : [root.next, tail, count];
+}
+function* values(head, end) {
+  for (let i = 0; head != end; ++i) {
+    yield head.value;
+    head = head.next;
+  }
+}
+class CircularLinkedList extends CircularBase {
   constructor(capacity) {
     super();
     /**
@@ -1317,25 +1144,19 @@ class CircularLinkedQueue extends CircularBase {
      */
     __publicField(this, "_capacity");
     /**
-     * The root of the collection.
      * @internal
      */
     __publicField(this, "root");
     /**
-     * The number of elements in the collection.
      * @internal
      */
     __publicField(this, "_size");
     /**
-     * The tail of the collection.
      * @internal
      */
     __publicField(this, "tail");
     this._capacity = Infinity;
-    this.root = { value: void 0 };
-    this.root.next = this.root;
-    this._size = 0;
-    this.tail = this.root;
+    this.clear();
     capacity = capacity ?? Infinity;
     if (isInfinity(capacity)) {
       return;
@@ -1347,37 +1168,21 @@ class CircularLinkedQueue extends CircularBase {
       this._capacity = capacity;
       return;
     }
-    let tail = this.root;
-    for (const value of capacity) {
-      tail.next = { next: this.root, value };
-      tail = tail.next;
-      ++this._size;
-    }
-    this.tail = tail;
-    tail.next = this.root;
-    this._capacity = this._size;
+    const [head, tail, size] = toList(capacity);
+    this.root.next = head;
+    this.tail = tail ?? this.root;
+    this._capacity = size;
+    this._size = size;
   }
-  /**
-   * @returns the maximum number of elements that can be stored.
-   */
   get capacity() {
     return this._capacity;
   }
-  /**
-   *  @returns the number of elements in the collection.
-   */
   get size() {
     return this._size;
   }
-  /**
-   * Return the type of the object.
-   */
   get [Symbol.toStringTag]() {
-    return CircularLinkedQueue.name;
+    return CircularLinkedList.name;
   }
-  /**
-   * Sets the maximum number of elements that can be stored.
-   */
   set capacity(capacity) {
     capacity = +capacity;
     if (!isInfinity(capacity) && !isSafeCount(capacity)) {
@@ -1387,58 +1192,53 @@ class CircularLinkedQueue extends CircularBase {
       this._capacity = capacity;
       return;
     }
-    const items = [];
-    let head = this.root.next;
-    do {
-      items.push(head.value);
-      head = head.next;
-    } while (--this._size > capacity);
-    this.root.next = head;
-    this.tail = this._size > 0 ? this.tail : this.root;
+    const diff = this._size - capacity;
+    const [head] = cut(this.root, diff);
+    this._size -= diff;
+    if (this._size <= 0) {
+      this.tail = this.root;
+    }
     this._capacity = capacity;
-    this.emitter.emit(BoundedEvent.Overflow, items);
+    this.emitter.emit(BoundedEvent.Overflow, toArray(head));
   }
-  /**
-   * Remove all elements and resets the collection.
-   */
+  at(index) {
+    const i = this.tryIndex(index);
+    return i == void 0 ? void 0 : get(this.root, i + 1).value;
+  }
   clear() {
     this._size = 0;
     this.root = { value: void 0 };
-    this.root.next = this.root;
     this.tail = this.root;
   }
-  /**
-   * Iterate through the collection's entries.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of [key, value] pairs for every entry.
-   */
-  *entries() {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      yield [i, node.value];
+  delete(index) {
+    index = this.tryIndex(index);
+    if (index == void 0) {
+      return false;
     }
+    const prev = get(this.root, index);
+    prev.next = prev.next.next;
+    if (index == --this._size) {
+      this.tail = prev;
+    }
+    return true;
   }
-  /**
-   * Get the first element in the queue.
-   *
-   * Alias for {@link top | top()}.
-   *
-   * @returns the first element, or `undefined` if empty.
-   */
-  first() {
-    return this.root.next.value;
+  entries() {
+    return entries(this.root.next);
   }
-  /**
-   * Performs the specified action for each element in the collection.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @param callbackfn - A function that accepts up to three arguments. It is called once per element.
-   * @param thisArg - An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used.
-   */
+  fill(value, start, end) {
+    const size = this._size;
+    start = toInteger(start, 0);
+    start = clamp(start, -size, size);
+    start += start >= 0 ? 0 : size;
+    end = toInteger(end, size);
+    end = clamp(end, -size, size);
+    end += end >= 0 ? 0 : size;
+    for (let node = get(this.root, start + 1); start < end; ++start) {
+      node.value = value;
+      node = node.next;
+    }
+    return this;
+  }
   forEach(callbackfn, thisArg) {
     let node = this.root;
     for (let i = 0; i < this._size; ++i) {
@@ -1446,368 +1246,312 @@ class CircularLinkedQueue extends CircularBase {
       callbackfn.call(thisArg, node.value, i, this);
     }
   }
-  /**
-   * Get the element at the front of the queue.
-   *
-   * Alias for {@link top | top()}.
-   *
-   * @returns the first element, or `undefined` if empty.
-   */
-  front() {
-    return this.root.next.value;
-  }
-  /**
-   * Determines whether a given element is in the collection.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @param value - The element to search for
-   *
-   * @returns a boolean indicating if `value` was found or not
-   */
   has(value) {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      if (node.value === value) {
-        return true;
-      }
-    }
-    return false;
+    return has(this.root.next, value);
   }
-  /**
-   * Iterate through the collection's keys.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of keys.
-   */
-  *keys() {
-    for (let i = 0; i < this._size; ++i) {
-      yield i;
-    }
+  keys() {
+    return keys(this.root.next);
   }
-  /**
-   * Inserts new elements at the end of the stack.
-   *
-   * @param elems - Elements to insert.
-   *
-   * @returns The overwritten elements, if any.
-   */
-  push(...elems) {
-    const capacity = this._capacity;
-    if (capacity < 1) {
-      this.emitter.emit(BoundedEvent.Overflow, elems);
+  pop() {
+    if (this._size <= 0) {
+      return void 0;
+    }
+    const value = this.tail.value;
+    this.tail = get(this.root, --this._size);
+    this.tail.next = void 0;
+    return value;
+  }
+  push(...values2) {
+    const N = values2.length;
+    if (N <= 0) {
       return this._size;
     }
-    const N = elems.length;
-    const root = this.root;
-    const evicted = [];
-    for (let i = 0; i < N; ++i) {
-      this.tail.next = { next: root, value: elems[i] };
-      this.tail = this.tail.next;
-      if (this._size < capacity) {
-        ++this._size;
-      } else {
-        evicted.push(root.next.value);
-        root.next = root.next.next;
-      }
+    const capacity = this._capacity;
+    if (capacity <= 0) {
+      this.emitter.emit(BoundedEvent.Overflow, values2);
+      return this._size;
     }
-    if (evicted.length > 0) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted);
-    }
+    this.tail = this.append(this.tail, values2);
     return this._size;
   }
-  /**
-   * Removes the element at the front of the queue.
-   *
-   * @returns the front element, or `undefined` if empty.
-   */
+  set(index, value) {
+    const i = this.tryIndex(index);
+    if (i == void 0) {
+      return void 0;
+    }
+    const node = get(this.root, i + 1);
+    const prevValue = node.value;
+    node.value = value;
+    return prevValue;
+  }
   shift() {
-    if (this._size < 1) {
+    if (this._size <= 0) {
       return void 0;
     }
     const head = this.root.next;
     this.root.next = head.next;
-    if (--this._size < 1) {
+    if (--this._size <= 0) {
       this.tail = this.root;
     }
     return head.value;
   }
-  /**
-   * Iterate through the collection's values.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of values.
-   */
+  slice(start, end) {
+    const out = new CircularLinkedList();
+    if (this._size <= 0) {
+      return out;
+    }
+    const size = this._size;
+    start = toInteger(start, 0);
+    start = clamp(start, -size, size);
+    start += start >= 0 ? 0 : size;
+    end = toInteger(end, size);
+    end = clamp(end, -size, size);
+    end += end >= 0 ? 0 : size;
+    for (let node = get(this.root, start); start < end; ++start) {
+      node = node.next;
+      out.push(node.value);
+    }
+    return out;
+  }
+  splice(start, deleteCount, ...items) {
+    const out = new CircularLinkedList();
+    if (this._size <= 0) {
+      return out;
+    }
+    const size = this._size;
+    start = toInteger(start, 0);
+    start = clamp(start, -size, size);
+    start += start >= 0 ? 0 : size;
+    deleteCount = toInteger(deleteCount, 0);
+    deleteCount = clamp(deleteCount, 0, size - start);
+    let prev = get(this.root, start);
+    const [head, tail] = cut(prev, deleteCount);
+    this._size -= deleteCount;
+    out.root.next = head;
+    out.tail = tail ?? out.root;
+    out._size = deleteCount;
+    prev = this.append(prev, items);
+    if (prev.next == null) {
+      this.tail = prev;
+    }
+    return out;
+  }
   [Symbol.iterator]() {
-    return this.values();
+    return values(this.root.next);
   }
-  /**
-   * Iterate through the collection's values.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of values.
-   */
-  *values() {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      yield node.value;
-    }
-  }
-}
-class CircularLinkedStack extends CircularBase {
-  constructor(capacity) {
-    super();
-    /**
-     * The maximum number of elements that can be stored in the collection.
-     * @internal
-     */
-    __publicField(this, "_capacity");
-    /**
-     * The root of the collection.
-     * @internal
-     */
-    __publicField(this, "root");
-    /**
-     * The number of elements in the collection.
-     * @internal
-     */
-    __publicField(this, "_size");
-    this._capacity = Infinity;
-    this.root = { value: void 0 };
-    this.root.next = this.root;
-    this.root.prev = this.root;
-    this._size = 0;
-    capacity = capacity ?? Infinity;
-    if (isInfinity(capacity)) {
-      return;
-    }
-    if (isNumber(capacity)) {
-      if (!isSafeCount(capacity)) {
-        throw new RangeError("Invalid capacity");
-      }
-      this._capacity = capacity;
-      return;
-    }
-    let tail = this.root;
-    for (const value of capacity) {
-      tail.next = { prev: tail, value };
-      tail = tail.next;
-      ++this._size;
-    }
-    tail.next = this.root;
-    this.root.prev = tail;
-    this._capacity = this._size;
-  }
-  /**
-   * @returns the maximum number of elements that can be stored.
-   */
-  get capacity() {
-    return this._capacity;
-  }
-  /**
-   *  @returns the number of elements in the collection.
-   */
-  get size() {
-    return this._size;
-  }
-  /**
-   * Return the type of the object.
-   */
-  get [Symbol.toStringTag]() {
-    return CircularLinkedStack.name;
-  }
-  /**
-   * Sets the maximum number of elements that can be stored.
-   */
-  set capacity(capacity) {
-    capacity = +capacity;
-    if (!isInfinity(capacity) && !isSafeCount(capacity)) {
-      throw new RangeError("Invalid capacity");
-    }
-    if (this._size <= capacity) {
-      this._capacity = capacity;
-      return;
-    }
-    const items = [];
-    let head = this.root.next;
-    do {
-      items.push(head.value);
-      head = head.next;
-    } while (--this._size > capacity);
-    this.root.next = head;
-    head.prev = this.root;
-    this._capacity = capacity;
-    this.emitter.emit(BoundedEvent.Overflow, items);
-  }
-  /**
-   * Remove all elements and resets the collection.
-   */
-  clear() {
-    this._size = 0;
-    this.root = { value: void 0 };
-    this.root.next = this.root;
-    this.root.prev = this.root;
-  }
-  /**
-   * Iterate through the collection's entries.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of [key, value] pairs for every entry.
-   */
-  *entries() {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      yield [i, node.value];
-    }
-  }
-  /**
-   * Performs the specified action for each element in the collection.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @param callbackfn - A function that accepts up to three arguments. It is called once per element.
-   * @param thisArg - An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used.
-   */
-  forEach(callbackfn, thisArg) {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      callbackfn.call(thisArg, node.value, i, this);
-    }
-  }
-  /**
-   * Determines whether a given element is in the collection.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @param value - The element to search for
-   *
-   * @returns a boolean indicating if `value` was found or not
-   */
-  has(value) {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      if (node.value === value) {
-        return true;
-      }
-    }
-    return false;
-  }
-  /**
-   * Iterate through the collection's keys.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of keys.
-   */
-  *keys() {
-    for (let i = 0; i < this._size; ++i) {
-      yield i;
-    }
-  }
-  /**
-   * Get the last element pushed onto the stack.
-   *
-   * Alias for {@link top | top()}.
-   *
-   * @returns the last element, or `undefined` if empty.
-   */
-  last() {
-    return this.root.prev.value;
-  }
-  /**
-   * Removes the top element from the stack and returns it.
-   *
-   * @returns the top element, or `undefined` if empty.
-   */
-  pop() {
-    if (this._size < 1) {
-      return void 0;
-    }
-    const node = this.root.prev;
-    this.root.prev = node.prev;
-    node.prev.next = this.root;
-    --this._size;
-    return node.value;
-  }
-  /**
-   * Inserts new elements at the end of the stack.
-   *
-   * @param elems - Elements to insert.
-   *
-   * @returns The overwritten elements, if any.
-   */
-  push(...elems) {
-    const N = elems.length;
-    if (N < 1) {
+  unshift(...values2) {
+    let N = values2.length;
+    if (N <= 0) {
       return this._size;
     }
     const capacity = this._capacity;
-    if (capacity < 1) {
-      this.emitter.emit(BoundedEvent.Overflow, elems);
+    if (capacity <= 0) {
+      this.emitter.emit(BoundedEvent.Overflow, values2);
       return this._size;
     }
+    const diff = N <= capacity ? 0 : N - capacity;
+    N -= diff;
+    if (this._size + N > capacity) {
+      this._size = capacity - N;
+      const prev = get(this.root, this._size);
+      this.emitter.emit(BoundedEvent.Overflow, toArray(prev.next));
+      prev.next = void 0;
+      this.tail = prev;
+    }
+    if (diff > 0) {
+      this.emitter.emit(BoundedEvent.Overflow, values2.slice(N));
+      values2.length = N;
+    }
+    const [head, tail] = toList(values2);
+    tail.next = this.root.next;
+    this.root.next = head;
+    if (this._size <= 0) {
+      this.tail = tail;
+    }
+    this._size += N;
+    return this._size;
+  }
+  values() {
+    return values(this.root.next);
+  }
+  /**
+   * @internal
+   */
+  append(tail, values2, minIndex = 0) {
     const root = this.root;
+    const next = tail.next;
     const evicted = [];
-    let tail = root.prev;
-    for (let i = 0; i < N; ++i) {
-      tail.next = { next: root, prev: tail, value: elems[i] };
-      tail = tail.next;
-      if (this._size < capacity) {
-        ++this._size;
+    const capacity = this._capacity;
+    let size = this._size;
+    const N = values2.length;
+    for (let i = minIndex; i < N; ++i) {
+      const curr = { value: values2[i] };
+      tail.next = curr;
+      tail = curr;
+      if (size < capacity) {
+        ++size;
       } else {
         evicted.push(root.next.value);
         root.next = root.next.next;
       }
     }
-    root.prev = tail;
-    root.next.prev = root;
+    tail.next = next;
     if (evicted.length > 0) {
       this.emitter.emit(BoundedEvent.Overflow, evicted);
     }
-    return this._size;
+    this._size = size;
+    return tail;
   }
   /**
-   * Iterate through the collection's values.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of values.
+   * @internal
    */
+  tryIndex(index) {
+    index = +index;
+    const size = this._size;
+    if (!Number.isInteger(index) || index >= size || index < -size) {
+      return void 0;
+    }
+    return index < 0 ? index + size : index;
+  }
+}
+class CircularLinkedQueue {
+  constructor(capacity) {
+    /**
+     * @internal
+     */
+    __publicField(this, "list");
+    this.list = new CircularLinkedList(capacity);
+  }
+  get capacity() {
+    return this.list.capacity;
+  }
+  get size() {
+    return this.list.size;
+  }
+  get [Symbol.toStringTag]() {
+    return CircularLinkedQueue.name;
+  }
+  set capacity(capacity) {
+    this.list.capacity = capacity;
+  }
+  clear() {
+    this.list.clear();
+  }
+  entries() {
+    return this.list.entries();
+  }
+  first() {
+    return this.list.at(0);
+  }
+  forEach(callbackfn, thisArg) {
+    this.list.forEach((v, i) => callbackfn.call(thisArg, v, i, this), thisArg);
+  }
+  front() {
+    return this.list.at(0);
+  }
+  has(value) {
+    return this.list.has(value);
+  }
+  keys() {
+    return this.list.keys();
+  }
+  push(...elems) {
+    return this.list.push(...elems);
+  }
+  shift() {
+    return this.list.shift();
+  }
   [Symbol.iterator]() {
     return this.values();
   }
-  /**
-   * Get the last element pushed onto the stack.
-   *
-   * Alias for {@link top | top()}.
-   *
-   * @returns the last element, or `undefined` if empty.
-   */
-  top() {
-    return this.root.prev.value;
+  values() {
+    return this.list.values();
   }
-  /**
-   * Iterate through the collection's values.
-   *
-   * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-   *
-   * @returns an iterable of values.
-   */
-  *values() {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      yield node.value;
-    }
+  addListener(event, listener) {
+    this.list.addListener(event, listener);
+    return this;
+  }
+  on(event, listener) {
+    this.list.on(event, listener);
+    return this;
+  }
+  prependListener(event, listener) {
+    this.list.prependListener(event, listener);
+    return this;
+  }
+  removeListener(event, listener) {
+    this.list.removeListener(event, listener);
+    return this;
+  }
+}
+class CircularLinkedStack {
+  constructor(capacity) {
+    /**
+     * @internal
+     */
+    __publicField(this, "list");
+    this.list = new CircularDoublyLinkedList(capacity);
+  }
+  get capacity() {
+    return this.list.capacity;
+  }
+  get size() {
+    return this.list.size;
+  }
+  get [Symbol.toStringTag]() {
+    return CircularLinkedStack.name;
+  }
+  set capacity(capacity) {
+    this.list.capacity = capacity;
+  }
+  clear() {
+    this.list.clear();
+  }
+  entries() {
+    return this.list.entries();
+  }
+  forEach(callbackfn, thisArg) {
+    this.list.forEach((v, i) => callbackfn.call(thisArg, v, i, this), thisArg);
+  }
+  has(value) {
+    return this.list.has(value);
+  }
+  keys() {
+    return this.list.keys();
+  }
+  last() {
+    return this.list.at(-1);
+  }
+  pop() {
+    return this.list.pop();
+  }
+  push(...elems) {
+    return this.list.push(...elems);
+  }
+  [Symbol.iterator]() {
+    return this.values();
+  }
+  top() {
+    return this.list.at(-1);
+  }
+  values() {
+    return this.list.values();
+  }
+  addListener(event, listener) {
+    this.list.addListener(event, listener);
+    return this;
+  }
+  on(event, listener) {
+    this.list.on(event, listener);
+    return this;
+  }
+  prependListener(event, listener) {
+    this.list.prependListener(event, listener);
+    return this;
+  }
+  removeListener(event, listener) {
+    this.list.removeListener(event, listener);
+    return this;
   }
 }
 class CircularMap extends CircularBase {
@@ -1846,7 +1590,7 @@ class CircularMap extends CircularBase {
     return this._capacity;
   }
   /**
-   *  @returns the number of values in the map.
+   * @returns the number of values in the map.
    */
   get size() {
     return this.map.size;
@@ -2063,7 +1807,7 @@ class CircularQueue extends CircularBase {
     return this.isFinite ? this._capacity : Infinity;
   }
   /**
-   *  @returns the number of elements in the collection.
+   * @returns the number of elements in the collection.
    */
   get size() {
     return this._size;
@@ -2456,7 +2200,7 @@ class CircularSet extends CircularBase {
     return this._capacity;
   }
   /**
-   *  @returns the number of values in the set.
+   * @returns the number of values in the set.
    */
   get size() {
     return this.set.size;
@@ -2661,7 +2405,7 @@ class CircularStack extends CircularBase {
     return this.isFinite ? this._capacity : Infinity;
   }
   /**
-   *  @returns the number of elements in the collection.
+   * @returns the number of elements in the collection.
    */
   get size() {
     return this._size;
@@ -3022,6 +2766,7 @@ class CircularStack extends CircularBase {
 }
 exports.BoundedEvent = BoundedEvent;
 exports.CircularDeque = CircularDeque;
+exports.CircularDoublyLinkedList = CircularDoublyLinkedList;
 exports.CircularLinkedDeque = CircularLinkedDeque;
 exports.CircularLinkedList = CircularLinkedList;
 exports.CircularLinkedQueue = CircularLinkedQueue;
