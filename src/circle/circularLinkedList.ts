@@ -27,7 +27,7 @@ export class CircularLinkedList<T>
   /**
    * @internal
    */
-  protected root!: Node<T>;
+  protected root: Node<T>;
   /**
    * @internal
    */
@@ -58,6 +58,7 @@ export class CircularLinkedList<T>
 
     // Initialize class variables
     this._capacity = Infinity;
+    this.root = { value: undefined } as Node<T>;
     this.clear();
 
     // Case 1: capacity is null, undefined or Infinity
@@ -127,12 +128,18 @@ export class CircularLinkedList<T>
 
   at(index: number): T | undefined {
     const i = this.tryIndex(index);
-    return i == undefined ? undefined : get(this.root, i + 1)!.value;
+    if (i == undefined) {
+      return undefined;
+    }
+    if (i + 1 == this._size) {
+      return this.tail.value;
+    }
+    return get(this.root, i + 1)!.value;
   }
 
   clear(): void {
     this._size = 0;
-    this.root = { value: undefined } as Node<T>;
+    this.root.next = undefined;
     this.tail = this.root;
   }
 

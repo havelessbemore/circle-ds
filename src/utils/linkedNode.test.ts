@@ -12,7 +12,7 @@ import {
   values,
 } from "./linkedNode";
 
-describe("cut()", () => {
+describe(`${cut.name}()`, () => {
   test("returns [undefined, undefined] for non-positive count", () => {
     const list = { value: 1, next: { value: 2 } };
     expect(cut(list, 0)).toEqual([undefined, undefined]);
@@ -47,7 +47,7 @@ describe("cut()", () => {
   });
 });
 
-describe("entries()", () => {
+describe(`${entries.name}()`, () => {
   test("yields correct [index, value] pairs for a list", () => {
     // 0 -> 1 -> 2 -> 3
     const list = {
@@ -94,7 +94,7 @@ describe("entries()", () => {
   });
 });
 
-describe("get()", () => {
+describe(`${get.name}()`, () => {
   test("retrieves the correct node at a given index", () => {
     const [head] = toList([1, 2, 3, 4, 5]);
     const node = get(head, 2);
@@ -137,13 +137,14 @@ describe("get()", () => {
     expect(node).toBe(undefined);
   });
 
-  test("throws TypeError for an index greater than length", () => {
+  test("returns undefined when index greater than length", () => {
     const [head] = toList([1, 2, 3]);
-    expect(() => get(head, 5)).toThrow(TypeError);
+    const node = get(head, 5);
+    expect(node).toBe(undefined);
   });
 });
 
-describe("has()", () => {
+describe(`${has.name}()`, () => {
   test("returns false when head is undefined", () => {
     expect(has(undefined, 1)).toBe(false);
   });
@@ -177,7 +178,7 @@ describe("has()", () => {
   });
 });
 
-describe("keys()", () => {
+describe(`${keys.name}()`, () => {
   test("yields correct keys for a list", () => {
     // 0 -> 1 -> 2 -> 3
     const list = {
@@ -216,7 +217,7 @@ describe("keys()", () => {
   });
 });
 
-describe("len()", () => {
+describe(`${len.name}()`, () => {
   test("yields correct length for a list", () => {
     // 0 -> 1 -> 2 -> 3
     const list = {
@@ -254,7 +255,7 @@ describe("len()", () => {
   });
 });
 
-describe("toArray()", () => {
+describe(`${toArray.name}()`, () => {
   test("yields correct array for a list", () => {
     // 0 -> 1 -> 2 -> 3
     const list = {
@@ -292,7 +293,7 @@ describe("toArray()", () => {
   });
 });
 
-describe("toList()", () => {
+describe(`${toList.name}()`, () => {
   test("returns [undefined, undefined, 0] for an empty iterable", () => {
     const result = toList([]);
     expect(result).toEqual([undefined, undefined, 0]);
@@ -347,7 +348,7 @@ describe("toList()", () => {
   });
 });
 
-describe("values()", () => {
+describe(`${values.name}()`, () => {
   test("yields correct values for a list", () => {
     // 0 -> 1 -> 2 -> 3
     const list = {

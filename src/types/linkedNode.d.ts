@@ -1,4 +1,4 @@
 export interface LinkedNode<T> {
-  next?: LinkedNode<T>;
+  next?: this;
   value: T;
 }

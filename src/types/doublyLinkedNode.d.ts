@@ -1,5 +1,5 @@
-export interface DoublyLinkedNode<T> {
-  next: DoublyLinkedNode<T>;
-  prev: DoublyLinkedNode<T>;
-  value: T;
+import { LinkedNode } from "./linkedNode";
+
+export interface DoublyLinkedNode<T> extends LinkedNode<T> {
+  prev?: this;
 }

@@ -4,29 +4,29 @@ import { LinkedNode } from "../types/linkedNode";
  * Removes and returns a segment of a linked list as a new list.
  *
  * This operation modifies the original list by removing the specified
- * range of nodes, returning the new list's head and tail as a tuple.
+ * range of nodes and returning the new list's head and tail as a tuple.
  * If `count` \<= zero, the function returns [undefined, undefined].
- * If `count` \> len(root), a `TypeError` is thrown.
+ * If `count` \> len(prev), a `TypeError` is thrown.
  *
- * @param root - The node preceding the start of the section to be cut.
+ * @param prev - The node preceding the start of the section to be cut.
  * @param count - The number of nodes to include in the cut.
  *
  * @returns A tuple containing the head and tail of the removed segment,
  * or [undefined, undefined] if `count` \<= zero.
  *
  * @throws - {@link TypeError}
- * thrown if `count` \> `len(root)`
+ * thrown if `count` \> `len(prev)`
  */
-export function cut<T>(
-  root: LinkedNode<T>,
+export function cut<N extends LinkedNode<unknown>>(
+  prev: N,
   count: number
-): [LinkedNode<T>, LinkedNode<T>] | [undefined, undefined] {
+): [N, N] | [undefined, undefined] {
   if (count <= 0) {
     return [undefined, undefined];
   }
-  const head = root.next!;
+  const head = prev.next!;
   const tail = get(head, count - 1)!;
-  root.next = tail.next;
+  prev.next = tail.next;
   tail.next = undefined;
   return [head, tail];
 }
@@ -35,101 +35,156 @@ export function cut<T>(
  * Iterates through a linked list, yielding each node's index
  * (position in the list) and value as a tuple.
  *
+ * Iteration starts from the `node` node and continues until either the end
+ * of the list, or the `end` node if provided.
+ *
  * This generator function provides a convenient way to enumerate all nodes in
  * a linked list, similar to how `Array.prototype.entries()` works for arrays.
  *
- * @param head - The head node of the linked list to iterate over.
+ * @param node - The node at which to start iterating.
+ * @param end - An optional node at which to end (exclusive).
+ * If not provided, iteration continues until the end of the list.
+ *
+ * @throws - {@link TypeError}
+ * thrown if an `end` node is provided but not encountered before the end of the list.
  */
 export function* entries<T>(
-  head?: LinkedNode<T>,
+  node?: LinkedNode<T>,
   end?: LinkedNode<T>
 ): Generator<[number, T]> {
-  for (let i = 0; head != end; ++i) {
-    yield [i, head!.value];
-    head = head!.next;
+  for (let i = 0; node != end; ++i) {
+    yield [i, node!.value];
+    node = node!.next;
   }
 }
 
 /**
- * Retrieves the node at the specified index in a linked list.
+ * Retrieves the node at the specified distance from the given node.
  *
- * This function iterates through the linked list starting from the `head`
- * node, moving forward `index` nodes in the sequence. The caller is
- * responsible for ensuring that the list contains a sufficient number
- * of nodes to prevent accessing `undefined` properties. `index` values that
- * exceed the list's length will result in a `TypeError`.
+ * This function iterates through the linked list starting from the `node`
+ * node, moving `index` nodes away in the list.
  *
- * @param head - The node from which to start.
- * @param index - The zero-based index of the node to retrieve.
+ * @param node - The node from which to start.
+ * @param index - The forward distance of the node to retrieve.
  *
- * @returns The node at the specified index, or `undefined` if `index` equals `len(head)`.
- *
- * @throws - {@link TypeError}
- * thrown if `index` \> `len(head)`
+ * @returns The node at the specified index,
+ * or `undefined` if `index` does not exist.
  */
-export function get<T>(
-  head: LinkedNode<T> | undefined,
+export function get<N extends LinkedNode<unknown>>(
+  node: N | undefined,
   index: number
-): LinkedNode<T> | undefined {
+): N | undefined {
   if (index < 0) {
     return undefined;
   }
-  for (let i = 0; i < index; ++i) {
-    head = head!.next;
+  for (let i = 0; node != null && i < index; ++i) {
+    node = node.next;
   }
-  return head;
+  return node;
 }
 
+/**
+ * Determines whether a linked list contains a node with a specified value.
+ *
+ * Iteration starts from the `node` node and continues until either the end
+ * of the list, or the `end` node if provided.
+ *
+ * @param node - The node from which to start searching.
+ * @param value - The value to search for.
+ * @param end - An optional node at which to end the search (exclusive).
+ * If not provided, the search continues until the end of the list.
+ *
+ * @returns `true` if the specified value is found, `false` otherwise.
+ *
+ * @throws - {@link TypeError}
+ * thrown if an `end` node is provided but not encountered before the end of the list.
+ *
+ */
 export function has<T>(
-  head: LinkedNode<T> | undefined,
+  node: LinkedNode<T> | undefined,
   value: T,
   end?: LinkedNode<T>
 ): boolean {
-  while (head != end) {
-    if (head!.value === value) {
+  while (node != end) {
+    if (node!.value === value) {
       return true;
     }
-    head = head!.next;
+    node = node!.next;
   }
   return false;
 }
 
+/**
+ * Iterates through a linked list, yielding each node's index
+ * (position in the list).
+ *
+ * Iteration starts from the `node` node and continues until either the end
+ * of the list, or the `end` node if provided.
+ *
+ * This generator function provides a convenient way to enumerate all nodes in
+ * a linked list, similar to how `Array.prototype.entries()` works for arrays.
+ *
+ * @param node - The node at which to start iterating.
+ * @param end - An optional node at which to end (exclusive).
+ * If not provided, iteration continues until the end of the list.
+ *
+ * @throws - {@link TypeError}
+ * thrown if an `end` node is provided but not encountered before the end of the list.
+ */
 export function* keys<T>(
-  head?: LinkedNode<T>,
+  node?: LinkedNode<T>,
   end?: LinkedNode<T>
 ): Generator<number> {
-  for (let i = 0; head != end; ++i) {
+  for (let i = 0; node != end; ++i) {
     yield i;
-    head = head!.next;
+    node = node!.next;
   }
 }
 
 /**
  * Calculates the length of the linked list.
  *
- * This function iterates through the linked list starting from the `head`
- * node, counting each node until it reaches the end of the list (i.e. the next
- * node is `null` or `undefined`).
+ * This function iterates through the linked list starting from the `node`
+ * node, counting each node until it reaches the end of the list, or the
+ * `end` node if provided.
  *
- * @param head - The node from which to start counting.
+ * @param node - The node from which to start counting.
+ * @param end - An optional node at which to end (exclusive).
+ * If not provided, iteration continues until the end of the list.
  *
- * @returns The number of nodes in the linked list.
+ * @throws - {@link TypeError}
+ * thrown if an `end` node is provided but not encountered before the end of the list.
  */
-export function len<T>(head?: LinkedNode<T>, end?: LinkedNode<T>): number {
+export function len<T>(node?: LinkedNode<T>, end?: LinkedNode<T>): number {
   let count = 0;
-  while (head != end) {
-    head = head!.next;
+  while (node != end) {
+    node = node!.next;
     ++count;
   }
   return count;
 }
 
-export function toArray<T>(head?: LinkedNode<T>, end?: LinkedNode<T>): T[] {
+/**
+ * Converts a linked list into an array of values.
+ *
+ * The conversion starts from the `node` node and includes all nodes up to the
+ * end of the list, or the `end` node if provided.
+ *
+ * @param node - The node at which to start converting.
+ * @param end - An optional node at which to end (exclusive).
+ * If not provided, conversion continues until the end of the list.
+ *
+ * @returns An array with the values of the list from `node` to `end`.
+ *
+ * @throws - {@link TypeError}
+ * thrown if an `end` node is provided but not encountered before the end of the list.
+ */
+export function toArray<T>(node?: LinkedNode<T>, end?: LinkedNode<T>): T[] {
   const array: T[] = [];
 
-  while (head != end) {
-    array.push(head!.value);
-    head = head!.next;
+  while (node != end) {
+    array.push(node!.value);
+    node = node!.next;
   }
 
   return array;
@@ -165,6 +220,22 @@ export function toList<T>(
     : [root.next, tail, count];
 }
 
+/**
+ * Iterates through a linked list, yielding each node's value.
+ *
+ * Iteration starts from the `node` node and continues until either the end
+ * of the list, or the `end` node if provided.
+ *
+ * This generator function provides a convenient way to enumerate all nodes in
+ * a linked list, similar to how `Array.prototype.entries()` works for arrays.
+ *
+ * @param node - The node at which to start iterating.
+ * @param end - An optional node at which to end (exclusive).
+ * If not provided, iteration continues until the end of the list.
+ *
+ * @throws - {@link TypeError}
+ * thrown if an `end` node is provided but not encountered before the end of the list.
+ */
 export function* values<T>(
   head?: LinkedNode<T>,
   end?: LinkedNode<T>
