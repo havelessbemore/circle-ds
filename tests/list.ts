@@ -93,9 +93,9 @@ export function test(cls: Constructor<List<unknown>>) {
         expect(list.at(-100)).toBeUndefined();
       });
 
-      it("should handle non-integer indices by returning undefined", () => {
-        expect(list.at(2.5)).toBeUndefined();
-        expect(list.at(-2.5)).toBeUndefined();
+      it("should handle non-integer indices by truncating", () => {
+        expect(list.at(2.5)).toBe(2);
+        expect(list.at(-2.5)).toBe(8);
       });
 
       it("should handle coercible non-numeric indices", () => {

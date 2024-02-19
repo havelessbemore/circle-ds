@@ -142,26 +142,33 @@ export function* keys<T>(
 }
 
 /**
- * Calculates the length of the linked list.
+ * Finds the tail of the linked list and the distance to it.
  *
  * This function iterates through the linked list starting from the `node`
- * node, counting each node until it reaches the end of the list, or the
- * `end` node if provided.
+ * node, counting each node until it reaches the tail of the list (
+ * where node.next is null or undefined).
  *
  * @param node - The node from which to start counting.
- * @param end - An optional node at which to end (exclusive).
- * If not provided, iteration continues until the end of the list.
  *
- * @throws - {@link TypeError}
- * thrown if an `end` node is provided but not encountered before the end of the list.
+ * @returns a tuple with the tail and distance to it.
  */
-export function len<T>(node?: LinkedNode<T>, end?: LinkedNode<T>): number {
+export function getTail(node?: null): [undefined, -1];
+export function getTail<N extends LinkedNode<unknown>>(node: N): [N, number];
+export function getTail<N extends LinkedNode<unknown>>(
+  node?: N | null
+): [N, number] | [undefined, -1];
+export function getTail<N extends LinkedNode<unknown>>(
+  node?: N | null
+): [N, number] | [undefined, -1] {
+  if (node == null) {
+    return [undefined, -1];
+  }
   let count = 0;
-  while (node != end) {
-    node = node!.next;
+  while (node.next != null) {
+    node = node.next;
     ++count;
   }
-  return count;
+  return [node, count];
 }
 
 /**
@@ -215,7 +222,7 @@ export function toList<T>(
     ++count;
   }
 
-  return root.next == null
+  return root.next === undefined
     ? [undefined, undefined, 0]
     : [root.next, tail, count];
 }

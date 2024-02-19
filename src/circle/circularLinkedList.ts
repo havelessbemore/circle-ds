@@ -12,7 +12,7 @@ import {
   toList,
   values,
 } from "../utils/linkedNode";
-import { clamp, toInteger } from "../utils/math";
+import { addIfBelow, clamp, isInRange, toInteger } from "../utils/math";
 import { CircularBase } from "./circularBase";
 
 export class CircularLinkedList<T>
@@ -126,15 +126,17 @@ export class CircularLinkedList<T>
     this.emitter.emit(BoundedEvent.Overflow, toArray(head));
   }
 
-  at(index: number): T | undefined {
-    const i = this.tryIndex(index);
-    if (i == undefined) {
+  at(index?: number): T | undefined {
+    // Check index
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
       return undefined;
     }
-    if (i + 1 == this._size) {
-      return this.tail.value;
-    }
-    return get(this.root, i + 1)!.value;
+
+    // Return value
+    return ++index == this._size
+      ? this.tail.value
+      : get(this.root, index)!.value;
   }
 
   clear(): void {
@@ -145,16 +147,16 @@ export class CircularLinkedList<T>
 
   delete(index: number): boolean {
     // Check index
-    index = this.tryIndex(index)!;
-    if (index == undefined) {
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
       return false;
     }
 
-    // Delete node
+    // Delete value
     const prev = get(this.root, index)!;
     prev.next = prev.next!.next;
 
-    // Update tail
+    // Update tail, if needed
     if (index == --this._size) {
       this.tail = prev;
     }
@@ -168,15 +170,12 @@ export class CircularLinkedList<T>
 
   fill(value: T, start?: number, end?: number): this {
     // Sanitize start
-    const size = this._size;
     start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
 
     // Sanitize end
-    end = toInteger(end, size);
-    end = clamp(end, -size, size);
-    end += end >= 0 ? 0 : size;
+    end = toInteger(end, this._size);
+    end = clamp(addIfBelow(end, this._size), 0, this._size);
 
     // Update values
     for (let node = get(this.root, start + 1); start < end; ++start) {
@@ -207,9 +206,12 @@ export class CircularLinkedList<T>
   }
 
   pop(): T | undefined {
+    // Check if empty
     if (this._size <= 0) {
       return undefined;
     }
+
+    // Remove and update tail
     const value = this.tail.value;
     this.tail = get(this.root, --this._size)!;
     this.tail.next = undefined;
@@ -239,13 +241,13 @@ export class CircularLinkedList<T>
 
   set(index: number, value: T): T | undefined {
     // Check index
-    const i = this.tryIndex(index);
-    if (i == undefined) {
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
       return undefined;
     }
 
     // Update node
-    const node = get(this.root, i + 1)!;
+    const node = get(this.root, index + 1)!;
     const prevValue = node.value;
     node.value = value;
 
@@ -253,35 +255,38 @@ export class CircularLinkedList<T>
   }
 
   shift(): T | undefined {
+    // Check if empty
     if (this._size <= 0) {
       return undefined;
     }
+
+    // Remove and update head
     const head = this.root.next!;
     this.root.next = head.next;
+
+    // Update tail, if needed
     if (--this._size <= 0) {
       this.tail = this.root;
     }
+
     return head.value;
   }
 
   slice(start?: number, end?: number): CircularLinkedList<T> {
     const out = new CircularLinkedList<T>();
 
-    // Check size
+    // Check if empty
     if (this._size <= 0) {
       return out;
     }
 
     // Sanitize start
-    const size = this._size;
     start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
 
     // Sanitize end
-    end = toInteger(end, size);
-    end = clamp(end, -size, size);
-    end += end >= 0 ? 0 : size;
+    end = toInteger(end, this._size);
+    end = clamp(addIfBelow(end, this._size), 0, this._size);
 
     // Add values to output
     for (let node = get(this.root, start)!; start < end; ++start) {
@@ -298,19 +303,19 @@ export class CircularLinkedList<T>
     ...items: T[]
   ): CircularLinkedList<T> {
     const out = new CircularLinkedList<T>();
+
+    // Check if empty
     if (this._size <= 0) {
       return out;
     }
 
     // Sanitize start
-    const size = this._size;
     start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
 
     // Sanitize deleteCount
     deleteCount = toInteger(deleteCount, 0);
-    deleteCount = clamp(deleteCount, 0, size - start);
+    deleteCount = clamp(deleteCount, 0, this._size - start);
 
     // Get prev node
     let prev = get(this.root, start)!;
@@ -325,7 +330,7 @@ export class CircularLinkedList<T>
     // Add values
     prev = this.append(prev, items);
 
-    // Update tail
+    // Update tail, if needed
     if (prev.next == null) {
       this.tail = prev;
     }
@@ -374,9 +379,13 @@ export class CircularLinkedList<T>
     const [head, tail] = toList(values);
     tail!.next = this.root.next;
     this.root.next = head;
+
+    // Update tail, if needed
     if (this._size <= 0) {
       this.tail = tail!;
     }
+
+    // Update size
     this._size += N;
     return this._size;
   }
@@ -420,22 +429,5 @@ export class CircularLinkedList<T>
 
     // Return last node
     return tail;
-  }
-
-  /**
-   * @internal
-   */
-  protected tryIndex(index: number): number | undefined {
-    // Conver to number
-    index = +index;
-
-    // Check if an integer
-    const size = this._size;
-    if (!Number.isInteger(index) || index >= size || index < -size) {
-      return undefined;
-    }
-
-    // If negative, treat as index + size
-    return index < 0 ? index + size : index;
   }
 }

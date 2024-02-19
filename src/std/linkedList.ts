@@ -2,7 +2,8 @@ import { DoublyLinkedNode as Node } from "../types/doublyLinkedNode";
 import { List } from "../types/list";
 import { ARGS_MAX_LENGTH } from "../utils/constants";
 import { chunk } from "../utils/iterable";
-import { clamp, toInteger } from "../utils/math";
+import { get } from "../utils/linkedNode";
+import { addIfBelow, clamp, isInRange, toInteger } from "../utils/math";
 
 export class LinkedList<T> implements List<T> {
   /**
@@ -32,8 +33,13 @@ export class LinkedList<T> implements List<T> {
   }
 
   at(index: number): T | undefined {
-    const i = this.tryIndex(index);
-    return i == undefined ? undefined : this.getNode(i).value;
+    // Check index
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
+      return undefined;
+    }
+    // Return value
+    return get(this.root, index + 1)!.value;
   }
 
   clear(): void {
@@ -55,7 +61,7 @@ export class LinkedList<T> implements List<T> {
   *entries(): IterableIterator<[number, T]> {
     let node = this.root;
     for (let i = 0; i < this._size; ++i) {
-      node = node.next;
+      node = node.next!;
       yield [i, node.value];
     }
   }

@@ -4,9 +4,9 @@ import {
   cut,
   entries,
   get,
+  getTail,
   has,
   keys,
-  len,
   toArray,
   toList,
   values,
@@ -144,6 +144,29 @@ describe(`${get.name}()`, () => {
   });
 });
 
+describe(`${getTail.name}()`, () => {
+  test("returns the tail node and correct count in a multi-node list", () => {
+    const [head, tail, length] = toList([1, 2, 3, 4, 5]);
+    const [result, count] = getTail(head);
+    expect(result).toBe(tail);
+    expect(count).toBe(length - 1); // 4 steps to reach the tail from the head
+  });
+
+  test("returns the head as the tail node and count 0 in a single-node list", () => {
+    const [head, tail, length] = toList([42]);
+    const [result, count] = getTail(head);
+    expect(result).toBe(tail);
+    expect(count).toBe(length - 1);
+  });
+
+  test("handles empty list correctly", () => {
+    const [head, tail, length] = toList([]);
+    const [result, count] = getTail(head);
+    expect(result).toBe(tail);
+    expect(count).toBe(length - 1);
+  });
+});
+
 describe(`${has.name}()`, () => {
   test("returns false when head is undefined", () => {
     expect(has(undefined, 1)).toBe(false);
@@ -214,44 +237,6 @@ describe(`${keys.name}()`, () => {
     const node = { value: 0, next: { value: 1, next: { value: 2 } } };
     const result = Array.from(keys(node, node));
     expect(result).toEqual([]);
-  });
-});
-
-describe(`${len.name}()`, () => {
-  test("yields correct length for a list", () => {
-    // 0 -> 1 -> 2 -> 3
-    const list = {
-      value: 3,
-      next: { value: 2, next: { value: 1, next: { value: 0 } } },
-    };
-    const result = len(list);
-    expect(result).toEqual(4);
-  });
-
-  test("stops iteration at the specified end node", () => {
-    // 0 -> 1 -> [2] -> 3
-    const end = { value: 1, next: { value: 0 } };
-    const list = { value: 3, next: { value: 2, next: end } };
-
-    const result = len(list, end);
-    expect(result).toEqual(2);
-  });
-
-  test("handles empty lists correctly", () => {
-    const result = len();
-    expect(result).toEqual(0);
-  });
-
-  test("handles single-element lists correctly", () => {
-    const list = { value: 42 };
-    const result = len(list);
-    expect(result).toEqual(1);
-  });
-
-  test("returns zero when head is the same as end", () => {
-    const node = { value: 0, next: { value: 1, next: { value: 2 } } };
-    const result = len(node, node);
-    expect(result).toEqual(0);
   });
 });
 
