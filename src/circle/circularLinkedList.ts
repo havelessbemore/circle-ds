@@ -24,33 +24,39 @@ export class CircularLinkedList<T>
    * @internal
    */
   protected _capacity: number;
+
   /**
+   * The root of the linked list
    * @internal
    */
   protected root: Node<T>;
+
   /**
+   * The current size of the list (0 \<= size \<= capacity)
    * @internal
    */
   protected _size!: number;
+
   /**
+   * The last node in the linked list.
    * @internal
    */
   protected tail!: Node<T>;
 
   /**
-   * Creates a new queue with `capacity` defaulted to `Infinity`.
+   * Creates a standard linked list (no capacity restriction).
    */
   constructor();
   /**
-   * Creates a new queue with the given capacity.
+   * Creates a linked list with the given capacity.
    *
-   * @param capacity - the queue's capacity.
+   * @param capacity - the list's capacity.
    */
   constructor(capacity?: number | null);
   /**
-   * Creates a new queue. Initial capacity is the number of items given.
+   * Creates a linked list with the given items. Capacity is set to the number of items.
    *
-   * @param items - the values to store in the queue.
+   * @param items - the values to store in the list.
    */
   constructor(items: Iterable<T>);
   constructor(capacity?: number | null | Iterable<T>) {
@@ -78,10 +84,12 @@ export class CircularLinkedList<T>
 
     // Case 3: capacity is iterable
     const [head, tail, size] = toList(capacity as Iterable<T>);
-    this.root.next = head;
-    this.tail = tail ?? this.root;
     this._capacity = size;
-    this._size = size;
+    if (size > 0) {
+      this.root.next = head;
+      this.tail = tail!;
+      this._size = size;
+    }
   }
 
   get capacity(): number {
@@ -105,9 +113,11 @@ export class CircularLinkedList<T>
       throw new RangeError("Invalid capacity");
     }
 
+    // Update capacity
+    this._capacity = capacity;
+
     // If current size fits within new capacity
     if (this._size <= capacity) {
-      this._capacity = capacity;
       return;
     }
 
@@ -115,12 +125,11 @@ export class CircularLinkedList<T>
     const diff = this._size - capacity;
     const [head] = cut(this.root, diff);
     this._size -= diff;
+
+    // Update tail, if needed
     if (this._size <= 0) {
       this.tail = this.root;
     }
-
-    // Update capacity
-    this._capacity = capacity;
 
     // Emit discarded items
     this.emitter.emit(BoundedEvent.Overflow, toArray(head));
@@ -133,10 +142,13 @@ export class CircularLinkedList<T>
       return undefined;
     }
 
+    // If tail
+    if (++index == this._size) {
+      return this.tail.value;
+    }
+
     // Return value
-    return ++index == this._size
-      ? this.tail.value
-      : get(this.root, index)!.value;
+    return get(this.root, index)!.value;
   }
 
   clear(): void {
@@ -155,9 +167,10 @@ export class CircularLinkedList<T>
     // Delete value
     const prev = get(this.root, index)!;
     prev.next = prev.next!.next;
+    --this._size;
 
     // Update tail, if needed
-    if (index == --this._size) {
+    if (index == this._size) {
       this.tail = prev;
     }
 
@@ -178,9 +191,11 @@ export class CircularLinkedList<T>
     end = clamp(addIfBelow(end, this._size), 0, this._size);
 
     // Update values
-    for (let node = get(this.root, start + 1); start < end; ++start) {
+    let node = get(this.root, start + 1);
+    while (start < end) {
       node!.value = value;
       node = node!.next;
+      ++start;
     }
 
     return this;
@@ -215,6 +230,8 @@ export class CircularLinkedList<T>
     const value = this.tail.value;
     this.tail = get(this.root, --this._size)!;
     this.tail.next = undefined;
+
+    // Return value
     return value;
   }
 
@@ -251,6 +268,7 @@ export class CircularLinkedList<T>
     const prevValue = node.value;
     node.value = value;
 
+    // Return previous value
     return prevValue;
   }
 
@@ -260,15 +278,17 @@ export class CircularLinkedList<T>
       return undefined;
     }
 
-    // Remove and update head
+    // Remove head
     const head = this.root.next!;
     this.root.next = head.next;
+    --this._size;
 
     // Update tail, if needed
-    if (--this._size <= 0) {
+    if (this._size <= 0) {
       this.tail = this.root;
     }
 
+    // Return value
     return head.value;
   }
 
@@ -289,11 +309,14 @@ export class CircularLinkedList<T>
     end = clamp(addIfBelow(end, this._size), 0, this._size);
 
     // Add values to output
-    for (let node = get(this.root, start)!; start < end; ++start) {
+    let node = get(this.root, start)!;
+    while (start < end) {
       node = node.next!;
       out.push(node.value);
+      ++start;
     }
 
+    // Return new list
     return out;
   }
 

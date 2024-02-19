@@ -90,7 +90,6 @@ export function toList<T>(
     return [undefined, undefined, 0];
   }
 
-  tail.next = undefined;
   root.next!.prev = undefined;
   return [root.next!, tail, count];
 }

@@ -4,7 +4,7 @@ import { List } from "../types/list";
 import { cut, get, toList } from "../utils/doublyLinkedNode";
 import { isInfinity, isNumber, isSafeCount } from "../utils/is";
 import { entries, has, keys, toArray, values } from "../utils/linkedNode";
-import { clamp, toInteger } from "../utils/math";
+import { addIfBelow, clamp, isInRange, toInteger } from "../utils/math";
 import { CircularBase } from "./circularBase";
 
 export class CircularDoublyLinkedList<T>
@@ -16,29 +16,33 @@ export class CircularDoublyLinkedList<T>
    * @internal
    */
   protected _capacity: number;
+
   /**
+   * The root of the linked list
    * @internal
    */
   protected root: Node<T>;
+
   /**
+   * The current size of the list (0 \<= size \<= capacity)
    * @internal
    */
   protected _size!: number;
 
   /**
-   * Creates a new queue with `capacity` defaulted to `Infinity`.
+   * Creates a standard linked list (no capacity restriction).
    */
   constructor();
   /**
-   * Creates a new queue with the given capacity.
+   * Creates a linked list with the given capacity.
    *
-   * @param capacity - the queue's capacity.
+   * @param capacity - the list's capacity.
    */
   constructor(capacity?: number | null);
   /**
-   * Creates a new queue. Initial capacity is the number of items given.
+   * Creates a linked list with the given items. Capacity is set to the number of items.
    *
-   * @param items - the values to store in the queue.
+   * @param items - the values to store in the list.
    */
   constructor(items: Iterable<T>);
   constructor(capacity?: number | null | Iterable<T>) {
@@ -97,9 +101,11 @@ export class CircularDoublyLinkedList<T>
       throw new RangeError("Invalid capacity");
     }
 
+    // Update capacity
+    this._capacity = capacity;
+
     // If current size fits within new capacity
     if (this._size <= capacity) {
-      this._capacity = capacity;
       return;
     }
 
@@ -108,16 +114,19 @@ export class CircularDoublyLinkedList<T>
     const [head, tail] = cut(this.root, diff);
     this._size -= diff;
 
-    // Update capacity
-    this._capacity = capacity;
-
     // Emit discarded items
     this.emitter.emit(BoundedEvent.Overflow, toArray(head, tail!.next));
   }
 
   at(index: number): T | undefined {
-    const i = this.tryIndex(index);
-    return i == undefined ? undefined : this.getNode(i).value;
+    // Check index
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
+      return undefined;
+    }
+
+    // Return value
+    return this.get(index).value;
   }
 
   clear(): void {
@@ -127,14 +136,18 @@ export class CircularDoublyLinkedList<T>
   }
 
   delete(index: number): boolean {
-    index = this.tryIndex(index)!;
-    if (index == undefined) {
+    // Check index
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
       return false;
     }
-    const node = this.getNode(index);
+
+    // Delete value
+    const node = this.get(index);
     node.prev!.next = node.next;
     node.next!.prev = node.prev;
     --this._size;
+
     return true;
   }
 
@@ -144,20 +157,19 @@ export class CircularDoublyLinkedList<T>
 
   fill(value: T, start?: number, end?: number): this {
     // Sanitize start
-    const size = this._size;
     start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
 
     // Sanitize end
-    end = toInteger(end, size);
-    end = clamp(end, -size, size);
-    end += end >= 0 ? 0 : size;
+    end = toInteger(end, this._size);
+    end = clamp(addIfBelow(end, this._size), 0, this._size);
 
     // Update values
-    for (let node = this.getNode(start); start < end; ++start) {
+    let node = this.get(start);
+    while (start < end) {
       node.value = value;
       node = node.next!;
+      ++start;
     }
 
     return this;
@@ -183,26 +195,31 @@ export class CircularDoublyLinkedList<T>
   }
 
   pop(): T | undefined {
-    if (this._size < 1) {
+    // Check if empty
+    if (this._size <= 0) {
       return undefined;
     }
+
+    // Remove tail
     const node = this.root.prev!;
     node.prev!.next = node.next;
     node.next!.prev = node.prev;
     --this._size;
+
+    // Return value
     return node.value;
   }
 
   push(...values: T[]): number {
     // Case 1: No values
     const N = values.length;
-    if (N < 1) {
+    if (N <= 0) {
       return this._size;
     }
 
     // Case 2: Zero capacity
     const capacity = this._capacity;
-    if (capacity < 1) {
+    if (capacity <= 0) {
       this.emitter.emit(BoundedEvent.Overflow, values);
       return this._size;
     }
@@ -215,45 +232,62 @@ export class CircularDoublyLinkedList<T>
   }
 
   set(index: number, value: T): T | undefined {
-    const i = this.tryIndex(index);
-    if (i == undefined) {
+    // Check index
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
       return undefined;
     }
-    const node = this.getNode(i);
+
+    // Update node
+    const node = this.get(index);
     const prevValue = node.value;
     node.value = value;
+
+    // Return previous value
     return prevValue;
   }
 
   shift(): T | undefined {
-    if (this._size < 1) {
+    // Check if empty
+    if (this._size <= 0) {
       return undefined;
     }
-    const node = this.root.next!;
-    node.prev!.next = node.next;
-    node.next!.prev = node.prev;
+
+    // Remove head
+    const head = this.root.next!;
+    head.prev!.next = head.next;
+    head.next!.prev = head.prev;
     --this._size;
-    return node.value;
+
+    // Return value
+    return head.value;
   }
 
   slice(start?: number, end?: number): CircularDoublyLinkedList<T> {
-    // Sanitize start
-    const size = this._size;
-    start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
-
-    // Sanitize end
-    end = toInteger(end, size);
-    end = clamp(end, -size, size);
-    end += end >= 0 ? 0 : size;
-
     const out = new CircularDoublyLinkedList<T>();
-    for (let prev = this.getNode(start - 1); start < end; ++start) {
-      prev = prev.next!;
-      out.push(prev.value);
+
+    // Check if empty
+    if (this._size <= 0) {
+      return out;
     }
 
+    // Sanitize start
+    start = toInteger(start, 0);
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
+
+    // Sanitize end
+    end = toInteger(end, this._size);
+    end = clamp(addIfBelow(end, this._size), 0, this._size);
+
+    // Add values to output
+    let prev = this.get(start - 1);
+    while (start < end) {
+      prev = prev.next!;
+      out.push(prev.value);
+      ++start;
+    }
+
+    // Return new list
     return out;
   }
 
@@ -262,22 +296,24 @@ export class CircularDoublyLinkedList<T>
     deleteCount?: number,
     ...items: T[]
   ): CircularDoublyLinkedList<T> {
+    const out = new CircularDoublyLinkedList<T>();
+
+    // Check if empty
+    if (this._size <= 0) {
+      return out;
+    }
+
     // Sanitize start
-    const size = this._size;
     start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
 
     // Sanitize deleteCount
     deleteCount = toInteger(deleteCount, 0);
-    deleteCount = clamp(deleteCount, 0, size - start);
-
-    // Create output list
-    const out = new CircularDoublyLinkedList<T>();
+    deleteCount = clamp(deleteCount, 0, this._size - start);
 
     // Replace values
     const itemCount = items.length;
-    let prev = this.getNode(start - 1);
+    let prev = this.get(start - 1);
     const replaceCount = Math.min(deleteCount, itemCount);
     for (let i = 0; i < replaceCount; ++i) {
       prev = prev.next!;
@@ -320,13 +356,13 @@ export class CircularDoublyLinkedList<T>
   unshift(...values: T[]): number {
     // Case 1: No values
     const N = values.length;
-    if (N < 1) {
+    if (N <= 0) {
       return this._size;
     }
 
     // Case 2: Zero capacity
     const capacity = this._capacity;
-    if (capacity < 1) {
+    if (capacity <= 0) {
       this.emitter.emit(BoundedEvent.Overflow, values);
       return this._size;
     }
@@ -345,9 +381,9 @@ export class CircularDoublyLinkedList<T>
   /**
    * @internal
    */
-  protected append(prev: Node<T>, values: T[], minIndex = 0): Node<T> {
+  protected append(tail: Node<T>, values: T[], minIndex = 0): Node<T> {
     const root = this.root;
-    const next = prev.next!;
+    const next = tail.next!;
     const evicted: T[] = [];
     const capacity = this._capacity;
 
@@ -355,9 +391,9 @@ export class CircularDoublyLinkedList<T>
     let size = this._size;
     const N = values.length;
     for (let i = minIndex; i < N; ++i) {
-      const curr = { prev, value: values[i] } as Node<T>;
-      prev.next = curr;
-      prev = curr;
+      const curr = { prev: tail, value: values[i] } as Node<T>;
+      tail.next = curr;
+      tail = curr;
       if (size < capacity) {
         ++size;
       } else {
@@ -365,8 +401,8 @@ export class CircularDoublyLinkedList<T>
         root.next = root.next!.next;
       }
     }
-    prev.next = next;
-    next.prev = prev;
+    tail.next = next;
+    next.prev = tail;
     root.next!.prev = root;
 
     // Emit evicted items
@@ -378,14 +414,14 @@ export class CircularDoublyLinkedList<T>
     this._size = size;
 
     // Return last node
-    return prev;
+    return tail;
   }
 
   /**
    * @internal
    */
-  protected getNode(index: number): Node<T> {
-    index += index <= this._size / 2 ? 1 : -this._size;
+  protected get(index: number): Node<T> {
+    index -= index <= this._size / 2 ? -1 : this._size;
     return get(this.root, index)!;
   }
 
@@ -425,22 +461,5 @@ export class CircularDoublyLinkedList<T>
 
     // Return last node
     return next;
-  }
-
-  /**
-   * @internal
-   */
-  protected tryIndex(index: number): number | undefined {
-    // Conver to number
-    index = +index;
-
-    // Check if an integer
-    const size = this._size;
-    if (!Number.isInteger(index) || index >= size || index < -size) {
-      return undefined;
-    }
-
-    // If negative, treat as index + size
-    return index < 0 ? index + size : index;
   }
 }
