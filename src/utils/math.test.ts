@@ -1,8 +1,50 @@
 import { describe, expect, test, vi } from "vitest";
 
-import { clamp, log, randomRun, toInteger } from "./math";
+import {
+  addIfBelow,
+  clamp,
+  isInRange,
+  log,
+  randomRun,
+  toInteger,
+} from "./math";
 
-describe("clamp()", () => {
+describe(`${addIfBelow.name}()`, () => {
+  test("adds addend to value if value is below target", () => {
+    expect(addIfBelow(90, 10, 100)).toBe(100);
+  });
+
+  test("does not add addend to value if value is equal to target", () => {
+    expect(addIfBelow(100, 10, 100)).toBe(100);
+  });
+
+  test("does not add addend to value if value is above target", () => {
+    expect(addIfBelow(110, 10, 100)).toBe(110);
+  });
+
+  test("utilizes default target value of 0 when not specified", () => {
+    expect(addIfBelow(-5, 10)).toBe(5);
+    expect(addIfBelow(5, 10)).toBe(5);
+  });
+
+  test("correctly handles negative numbers for value and addend", () => {
+    expect(addIfBelow(-20, -10, -15)).toBe(-30);
+  });
+
+  test("correctly handles target of 0 when value is 0", () => {
+    expect(addIfBelow(0, 10)).toBe(0);
+  });
+
+  test("adds addend when value is less than 0 and no target is specified", () => {
+    expect(addIfBelow(-1, 10)).toBe(9);
+  });
+
+  test("does not add addend when value is positive and target is not specified (default 0)", () => {
+    expect(addIfBelow(1, 10)).toBe(1);
+  });
+});
+
+describe(`${clamp.name}()`, () => {
   test("returns min if value is below the minimum", () => {
     expect(clamp(-5, 0, 10)).toBe(0);
     expect(clamp(-100, -50, 50)).toBe(-50);
@@ -48,7 +90,48 @@ describe("clamp()", () => {
   });
 });
 
-describe("log()", () => {
+describe(`${isInRange.name}()`, () => {
+  test("returns true for a value within the range", () => {
+    expect(isInRange(5, 1, 10)).toBe(true);
+  });
+
+  test("returns false for a value below the range", () => {
+    expect(isInRange(0, 1, 10)).toBe(false);
+  });
+
+  test("returns false for a value above the range", () => {
+    expect(isInRange(11, 1, 10)).toBe(false);
+  });
+
+  test("returns true for a value equal to the minimum boundary", () => {
+    expect(isInRange(1, 1, 10)).toBe(true);
+  });
+
+  test("returns false for a value equal to the maximum boundary", () => {
+    expect(isInRange(10, 1, 10)).toBe(false);
+  });
+
+  test("handles negative ranges correctly", () => {
+    expect(isInRange(-5, -10, 0)).toBe(true);
+    expect(isInRange(-10, -10, 0)).toBe(true);
+    expect(isInRange(0, -10, 0)).toBe(false);
+  });
+
+  test("returns false for an invalid range where min equals max", () => {
+    expect(isInRange(5, 5, 5)).toBe(false);
+  });
+
+  test("returns false for an invalid range where min is greater than max", () => {
+    expect(isInRange(5, 10, 1)).toBe(false);
+  });
+
+  test("handles floating point numbers correctly", () => {
+    expect(isInRange(5.5, 5, 6)).toBe(true);
+    expect(isInRange(5.1, 5.2, 5.3)).toBe(false);
+  });
+});
+
+describe(`${log.name}()`, () => {
   test("calculates the logarithm of a number with a given base", () => {
     expect(log(8, 2)).toBeCloseTo(3);
     expect(log(27, 3)).toBeCloseTo(3);
@@ -97,7 +180,7 @@ describe("log()", () => {
   });
 });
 
-describe("randomRun()", () => {
+describe(`${randomRun.name}()`, () => {
   test("returns min if randomFn always >= p", () => {
     const mockRandomFn = () => 0.6;
     expect(randomRun(0.5, Infinity, 0, mockRandomFn)).toBe(0);
@@ -134,7 +217,7 @@ describe("randomRun()", () => {
   });
 });
 
-describe("toInteger()", () => {
+describe(`${toInteger.name}()`, () => {
   test("converts numeric strings to integers", () => {
     expect(toInteger("123")).toBe(123);
     expect(toInteger("123.456")).toBe(123);

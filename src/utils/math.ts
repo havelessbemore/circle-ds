@@ -1,4 +1,16 @@
 /**
+ * Adds a specified addend to a value if the value is below a given target.
+ *
+ * @param value - The initial number.
+ * @param addend - The number added if the value is below the target.
+ * @param target - The target number for comparison. If the value is below this
+ * number, the addend will be added. Defaults to 0 if not specified.
+ */
+export function addIfBelow(value: number, addend: number, target = 0): number {
+  return value >= target ? value : value + addend;
+}
+
+/**
  * Restricts a given numerical value within a specified range [min, max].
  *
  * If the provided value is less than the minimum, the minimum is returned.
@@ -23,6 +35,19 @@ export function clamp(value: number, min: number, max: number): number {
     return min;
   }
   return value <= max ? value : max;
+}
+
+/**
+ * Checks if a given numeric value falls within a specified range.
+ *
+ * @param value - The numeric value to check.
+ * @param min - The inclusive lower bound of the range.
+ * @param max - The exclusive upper bound of the range.
+ *
+ * @returns - `true` if `value` is within the range `[min, max)`, `false` otherwise.
+ */
+export function isInRange(value: number, min: number, max: number): boolean {
+  return value >= min && value < max;
 }
 
 /**
