@@ -628,6 +628,109 @@ class CircularDeque extends CircularBase {
     this._size += num;
   }
 }
+function cut$1(prev, count) {
+  if (count <= 0) {
+    return [void 0, void 0];
+  }
+  const head = prev.next;
+  const tail = get$1(head, count - 1);
+  prev.next = tail.next;
+  tail.next = void 0;
+  return [head, tail];
+}
+function* entries(node, end) {
+  for (let i = 0; node != end; ++i) {
+    yield [i, node.value];
+    node = node.next;
+  }
+}
+function get$1(node, index) {
+  if (index < 0) {
+    return void 0;
+  }
+  for (let i = 0; node != null && i < index; ++i) {
+    node = node.next;
+  }
+  return node;
+}
+function has(node, value, end) {
+  while (node != end) {
+    if (node.value === value) {
+      return true;
+    }
+    node = node.next;
+  }
+  return false;
+}
+function* keys(node, end) {
+  for (let i = 0; node != end; ++i) {
+    yield i;
+    node = node.next;
+  }
+}
+function toArray(node, end) {
+  const array = [];
+  while (node != end) {
+    array.push(node.value);
+    node = node.next;
+  }
+  return array;
+}
+function toList$1(values2) {
+  const root = {};
+  let count = 0;
+  let tail = root;
+  for (const value of values2) {
+    tail.next = { value };
+    tail = tail.next;
+    ++count;
+  }
+  return root.next === void 0 ? [void 0, void 0, 0] : [root.next, tail, count];
+}
+function* values(head, end) {
+  for (let i = 0; head != end; ++i) {
+    yield head.value;
+    head = head.next;
+  }
+}
+function cut(root, count) {
+  if (count <= 0) {
+    return [void 0, void 0];
+  }
+  const [head, tail] = cut$1(root, count);
+  head.prev = void 0;
+  if (root.next != null) {
+    root.next.prev = root;
+  }
+  return [head, tail];
+}
+function get(node, index) {
+  if (index >= 0) {
+    return get$1(node, index);
+  }
+  for (let i = 0; node != null && i > index; --i) {
+    node = node.prev;
+  }
+  return node;
+}
+function toList(values2) {
+  const root = {};
+  let count = 0;
+  let tail = root;
+  for (const value of values2) {
+    tail.next = { prev: tail, value };
+    tail = tail.next;
+    ++count;
+  }
+  if (count <= 0) {
+    return [void 0, void 0, 0];
+  }
+  root.next.prev = void 0;
+  return [root.next, tail, count];
+}
+function addIfBelow(value, addend, target = 0) {
+  return value >= target ? value : value + addend;
+}
 function clamp(value, min, max) {
   if (min > max) {
     throw new RangeError("Invalid clamp range; min must be <= max");
@@ -636,6 +739,9 @@ function clamp(value, min, max) {
     return min;
   }
   return value <= max ? value : max;
+}
+function isInRange(value, min, max) {
+  return value >= min && value < max;
 }
 function toInteger(value, defaultValue = 0) {
   value = +value;
@@ -650,14 +756,17 @@ class CircularDoublyLinkedList extends CircularBase {
      */
     __publicField(this, "_capacity");
     /**
+     * The root of the linked list
      * @internal
      */
     __publicField(this, "root");
     /**
+     * The current size of the list (0 \<= size \<= capacity)
      * @internal
      */
     __publicField(this, "_size");
     this._capacity = Infinity;
+    this.root = { value: void 0 };
     this.clear();
     capacity = capacity ?? Infinity;
     if (isInfinity(capacity)) {
@@ -670,15 +779,15 @@ class CircularDoublyLinkedList extends CircularBase {
       this._capacity = capacity;
       return;
     }
-    let tail = this.root;
-    for (const value of capacity) {
-      tail.next = { prev: tail, value };
-      tail = tail.next;
-      ++this._size;
+    const [head, tail, size] = toList(capacity);
+    this._capacity = size;
+    if (size > 0) {
+      this.root.next = head;
+      this.root.prev = tail;
+      head.prev = this.root;
+      tail.next = this.root;
+      this._size = size;
     }
-    tail.next = this.root;
-    this.root.prev = tail;
-    this._capacity = this._size;
   }
   get capacity() {
     return this._capacity;
@@ -694,57 +803,51 @@ class CircularDoublyLinkedList extends CircularBase {
     if (!isInfinity(capacity) && !isSafeCount(capacity)) {
       throw new RangeError("Invalid capacity");
     }
+    this._capacity = capacity;
     if (this._size <= capacity) {
-      this._capacity = capacity;
       return;
     }
-    const items = [];
-    let head = this.root.next;
-    do {
-      items.push(head.value);
-      head = head.next;
-    } while (--this._size > capacity);
-    this.root.next = head;
-    head.prev = this.root;
-    this._capacity = capacity;
-    this.emitter.emit(BoundedEvent.Overflow, items);
+    const diff = this._size - capacity;
+    const [head, tail] = cut(this.root, diff);
+    this._size -= diff;
+    this.emitter.emit(BoundedEvent.Overflow, toArray(head, tail.next));
   }
   at(index) {
-    const i = this.tryIndex(index);
-    return i == void 0 ? void 0 : this.getNode(i).value;
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
+      return void 0;
+    }
+    return this.get(index).value;
   }
   clear() {
     this._size = 0;
-    this.root = { value: void 0 };
     this.root.next = this.root;
     this.root.prev = this.root;
   }
   delete(index) {
-    index = this.tryIndex(index);
-    if (index == void 0) {
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
       return false;
     }
-    this.remove(this.getNode(index));
+    const node = this.get(index);
+    node.prev.next = node.next;
+    node.next.prev = node.prev;
+    --this._size;
     return true;
   }
-  *entries() {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      yield [i, node.value];
-    }
+  entries() {
+    return entries(this.root.next, this.root);
   }
   fill(value, start, end) {
-    const size = this._size;
     start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
-    end = toInteger(end, size);
-    end = clamp(end, -size, size);
-    end += end >= 0 ? 0 : size;
-    for (let node = this.getNode(start); start < end; ++start) {
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
+    end = toInteger(end, this._size);
+    end = clamp(addIfBelow(end, this._size), 0, this._size);
+    let node = this.get(start);
+    while (start < end) {
       node.value = value;
       node = node.next;
+      ++start;
     }
     return this;
   }
@@ -756,36 +859,28 @@ class CircularDoublyLinkedList extends CircularBase {
     }
   }
   has(value) {
-    const N = this._size;
-    let node = this.root;
-    for (let i = 0; i < N; ++i) {
-      node = node.next;
-      if (node.value === value) {
-        return true;
-      }
-    }
-    return false;
+    return has(this.root.next, value, this.root);
   }
-  *keys() {
-    for (let i = 0; i < this._size; ++i) {
-      yield i;
-    }
+  keys() {
+    return keys(this.root.next, this.root);
   }
   pop() {
-    if (this._size < 1) {
+    if (this._size <= 0) {
       return void 0;
     }
     const node = this.root.prev;
-    this.remove(node);
+    node.prev.next = node.next;
+    node.next.prev = node.prev;
+    --this._size;
     return node.value;
   }
   push(...values2) {
     const N = values2.length;
-    if (N < 1) {
+    if (N <= 0) {
       return this._size;
     }
     const capacity = this._capacity;
-    if (capacity < 1) {
+    if (capacity <= 0) {
       this.emitter.emit(BoundedEvent.Overflow, values2);
       return this._size;
     }
@@ -793,48 +888,53 @@ class CircularDoublyLinkedList extends CircularBase {
     return this._size;
   }
   set(index, value) {
-    const i = this.tryIndex(index);
-    if (i == void 0) {
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
       return void 0;
     }
-    const node = this.getNode(i);
+    const node = this.get(index);
     const prevValue = node.value;
     node.value = value;
     return prevValue;
   }
   shift() {
-    if (this._size < 1) {
+    if (this._size <= 0) {
       return void 0;
     }
-    const node = this.root.next;
-    this.remove(node);
-    return node.value;
+    const head = this.root.next;
+    head.prev.next = head.next;
+    head.next.prev = head.prev;
+    --this._size;
+    return head.value;
   }
   slice(start, end) {
-    const size = this._size;
-    start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
-    end = toInteger(end, size);
-    end = clamp(end, -size, size);
-    end += end >= 0 ? 0 : size;
     const out = new CircularDoublyLinkedList();
-    for (let prev = this.getNode(start - 1); start < end; ++start) {
-      out.push(prev.next.value);
+    if (this._size <= 0) {
+      return out;
+    }
+    start = toInteger(start, 0);
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
+    end = toInteger(end, this._size);
+    end = clamp(addIfBelow(end, this._size), 0, this._size);
+    let prev = this.get(start - 1);
+    while (start < end) {
       prev = prev.next;
+      out.push(prev.value);
+      ++start;
     }
     return out;
   }
   splice(start, deleteCount, ...items) {
-    const size = this._size;
-    start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
-    deleteCount = toInteger(deleteCount, 0);
-    deleteCount = clamp(deleteCount, 0, size - start);
     const out = new CircularDoublyLinkedList();
+    if (this._size <= 0) {
+      return out;
+    }
+    start = toInteger(start, 0);
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
+    deleteCount = toInteger(deleteCount, 0);
+    deleteCount = clamp(deleteCount, 0, this._size - start);
     const itemCount = items.length;
-    let prev = this.getNode(start - 1);
+    let prev = this.get(start - 1);
     const replaceCount = Math.min(deleteCount, itemCount);
     for (let i = 0; i < replaceCount; ++i) {
       prev = prev.next;
@@ -849,9 +949,9 @@ class CircularDoublyLinkedList extends CircularBase {
     prev.next.prev = tail;
     tail.next = prev.next;
     const diff = deleteCount - replaceCount;
-    tail = this.moveRight(prev, diff);
+    tail = get(prev, diff);
     prev.next = tail.next;
-    tail.next.prev = prev;
+    prev.next.prev = prev;
     this._size -= diff;
     tail.next = out.root;
     out.root.prev = tail;
@@ -859,42 +959,38 @@ class CircularDoublyLinkedList extends CircularBase {
     return out;
   }
   [Symbol.iterator]() {
-    return this.values();
+    return values(this.root.next, this.root);
   }
   unshift(...values2) {
     const N = values2.length;
-    if (N < 1) {
+    if (N <= 0) {
       return this._size;
     }
     const capacity = this._capacity;
-    if (capacity < 1) {
+    if (capacity <= 0) {
       this.emitter.emit(BoundedEvent.Overflow, values2);
       return this._size;
     }
     this.prepend(this.root.next, values2);
     return this._size;
   }
-  *values() {
-    let node = this.root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.next;
-      yield node.value;
-    }
+  values() {
+    return values(this.root.next, this.root);
   }
   /**
    * @internal
    */
-  append(prev, values2, minIndex = 0) {
+  append(tail, values2, minIndex = 0) {
     const root = this.root;
-    const next = prev.next;
+    const next = tail.next;
     const evicted = [];
     const capacity = this._capacity;
     let size = this._size;
     const N = values2.length;
     for (let i = minIndex; i < N; ++i) {
-      const curr = { prev, value: values2[i] };
-      prev.next = curr;
-      prev = curr;
+      const curr = { prev: tail, value: values2[i] };
+      tail.next = curr;
+      tail = curr;
       if (size < capacity) {
         ++size;
       } else {
@@ -902,40 +998,21 @@ class CircularDoublyLinkedList extends CircularBase {
         root.next = root.next.next;
       }
     }
-    prev.next = next;
-    next.prev = prev;
+    tail.next = next;
+    next.prev = tail;
     root.next.prev = root;
     if (evicted.length > 0) {
       this.emitter.emit(BoundedEvent.Overflow, evicted);
     }
     this._size = size;
-    return prev;
+    return tail;
   }
   /**
    * @internal
    */
-  getNode(index) {
-    const node = this.root;
-    const half = this._size / 2;
-    return index <= half ? this.moveRight(node, index + 1) : this.moveLeft(node, this._size - index);
-  }
-  /**
-   * @internal
-   */
-  moveLeft(node, steps) {
-    for (let i = 0; i < steps; ++i) {
-      node = node.prev;
-    }
-    return node;
-  }
-  /**
-   * @internal
-   */
-  moveRight(node, steps) {
-    for (let i = 0; i < steps; ++i) {
-      node = node.next;
-    }
-    return node;
+  get(index) {
+    index -= index <= this._size / 2 ? -1 : this._size;
+    return get(this.root, index);
   }
   /**
    * @internal
@@ -965,25 +1042,6 @@ class CircularDoublyLinkedList extends CircularBase {
     }
     this._size = size;
     return next;
-  }
-  /**
-   * @internal
-   */
-  remove(node) {
-    node.prev.next = node.next;
-    node.next.prev = node.prev;
-    --this._size;
-  }
-  /**
-   * @internal
-   */
-  tryIndex(index) {
-    index = +index;
-    const size = this._size;
-    if (!Number.isInteger(index) || index >= size || index < -size) {
-      return void 0;
-    }
-    return index < 0 ? index + size : index;
   }
 }
 class CircularLinkedDeque {
@@ -1068,71 +1126,6 @@ class CircularLinkedDeque {
     return this;
   }
 }
-function cut(root, count) {
-  if (count <= 0) {
-    return [void 0, void 0];
-  }
-  const head = root.next;
-  const tail = get(head, count - 1);
-  root.next = tail.next;
-  tail.next = void 0;
-  return [head, tail];
-}
-function* entries(head, end) {
-  for (let i = 0; head != end; ++i) {
-    yield [i, head.value];
-    head = head.next;
-  }
-}
-function get(head, index) {
-  if (index < 0) {
-    return void 0;
-  }
-  for (let i = 0; i < index; ++i) {
-    head = head.next;
-  }
-  return head;
-}
-function has(head, value, end) {
-  while (head != end) {
-    if (head.value === value) {
-      return true;
-    }
-    head = head.next;
-  }
-  return false;
-}
-function* keys(head, end) {
-  for (let i = 0; head != end; ++i) {
-    yield i;
-    head = head.next;
-  }
-}
-function toArray(head, end) {
-  const array = [];
-  while (head != end) {
-    array.push(head.value);
-    head = head.next;
-  }
-  return array;
-}
-function toList(values2) {
-  const root = {};
-  let count = 0;
-  let tail = root;
-  for (const value of values2) {
-    tail.next = { value };
-    tail = tail.next;
-    ++count;
-  }
-  return root.next == null ? [void 0, void 0, 0] : [root.next, tail, count];
-}
-function* values(head, end) {
-  for (let i = 0; head != end; ++i) {
-    yield head.value;
-    head = head.next;
-  }
-}
 class CircularLinkedList extends CircularBase {
   constructor(capacity) {
     super();
@@ -1142,18 +1135,22 @@ class CircularLinkedList extends CircularBase {
      */
     __publicField(this, "_capacity");
     /**
+     * The root of the linked list
      * @internal
      */
     __publicField(this, "root");
     /**
+     * The current size of the list (0 \<= size \<= capacity)
      * @internal
      */
     __publicField(this, "_size");
     /**
+     * The last node in the linked list.
      * @internal
      */
     __publicField(this, "tail");
     this._capacity = Infinity;
+    this.root = { value: void 0 };
     this.clear();
     capacity = capacity ?? Infinity;
     if (isInfinity(capacity)) {
@@ -1166,11 +1163,13 @@ class CircularLinkedList extends CircularBase {
       this._capacity = capacity;
       return;
     }
-    const [head, tail, size] = toList(capacity);
-    this.root.next = head;
-    this.tail = tail ?? this.root;
+    const [head, tail, size] = toList$1(capacity);
     this._capacity = size;
-    this._size = size;
+    if (size > 0) {
+      this.root.next = head;
+      this.tail = tail;
+      this._size = size;
+    }
   }
   get capacity() {
     return this._capacity;
@@ -1186,36 +1185,42 @@ class CircularLinkedList extends CircularBase {
     if (!isInfinity(capacity) && !isSafeCount(capacity)) {
       throw new RangeError("Invalid capacity");
     }
+    this._capacity = capacity;
     if (this._size <= capacity) {
-      this._capacity = capacity;
       return;
     }
     const diff = this._size - capacity;
-    const [head] = cut(this.root, diff);
+    const [head] = cut$1(this.root, diff);
     this._size -= diff;
     if (this._size <= 0) {
       this.tail = this.root;
     }
-    this._capacity = capacity;
     this.emitter.emit(BoundedEvent.Overflow, toArray(head));
   }
   at(index) {
-    const i = this.tryIndex(index);
-    return i == void 0 ? void 0 : get(this.root, i + 1).value;
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
+      return void 0;
+    }
+    if (++index == this._size) {
+      return this.tail.value;
+    }
+    return get$1(this.root, index).value;
   }
   clear() {
     this._size = 0;
-    this.root = { value: void 0 };
+    this.root.next = void 0;
     this.tail = this.root;
   }
   delete(index) {
-    index = this.tryIndex(index);
-    if (index == void 0) {
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
       return false;
     }
-    const prev = get(this.root, index);
+    const prev = get$1(this.root, index);
     prev.next = prev.next.next;
-    if (index == --this._size) {
+    --this._size;
+    if (index == this._size) {
       this.tail = prev;
     }
     return true;
@@ -1224,16 +1229,15 @@ class CircularLinkedList extends CircularBase {
     return entries(this.root.next);
   }
   fill(value, start, end) {
-    const size = this._size;
     start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
-    end = toInteger(end, size);
-    end = clamp(end, -size, size);
-    end += end >= 0 ? 0 : size;
-    for (let node = get(this.root, start + 1); start < end; ++start) {
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
+    end = toInteger(end, this._size);
+    end = clamp(addIfBelow(end, this._size), 0, this._size);
+    let node = get$1(this.root, start + 1);
+    while (start < end) {
       node.value = value;
       node = node.next;
+      ++start;
     }
     return this;
   }
@@ -1255,7 +1259,7 @@ class CircularLinkedList extends CircularBase {
       return void 0;
     }
     const value = this.tail.value;
-    this.tail = get(this.root, --this._size);
+    this.tail = get$1(this.root, --this._size);
     this.tail.next = void 0;
     return value;
   }
@@ -1273,11 +1277,11 @@ class CircularLinkedList extends CircularBase {
     return this._size;
   }
   set(index, value) {
-    const i = this.tryIndex(index);
-    if (i == void 0) {
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
       return void 0;
     }
-    const node = get(this.root, i + 1);
+    const node = get$1(this.root, index + 1);
     const prevValue = node.value;
     node.value = value;
     return prevValue;
@@ -1288,7 +1292,8 @@ class CircularLinkedList extends CircularBase {
     }
     const head = this.root.next;
     this.root.next = head.next;
-    if (--this._size <= 0) {
+    --this._size;
+    if (this._size <= 0) {
       this.tail = this.root;
     }
     return head.value;
@@ -1298,16 +1303,15 @@ class CircularLinkedList extends CircularBase {
     if (this._size <= 0) {
       return out;
     }
-    const size = this._size;
     start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
-    end = toInteger(end, size);
-    end = clamp(end, -size, size);
-    end += end >= 0 ? 0 : size;
-    for (let node = get(this.root, start); start < end; ++start) {
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
+    end = toInteger(end, this._size);
+    end = clamp(addIfBelow(end, this._size), 0, this._size);
+    let node = get$1(this.root, start);
+    while (start < end) {
       node = node.next;
       out.push(node.value);
+      ++start;
     }
     return out;
   }
@@ -1316,14 +1320,12 @@ class CircularLinkedList extends CircularBase {
     if (this._size <= 0) {
       return out;
     }
-    const size = this._size;
     start = toInteger(start, 0);
-    start = clamp(start, -size, size);
-    start += start >= 0 ? 0 : size;
+    start = clamp(addIfBelow(start, this._size), 0, this._size);
     deleteCount = toInteger(deleteCount, 0);
-    deleteCount = clamp(deleteCount, 0, size - start);
-    let prev = get(this.root, start);
-    const [head, tail] = cut(prev, deleteCount);
+    deleteCount = clamp(deleteCount, 0, this._size - start);
+    let prev = get$1(this.root, start);
+    const [head, tail] = cut$1(prev, deleteCount);
     this._size -= deleteCount;
     out.root.next = head;
     out.tail = tail ?? out.root;
@@ -1351,7 +1353,7 @@ class CircularLinkedList extends CircularBase {
     N -= diff;
     if (this._size + N > capacity) {
       this._size = capacity - N;
-      const prev = get(this.root, this._size);
+      const prev = get$1(this.root, this._size);
       this.emitter.emit(BoundedEvent.Overflow, toArray(prev.next));
       prev.next = void 0;
       this.tail = prev;
@@ -1360,7 +1362,7 @@ class CircularLinkedList extends CircularBase {
       this.emitter.emit(BoundedEvent.Overflow, values2.slice(N));
       values2.length = N;
     }
-    const [head, tail] = toList(values2);
+    const [head, tail] = toList$1(values2);
     tail.next = this.root.next;
     this.root.next = head;
     if (this._size <= 0) {
@@ -1399,17 +1401,6 @@ class CircularLinkedList extends CircularBase {
     }
     this._size = size;
     return tail;
-  }
-  /**
-   * @internal
-   */
-  tryIndex(index) {
-    index = +index;
-    const size = this._size;
-    if (!Number.isInteger(index) || index >= size || index < -size) {
-      return void 0;
-    }
-    return index < 0 ? index + size : index;
   }
 }
 class CircularLinkedQueue {

@@ -22,14 +22,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
-var H = Object.defineProperty;
-var V = (n, h, t) => h in n ? H(n, h, { enumerable: !0, configurable: !0, writable: !0, value: t }) : n[h] = t;
-var a = (n, h, t) => (V(n, typeof h != "symbol" ? h + "" : h, t), t);
+var P = Object.defineProperty;
+var X = (r, h, t) => h in r ? P(r, h, { enumerable: !0, configurable: !0, writable: !0, value: t }) : r[h] = t;
+var a = (r, h, t) => (X(r, typeof h != "symbol" ? h + "" : h, t), t);
 const u = {
   Overflow: "overflow"
-}, B = {};
+}, j = {};
 class y {
-  constructor(h = new B()) {
+  constructor(h = new j()) {
     /**
      * The event emitter.
      * @internal
@@ -50,20 +50,20 @@ class y {
     return this.emitter.removeListener(h, t), this;
   }
 }
-const g = 4294967295;
-function S(n) {
-  return Number.isInteger(n) && n >= 0 && n <= g;
+const m = 4294967295;
+function E(r) {
+  return Number.isInteger(r) && r >= 0 && r <= m;
 }
-function c(n) {
-  return n === Number.POSITIVE_INFINITY;
+function c(r) {
+  return r === Number.POSITIVE_INFINITY;
 }
-function w(n) {
-  return typeof n == "number";
+function w(r) {
+  return typeof r == "number";
 }
-function m(n) {
-  return Number.isSafeInteger(n) && n >= 0;
+function g(r) {
+  return Number.isSafeInteger(r) && r >= 0;
 }
-class q extends y {
+class k extends y {
   constructor(t) {
     super();
     /**
@@ -95,9 +95,9 @@ class q extends y {
      * @internal
      */
     a(this, "vals");
-    if (this._capacity = g, this.head = 0, this.isFinite = !1, this._size = 0, this.next = 0, this.vals = [], t = t ?? 1 / 0, !c(t)) {
+    if (this._capacity = m, this.head = 0, this.isFinite = !1, this._size = 0, this.next = 0, this.vals = [], t = t ?? 1 / 0, !c(t)) {
       if (w(t)) {
-        if (!S(t))
+        if (!E(t))
           throw new RangeError("Invalid capacity");
         this._capacity = t, this.isFinite = !0;
         return;
@@ -123,15 +123,15 @@ class q extends y {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return q.name;
+    return k.name;
   }
   /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(t) {
     if (t = +t, c(t))
-      t = g, this.isFinite = !1;
-    else if (S(t))
+      t = m, this.isFinite = !1;
+    else if (E(t))
       this.isFinite = !0;
     else
       throw new RangeError("Invalid capacity");
@@ -175,8 +175,8 @@ class q extends y {
   forEach(t, i) {
     const s = this._size;
     for (let e = 0; e < s && e < this._size; ++e) {
-      const r = this.vals[(this.head + e) % this._capacity];
-      t.call(i, r, e, this);
+      const n = this.vals[(this.head + e) % this._capacity];
+      t.call(i, n, e, this);
     }
   }
   /**
@@ -258,10 +258,10 @@ class q extends y {
       return this._push(t, i), this._size;
     if (!this.isFinite)
       throw this._push(t, e), new Error("Out of memory");
-    const r = i - s;
-    if (this.evictHead(this.size + r), r > 0)
-      this.emit(t.splice(0, r));
-    else if (r < 0)
+    const n = i - s;
+    if (this.evictHead(this.size + n), n > 0)
+      this.emit(t.splice(0, n));
+    else if (n < 0)
       return this._push(t, i), this._size;
     return this.vals = t, this._size = s, this._size;
   }
@@ -306,10 +306,10 @@ class q extends y {
       return this._unshift(t, i), this._size;
     if (!this.isFinite)
       throw this._unshift(t, e), new Error("Out of memory");
-    const r = i - s;
-    if (this.evictTail(this.size + r), r > 0)
-      this.emit(t.splice(i - r, r));
-    else if (r < 0)
+    const n = i - s;
+    if (this.evictTail(this.size + n), n > 0)
+      this.emit(t.splice(i - n, n));
+    else if (n < 0)
       return this._unshift(t, i), this._size;
     return this.vals = t, this._size = s, this._size;
   }
@@ -435,10 +435,10 @@ class q extends y {
    */
   _push(t, i) {
     const s = this._capacity, e = this.vals;
-    let r = this.next;
+    let n = this.next;
     for (let l = 0; l < i; ++l)
-      e[r] = t[l], ++r >= s && (r = 0);
-    this.next = r, this._size += i;
+      e[n] = t[l], ++n >= s && (n = 0);
+    this.next = n, this._size += i;
   }
   /**
    * Adjusts the deque to fit within the given capacity.
@@ -477,20 +477,92 @@ class q extends y {
    */
   _unshift(t, i) {
     const s = this._capacity, e = this.vals;
-    let r = this.head;
+    let n = this.head;
     const l = t.length - i;
     for (let o = t.length - 1; o >= l; --o)
-      --r < 0 && (r += s), e[r] = t[o];
-    this.head = r, this._size += i;
+      --n < 0 && (n += s), e[n] = t[o];
+    this.head = n, this._size += i;
   }
 }
-function _(n, h, t) {
+function q(r, h) {
+  if (h <= 0)
+    return [void 0, void 0];
+  const t = r.next, i = x(t, h - 1);
+  return r.next = i.next, i.next = void 0, [t, i];
+}
+function* L(r, h) {
+  for (let t = 0; r != h; ++t)
+    yield [t, r.value], r = r.next;
+}
+function x(r, h) {
+  if (!(h < 0)) {
+    for (let t = 0; r != null && t < h; ++t)
+      r = r.next;
+    return r;
+  }
+}
+function T(r, h, t) {
+  for (; r != t; ) {
+    if (r.value === h)
+      return !0;
+    r = r.next;
+  }
+  return !1;
+}
+function* M(r, h) {
+  for (let t = 0; r != h; ++t)
+    yield t, r = r.next;
+}
+function F(r, h) {
+  const t = [];
+  for (; r != h; )
+    t.push(r.value), r = r.next;
+  return t;
+}
+function b(r) {
+  const h = {};
+  let t = 0, i = h;
+  for (const s of r)
+    i.next = { value: s }, i = i.next, ++t;
+  return h.next === void 0 ? [void 0, void 0, 0] : [h.next, i, t];
+}
+function* R(r, h) {
+  for (let t = 0; r != h; ++t)
+    yield r.value, r = r.next;
+}
+function J(r, h) {
+  if (h <= 0)
+    return [void 0, void 0];
+  const [t, i] = q(r, h);
+  return t.prev = void 0, r.next != null && (r.next.prev = r), [t, i];
+}
+function W(r, h) {
+  if (h >= 0)
+    return x(r, h);
+  for (let t = 0; r != null && t > h; --t)
+    r = r.prev;
+  return r;
+}
+function K(r) {
+  const h = {};
+  let t = 0, i = h;
+  for (const s of r)
+    i.next = { prev: i, value: s }, i = i.next, ++t;
+  return t <= 0 ? [void 0, void 0, 0] : (h.next.prev = void 0, [h.next, i, t]);
+}
+function v(r, h, t = 0) {
+  return r >= t ? r : r + h;
+}
+function z(r, h, t) {
   if (h > t)
     throw new RangeError("Invalid clamp range; min must be <= max");
-  return n <= h ? h : n <= t ? n : t;
+  return r <= h ? h : r <= t ? r : t;
 }
-function d(n, h = 0) {
-  return n = +n, isNaN(n) ? h : Math.trunc(n);
+function S(r, h, t) {
+  return r >= h && r < t;
+}
+function _(r, h = 0) {
+  return r = +r, isNaN(r) ? h : Math.trunc(r);
 }
 class I extends y {
   constructor(t) {
@@ -501,25 +573,25 @@ class I extends y {
      */
     a(this, "_capacity");
     /**
+     * The root of the linked list
      * @internal
      */
     a(this, "root");
     /**
+     * The current size of the list (0 \<= size \<= capacity)
      * @internal
      */
     a(this, "_size");
-    if (this._capacity = 1 / 0, this.clear(), t = t ?? 1 / 0, c(t))
+    if (this._capacity = 1 / 0, this.root = { value: void 0 }, this.clear(), t = t ?? 1 / 0, c(t))
       return;
     if (w(t)) {
-      if (!m(t))
+      if (!g(t))
         throw new RangeError("Invalid capacity");
       this._capacity = t;
       return;
     }
-    let i = this.root;
-    for (const s of t)
-      i.next = { prev: i, value: s }, i = i.next, ++this._size;
-    i.next = this.root, this.root.prev = i, this._capacity = this._size;
+    const [i, s, e] = K(t);
+    this._capacity = e, e > 0 && (this.root.next = i, this.root.prev = s, i.prev = this.root, s.next = this.root, this._size = e);
   }
   get capacity() {
     return this._capacity;
@@ -531,39 +603,34 @@ class I extends y {
     return I.name;
   }
   set capacity(t) {
-    if (t = +t, !c(t) && !m(t))
+    if (t = +t, !c(t) && !g(t))
       throw new RangeError("Invalid capacity");
-    if (this._size <= t) {
-      this._capacity = t;
+    if (this._capacity = t, this._size <= t)
       return;
-    }
-    const i = [];
-    let s = this.root.next;
-    do
-      i.push(s.value), s = s.next;
-    while (--this._size > t);
-    this.root.next = s, s.prev = this.root, this._capacity = t, this.emitter.emit(u.Overflow, i);
+    const i = this._size - t, [s, e] = J(this.root, i);
+    this._size -= i, this.emitter.emit(u.Overflow, F(s, e.next));
   }
   at(t) {
-    const i = this.tryIndex(t);
-    return i == null ? void 0 : this.getNode(i).value;
+    if (t = v(_(t, -1 / 0), this._size), !!S(t, 0, this._size))
+      return this.get(t).value;
   }
   clear() {
-    this._size = 0, this.root = { value: void 0 }, this.root.next = this.root, this.root.prev = this.root;
+    this._size = 0, this.root.next = this.root, this.root.prev = this.root;
   }
   delete(t) {
-    return t = this.tryIndex(t), t == null ? !1 : (this.remove(this.getNode(t)), !0);
+    if (t = v(_(t, -1 / 0), this._size), !S(t, 0, this._size))
+      return !1;
+    const i = this.get(t);
+    return i.prev.next = i.next, i.next.prev = i.prev, --this._size, !0;
   }
-  *entries() {
-    let t = this.root;
-    for (let i = 0; i < this._size; ++i)
-      t = t.next, yield [i, t.value];
+  entries() {
+    return L(this.root.next, this.root);
   }
   fill(t, i, s) {
-    const e = this._size;
-    i = d(i, 0), i = _(i, -e, e), i += i >= 0 ? 0 : e, s = d(s, e), s = _(s, -e, e), s += s >= 0 ? 0 : e;
-    for (let r = this.getNode(i); i < s; ++i)
-      r.value = t, r = r.next;
+    i = _(i, 0), i = z(v(i, this._size), 0, this._size), s = _(s, this._size), s = z(v(s, this._size), 0, this._size);
+    let e = this.get(i);
+    for (; i < s; )
+      e.value = t, e = e.next, ++i;
     return this;
   }
   forEach(t, i) {
@@ -572,138 +639,101 @@ class I extends y {
       s = s.next, t.call(i, s.value, e, this);
   }
   has(t) {
-    const i = this._size;
-    let s = this.root;
-    for (let e = 0; e < i; ++e)
-      if (s = s.next, s.value === t)
-        return !0;
-    return !1;
+    return T(this.root.next, t, this.root);
   }
-  *keys() {
-    for (let t = 0; t < this._size; ++t)
-      yield t;
+  keys() {
+    return M(this.root.next, this.root);
   }
   pop() {
-    if (this._size < 1)
+    if (this._size <= 0)
       return;
     const t = this.root.prev;
-    return this.remove(t), t.value;
+    return t.prev.next = t.next, t.next.prev = t.prev, --this._size, t.value;
   }
   push(...t) {
-    return t.length < 1 ? this._size : this._capacity < 1 ? (this.emitter.emit(u.Overflow, t), this._size) : (this.append(this.root.prev, t), this._size);
+    return t.length <= 0 ? this._size : this._capacity <= 0 ? (this.emitter.emit(u.Overflow, t), this._size) : (this.append(this.root.prev, t), this._size);
   }
   set(t, i) {
-    const s = this.tryIndex(t);
-    if (s == null)
+    if (t = v(_(t, -1 / 0), this._size), !S(t, 0, this._size))
       return;
-    const e = this.getNode(s), r = e.value;
-    return e.value = i, r;
+    const s = this.get(t), e = s.value;
+    return s.value = i, e;
   }
   shift() {
-    if (this._size < 1)
+    if (this._size <= 0)
       return;
     const t = this.root.next;
-    return this.remove(t), t.value;
+    return t.prev.next = t.next, t.next.prev = t.prev, --this._size, t.value;
   }
   slice(t, i) {
-    const s = this._size;
-    t = d(t, 0), t = _(t, -s, s), t += t >= 0 ? 0 : s, i = d(i, s), i = _(i, -s, s), i += i >= 0 ? 0 : s;
-    const e = new I();
-    for (let r = this.getNode(t - 1); t < i; ++t)
-      e.push(r.next.value), r = r.next;
-    return e;
+    const s = new I();
+    if (this._size <= 0)
+      return s;
+    t = _(t, 0), t = z(v(t, this._size), 0, this._size), i = _(i, this._size), i = z(v(i, this._size), 0, this._size);
+    let e = this.get(t - 1);
+    for (; t < i; )
+      e = e.next, s.push(e.value), ++t;
+    return s;
   }
   splice(t, i, ...s) {
-    const e = this._size;
-    t = d(t, 0), t = _(t, -e, e), t += t >= 0 ? 0 : e, i = d(i, 0), i = _(i, 0, e - t);
-    const r = new I(), l = s.length;
-    let o = this.getNode(t - 1);
-    const f = Math.min(i, l);
-    for (let p = 0; p < f; ++p)
-      o = o.next, r.push(o.value), o.value = s[p];
-    if (i <= f)
-      return this.append(o, s, f), r;
-    let v = r.root.prev;
-    o.next.prev = v, v.next = o.next;
-    const z = i - f;
-    return v = this.moveRight(o, z), o.next = v.next, v.next.prev = o, this._size -= z, v.next = r.root, r.root.prev = v, r._size += z, r;
+    const e = new I();
+    if (this._size <= 0)
+      return e;
+    t = _(t, 0), t = z(v(t, this._size), 0, this._size), i = _(i, 0), i = z(i, 0, this._size - t);
+    const n = s.length;
+    let l = this.get(t - 1);
+    const o = Math.min(i, n);
+    for (let d = 0; d < o; ++d)
+      l = l.next, e.push(l.value), l.value = s[d];
+    if (i <= o)
+      return this.append(l, s, o), e;
+    let f = e.root.prev;
+    l.next.prev = f, f.next = l.next;
+    const p = i - o;
+    return f = W(l, p), l.next = f.next, l.next.prev = l, this._size -= p, f.next = e.root, e.root.prev = f, e._size += p, e;
   }
   [Symbol.iterator]() {
-    return this.values();
+    return R(this.root.next, this.root);
   }
   unshift(...t) {
-    return t.length < 1 ? this._size : this._capacity < 1 ? (this.emitter.emit(u.Overflow, t), this._size) : (this.prepend(this.root.next, t), this._size);
+    return t.length <= 0 ? this._size : this._capacity <= 0 ? (this.emitter.emit(u.Overflow, t), this._size) : (this.prepend(this.root.next, t), this._size);
   }
-  *values() {
-    let t = this.root;
-    for (let i = 0; i < this._size; ++i)
-      t = t.next, yield t.value;
+  values() {
+    return R(this.root.next, this.root);
   }
   /**
    * @internal
    */
   append(t, i, s = 0) {
-    const e = this.root, r = t.next, l = [], o = this._capacity;
+    const e = this.root, n = t.next, l = [], o = this._capacity;
     let f = this._size;
-    const v = i.length;
-    for (let z = s; z < v; ++z) {
-      const p = { prev: t, value: i[z] };
-      t.next = p, t = p, f < o ? ++f : (l.push(e.next.value), e.next = e.next.next);
+    const p = i.length;
+    for (let d = s; d < p; ++d) {
+      const N = { prev: t, value: i[d] };
+      t.next = N, t = N, f < o ? ++f : (l.push(e.next.value), e.next = e.next.next);
     }
-    return t.next = r, r.prev = t, e.next.prev = e, l.length > 0 && this.emitter.emit(u.Overflow, l), this._size = f, t;
+    return t.next = n, n.prev = t, e.next.prev = e, l.length > 0 && this.emitter.emit(u.Overflow, l), this._size = f, t;
   }
   /**
    * @internal
    */
-  getNode(t) {
-    const i = this.root, s = this._size / 2;
-    return t <= s ? this.moveRight(i, t + 1) : this.moveLeft(i, this._size - t);
-  }
-  /**
-   * @internal
-   */
-  moveLeft(t, i) {
-    for (let s = 0; s < i; ++s)
-      t = t.prev;
-    return t;
-  }
-  /**
-   * @internal
-   */
-  moveRight(t, i) {
-    for (let s = 0; s < i; ++s)
-      t = t.next;
-    return t;
+  get(t) {
+    return t -= t <= this._size / 2 ? -1 : this._size, W(this.root, t);
   }
   /**
    * @internal
    */
   prepend(t, i) {
-    const s = this.root, e = t.prev, r = [], l = this._capacity;
+    const s = this.root, e = t.prev, n = [], l = this._capacity;
     let o = this._size;
     for (let f = i.length - 1; f >= 0; --f) {
-      const v = { next: t, value: i[f] };
-      t.prev = v, t = v, o < l ? ++o : (r.push(s.prev.value), s.prev = s.prev.prev);
+      const p = { next: t, value: i[f] };
+      t.prev = p, t = p, o < l ? ++o : (n.push(s.prev.value), s.prev = s.prev.prev);
     }
-    return t.prev = e, e.next = t, s.prev.next = s, r.length > 0 && this.emitter.emit(u.Overflow, r.reverse()), this._size = o, t;
-  }
-  /**
-   * @internal
-   */
-  remove(t) {
-    t.prev.next = t.next, t.next.prev = t.prev, --this._size;
-  }
-  /**
-   * @internal
-   */
-  tryIndex(t) {
-    t = +t;
-    const i = this._size;
-    if (!(!Number.isInteger(t) || t >= i || t < -i))
-      return t < 0 ? t + i : t;
+    return t.prev = e, e.next = t, s.prev.next = s, n.length > 0 && this.emitter.emit(u.Overflow, n.reverse()), this._size = o, t;
   }
 }
-class F {
+class A {
   constructor(h) {
     /**
      * @internal
@@ -718,7 +748,7 @@ class F {
     return this.list.size;
   }
   get [Symbol.toStringTag]() {
-    return F.name;
+    return A.name;
   }
   set capacity(h) {
     this.list.capacity = h;
@@ -781,53 +811,7 @@ class F {
     return this.list.removeListener(h, t), this;
   }
 }
-function E(n, h) {
-  if (h <= 0)
-    return [void 0, void 0];
-  const t = n.next, i = x(t, h - 1);
-  return n.next = i.next, i.next = void 0, [t, i];
-}
-function* Y(n, h) {
-  for (let t = 0; n != h; ++t)
-    yield [t, n.value], n = n.next;
-}
-function x(n, h) {
-  if (!(h < 0)) {
-    for (let t = 0; t < h; ++t)
-      n = n.next;
-    return n;
-  }
-}
-function G(n, h, t) {
-  for (; n != t; ) {
-    if (n.value === h)
-      return !0;
-    n = n.next;
-  }
-  return !1;
-}
-function* P(n, h) {
-  for (let t = 0; n != h; ++t)
-    yield t, n = n.next;
-}
-function R(n, h) {
-  const t = [];
-  for (; n != h; )
-    t.push(n.value), n = n.next;
-  return t;
-}
-function O(n) {
-  const h = {};
-  let t = 0, i = h;
-  for (const s of n)
-    i.next = { value: s }, i = i.next, ++t;
-  return h.next == null ? [void 0, void 0, 0] : [h.next, i, t];
-}
-function* b(n, h) {
-  for (let t = 0; n != h; ++t)
-    yield n.value, n = n.next;
-}
-class N extends y {
+class O extends y {
   constructor(t) {
     super();
     /**
@@ -836,27 +820,30 @@ class N extends y {
      */
     a(this, "_capacity");
     /**
+     * The root of the linked list
      * @internal
      */
     a(this, "root");
     /**
+     * The current size of the list (0 \<= size \<= capacity)
      * @internal
      */
     a(this, "_size");
     /**
+     * The last node in the linked list.
      * @internal
      */
     a(this, "tail");
-    if (this._capacity = 1 / 0, this.clear(), t = t ?? 1 / 0, c(t))
+    if (this._capacity = 1 / 0, this.root = { value: void 0 }, this.clear(), t = t ?? 1 / 0, c(t))
       return;
     if (w(t)) {
-      if (!m(t))
+      if (!g(t))
         throw new RangeError("Invalid capacity");
       this._capacity = t;
       return;
     }
-    const [i, s, e] = O(t);
-    this.root.next = i, this.tail = s ?? this.root, this._capacity = e, this._size = e;
+    const [i, s, e] = b(t);
+    this._capacity = e, e > 0 && (this.root.next = i, this.tail = s, this._size = e);
   }
   get capacity() {
     return this._capacity;
@@ -865,39 +852,37 @@ class N extends y {
     return this._size;
   }
   get [Symbol.toStringTag]() {
-    return N.name;
+    return O.name;
   }
   set capacity(t) {
-    if (t = +t, !c(t) && !m(t))
+    if (t = +t, !c(t) && !g(t))
       throw new RangeError("Invalid capacity");
-    if (this._size <= t) {
-      this._capacity = t;
+    if (this._capacity = t, this._size <= t)
       return;
-    }
-    const i = this._size - t, [s] = E(this.root, i);
-    this._size -= i, this._size <= 0 && (this.tail = this.root), this._capacity = t, this.emitter.emit(u.Overflow, R(s));
+    const i = this._size - t, [s] = q(this.root, i);
+    this._size -= i, this._size <= 0 && (this.tail = this.root), this.emitter.emit(u.Overflow, F(s));
   }
   at(t) {
-    const i = this.tryIndex(t);
-    return i == null ? void 0 : x(this.root, i + 1).value;
+    if (t = v(_(t, -1 / 0), this._size), !!S(t, 0, this._size))
+      return ++t == this._size ? this.tail.value : x(this.root, t).value;
   }
   clear() {
-    this._size = 0, this.root = { value: void 0 }, this.tail = this.root;
+    this._size = 0, this.root.next = void 0, this.tail = this.root;
   }
   delete(t) {
-    if (t = this.tryIndex(t), t == null)
+    if (t = v(_(t, -1 / 0), this._size), !S(t, 0, this._size))
       return !1;
     const i = x(this.root, t);
-    return i.next = i.next.next, t == --this._size && (this.tail = i), !0;
+    return i.next = i.next.next, --this._size, t == this._size && (this.tail = i), !0;
   }
   entries() {
-    return Y(this.root.next);
+    return L(this.root.next);
   }
   fill(t, i, s) {
-    const e = this._size;
-    i = d(i, 0), i = _(i, -e, e), i += i >= 0 ? 0 : e, s = d(s, e), s = _(s, -e, e), s += s >= 0 ? 0 : e;
-    for (let r = x(this.root, i + 1); i < s; ++i)
-      r.value = t, r = r.next;
+    i = _(i, 0), i = z(v(i, this._size), 0, this._size), s = _(s, this._size), s = z(v(s, this._size), 0, this._size);
+    let e = x(this.root, i + 1);
+    for (; i < s; )
+      e.value = t, e = e.next, ++i;
     return this;
   }
   forEach(t, i) {
@@ -906,10 +891,10 @@ class N extends y {
       s = s.next, t.call(i, s.value, e, this);
   }
   has(t) {
-    return G(this.root.next, t);
+    return T(this.root.next, t);
   }
   keys() {
-    return P(this.root.next);
+    return M(this.root.next);
   }
   pop() {
     if (this._size <= 0)
@@ -921,40 +906,38 @@ class N extends y {
     return t.length <= 0 ? this._size : this._capacity <= 0 ? (this.emitter.emit(u.Overflow, t), this._size) : (this.tail = this.append(this.tail, t), this._size);
   }
   set(t, i) {
-    const s = this.tryIndex(t);
-    if (s == null)
+    if (t = v(_(t, -1 / 0), this._size), !S(t, 0, this._size))
       return;
-    const e = x(this.root, s + 1), r = e.value;
-    return e.value = i, r;
+    const s = x(this.root, t + 1), e = s.value;
+    return s.value = i, e;
   }
   shift() {
     if (this._size <= 0)
       return;
     const t = this.root.next;
-    return this.root.next = t.next, --this._size <= 0 && (this.tail = this.root), t.value;
+    return this.root.next = t.next, --this._size, this._size <= 0 && (this.tail = this.root), t.value;
   }
   slice(t, i) {
-    const s = new N();
+    const s = new O();
     if (this._size <= 0)
       return s;
-    const e = this._size;
-    t = d(t, 0), t = _(t, -e, e), t += t >= 0 ? 0 : e, i = d(i, e), i = _(i, -e, e), i += i >= 0 ? 0 : e;
-    for (let r = x(this.root, t); t < i; ++t)
-      r = r.next, s.push(r.value);
+    t = _(t, 0), t = z(v(t, this._size), 0, this._size), i = _(i, this._size), i = z(v(i, this._size), 0, this._size);
+    let e = x(this.root, t);
+    for (; t < i; )
+      e = e.next, s.push(e.value), ++t;
     return s;
   }
   splice(t, i, ...s) {
-    const e = new N();
+    const e = new O();
     if (this._size <= 0)
       return e;
-    const r = this._size;
-    t = d(t, 0), t = _(t, -r, r), t += t >= 0 ? 0 : r, i = d(i, 0), i = _(i, 0, r - t);
-    let l = x(this.root, t);
-    const [o, f] = E(l, i);
-    return this._size -= i, e.root.next = o, e.tail = f ?? e.root, e._size = i, l = this.append(l, s), l.next == null && (this.tail = l), e;
+    t = _(t, 0), t = z(v(t, this._size), 0, this._size), i = _(i, 0), i = z(i, 0, this._size - t);
+    let n = x(this.root, t);
+    const [l, o] = q(n, i);
+    return this._size -= i, e.root.next = l, e.tail = o ?? e.root, e._size = i, n = this.append(n, s), n.next == null && (this.tail = n), e;
   }
   [Symbol.iterator]() {
-    return b(this.root.next);
+    return R(this.root.next);
   }
   unshift(...t) {
     let i = t.length;
@@ -967,45 +950,36 @@ class N extends y {
     if (i -= e, this._size + i > s) {
       this._size = s - i;
       const o = x(this.root, this._size);
-      this.emitter.emit(u.Overflow, R(o.next)), o.next = void 0, this.tail = o;
+      this.emitter.emit(u.Overflow, F(o.next)), o.next = void 0, this.tail = o;
     }
     e > 0 && (this.emitter.emit(u.Overflow, t.slice(i)), t.length = i);
-    const [r, l] = O(t);
-    return l.next = this.root.next, this.root.next = r, this._size <= 0 && (this.tail = l), this._size += i, this._size;
+    const [n, l] = b(t);
+    return l.next = this.root.next, this.root.next = n, this._size <= 0 && (this.tail = l), this._size += i, this._size;
   }
   values() {
-    return b(this.root.next);
+    return R(this.root.next);
   }
   /**
    * @internal
    */
   append(t, i, s = 0) {
-    const e = this.root, r = t.next, l = [], o = this._capacity;
+    const e = this.root, n = t.next, l = [], o = this._capacity;
     let f = this._size;
-    const v = i.length;
-    for (let z = s; z < v; ++z) {
-      const p = { value: i[z] };
-      t.next = p, t = p, f < o ? ++f : (l.push(e.next.value), e.next = e.next.next);
+    const p = i.length;
+    for (let d = s; d < p; ++d) {
+      const N = { value: i[d] };
+      t.next = N, t = N, f < o ? ++f : (l.push(e.next.value), e.next = e.next.next);
     }
-    return t.next = r, l.length > 0 && this.emitter.emit(u.Overflow, l), this._size = f, t;
-  }
-  /**
-   * @internal
-   */
-  tryIndex(t) {
-    t = +t;
-    const i = this._size;
-    if (!(!Number.isInteger(t) || t >= i || t < -i))
-      return t < 0 ? t + i : t;
+    return t.next = n, l.length > 0 && this.emitter.emit(u.Overflow, l), this._size = f, t;
   }
 }
-class W {
+class H {
   constructor(h) {
     /**
      * @internal
      */
     a(this, "list");
-    this.list = new N(h);
+    this.list = new O(h);
   }
   get capacity() {
     return this.list.capacity;
@@ -1014,7 +988,7 @@ class W {
     return this.list.size;
   }
   get [Symbol.toStringTag]() {
-    return W.name;
+    return H.name;
   }
   set capacity(h) {
     this.list.capacity = h;
@@ -1065,7 +1039,7 @@ class W {
     return this.list.removeListener(h, t), this;
   }
 }
-class L {
+class B {
   constructor(h) {
     /**
      * @internal
@@ -1080,7 +1054,7 @@ class L {
     return this.list.size;
   }
   get [Symbol.toStringTag]() {
-    return L.name;
+    return B.name;
   }
   set capacity(h) {
     this.list.capacity = h;
@@ -1131,7 +1105,7 @@ class L {
     return this.list.removeListener(h, t), this;
   }
 }
-class k extends y {
+class V extends y {
   constructor(t) {
     super();
     /**
@@ -1146,7 +1120,7 @@ class k extends y {
     a(this, "map");
     if (this._capacity = 1 / 0, this.map = /* @__PURE__ */ new Map(), t = t ?? 1 / 0, !c(t)) {
       if (w(t)) {
-        if (!m(t))
+        if (!g(t))
           throw new RangeError("Invalid capacity");
         this._capacity = t;
         return;
@@ -1170,13 +1144,13 @@ class k extends y {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return k.name;
+    return V.name;
   }
   /**
    * The maximum number of elements that can be stored in the map.
    */
   set capacity(t) {
-    if (t = +t, !c(t) && !m(t))
+    if (t = +t, !c(t) && !g(t))
       throw new RangeError("Invalid capacity");
     if (t === this._capacity || (this._capacity = t, this.size <= t))
       return;
@@ -1187,8 +1161,8 @@ class k extends y {
     }
     const i = [], s = this.map.entries();
     for (let e = this.size - t; e > 0; --e) {
-      const r = s.next().value;
-      this.map.delete(r[0]), i.push(r);
+      const n = s.next().value;
+      this.map.delete(n[0]), i.push(n);
     }
     this.emitter.emit(u.Overflow, i);
   }
@@ -1295,7 +1269,7 @@ class k extends y {
     return this.map.values();
   }
 }
-class T extends y {
+class $ extends y {
   constructor(t) {
     super();
     /**
@@ -1328,9 +1302,9 @@ class T extends y {
      * @internal
      */
     a(this, "vals");
-    if (this._capacity = g, this.head = 0, this.isFinite = !1, this._size = 0, this.next = 0, this.vals = [], t = t ?? 1 / 0, !c(t)) {
+    if (this._capacity = m, this.head = 0, this.isFinite = !1, this._size = 0, this.next = 0, this.vals = [], t = t ?? 1 / 0, !c(t)) {
       if (w(t)) {
-        if (!S(t))
+        if (!E(t))
           throw new RangeError("Invalid capacity");
         this._capacity = t, this.isFinite = !0;
         return;
@@ -1356,15 +1330,15 @@ class T extends y {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return T.name;
+    return $.name;
   }
   /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(t) {
     if (t = +t, c(t))
-      t = g, this.isFinite = !1;
-    else if (S(t))
+      t = m, this.isFinite = !1;
+    else if (E(t))
       this.isFinite = !0;
     else
       throw new RangeError("Invalid capacity");
@@ -1408,8 +1382,8 @@ class T extends y {
   forEach(t, i) {
     const s = this._size;
     for (let e = 0; e < s && e < this._size; ++e) {
-      const r = this.vals[(this.head + e) % this._capacity];
-      t.call(i, r, e, this);
+      const n = this.vals[(this.head + e) % this._capacity];
+      t.call(i, n, e, this);
     }
   }
   /**
@@ -1468,10 +1442,10 @@ class T extends y {
       return this._push(t, i), this._size;
     if (!this.isFinite)
       throw this._push(t, e), new Error("Out of memory");
-    const r = i - s;
-    if (this.evict(this.size + r), r > 0)
-      this.emit(t.splice(0, r));
-    else if (r < 0)
+    const n = i - s;
+    if (this.evict(this.size + n), n > 0)
+      this.emit(t.splice(0, n));
+    else if (n < 0)
       return this._push(t, i), this._size;
     return this.vals = t, this._size = s, this._size;
   }
@@ -1586,10 +1560,10 @@ class T extends y {
    */
   _push(t, i) {
     const s = this._capacity, e = this.vals;
-    let r = this.next;
+    let n = this.next;
     for (let l = 0; l < i; ++l)
-      e[r] = t[l], ++r >= s && (r = 0);
-    this.next = r, this._size += i;
+      e[n] = t[l], ++n >= s && (n = 0);
+    this.next = n, this._size += i;
   }
   /**
    * Adjusts the queue to fit within the given capacity.
@@ -1620,7 +1594,7 @@ class T extends y {
     this.vals.copyWithin(this.head - i, this.head, this._capacity), this.vals.length = t, this.head -= i, this._capacity = t;
   }
 }
-class M extends y {
+class Y extends y {
   constructor(t) {
     super();
     /**
@@ -1635,7 +1609,7 @@ class M extends y {
     a(this, "set");
     if (this._capacity = 1 / 0, this.set = /* @__PURE__ */ new Set(), t = t ?? 1 / 0, !c(t)) {
       if (w(t)) {
-        if (!m(t))
+        if (!g(t))
           throw new RangeError("Invalid capacity");
         this._capacity = t;
         return;
@@ -1659,13 +1633,13 @@ class M extends y {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return M.name;
+    return Y.name;
   }
   /**
    * The maximum number of elements that can be stored in the set.
    */
   set capacity(t) {
-    if (t = +t, !c(t) && !m(t))
+    if (t = +t, !c(t) && !g(t))
       throw new RangeError("Invalid capacity");
     if (t === this._capacity || (this._capacity = t, this.size <= t))
       return;
@@ -1676,8 +1650,8 @@ class M extends y {
     }
     const i = [], s = this.set.values();
     for (let e = this.size - t; e > 0; --e) {
-      const r = s.next().value;
-      this.set.delete(r), i.push(r);
+      const n = s.next().value;
+      this.set.delete(n), i.push(n);
     }
     this.emitter.emit(u.Overflow, i);
   }
@@ -1773,7 +1747,7 @@ class M extends y {
     return this.set.values();
   }
 }
-class A extends y {
+class G extends y {
   constructor(t) {
     super();
     /**
@@ -1805,9 +1779,9 @@ class A extends y {
      * @internal
      */
     a(this, "vals");
-    if (this._capacity = g, this.head = 0, this.isFinite = !1, this._size = 0, this.next = 0, this.vals = [], t = t ?? 1 / 0, !c(t)) {
+    if (this._capacity = m, this.head = 0, this.isFinite = !1, this._size = 0, this.next = 0, this.vals = [], t = t ?? 1 / 0, !c(t)) {
       if (w(t)) {
-        if (!S(t))
+        if (!E(t))
           throw new RangeError("Invalid capacity");
         this._capacity = t, this.isFinite = !0;
         return;
@@ -1833,15 +1807,15 @@ class A extends y {
    * Return the type of the object.
    */
   get [Symbol.toStringTag]() {
-    return A.name;
+    return G.name;
   }
   /**
    * Sets the maximum number of elements that can be stored.
    */
   set capacity(t) {
     if (t = +t, c(t))
-      t = g, this.isFinite = !1;
-    else if (S(t))
+      t = m, this.isFinite = !1;
+    else if (E(t))
       this.isFinite = !0;
     else
       throw new RangeError("Invalid capacity");
@@ -1875,8 +1849,8 @@ class A extends y {
   forEach(t, i) {
     const s = this._size;
     for (let e = 0; e < s && e < this._size; ++e) {
-      const r = this.vals[(this.head + e) % this._capacity];
-      t.call(i, r, e, this);
+      const n = this.vals[(this.head + e) % this._capacity];
+      t.call(i, n, e, this);
     }
   }
   /**
@@ -1948,10 +1922,10 @@ class A extends y {
       return this._push(t, i), this._size;
     if (!this.isFinite)
       throw this._push(t, e), new Error("Out of memory");
-    const r = i - s;
-    if (this.evict(this.size + r), r > 0)
-      this.emit(t.splice(0, r));
-    else if (r < 0)
+    const n = i - s;
+    if (this.evict(this.size + n), n > 0)
+      this.emit(t.splice(0, n));
+    else if (n < 0)
       return this._push(t, i), this._size;
     return this.vals = t, this._size = s, this._size;
   }
@@ -2066,10 +2040,10 @@ class A extends y {
    */
   _push(t, i) {
     const s = this._capacity, e = this.vals;
-    let r = this.next;
+    let n = this.next;
     for (let l = 0; l < i; ++l)
-      e[r] = t[l], ++r >= s && (r = 0);
-    this.next = r, this._size += i;
+      e[n] = t[l], ++n >= s && (n = 0);
+    this.next = n, this._size += i;
   }
   /**
    * Adjusts the stack to fit within the given capacity.
@@ -2102,15 +2076,15 @@ class A extends y {
 }
 export {
   u as BoundedEvent,
-  q as CircularDeque,
+  k as CircularDeque,
   I as CircularDoublyLinkedList,
-  F as CircularLinkedDeque,
-  N as CircularLinkedList,
-  W as CircularLinkedQueue,
-  L as CircularLinkedStack,
-  k as CircularMap,
-  T as CircularQueue,
-  M as CircularSet,
-  A as CircularStack
+  A as CircularLinkedDeque,
+  O as CircularLinkedList,
+  H as CircularLinkedQueue,
+  B as CircularLinkedStack,
+  V as CircularMap,
+  $ as CircularQueue,
+  Y as CircularSet,
+  G as CircularStack
 };
 //# sourceMappingURL=circle-ds.min.mjs.map

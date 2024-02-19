@@ -324,19 +324,19 @@ export declare class CircularDoublyLinkedList<T> extends CircularBase<T> impleme
     /* Excluded from this release type: root */
     /* Excluded from this release type: _size */
     /**
-     * Creates a new queue with `capacity` defaulted to `Infinity`.
+     * Creates a standard linked list (no capacity restriction).
      */
     constructor();
     /**
-     * Creates a new queue with the given capacity.
+     * Creates a linked list with the given capacity.
      *
-     * @param capacity - the queue's capacity.
+     * @param capacity - the list's capacity.
      */
     constructor(capacity?: number | null);
     /**
-     * Creates a new queue. Initial capacity is the number of items given.
+     * Creates a linked list with the given items. Capacity is set to the number of items.
      *
-     * @param items - the values to store in the queue.
+     * @param items - the values to store in the list.
      */
     constructor(items: Iterable<T>);
     get capacity(): number;
@@ -361,12 +361,8 @@ export declare class CircularDoublyLinkedList<T> extends CircularBase<T> impleme
     unshift(...values: T[]): number;
     values(): IterableIterator<T>;
     /* Excluded from this release type: append */
-    /* Excluded from this release type: getNode */
-    /* Excluded from this release type: moveLeft */
-    /* Excluded from this release type: moveRight */
+    /* Excluded from this release type: get */
     /* Excluded from this release type: prepend */
-    /* Excluded from this release type: remove */
-    /* Excluded from this release type: tryIndex */
 }
 
 /**
@@ -428,26 +424,26 @@ export declare class CircularLinkedList<T> extends CircularBase<T> implements Bo
     /* Excluded from this release type: _size */
     /* Excluded from this release type: tail */
     /**
-     * Creates a new queue with `capacity` defaulted to `Infinity`.
+     * Creates a standard linked list (no capacity restriction).
      */
     constructor();
     /**
-     * Creates a new queue with the given capacity.
+     * Creates a linked list with the given capacity.
      *
-     * @param capacity - the queue's capacity.
+     * @param capacity - the list's capacity.
      */
     constructor(capacity?: number | null);
     /**
-     * Creates a new queue. Initial capacity is the number of items given.
+     * Creates a linked list with the given items. Capacity is set to the number of items.
      *
-     * @param items - the values to store in the queue.
+     * @param items - the values to store in the list.
      */
     constructor(items: Iterable<T>);
     get capacity(): number;
     get size(): number;
     get [Symbol.toStringTag](): string;
     set capacity(capacity: number);
-    at(index: number): T | undefined;
+    at(index?: number): T | undefined;
     clear(): void;
     delete(index: number): boolean;
     entries(): IterableIterator<[number, T]>;
@@ -465,7 +461,6 @@ export declare class CircularLinkedList<T> extends CircularBase<T> implements Bo
     unshift(...values: T[]): number;
     values(): IterableIterator<T>;
     /* Excluded from this release type: append */
-    /* Excluded from this release type: tryIndex */
 }
 
 /**
