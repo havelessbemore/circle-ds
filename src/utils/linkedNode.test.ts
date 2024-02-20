@@ -6,6 +6,7 @@ import {
   get,
   getTail,
   has,
+  insert,
   keys,
   toArray,
   toList,
@@ -198,6 +199,52 @@ describe(`${has.name}()`, () => {
     const end = head!.next!.next!.next; // End node at value 3
     expect(has(head, 4, end)).toBe(false); // Should not find value 4
     expect(has(head, 3, end)).toBe(true); // Should find value 3
+  });
+});
+
+describe(`${insert.name}()`, () => {
+  test("inserts values into an empty list", () => {
+    const [, prev] = toList([0]);
+    const values = [1, 2, 3];
+    const lastNode = insert(prev!, values);
+    expect(toArray(prev)).toEqual([0, 1, 2, 3]);
+    expect(lastNode.value).toEqual(3);
+  });
+
+  test("inserts values with an empty array", () => {
+    const [, prev] = toList([0]);
+    const values: number[] = [];
+    const lastNode = insert(prev!, values);
+    expect(toArray(prev!)).toEqual([0]);
+    expect(lastNode.value).toEqual(0);
+  });
+
+  test("inserts values at the beginning of a list", () => {
+    const [prev] = toList([-1, 0]);
+    const values = [1, 2, 3];
+    insert(prev!, values);
+    expect(toArray(prev)).toEqual([-1, 1, 2, 3, 0]);
+  });
+
+  test("inserts values in the middle of a list", () => {
+    const [prev] = toList([0, 1, 4, 5]);
+    const values = [2, 3];
+    insert(prev!.next!, values);
+    expect(toArray(prev)).toEqual([0, 1, 2, 3, 4, 5]);
+  });
+
+  test("inserts values at the end of a list", () => {
+    const [head, prev] = toList([0, 1, 2]);
+    const values = [3, 4];
+    insert(prev!, values);
+    expect(toArray(head)).toEqual([0, 1, 2, 3, 4]);
+  });
+
+  test("inserts iterable other than an array", () => {
+    const [prev] = toList([0, 1]);
+    const values = new Set([2, 3, 4]);
+    insert(prev!, values);
+    expect(toArray(prev)).toEqual([0, 2, 3, 4, 1]);
   });
 });
 

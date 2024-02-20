@@ -875,6 +875,14 @@ export function test(cls: Constructor<List<unknown>>) {
         expect(list.size).toBe(0);
       });
 
+      it("can insert items into an empty list", () => {
+        const list = new cls();
+        const removed = list.splice(0, 0, 1, 2, 3);
+        expect(Array.from(removed)).toEqual([]);
+        expect(Array.from(list)).toEqual([1, 2, 3]);
+        expect(list.size).toBe(3);
+      });
+
       it("removes the correct elements and returns them", () => {
         const removed = list.splice(3, 2);
         expect(Array.from(removed)).toEqual([4, 5]);

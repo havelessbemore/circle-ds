@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { cut, get, toList } from "./doublyLinkedNode";
+import { cut, get, insert, toList } from "./doublyLinkedNode";
+import { toArray } from "./linkedNode";
 
 describe(`${cut.name}()`, () => {
   test("returns [undefined, undefined] for non-positive count", () => {
@@ -93,6 +94,52 @@ describe(`${get.name}()`, () => {
     expect(get(list, -1)?.value).toBeUndefined();
     expect(get(list, 1)).toBeUndefined();
     expect(get(list, -2)).toBeUndefined();
+  });
+});
+
+describe(`${insert.name}()`, () => {
+  test("inserts values into an empty list", () => {
+    const [prev] = toList([0]);
+    const values = [1, 2, 3];
+    insert(prev!, values);
+    expect(toArray(prev)).toEqual([0, 1, 2, 3]);
+  });
+
+  test("inserts with an empty array of values", () => {
+    const [prev] = toList([0]);
+    insert(prev!, []);
+    expect(toArray(prev!)).toEqual([0]);
+  });
+
+  test("inserts at the beginning of a list", () => {
+    const [root] = toList([0, 1, 2, 3]);
+    const values = [4, 5, 6];
+    insert(root!, values);
+    expect(toArray(root)).toEqual([0, 4, 5, 6, 1, 2, 3]);
+  });
+
+  test("inserts in the middle of a list", () => {
+    const [head] = toList([0, 3, 4]);
+    const values = [1, 2];
+    insert(head!.next!, values);
+    expect(toArray(head!)).toEqual([0, 3, 1, 2, 4]);
+  });
+
+  test("inserts at the end of a list", () => {
+    const [head, tail] = toList([0, 1, 2]);
+    const values = [3, 4];
+    insert(tail!, values);
+    expect(toArray(head!)).toEqual([0, 1, 2, 3, 4]);
+  });
+
+  test("updates prev links after insertion", () => {
+    const [, prev] = toList([0, 1, 2]);
+    const values = [3, 4];
+    let tail = insert(prev!, values);
+    for (let i = 4; i >= 0; --i) {
+      expect(tail.value).toEqual(i);
+      tail = tail.prev!;
+    }
   });
 });
 

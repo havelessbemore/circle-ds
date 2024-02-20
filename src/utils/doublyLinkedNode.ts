@@ -60,6 +60,38 @@ export function get<N extends DoublyLinkedNode<unknown>>(
 }
 
 /**
+ * Inserts a new sequence of values into a linked list right after a specified node.
+ *
+ * @param prev - The node in the linked list after which the new values will be inserted.
+ * @param values - An iterable of values to be inserted.
+ *
+ * @returns The last node that was inserted into the list, or `prev` if no values were inserted.
+ */
+export function insert<T>(
+  prev: DoublyLinkedNode<T>,
+  values: T[]
+): DoublyLinkedNode<T> {
+  // Convert values to list
+  const [head, tail, size] = toList(values);
+
+  // If no values
+  if (size <= 0) {
+    return prev;
+  }
+
+  // Add values
+  const next = prev.next;
+  prev.next = head;
+  head!.prev = prev;
+  tail!.next = next;
+  if (next != null) {
+    next.prev = tail;
+  }
+
+  return tail!;
+}
+
+/**
  * Converts an iterable collection of values into a linked list and returns
  * the head, tail and size of the list.
  *

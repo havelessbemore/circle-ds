@@ -1,30 +1,18 @@
-import { Bounded, BoundedEvent } from "..";
 import { LinkedNode as Node } from "../types/linkedNode";
 import { List } from "../types/list";
-import { isInfinity, isNumber, isSafeCount } from "../utils/is";
 import {
   cut,
   entries,
   get,
   has,
+  insert,
   keys,
-  toArray,
   toList,
   values,
 } from "../utils/linkedNode";
 import { addIfBelow, clamp, isInRange, toInteger } from "../utils/math";
-import { CircularBase } from "./circularBase";
 
-export class CircularLinkedList<T>
-  extends CircularBase<T>
-  implements Bounded<T>, List<T>
-{
-  /**
-   * The maximum number of elements that can be stored in the collection.
-   * @internal
-   */
-  protected _capacity: number;
-
+export class LinkedList<T> implements List<T> {
   /**
    * The root of the linked list
    * @internal
@@ -44,47 +32,27 @@ export class CircularLinkedList<T>
   protected tail!: Node<T>;
 
   /**
-   * Creates a standard linked list (no capacity restriction).
+   * Creates a linked list.
    */
   constructor();
   /**
-   * Creates a linked list with the given capacity.
+   * Creates a linked list with the given values.
    *
-   * @param capacity - the list's capacity.
+   * @param values - the values to store in the list.
    */
-  constructor(capacity?: number | null);
-  /**
-   * Creates a linked list with the given items. Capacity is set to the number of items.
-   *
-   * @param items - the values to store in the list.
-   */
-  constructor(items: Iterable<T>);
-  constructor(capacity?: number | null | Iterable<T>) {
-    super();
-
+  constructor(values: Iterable<T>);
+  constructor(values?: null | Iterable<T>) {
     // Initialize class variables
-    this._capacity = Infinity;
     this.root = { value: undefined } as Node<T>;
     this.clear();
 
-    // Case 1: capacity is null, undefined or Infinity
-    capacity = capacity ?? Infinity;
-    if (isInfinity(capacity)) {
+    // No values given
+    if (values == null) {
       return;
     }
 
-    // Case 2: capacity is zero or a positive safe integer
-    if (isNumber(capacity)) {
-      if (!isSafeCount(capacity)) {
-        throw new RangeError("Invalid capacity");
-      }
-      this._capacity = capacity;
-      return;
-    }
-
-    // Case 3: capacity is iterable
-    const [head, tail, size] = toList(capacity as Iterable<T>);
-    this._capacity = size;
+    // Add values
+    const [head, tail, size] = toList(values as Iterable<T>);
     if (size > 0) {
       this.root.next = head;
       this.tail = tail!;
@@ -92,47 +60,12 @@ export class CircularLinkedList<T>
     }
   }
 
-  get capacity(): number {
-    return this._capacity;
-  }
-
   get size(): number {
     return this._size;
   }
 
   get [Symbol.toStringTag](): string {
-    return CircularLinkedList.name;
-  }
-
-  set capacity(capacity: number) {
-    // Convert input to a number
-    capacity = +capacity;
-
-    // If input is NaN, below zero, or a non-integer
-    if (!isInfinity(capacity) && !isSafeCount(capacity)) {
-      throw new RangeError("Invalid capacity");
-    }
-
-    // Update capacity
-    this._capacity = capacity;
-
-    // If current size fits within new capacity
-    if (this._size <= capacity) {
-      return;
-    }
-
-    // Shrink
-    const diff = this._size - capacity;
-    const [head] = cut(this.root, diff);
-    this._size -= diff;
-
-    // Update tail, if needed
-    if (this._size <= 0) {
-      this.tail = this.root;
-    }
-
-    // Emit discarded items
-    this.emitter.emit(BoundedEvent.Overflow, toArray(head));
+    return LinkedList.name;
   }
 
   at(index?: number): T | undefined {
@@ -236,21 +169,9 @@ export class CircularLinkedList<T>
   }
 
   push(...values: T[]): number {
-    // Case 1: No values
-    const N = values.length;
-    if (N <= 0) {
-      return this._size;
-    }
-
-    // Case 2: Zero capacity
-    const capacity = this._capacity;
-    if (capacity <= 0) {
-      this.emitter.emit(BoundedEvent.Overflow, values);
-      return this._size;
-    }
-
     // Add values
-    this.tail = this.append(this.tail, values);
+    this.tail = insert(this.tail, values);
+    this._size += values.length;
 
     // Return size
     return this._size;
@@ -292,8 +213,8 @@ export class CircularLinkedList<T>
     return head.value;
   }
 
-  slice(start?: number, end?: number): CircularLinkedList<T> {
-    const out = new CircularLinkedList<T>();
+  slice(start?: number, end?: number): LinkedList<T> {
+    const out = new LinkedList<T>();
 
     // Check if empty
     if (this._size <= 0) {
@@ -320,12 +241,8 @@ export class CircularLinkedList<T>
     return out;
   }
 
-  splice(
-    start: number,
-    deleteCount?: number,
-    ...items: T[]
-  ): CircularLinkedList<T> {
-    const out = new CircularLinkedList<T>();
+  splice(start: number, deleteCount?: number, ...values: T[]): LinkedList<T> {
+    const out = new LinkedList<T>();
 
     // Sanitize start
     start = toInteger(start, 0);
@@ -348,7 +265,8 @@ export class CircularLinkedList<T>
     }
 
     // Add values
-    prev = this.append(prev, items);
+    prev = insert(prev, values);
+    this._size += values.length;
 
     // Update tail, if needed
     if (prev.next == null) {
@@ -363,91 +281,20 @@ export class CircularLinkedList<T>
   }
 
   unshift(...values: T[]): number {
-    // Case 1: No values
-    let N = values.length;
-    if (N <= 0) {
-      return this._size;
-    }
-
-    // Case 2: No capacity
-    const capacity = this._capacity;
-    if (capacity <= 0) {
-      this.emitter.emit(BoundedEvent.Overflow, values);
-      return this._size;
-    }
-
-    // Reduce input
-    const diff = N <= capacity ? 0 : N - capacity;
-    N -= diff;
-
-    // Case 3: Discard list overflow
-    if (this._size + N > capacity) {
-      this._size = capacity - N;
-      const prev = get(this.root, this._size)!;
-      this.emitter.emit(BoundedEvent.Overflow, toArray(prev.next));
-      prev.next = undefined;
-      this.tail = prev;
-    }
-
-    // Discard input overflow
-    if (diff > 0) {
-      this.emitter.emit(BoundedEvent.Overflow, values.slice(N));
-      values.length = N;
-    }
-
     // Add values
-    const [head, tail] = toList(values);
-    tail!.next = this.root.next;
-    this.root.next = head;
+    const tail = insert(this.root, values);
+    this._size += values.length;
 
     // Update tail, if needed
-    if (this._size <= 0) {
-      this.tail = tail!;
+    if (tail.next == null) {
+      this.tail = tail;
     }
 
-    // Update size
-    this._size += N;
+    // Return new size
     return this._size;
   }
 
   values(): IterableIterator<T> {
     return values(this.root.next);
-  }
-
-  /**
-   * @internal
-   */
-  protected append(tail: Node<T>, values: T[], minIndex = 0): Node<T> {
-    const root = this.root;
-    const next = tail.next;
-    const evicted: T[] = [];
-    const capacity = this._capacity;
-
-    // Add values
-    let size = this._size;
-    const N = values.length;
-    for (let i = minIndex; i < N; ++i) {
-      const curr = { value: values[i] } as Node<T>;
-      tail.next = curr;
-      tail = curr;
-      if (size < capacity) {
-        ++size;
-      } else {
-        evicted.push(root.next!.value);
-        root.next = root.next!.next;
-      }
-    }
-    tail.next = next;
-
-    // Emit evicted items
-    if (evicted.length > 0) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted);
-    }
-
-    // Update size
-    this._size = size;
-
-    // Return last node
-    return tail;
   }
 }

@@ -115,6 +115,32 @@ export function has<T>(
 }
 
 /**
+ * Inserts a new sequence of values into a linked list right after a specified node.
+ *
+ * @param prev - The node in the linked list after which the new values will be inserted.
+ * @param values - An iterable of values to be inserted.
+ * @returns The last node that was inserted into the list, or `prev` if no values were inserted.
+ */
+export function insert<T>(
+  prev: LinkedNode<T>,
+  values: Iterable<T>
+): LinkedNode<T> {
+  // Convert values to list
+  const [head, tail, size] = toList(values);
+
+  // If no values
+  if (size <= 0) {
+    return prev;
+  }
+
+  // Add values
+  tail!.next = prev.next;
+  prev.next = head;
+
+  return tail!;
+}
+
+/**
  * Iterates through a linked list, yielding each node's index
  * (position in the list).
  *
