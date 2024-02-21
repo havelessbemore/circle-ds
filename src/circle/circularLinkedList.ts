@@ -236,13 +236,13 @@ export class CircularLinkedList<T>
   }
 
   push(...values: T[]): number {
-    // Case 1: No values
+    // If no values
     const N = values.length;
     if (N <= 0) {
       return this._size;
     }
 
-    // Case 2: Zero capacity
+    // If no capacity
     const capacity = this._capacity;
     if (capacity <= 0) {
       this.emitter.emit(BoundedEvent.Overflow, values);
