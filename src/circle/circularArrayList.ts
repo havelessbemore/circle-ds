@@ -177,7 +177,7 @@ export class CircularArrayList<T>
    * @internal
    */
   protected _copyWithin(target: number, start: number, end: number): void {
-    if (target == start) {
+    if (target == start || start >= end) {
       return;
     }
 
@@ -300,10 +300,8 @@ export class CircularArrayList<T>
       return undefined;
     }
 
-    // Get tail
-    const tail = this.next > 0 ? this.next - 1 : this._capacity - 1;
-
     // Return value
+    const tail = this.next > 0 ? this.next - 1 : this._capacity - 1;
     return this.vals[tail];
   }
 
@@ -350,37 +348,8 @@ export class CircularArrayList<T>
     }
 
     // Push values
-    this._push(values);
+    this._insert(this._size, values);
     return this._size;
-  }
-
-  /**
-   * @internal
-   */
-  protected _push(elems: T[], start = 0): void {
-    const capacity = this._capacity;
-    const evicted: T[] = [];
-    const N = elems.length;
-    const vals = this.vals;
-
-    let next = this.next;
-    for (let i = start; i < N; ++i) {
-      next = ++next < capacity ? next : 0;
-      if (this._size < capacity) {
-        ++this._size;
-      } else if (!this.isFinite) {
-        throw new Error("Out of memory");
-      } else {
-        evicted.push(vals[this.next]);
-        this.head = next;
-      }
-      vals[this.next] = elems[i];
-      this.next = next;
-    }
-
-    if (evicted.length > 0) {
-      this._overflow(evicted);
-    }
   }
 
   set(index: number, value: T): T | undefined {
@@ -580,7 +549,7 @@ export class CircularArrayList<T>
 
     // Update state
     this._size += N;
-    this.next = this.toIndex(this.next + N);
+    this.next = this.toIndex(this._size);
   }
 
   [Symbol.iterator](): IterableIterator<T> {
