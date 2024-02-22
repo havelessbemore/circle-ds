@@ -1,6 +1,6 @@
 {
   "name": "circle-ds",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A suite of circular data structures, including CircleStack, CircleQueue, and CircleDeque. Use circular buffers with ease and supported by a variety of operations.",
   "files": [
     "dist/",
