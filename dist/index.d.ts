@@ -42,6 +42,78 @@ export declare const BoundedEvent: {
     readonly Overflow: "overflow";
 };
 
+export declare class CircularArrayList<T> extends CircularBase<T> implements Bounded_2<T>, List_2<T> {
+    /* Excluded from this release type: _capacity */
+    /* Excluded from this release type: head */
+    /**
+     * Whether capacity is finite (true) or infinite (false).
+     */
+    protected isFinite: boolean;
+    /* Excluded from this release type: next */
+    /* Excluded from this release type: _size */
+    /* Excluded from this release type: vals */
+    /**
+     * Creates a new list. Default `capacity` is `Infinity`.
+     */
+    constructor();
+    /**
+     * Creates a new list with the given capacity.
+     *
+     * @param capacity - the list's capacity.
+     */
+    constructor(capacity?: number | null);
+    /**
+     * Creates a new list from the given items. `capacity` will equal the number of items.
+     *
+     * @param items - the initial values in the list.
+     */
+    constructor(items: Iterable<T>);
+    get capacity(): number;
+    get size(): number;
+    get [Symbol.toStringTag](): string;
+    set capacity(capacity: number);
+    at(index?: number): T | undefined;
+    clear(): void;
+    copyWithin(target: number, start?: number, end?: number): this;
+    /* Excluded from this release type: _copyWithin */
+    delete(index: number): boolean;
+    /* Excluded from this release type: _delete */
+    entries(): IterableIterator<[number, T]>;
+    fill(value: T, start?: number, end?: number): this;
+    /* Excluded from this release type: _fill */
+    first(): T | undefined;
+    forEach(callbackfn: (value: T, index: number, collection: this) => void, thisArg?: unknown): void;
+    has(value: T): boolean;
+    keys(): IterableIterator<number>;
+    last(): T | undefined;
+    pop(): T | undefined;
+    /* Excluded from this release type: _pop */
+    push(...values: T[]): number;
+    /* Excluded from this release type: _push */
+    set(index: number, value: T): T | undefined;
+    shift(): T | undefined;
+    /* Excluded from this release type: _shift */
+    slice(start?: number, end?: number): CircularArrayList<T>;
+    /* Excluded from this release type: _slice */
+    splice(start: number, deleteCount?: number, ...items: T[]): CircularArrayList<T>;
+    /* Excluded from this release type: _splice */
+    /* Excluded from this release type: _insert */
+    /* Excluded from this release type: _safeInsert */
+    [Symbol.iterator](): IterableIterator<T>;
+    unshift(...values: T[]): number;
+    /* Excluded from this release type: _unshift */
+    /* Excluded from this release type: _safeUnshift */
+    values(): IterableIterator<T>;
+    /* Excluded from this release type: _overflow */
+    /* Excluded from this release type: grow */
+    /* Excluded from this release type: isSequential */
+    /* Excluded from this release type: sequentialReset */
+    /* Excluded from this release type: shrink */
+    /* Excluded from this release type: toIndex */
+    /* Excluded from this release type: toList */
+    /* Excluded from this release type: toRanges */
+}
+
 declare class CircularBase<T> {
     /* Excluded from this release type: emitter */
     constructor(emitter?: EventEmitter);
@@ -132,16 +204,8 @@ declare class CircularBase<T> {
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularDeque<T> extends CircularBase<T> implements Bounded_2<T>, Deque<T> {
-    /* Excluded from this release type: _capacity */
-    /* Excluded from this release type: head */
-    /**
-     * Whether capacity is finite (true) or infinite (false).
-     */
-    protected isFinite: boolean;
-    /* Excluded from this release type: next */
-    /* Excluded from this release type: _size */
-    /* Excluded from this release type: vals */
+export declare class CircularDeque<T> implements Bounded_2<T>, Deque<T> {
+    /* Excluded from this release type: list */
     /**
      * Creates a new deque. Default `capacity` is `Infinity`.
      */
@@ -158,165 +222,29 @@ export declare class CircularDeque<T> extends CircularBase<T> implements Bounded
      * @param items - the initial values in the deque.
      */
     constructor(items: Iterable<T>);
-    /**
-     * @returns the maximum number of elements that can be stored.
-     */
     get capacity(): number;
-    /**
-     * @returns the number of elements in the collection.
-     */
     get size(): number;
-    /**
-     * Return the type of the object.
-     */
     get [Symbol.toStringTag](): string;
-    /**
-     * Sets the maximum number of elements that can be stored.
-     */
     set capacity(capacity: number);
-    /**
-     * Remove all elements and resets the collection.
-     */
     clear(): void;
-    /**
-     * Iterate through the collection's entries.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of [key, value] pairs for every entry.
-     */
     entries(): IterableIterator<[number, T]>;
-    /**
-     * Get the first element in the deque.
-     *
-     * Alias for {@link front | front()}.
-     *
-     * @returns the first element, or `undefined` if empty.
-     */
     first(): T | undefined;
-    /**
-     * Performs the specified action for each element in the collection.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @param callbackfn - A function that accepts up to three arguments. It is called once per element.
-     * @param thisArg - An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used.
-     */
     forEach(callbackfn: (value: T, index: number, collection: this) => void, thisArg?: unknown): void;
-    /**
-     * Get the element at the front of the deque.
-     *
-     * Alias for {@link first | first()}.
-     *
-     * @returns the front element, or `undefined` if empty.
-     */
     front(): T | undefined;
-    /**
-     * Determines whether a given element is in the collection.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @param value - The element to search for
-     *
-     * @returns a boolean indicating if `value` was found or not
-     */
     has(value: T): boolean;
-    /**
-     * Iterate through the collection's keys.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of keys.
-     */
     keys(): IterableIterator<number>;
-    /**
-     * Get the last element in the deque.
-     *
-     * Alias for {@link top | top()}.
-     *
-     * @returns the last element, or `undefined` if empty.
-     */
     last(): T | undefined;
-    /**
-     * Removes the last element from the deque.
-     *
-     * @returns the last element, or `undefined` if empty.
-     */
     pop(): T | undefined;
-    /**
-     * Inserts new elements at the end of the deque.
-     *
-     * @param elems - Elements to insert.
-     *
-     * @returns The new size of the deque.
-     */
     push(...elems: T[]): number;
-    /**
-     * Removes the element at the front of the deque.
-     *
-     * @returns the front element, or `undefined` if empty.
-     */
     shift(): T | undefined;
-    /**
-     * Iterate through the collection's values.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of values.
-     */
     [Symbol.iterator](): IterableIterator<T>;
-    /**
-     * Inserts new elements at the end of the deque.
-     *
-     * @param elems - Elements to insert.
-     *
-     * @returns The new size of the deque.
-     */
-    unshift(...elems: T[]): number;
-    /**
-     * Get the last element in the deque.
-     *
-     * Alias for {@link last | last()}.
-     *
-     * @returns the last element, or `undefined` if empty.
-     */
     top(): T | undefined;
-    /**
-     * Iterate through the collection's values.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of values.
-     */
+    unshift(...elems: T[]): number;
     values(): IterableIterator<T>;
-    /**
-     * Emit an event containing the items evicted from the collection.
-     *
-     * @param evicted - The items evicted from the collection.
-     */
-    protected emit(evicted: T[]): void;
-    /**
-     * Removes a given number of elements from the deque.
-     * If elements are removed, the {@link BoundedEvent.Overflow} event
-     * is emitted one or more times.
-     *
-     * @param count - The number of elements to evict.
-     */
-    protected evictHead(count: number): void;
-    /**
-     * Removes a given number of elements from the deque.
-     * If elements are removed, the {@link BoundedEvent.Overflow} event
-     * is emitted one or more times.
-     *
-     * @param count - The number of elements to evict.
-     */
-    protected evictTail(count: number): void;
-    /* Excluded from this release type: grow */
-    /* Excluded from this release type: isSequential */
-    /* Excluded from this release type: _push */
-    /* Excluded from this release type: sequentialReset */
-    /* Excluded from this release type: shrink */
-    /* Excluded from this release type: _unshift */
+    addListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
+    on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
+    prependListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
+    removeListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
 }
 
 export declare class CircularDoublyLinkedList<T> extends CircularBase<T> implements Bounded<T>, List_2<T> {
@@ -685,13 +613,8 @@ export declare class CircularMap<K, V> extends CircularBase<[K, V]> implements B
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularQueue<T> extends CircularBase<T> implements Bounded_2<T>, Queue_2<T> {
-    /* Excluded from this release type: _capacity */
-    /* Excluded from this release type: head */
-    /* Excluded from this release type: isFinite */
-    /* Excluded from this release type: next */
-    /* Excluded from this release type: _size */
-    /* Excluded from this release type: vals */
+export declare class CircularQueue<T> implements Bounded_2<T>, Queue_2<T> {
+    /* Excluded from this release type: list */
     /**
      * Creates a new queue. Default `capacity` is `Infinity`.
      */
@@ -708,114 +631,25 @@ export declare class CircularQueue<T> extends CircularBase<T> implements Bounded
      * @param items - the initial values in the queue.
      */
     constructor(items: Iterable<T>);
-    /**
-     * @returns the maximum number of elements that can be stored.
-     */
     get capacity(): number;
-    /**
-     * @returns the number of elements in the collection.
-     */
     get size(): number;
-    /**
-     * Return the type of the object.
-     */
     get [Symbol.toStringTag](): string;
-    /**
-     * Sets the maximum number of elements that can be stored.
-     */
     set capacity(capacity: number);
-    /**
-     * Remove all elements and resets the collection.
-     */
     clear(): void;
-    /**
-     * Iterate through the collection's entries.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of [key, value] pairs for every entry.
-     */
     entries(): IterableIterator<[number, T]>;
-    /**
-     * Get the first element in the queue.
-     *
-     * Alias for {@link front | front()}.
-     *
-     * @returns the first element, or `undefined` if empty.
-     */
     first(): T | undefined;
-    /**
-     * Performs the specified action for each element in the collection.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @param callbackfn - A function that accepts up to three arguments. It is called once per element.
-     * @param thisArg - An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used.
-     */
     forEach(callbackfn: (value: T, index: number, collection: this) => void, thisArg?: unknown): void;
-    /**
-     * Get the element at the front of the queue.
-     *
-     * Alias for {@link first | first()}.
-     *
-     * @returns the front element, or `undefined` if empty.
-     */
     front(): T | undefined;
-    /**
-     * Determines whether a given element is in the collection.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @param value - The element to search for
-     *
-     * @returns a boolean indicating if `value` was found or not
-     */
     has(value: T): boolean;
-    /**
-     * Iterate through the collection's keys.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of keys.
-     */
     keys(): IterableIterator<number>;
-    /**
-     * Inserts new elements at the end of the queue.
-     *
-     * @param elems - Elements to insert.
-     *
-     * @returns The new size of the queue.
-     */
     push(...elems: T[]): number;
-    /**
-     * Removes the element at the front of the queue.
-     *
-     * @returns the front element, or `undefined` if empty.
-     */
     shift(): T | undefined;
-    /**
-     * Iterate through the collection's values.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of values.
-     */
     [Symbol.iterator](): IterableIterator<T>;
-    /**
-     * Iterate through the collection's values.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of values.
-     */
     values(): IterableIterator<T>;
-    /* Excluded from this release type: emit */
-    /* Excluded from this release type: evict */
-    /* Excluded from this release type: grow */
-    /* Excluded from this release type: isSequential */
-    /* Excluded from this release type: _push */
-    /* Excluded from this release type: sequentialReset */
-    /* Excluded from this release type: shrink */
+    addListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
+    on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
+    prependListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
+    removeListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
 }
 
 /**
@@ -933,16 +767,8 @@ export declare class CircularSet<T> extends CircularBase<T> implements Bounded_2
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export declare class CircularStack<T> extends CircularBase<T> implements Bounded_2<T>, Stack_2<T> {
-    /* Excluded from this release type: _capacity */
-    /* Excluded from this release type: head */
-    /**
-     * Whether capacity is finite (true) or infinite (false).
-     */
-    protected isFinite: boolean;
-    /* Excluded from this release type: next */
-    /* Excluded from this release type: _size */
-    /* Excluded from this release type: vals */
+export declare class CircularStack<T> implements Bounded_2<T>, Stack_2<T> {
+    /* Excluded from this release type: list */
     /**
      * Creates a new stack. Default `capacity` is `Infinity`.
      */
@@ -959,114 +785,25 @@ export declare class CircularStack<T> extends CircularBase<T> implements Bounded
      * @param items - the initial values in the stack.
      */
     constructor(items: Iterable<T>);
-    /**
-     * @returns the maximum number of elements that can be stored.
-     */
     get capacity(): number;
-    /**
-     * @returns the number of elements in the collection.
-     */
     get size(): number;
-    /**
-     * Return the type of the object.
-     */
     get [Symbol.toStringTag](): string;
-    /**
-     * Sets the maximum number of elements that can be stored.
-     */
     set capacity(capacity: number);
-    /**
-     * Remove all elements from the collection.
-     */
     clear(): void;
-    /**
-     * Iterate through the collection's entries.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of [key, value] pairs for every entry.
-     */
     entries(): IterableIterator<[number, T]>;
-    /**
-     * Performs the specified action for each element in the collection.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @param callbackfn - A function that accepts up to three arguments. It is called once per element.
-     * @param thisArg - An object to which the `this` keyword refers to in the `callbackfn` function. If omitted, `undefined` is used.
-     */
     forEach(callbackfn: (value: T, index: number, collection: this) => void, thisArg?: unknown): void;
-    /**
-     * Determines whether a given element is in the collection.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @param value - The element to search for
-     *
-     * @returns a boolean indicating if `value` was found or not
-     */
     has(value: T): boolean;
-    /**
-     * Iterate through the collection's keys.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of keys.
-     */
     keys(): IterableIterator<number>;
-    /**
-     * Get the last element in the stack.
-     *
-     * Alias for {@link top | top()}.
-     *
-     * @returns the last element, or `undefined` if empty.
-     */
     last(): T | undefined;
-    /**
-     * Removes the element at the top of the stack.
-     *
-     * @returns the top element, or `undefined` if empty.
-     */
     pop(): T | undefined;
-    /**
-     * Inserts new elements at the end of the stack.
-     *
-     * @param elems - Elements to insert.
-     *
-     * @returns The new size of the stack.
-     */
     push(...elems: T[]): number;
-    /**
-     * Iterate through the collection's values.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of values.
-     */
     [Symbol.iterator](): IterableIterator<T>;
-    /**
-     * Get the last element in the stack.
-     *
-     * Alias for {@link last | last()}.
-     *
-     * @returns the last element, or `undefined` if empty.
-     */
     top(): T | undefined;
-    /**
-     * Iterate through the collection's values.
-     *
-     * **NOTE:** Unknown behavior may occur if the collection is modified during use.
-     *
-     * @returns an iterable of values.
-     */
     values(): IterableIterator<T>;
-    /* Excluded from this release type: emit */
-    /* Excluded from this release type: evict */
-    /* Excluded from this release type: grow */
-    /* Excluded from this release type: isSequential */
-    /* Excluded from this release type: _push */
-    /* Excluded from this release type: sequentialReset */
-    /* Excluded from this release type: shrink */
+    addListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
+    on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
+    prependListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
+    removeListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
 }
 
 export { Collection }

@@ -6,6 +6,7 @@
 
 ### Classes
 
+- [CircularArrayList](classes/CircularArrayList.md)
 - [CircularDeque](classes/CircularDeque.md)
 - [CircularDoublyLinkedList](classes/CircularDoublyLinkedList.md)
 - [CircularLinkedDeque](classes/CircularLinkedDeque.md)
@@ -63,4 +64,4 @@ event handling across the application.
 
 #### Defined in
 
-[types/boundedEvent.ts:21](https://github.com/havelessbemore/circle-ds/blob/443e90c/src/types/boundedEvent.ts#L21)
+[types/boundedEvent.ts:21](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/types/boundedEvent.ts#L21)

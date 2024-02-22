@@ -91,9 +91,9 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularDeque.md#iterator): Returns an iterator for the values in the collection.
 
-### [CircularLinkedList](./docs/classes/CircularLinkedList.md) & [CircularDoublyLinkedList](./docs/classes/CircularDoublyLinkedList.md)
+### [CircularArrayList](./docs/classes/CircularArrayList.md), [CircularLinkedList](./docs/classes/CircularLinkedList.md) & [CircularDoublyLinkedList](./docs/classes/CircularDoublyLinkedList.md)
 
-`CircularLinkedList` is a list of elements allowing for indexed access, modification, and iteration.
+A list of elements allowing for indexed access, modification, and iteration.
 
 #### Constructor
 

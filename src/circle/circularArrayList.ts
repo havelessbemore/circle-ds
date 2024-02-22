@@ -403,6 +403,9 @@ export class CircularArrayList<T>
     return this._size > 0 ? this._shift(1)[0] : undefined;
   }
 
+  /**
+   * @internal
+   */
   protected _shift(N: number): T[] {
     const capacity = this._capacity;
     const evicted: T[] = [];
@@ -628,6 +631,9 @@ export class CircularArrayList<T>
     }
   }
 
+  /**
+   * @internal
+   */
   protected _safeUnshift(elems: T[], min = 0, max = elems.length): void {
     const capacity = this._capacity;
     const vals = this.vals;

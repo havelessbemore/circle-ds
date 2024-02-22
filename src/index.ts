@@ -10,6 +10,7 @@ export type { Queue } from "./types/queue";
 export type { Stack } from "./types/stack";
 
 // Circular Classes
+export { CircularArrayList } from "./circle/circularArrayList";
 export { CircularDeque } from "./circle/circularDeque";
 export { CircularDoublyLinkedList } from "./circle/circularDoublyLinkedList";
 export { CircularLinkedDeque } from "./circle/circularLinkedDeque";
