@@ -380,16 +380,18 @@ export class CircularArrayList<T>
     const evicted: T[] = [];
     const vals = this.vals;
 
+    let head = this.head;
     for (let i = 0; i < N; ++i) {
-      evicted.push(vals[this.head]);
-      vals[this.head] = undefined as T;
+      evicted.push(vals[head]);
+      vals[head] = undefined as T;
       --this._size;
-      if (++this.head >= capacity) {
-        this.head = 0;
+      if (++head >= capacity) {
+        head = 0;
         vals.length = this.next;
       }
     }
 
+    this.head = head;
     return evicted;
   }
 
