@@ -46,10 +46,12 @@ export class ArrayList<T> implements List<T> {
     this.vals.length = 0;
   }
 
+  /*
   copyWithin(target: number, start: number, end?: number): this {
     this.vals.copyWithin(target, start, end);
     return this;
   }
+  */
 
   delete(index: number): boolean {
     const size = this.vals.length;
@@ -75,9 +77,11 @@ export class ArrayList<T> implements List<T> {
     return this;
   }
 
+  /*
   first(): T | undefined {
     return this.vals.length > 0 ? this.vals[0] : undefined;
   }
+  */
 
   forEach(
     callbackfn: (value: T, index: number, collection: this) => void,
@@ -94,10 +98,12 @@ export class ArrayList<T> implements List<T> {
     return this.vals.keys();
   }
 
+  /*
   last(): T | undefined {
     const size = this.vals.length;
     return size > 0 ? this.vals[size - 1] : undefined;
   }
+  */
 
   pop(): T | undefined {
     return this.vals.pop();
