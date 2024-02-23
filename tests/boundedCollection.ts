@@ -180,4 +180,11 @@ export function test(
       });
     });
   });
+
+  describe("[Symbol.toStringTag]", () => {
+    it("Object.prototype.toString returns the correct tag", () => {
+      const obj = new cls();
+      expect(Object.prototype.toString.call(obj)).toBe(`[object ${cls.name}]`);
+    });
+  });
 }

@@ -31,8 +31,9 @@ export class ArrayList<T> implements List<T> {
   }
 
   at(index: number): T | undefined {
-    // Check index
     const size = this.vals.length;
+
+    // Sanitize input
     index = addIfBelow(toInteger(index, -Infinity), size);
     if (!isInRange(index, 0, size)) {
       return undefined;
@@ -41,9 +42,19 @@ export class ArrayList<T> implements List<T> {
     return this.vals.at(index);
   }
 
+  clear(): void {
+    this.vals.length = 0;
+  }
+
+  copyWithin(target: number, start: number, end?: number): this {
+    this.vals.copyWithin(target, start, end);
+    return this;
+  }
+
   delete(index: number): boolean {
-    // Check index
     const size = this.vals.length;
+
+    // Sanitize input
     index = addIfBelow(toInteger(index, -Infinity), size);
     if (!isInRange(index, 0, size)) {
       return false;
@@ -53,10 +64,6 @@ export class ArrayList<T> implements List<T> {
     this.vals.splice(index, 1);
 
     return true;
-  }
-
-  clear(): void {
-    this.vals.length = 0;
   }
 
   entries(): IterableIterator<[number, T]> {
@@ -69,7 +76,7 @@ export class ArrayList<T> implements List<T> {
   }
 
   first(): T | undefined {
-    return this.vals[0];
+    return this.vals.length > 0 ? this.vals[0] : undefined;
   }
 
   forEach(
@@ -89,7 +96,7 @@ export class ArrayList<T> implements List<T> {
 
   last(): T | undefined {
     const size = this.vals.length;
-    return size <= 0 ? undefined : this.vals[size - 1];
+    return size > 0 ? this.vals[size - 1] : undefined;
   }
 
   pop(): T | undefined {

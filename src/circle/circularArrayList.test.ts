@@ -1,6 +1,6 @@
 import { test as testBoundedCollection } from "../../tests/boundedCollection";
-import { test as testBoundedList } from "../../tests/boundedList";
-import { test as testList } from "../../tests/list";
+import { testBoundedList } from "../../tests/boundedList";
+import { testList as testList } from "../../tests/list";
 import { ARRAY_MAX_LENGTH } from "../utils/constants";
 import { CircularArrayList } from "./circularArrayList";
 

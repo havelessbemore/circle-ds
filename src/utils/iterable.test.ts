@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { chunk } from "./iterable";
 
-describe("chunk()", () => {
+describe(`${chunk.name}()`, () => {
   test("divides an array into chunks of the specified size", () => {
     const array = [1, 2, 3, 4, 5, 6];
     const chunked = Array.from(chunk(array, 2));

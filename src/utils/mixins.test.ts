@@ -44,7 +44,7 @@ interface TargetClass extends MixinOne, MixinTwo {}
 // Apply the mixins into the target class at runtime
 applyMixins(TargetClass, [MixinOne, MixinTwo]);
 
-describe("applyMixins()", () => {
+describe(`${applyMixins.name}()`, () => {
   test("target class should have its own methods", () => {
     const targetInstance = new TargetClass();
     expect(typeof targetInstance.targetMethod).toBe("function");

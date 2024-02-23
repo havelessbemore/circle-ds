@@ -11,7 +11,7 @@ import {
 } from "./is";
 import { ARRAY_MAX_LENGTH } from "./constants";
 
-describe("isArrayLength()", () => {
+describe(`${isArrayLength.name}()`, () => {
   test("returns true for zero", () => {
     expect(isArrayLength(0)).toBe(true);
   });
@@ -51,7 +51,7 @@ describe("isArrayLength()", () => {
   });
 });
 
-describe("isFunction()", () => {
+describe(`${isFunction.name}()`, () => {
   test("should return true for a function", () => {
     expect(isFunction(() => {})).toBe(true);
   });
@@ -108,7 +108,7 @@ describe("isFunction()", () => {
   });
 });
 
-describe("isInfinity()", () => {
+describe(`${isInfinity.name}()`, () => {
   test("returns true for positive infinity", () => {
     expect(isInfinity(Number.POSITIVE_INFINITY)).toBe(true);
   });
@@ -137,7 +137,7 @@ describe("isInfinity()", () => {
   });
 });
 
-describe("isIterable()", () => {
+describe(`${isIterable.name}()`, () => {
   it("returns true for an array", () => {
     expect(isIterable([1, 2, 3])).toBe(true);
   });
@@ -181,7 +181,7 @@ describe("isIterable()", () => {
   });
 });
 
-describe("isNumber()", () => {
+describe(`${isNumber.name}()`, () => {
   test("returns true for integers", () => {
     expect(isNumber(1)).toBe(true);
     expect(isNumber(-1)).toBe(true);
@@ -222,7 +222,7 @@ describe("isNumber()", () => {
   });
 });
 
-describe("isSafeCount()", () => {
+describe(`${isSafeCount.name}()`, () => {
   test("returns true for safe, non-negative integers", () => {
     expect(isSafeCount(0)).toBe(true);
     expect(isSafeCount(1)).toBe(true);
@@ -263,7 +263,7 @@ describe("isSafeCount()", () => {
   });
 });
 
-describe("isSymbol()", () => {
+describe(`${isSymbol.name}()`, () => {
   test("returns true for a symbol", () => {
     expect(isSymbol(Symbol())).toBe(true);
   });

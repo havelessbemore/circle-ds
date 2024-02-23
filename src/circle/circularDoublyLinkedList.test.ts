@@ -1,6 +1,6 @@
 import { test as testBoundedCollection } from "../../tests/boundedCollection";
-import { test as testBoundedList } from "../../tests/boundedList";
-import { test as testList } from "../../tests/list";
+import { testBoundedList } from "../../tests/boundedList";
+import { testList } from "../../tests/list";
 import { CircularDoublyLinkedList } from "./circularDoublyLinkedList";
 
 testList(CircularDoublyLinkedList);

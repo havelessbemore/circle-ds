@@ -1,4 +1,4 @@
-import { test as testList } from "../../tests/list";
+import { testList } from "../../tests/list";
 
 import { DoublyLinkedList } from "./doublyLinkedList";
 

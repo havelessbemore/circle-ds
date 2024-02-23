@@ -1,9 +1,9 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, test, vi } from "vitest";
 
 import { Constructor } from "../src/types/constructor";
 import { List } from "../src/types/list";
 
-export function test(cls: Constructor<List<unknown>>) {
+export function testList(cls: Constructor<List<unknown>>) {
   describe(`${cls.name} | List`, () => {
     let list: List<number>;
 
@@ -72,25 +72,50 @@ export function test(cls: Constructor<List<unknown>>) {
         expect(list.at(2)).toBeUndefined();
       });
 
-      it("should return the correct element for valid positive indices", () => {
-        expect(list.at(0)).toBe(0);
-        expect(list.at(4)).toBe(4);
-        expect(list.at(9)).toBe(9);
+      test("accesses the first element correctly", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.at(0)).toBe(1);
       });
 
-      it("should return undefined for out-of-bounds positive indices", () => {
-        expect(list.at(10)).toBeUndefined();
-        expect(list.at(999)).toBeUndefined();
+      test("accesses the last element correctly", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.at(2)).toBe(3);
       });
 
-      it("should return the correct element for valid negative indices", () => {
-        expect(list.at(-1)).toBe(9);
-        expect(list.at(-10)).toBe(0);
+      test("returns undefined for negative index out of bounds", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.at(-4)).toBeUndefined();
       });
 
-      it("should return undefined for out-of-bounds negative indices", () => {
-        expect(list.at(-11)).toBeUndefined();
-        expect(list.at(-100)).toBeUndefined();
+      test("returns undefined for index equal to list size", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.at(3)).toBeUndefined();
+      });
+
+      test("returns undefined for index greater than list size", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.at(4)).toBeUndefined();
+      });
+
+      test("accesses elements with positive index correctly", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.at(0)).toBe(1);
+        expect(list.at(1)).toBe(2);
+        expect(list.at(2)).toBe(3);
+      });
+
+      test("accesses elements with negative index correctly", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.at(-1)).toBe(3);
+        expect(list.at(-2)).toBe(2);
+        expect(list.at(-3)).toBe(1);
+      });
+
+      test("returns undefined when accessing any index in an empty list", () => {
+        const list = new cls();
+        expect(list.at(0)).toBeUndefined();
+        expect(list.at(-1)).toBeUndefined();
+        expect(list.at(1)).toBeUndefined();
       });
 
       it("should handle non-integer indices by truncating", () => {
@@ -112,14 +137,6 @@ export function test(cls: Constructor<List<unknown>>) {
         expect(list.at(undefined as any)).toBeUndefined();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         expect(list.at("invalid" as any)).toBeUndefined();
-      });
-
-      it("should return the first element when index is 0", () => {
-        expect(list.at(0)).toBe(0);
-      });
-
-      it("should return the last element when index is size - 1", () => {
-        expect(list.at(list.size - 1)).toBe(9);
       });
     });
 
@@ -191,35 +208,54 @@ export function test(cls: Constructor<List<unknown>>) {
         list.push(1, 2, 3, 4, 5);
       });
 
-      it("removes the element at a specific index", () => {
-        expect(list.delete(2)).toBe(true);
-        expect(list.size).toBe(4);
-        expect(list.has(3)).toBe(false);
-        expect(Array.from(list)).toEqual([1, 2, 4, 5]);
-      });
-
-      it("does not update the size when failed", () => {
-        const size = list.size;
-        list.delete(10);
-        expect(list.size).toBe(size);
-      });
-
-      it("updates size when succeeded", () => {
-        const size = list.size;
-        list.delete(1);
-        expect(list.size).toBe(size - 1);
-      });
-
-      it("removes the first element", () => {
+      test("deletes an element from the beginning of the list", () => {
+        const list = new cls([1, 2, 3]);
         expect(list.delete(0)).toBe(true);
-        expect(list.size).toBe(4);
-        expect(Array.from(list)).toEqual([2, 3, 4, 5]);
+        expect(Array.from(list)).toEqual([2, 3]);
+        expect(list.size).toBe(2);
+        expect(list.at(2)).toBeUndefined();
       });
 
-      it("removes last element", () => {
-        expect(list.delete(list.size - 1)).toBe(true);
-        expect(list.size).toBe(4);
-        expect(Array.from(list)).toEqual([1, 2, 3, 4]);
+      test("deletes an element from the middle of the list", () => {
+        const list = new cls([1, 2, 3, 4]);
+        expect(list.delete(2)).toBe(true);
+        expect(Array.from(list)).toEqual([1, 2, 4]);
+        expect(list.size).toBe(3);
+        expect(list.at(3)).toBeUndefined();
+      });
+
+      test("deletes an element from the end of the list", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.delete(2)).toBe(true);
+        expect(Array.from(list)).toEqual([1, 2]);
+        expect(list.size).toBe(2);
+        expect(list.at(2)).toBeUndefined();
+      });
+
+      test("deletes an element from a list with one element", () => {
+        const list = new cls([1]);
+        expect(list.delete(0)).toBe(true);
+        expect(Array.from(list)).toEqual([]);
+        expect(list.size).toBe(0);
+      });
+
+      test("returns false when trying to delete from an empty list", () => {
+        const list = new cls();
+        expect(list.delete(0)).toBe(false);
+      });
+
+      test("consecutively deletes all elements from the list", () => {
+        const list = new cls([1, 2, 3]);
+        list.delete(0);
+        list.delete(0);
+        list.delete(0);
+        expect(list.size).toBe(0);
+      });
+
+      test("fails to delete an element with an index out of bounds", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.delete(3)).toBe(false);
+        expect(list.size).toBe(3);
       });
 
       it("returns false for index < -size", () => {
@@ -232,28 +268,36 @@ export function test(cls: Constructor<List<unknown>>) {
         expect(list.delete(10)).toBe(false);
       });
 
-      it("wraps around for negative indices", () => {
+      it("deletes the last element when index is -1", () => {
+        const list = new cls([1, 2, 3]);
         expect(list.delete(-1)).toBe(true);
-        expect(list.has(5)).toBe(false);
-        expect(list.delete(-4)).toBe(true);
-        expect(list.has(1)).toBe(false);
+        expect(Array.from(list)).toEqual([1, 2]);
+        expect(list.size).toBe(2);
+        expect(list.at(2)).toBeUndefined();
       });
 
-      it("maintains the list order", () => {
-        list.delete(2);
-        expect(Array.from(list)).toEqual([1, 2, 4, 5]);
+      it("deletes the first element when index is -size", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.delete(-3)).toBe(true);
+        expect(Array.from(list)).toEqual([2, 3]);
+        expect(list.size).toBe(2);
+        expect(list.at(2)).toBeUndefined();
       });
 
-      it("sequential deletes reduce the list size correctly", () => {
-        list.delete(1);
-        expect(list.size).toBe(4);
-        expect(list.has(2)).toBe(false);
+      it("wraps around negative indices", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.delete(-2)).toBe(true);
+        expect(Array.from(list)).toEqual([1, 3]);
+        expect(list.size).toBe(2);
+        expect(list.at(2)).toBeUndefined();
+      });
 
-        list.delete(1);
+      test("adjusts internal pointers correctly after deletion", () => {
+        const list = new cls([1, 2, 3, 4, 5]);
+        expect(list.delete(1)).toBe(true);
+        expect(list.delete(2)).toBe(true);
+        expect(Array.from(list)).toEqual([1, 3, 5]);
         expect(list.size).toBe(3);
-        expect(list.has(3)).toBe(false);
-
-        expect(Array.from(list)).toEqual([1, 4, 5]);
       });
     });
 
@@ -333,59 +377,82 @@ export function test(cls: Constructor<List<unknown>>) {
     });
 
     describe("fill()", () => {
-      let list: List<unknown>;
-
-      beforeEach(() => {
-        list = new cls();
-        list.push(1, 2, 3, 4, 5);
-      });
-
-      it("updates all values when start and end are undefined", () => {
+      test("fills the entire list when start and end are undefined", () => {
+        const list = new cls([1, 2, 3]);
         list.fill(0);
-        expect(Array.from(list)).toEqual([0, 0, 0, 0, 0]);
+        expect(Array.from(list)).toEqual([0, 0, 0]);
       });
 
-      it("updates values in a specified range", () => {
-        list.fill(1, 1, 3);
-        expect(Array.from(list)).toEqual([1, 1, 1, 4, 5]);
+      test("fills using a negative start index", () => {
+        const list = new cls([1, 2, 3, 4]);
+        list.fill(9, -2);
+        expect(Array.from(list)).toEqual([1, 2, 9, 9]);
       });
 
-      it("handles negative start and end indices", () => {
-        list.fill(2, -4, -2);
-        expect(Array.from(list)).toEqual([1, 2, 2, 4, 5]);
+      test("fills using a positive start index", () => {
+        const list = new cls([1, 2, 3, 4]);
+        list.fill(9, 1);
+        expect(Array.from(list)).toEqual([1, 9, 9, 9]);
       });
 
-      it("adjusts start and end indices beyond list bounds to valid range", () => {
-        list.fill(3, -10, 10);
-        expect(Array.from(list)).toEqual([3, 3, 3, 3, 3]);
+      test("fills using a start index < -size", () => {
+        const list = new cls([1, 2, 3, 4]);
+        list.fill(9, -10);
+        expect(Array.from(list)).toEqual([9, 9, 9, 9]);
       });
 
-      it("does nothing if start equals end", () => {
-        const original = Array.from(list);
-        list.fill(4, 2, 2);
-        expect(Array.from(list)).toEqual(original);
+      test("does not fill if start index >= size", () => {
+        const list = new cls([1, 2, 3, 4]);
+        list.fill(9, 4);
+        expect(Array.from(list)).toEqual([1, 2, 3, 4]);
+        list.fill(9, 10);
+        expect(Array.from(list)).toEqual([1, 2, 3, 4]);
       });
 
-      it("does nothing if start is greater than end", () => {
-        const original = Array.from(list);
-        list.fill(4, 3, 2);
-        expect(Array.from(list)).toEqual(original);
+      test("fills using a negative end index", () => {
+        const list = new cls([1, 2, 3, 4]);
+        list.fill(9, 0, -2);
+        expect(Array.from(list)).toEqual([9, 9, 3, 4]);
       });
 
-      it("works correctly when end is undefined", () => {
-        list.fill(5, 3);
-        expect(Array.from(list)).toEqual([1, 2, 3, 5, 5]);
+      test("fills using a positive end index", () => {
+        const list = new cls([1, 2, 3, 4]);
+        list.fill(9, 1, 2);
+        expect(Array.from(list)).toEqual([1, 9, 3, 4]);
       });
 
-      it("fills the entire list when start is negative and exceeds list size", () => {
-        list.fill(6, -6);
-        expect(Array.from(list)).toEqual([6, 6, 6, 6, 6]);
+      test("fills if end index >= size", () => {
+        const list = new cls([1, 2, 3, 4]);
+        list.fill(9, 0, 10);
+        expect(Array.from(list)).toEqual([9, 9, 9, 9]);
       });
 
-      it("maintains the list size", () => {
-        const originalSize = list.size;
-        list.fill(7, 1, 4);
-        expect(list.size).toBe(originalSize);
+      test("does not fill using an end index <= -size", () => {
+        const list = new cls([1, 2, 3, 4]);
+        list.fill(9, 0, -4);
+        expect(Array.from(list)).toEqual([1, 2, 3, 4]);
+        list.fill(9, 0, -10);
+        expect(Array.from(list)).toEqual([1, 2, 3, 4]);
+      });
+
+      test("does not fill when start index >= end index", () => {
+        const list = new cls([1, 2, 3, 4]);
+        list.fill(9, 2, 1);
+        expect(Array.from(list)).toEqual([1, 2, 3, 4]);
+        list.fill(9, 2, 2);
+        expect(Array.from(list)).toEqual([1, 2, 3, 4]);
+      });
+
+      test("fills a middle portion of the list", () => {
+        const list = new cls([1, 2, 3, 4, 5]);
+        list.fill(0, 1, 4);
+        expect(Array.from(list)).toEqual([1, 0, 0, 0, 5]);
+      });
+
+      test("does not fill an empty list", () => {
+        const list = new cls();
+        list.fill(9);
+        expect(Array.from(list)).toEqual([]);
       });
     });
 
@@ -647,17 +714,34 @@ export function test(cls: Constructor<List<unknown>>) {
         expect(Array.from(list.values())).toEqual([]);
       });
 
-      it("removes and returns the last element", () => {
-        expect(list.pop()).toBe(25);
-        expect(list.size).toBe(4);
+      test("pops the only element in the list", () => {
+        const list = new cls([1]);
+        expect(list.pop()).toBe(1);
+        expect(list.size).toBe(0);
+        expect(Array.from(list)).toEqual([]);
       });
 
-      it("updates the list correctly after multiple pops", () => {
-        for (let i = 5; i > 0; --i) {
-          expect(list.pop()).toBe(5 * i);
-          expect(list.size).toBe(i - 1);
-        }
+      test("pops an element from a list with multiple elements", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.pop()).toBe(3);
+        expect(list.size).toBe(2);
+        expect(Array.from(list)).toEqual([1, 2]);
+      });
+
+      test("repeatedly pops elements until the list is empty", () => {
+        const list = new cls([1, 2, 3]);
+        expect(list.pop()).toBe(3);
+        expect(list.pop()).toBe(2);
+        expect(list.pop()).toBe(1);
         expect(list.pop()).toBeUndefined();
+        expect(list.size).toBe(0);
+      });
+
+      test("pops elements after adding elements to the list", () => {
+        const list = new cls();
+        list.push(1, 2, 3);
+        expect(list.pop()).toBe(3);
+        expect(Array.from(list)).toEqual([1, 2]);
       });
     });
 
@@ -676,13 +760,6 @@ export function test(cls: Constructor<List<unknown>>) {
         expect(Array.from(list.values())).toEqual([1]);
       });
 
-      it("correctly updates the list size", () => {
-        const list = new cls();
-        list.push(5);
-        list.push(10);
-        expect(list.size).toBe(2);
-      });
-
       it("adds multiple elements to an empty list", () => {
         const list = new cls();
         expect(list.push(1, 2, 3)).toEqual(3);
@@ -690,12 +767,12 @@ export function test(cls: Constructor<List<unknown>>) {
         expect(Array.from(list.values())).toEqual([1, 2, 3]);
       });
 
-      it("allows adding duplicate values", () => {
+      test("adds an element to a non-empty list", () => {
         const list = new cls();
-        list.push(10);
-        list.push(10);
-        expect(Array.from(list)).toEqual([10, 10]);
-        expect(list.size).toBe(2);
+        list.push(1, 2);
+        list.push(3);
+        expect(Array.from(list)).toEqual([1, 2, 3]);
+        expect(list.size).toBe(3);
       });
 
       it("works with multiple data types", () => {
