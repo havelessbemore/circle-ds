@@ -74,7 +74,6 @@ export declare class CircularArrayList<T> extends CircularBase<T> implements Bou
     set capacity(capacity: number);
     at(index?: number): T | undefined;
     clear(): void;
-    copyWithin(target: number, start?: number, end?: number): this;
     /* Excluded from this release type: _copyWithin */
     delete(index: number): boolean;
     /* Excluded from this release type: _delete */
@@ -89,7 +88,6 @@ export declare class CircularArrayList<T> extends CircularBase<T> implements Bou
     pop(): T | undefined;
     /* Excluded from this release type: _pop */
     push(...values: T[]): number;
-    /* Excluded from this release type: _push */
     set(index: number, value: T): T | undefined;
     shift(): T | undefined;
     /* Excluded from this release type: _shift */
@@ -101,8 +99,8 @@ export declare class CircularArrayList<T> extends CircularBase<T> implements Bou
     /* Excluded from this release type: _safeInsert */
     [Symbol.iterator](): IterableIterator<T>;
     unshift(...values: T[]): number;
-    /* Excluded from this release type: _unshift */
-    /* Excluded from this release type: _safeUnshift */
+    /* Excluded from this release type: _presert */
+    /* Excluded from this release type: _safePresert */
     values(): IterableIterator<T>;
     /* Excluded from this release type: _overflow */
     /* Excluded from this release type: grow */

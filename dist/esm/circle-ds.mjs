@@ -185,43 +185,48 @@ class CircularArrayList extends CircularBase {
     this.next = 0;
     this.vals.length = 0;
   }
-  copyWithin(target, start, end) {
-    const size = this._size;
-    target = clamp(addIfBelow(toInteger(target, 0), size), 0, size);
-    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
-    end = addIfBelow(toInteger(end, size), size);
-    end = clamp(end, start, size - Math.min(0, target - start));
-    if (target >= size || start >= end) {
+  /*
+    copyWithin(target: number, start: number, end?: number): this {
+      const size = this._size;
+  
+      // Sanitize inputs
+      target = clamp(addIfBelow(toInteger(target, 0), size), 0, size);
+      start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+      const temp = target > start ? target - start : 0;
+      end = clamp(addIfBelow(toInteger(end, size), size), start, size - temp);
+  
+      // Copy within
+      this._copyWithin(target, start, end);
+  
+      // Return list
       return this;
     }
-    this._copyWithin(target, start, end);
-    return this;
-  }
+    */
   /**
    * @internal
    */
   _copyWithin(target, start, end) {
-    if (target == start) {
+    if (target == start || start >= end) {
       return;
     }
-    const isFwd = target <= start || end <= target;
-    const max = this._capacity - 1;
+    const capacity = this._capacity - 1;
     const vals = this.vals;
-    let targetEnd = this.toIndex(target + (end - start));
-    end = this.toIndex(end);
-    start = this.toIndex(start);
-    target = this.toIndex(target);
-    if (isFwd) {
-      while (start != end) {
-        vals[target] = vals[start];
-        start = start < max ? start + 1 : 0;
-        target = target < max ? target + 1 : 0;
+    const ranges = this.toRanges(start, end);
+    if (target <= start || end <= target) {
+      target = this.toIndex(target);
+      for (const [min, max] of ranges) {
+        for (let i = min; i < max; ++i) {
+          vals[target] = vals[i];
+          target = target < capacity ? target + 1 : 0;
+        }
       }
     } else {
-      while (start != end) {
-        end = end > 0 ? end - 1 : max;
-        targetEnd = targetEnd > 0 ? targetEnd - 1 : max;
-        vals[targetEnd] = vals[end];
+      target = this.toIndex(target + (end - start));
+      for (const [min, max] of ranges.reverse()) {
+        for (let i = max - 1; i >= min; --i) {
+          target = target > 0 ? target - 1 : capacity;
+          vals[target] = vals[i];
+        }
       }
     }
   }
@@ -241,17 +246,14 @@ class CircularArrayList extends CircularBase {
     this._pop(deleteCount);
   }
   *entries() {
-    const vals = this.vals;
     for (let ext = 0; ext < this._size; ++ext) {
-      yield [ext, vals[this.toIndex(ext)]];
+      yield [ext, this.vals[this.toIndex(ext)]];
     }
   }
   fill(value, start, end) {
     const size = this._size;
-    start = toInteger(start, 0);
-    start = clamp(addIfBelow(start, size), 0, size);
-    end = toInteger(end, size);
-    end = clamp(addIfBelow(end, size), start, size);
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    end = clamp(addIfBelow(toInteger(end, size), size), start, size);
     this._fill(value, start, end);
     return this;
   }
@@ -264,22 +266,22 @@ class CircularArrayList extends CircularBase {
     }
   }
   first() {
-    return this._size <= 0 ? void 0 : this.vals[this.head];
+    return this._size > 0 ? this.vals[this.head] : void 0;
   }
   forEach(callbackfn, thisArg) {
     const N = this._size;
-    const vals = this.vals;
     for (let ext = 0; ext < N && ext < this._size; ++ext) {
-      const value = vals[this.toIndex(ext)];
+      const value = this.vals[this.toIndex(ext)];
       callbackfn.call(thisArg, value, ext, this);
     }
   }
   has(value) {
-    const N = this._size;
     const vals = this.vals;
-    for (let ext = 0; ext < N; ++ext) {
-      if (value === vals[this.toIndex(ext)]) {
-        return true;
+    for (const [min, max] of this.toRanges(0, this._size)) {
+      for (let i = min; i < max; ++i) {
+        if (value === vals[i]) {
+          return true;
+        }
       }
     }
     return false;
@@ -290,34 +292,24 @@ class CircularArrayList extends CircularBase {
     }
   }
   last() {
+    return this._size > 0 ? this.vals[this.toIndex(this._size - 1)] : void 0;
+  }
+  pop() {
     if (this._size <= 0) {
       return void 0;
     }
-    const tail = this.next > 0 ? this.next - 1 : this._capacity - 1;
-    return this.vals[tail];
-  }
-  pop() {
-    return this._size > 0 ? this._pop(1)[0] : void 0;
+    const value = this.vals[this.toIndex(this._size - 1)];
+    this._pop(1);
+    return value;
   }
   /**
    * @internal
    */
   _pop(N) {
-    const capacity = this._capacity;
-    const evicted = [];
-    const vals = this.vals;
-    let tail = this.next;
-    for (let i = 0; i < N; ++i) {
-      tail = tail > 0 ? tail - 1 : capacity - 1;
-      evicted.push(vals[tail]);
-      vals[tail] = void 0;
-    }
-    this.next = tail;
-    this._size -= N;
-    if (this._size <= 0) {
-      this.clear();
-    }
-    return evicted;
+    const newSize = this._size - N;
+    this._fill(void 0, newSize, this._size);
+    this.next = this.toIndex(newSize);
+    this._size = newSize;
   }
   push(...values2) {
     if (values2.length <= 0) {
@@ -327,34 +319,8 @@ class CircularArrayList extends CircularBase {
       this._overflow(values2);
       return this._size;
     }
-    this._push(values2);
+    this._insert(this._size, values2);
     return this._size;
-  }
-  /**
-   * @internal
-   */
-  _push(elems, start = 0) {
-    const capacity = this._capacity;
-    const evicted = [];
-    const N = elems.length;
-    const vals = this.vals;
-    let next = this.next;
-    for (let i = start; i < N; ++i) {
-      next = ++next < capacity ? next : 0;
-      if (this._size < capacity) {
-        ++this._size;
-      } else if (!this.isFinite) {
-        throw new Error("Out of memory");
-      } else {
-        evicted.push(vals[this.next]);
-        this.head = next;
-      }
-      vals[this.next] = elems[i];
-      this.next = next;
-    }
-    if (evicted.length > 0) {
-      this._overflow(evicted);
-    }
   }
   set(index, value) {
     index = addIfBelow(toInteger(index, -Infinity), this._size);
@@ -367,36 +333,25 @@ class CircularArrayList extends CircularBase {
     return prevValue;
   }
   shift() {
-    return this._size > 0 ? this._shift(1)[0] : void 0;
+    if (this._size <= 0) {
+      return void 0;
+    }
+    const value = this.vals[this.head];
+    this._shift(1);
+    return value;
   }
   /**
    * @internal
    */
   _shift(N) {
-    const capacity = this._capacity;
-    const evicted = [];
-    const vals = this.vals;
-    for (let i = 0; i < N; ++i) {
-      evicted.push(vals[this.head]);
-      vals[this.head] = void 0;
-      --this._size;
-      if (++this.head >= capacity) {
-        this.head = 0;
-        vals.length = this.next;
-      }
-    }
-    return evicted;
+    this._fill(void 0, 0, N);
+    this.head = this.toIndex(N);
+    this._size -= N;
   }
   slice(start, end) {
-    const out = new CircularArrayList(0);
     const size = this._size;
-    if (size <= 0) {
-      return out;
-    }
-    start = toInteger(start, 0);
-    start = clamp(addIfBelow(start, size), 0, size);
-    end = toInteger(end, size);
-    end = clamp(addIfBelow(end, size), start, size);
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    end = clamp(addIfBelow(toInteger(end, size), size), start, size);
     return this.toList(this._slice(start, end));
   }
   /**
@@ -405,20 +360,18 @@ class CircularArrayList extends CircularBase {
   _slice(start, end) {
     const from = this.vals;
     const to = new Array(end - start);
-    let target = 0;
+    let j = 0;
     for ([start, end] of this.toRanges(start, end)) {
       for (let i = start; i < end; ++i) {
-        to[target++] = from[i];
+        to[j++] = from[i];
       }
     }
     return to;
   }
   splice(start, deleteCount, ...items) {
     const size = this._size;
-    start = toInteger(start, 0);
-    start = clamp(addIfBelow(start, size), 0, size);
-    deleteCount = toInteger(deleteCount, 0);
-    deleteCount = clamp(deleteCount, 0, size - start);
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    deleteCount = clamp(toInteger(deleteCount, 0), 0, size - start);
     const out = this.toList(this._slice(start, start + deleteCount));
     this._splice(start, deleteCount, items);
     return out;
@@ -428,13 +381,13 @@ class CircularArrayList extends CircularBase {
    */
   _splice(start, deleteCount, items = []) {
     const addCount = items.length;
-    const capacity = this._capacity;
     const replaceCount = Math.min(deleteCount, addCount);
     const vals = this.vals;
-    let index = this.toIndex(start);
-    for (let i = 0; i < replaceCount; ++i) {
-      vals[index++] = items[i];
-      index = index < capacity ? index : 0;
+    let j = 0;
+    for (const [a, b] of this.toRanges(start, start + replaceCount)) {
+      for (let i = a; i < b; ++i) {
+        vals[i] = items[j++];
+      }
     }
     if (deleteCount == addCount) {
       return;
@@ -456,33 +409,35 @@ class CircularArrayList extends CircularBase {
       this._safeInsert(start, items, min, min + free);
       throw new Error("Out of memory");
     }
-    const shifted = Math.min(start, N);
-    this._overflow(this._shift(shifted));
-    start -= shifted;
-    free += shifted;
+    if (start > 0) {
+      const shifted = Math.min(start, N - free);
+      this._overflow(this._slice(0, shifted));
+      this._shift(shifted);
+      start -= shifted;
+      free += shifted;
+    }
     if (free >= N) {
       this._safeInsert(start, items, min, max);
       return;
     }
     const mid = max - free;
     this._overflow(items.slice(min, mid));
-    this._safeUnshift(items, mid, max);
+    this._safePresert(0, items, mid, max);
   }
   /**
    * @internal
    */
-  _safeInsert(start, items, min = 0, max = items.length) {
-    const capacity = this._capacity;
+  _safeInsert(vIndex, items, min = 0, max = items.length) {
     const N = max - min;
     const vals = this.vals;
-    this._copyWithin(start + N, start, this._size);
-    let index = this.toIndex(start);
-    for (let i = min; i < max; ++i) {
-      vals[index++] = items[i];
-      index = index < capacity ? index : 0;
+    this._copyWithin(vIndex + N, vIndex, this._size);
+    for (const [start, end] of this.toRanges(vIndex, vIndex + N)) {
+      for (let i = start; i < end; ++i) {
+        vals[i] = items[min++];
+      }
     }
     this._size += N;
-    this.next = this.toIndex(this.next + N);
+    this.next = this.toIndex(this._size);
   }
   [Symbol.iterator]() {
     return this.values();
@@ -495,52 +450,58 @@ class CircularArrayList extends CircularBase {
       this._overflow(values2);
       return this._size;
     }
-    this._unshift(values2);
+    this._presert(0, values2);
     return this._size;
   }
   /**
    * @internal
    */
-  _unshift(elems) {
-    const capacity = this._capacity;
-    const vals = this.vals;
-    const evicted = [];
-    let head = this.head;
-    for (let i = elems.length - 1; i >= 0; --i) {
-      head = head > 0 ? head - 1 : capacity - 1;
-      if (this._size < capacity) {
-        ++this._size;
-      } else if (!this.isFinite) {
-        throw new Error("Out of memory");
-      } else {
-        evicted.push(vals[head]);
-        this.next = head;
-      }
-      vals[head] = elems[i];
-      this.head = head;
+  _presert(end, items, min = 0, max = items.length) {
+    const N = max - min;
+    let free = this._capacity - this._size;
+    if (free >= N) {
+      this._safePresert(end, items, min, max);
+      return;
     }
-    if (evicted.length > 0) {
-      this._overflow(evicted.reverse());
+    if (!this.isFinite) {
+      this._safePresert(end, items, max - free, max);
+      throw new Error("Out of memory");
     }
+    if (end < this._size) {
+      const popped = Math.min(this._size - end, N - free);
+      this._overflow(this._slice(this._size - popped, this._size));
+      this._pop(popped);
+      free += popped;
+    }
+    if (free >= N) {
+      this._safePresert(end, items, min, max);
+      return;
+    }
+    const mid = min + free;
+    this._overflow(items.slice(mid, max));
+    this._safeInsert(this._size, items, min, mid);
   }
   /**
    * @internal
    */
-  _safeUnshift(elems, min = 0, max = elems.length) {
+  _safePresert(vIndex, items, min = 0, max = items.length) {
     const capacity = this._capacity;
+    const N = max - min;
     const vals = this.vals;
-    let head = this.head;
-    for (let i = max - 1; i >= min; --i) {
-      head = head > 0 ? head - 1 : capacity - 1;
-      vals[head] = elems[i];
+    const newHead = capacity - N;
+    this._copyWithin(newHead, 0, vIndex);
+    vIndex += newHead;
+    for (const [start, end] of this.toRanges(vIndex, vIndex + N)) {
+      for (let i = start; i < end; ++i) {
+        vals[i] = items[min++];
+      }
     }
-    this.head = head;
-    this._size += max - min;
+    this._size += N;
+    this.head = this.toIndex(newHead);
   }
   *values() {
-    const vals = this.vals;
     for (let ext = 0; ext < this._size; ++ext) {
-      yield vals[this.toIndex(ext)];
+      yield this.vals[this.toIndex(ext)];
     }
   }
   /**
@@ -637,7 +598,11 @@ class CircularArrayList extends CircularBase {
    * @param capacity - the new capacity
    */
   shrink(capacity) {
-    this._overflow(this._shift(this._size - capacity));
+    if (this._size > capacity) {
+      const shifted = this._size - capacity;
+      this._overflow(this._slice(0, shifted));
+      this._shift(shifted);
+    }
     if (this.isSequential()) {
       this.sequentialReset(capacity);
       return;
@@ -669,7 +634,7 @@ class CircularArrayList extends CircularBase {
    */
   toRanges(min, max) {
     const head = this.head;
-    const mid = this._capacity - this.head;
+    const mid = this._capacity - head;
     if (max <= mid) {
       return [[head + min, head + max]];
     }

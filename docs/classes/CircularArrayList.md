@@ -67,7 +67,6 @@ collection's state, especially when dealing with asynchronous event listeners.
 - [addListener](CircularArrayList.md#addlistener)
 - [at](CircularArrayList.md#at)
 - [clear](CircularArrayList.md#clear)
-- [copyWithin](CircularArrayList.md#copywithin)
 - [delete](CircularArrayList.md#delete)
 - [entries](CircularArrayList.md#entries)
 - [fill](CircularArrayList.md#fill)
@@ -112,7 +111,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularArrayList.ts:51](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L51)
+[circle/circularArrayList.ts:51](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L51)
 
 • **new CircularArrayList**\<`T`\>(`capacity?`): [`CircularArrayList`](CircularArrayList.md)\<`T`\>
 
@@ -140,7 +139,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularArrayList.ts:57](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L57)
+[circle/circularArrayList.ts:57](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L57)
 
 • **new CircularArrayList**\<`T`\>(`items`): [`CircularArrayList`](CircularArrayList.md)\<`T`\>
 
@@ -168,7 +167,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularArrayList.ts:63](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L63)
+[circle/circularArrayList.ts:63](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L63)
 
 ## Properties
 
@@ -180,7 +179,7 @@ Whether capacity is finite (true) or infinite (false).
 
 #### Defined in
 
-[circle/circularArrayList.ts:28](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L28)
+[circle/circularArrayList.ts:28](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L28)
 
 ## Accessors
 
@@ -200,7 +199,7 @@ List.[toStringTag]
 
 #### Defined in
 
-[circle/circularArrayList.ts:107](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L107)
+[circle/circularArrayList.ts:107](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L107)
 
 ___
 
@@ -233,7 +232,7 @@ limited to an array's maximum length (2^32 - 1 in JavaScript).
 
 #### Defined in
 
-[circle/circularArrayList.ts:99](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L99)
+[circle/circularArrayList.ts:99](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L99)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -268,7 +267,7 @@ limited to an array's maximum length (2^32 - 1 in JavaScript).
 
 #### Defined in
 
-[circle/circularArrayList.ts:111](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L111)
+[circle/circularArrayList.ts:111](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L111)
 
 ___
 
@@ -288,7 +287,7 @@ List.size
 
 #### Defined in
 
-[circle/circularArrayList.ts:103](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L103)
+[circle/circularArrayList.ts:103](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L103)
 
 ## Methods
 
@@ -308,7 +307,7 @@ Returns the default iterator through the list's elements.
 
 #### Defined in
 
-[circle/circularArrayList.ts:586](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L586)
+[circle/circularArrayList.ts:538](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L538)
 
 ___
 
@@ -350,7 +349,7 @@ CircularBase.addListener
 
 #### Defined in
 
-[circle/circularBase.ts:36](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularBase.ts#L36)
+[circle/circularBase.ts:36](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularBase.ts#L36)
 
 ___
 
@@ -378,7 +377,7 @@ The element at the specified index, or `undefined` if the index is out of bounds
 
 #### Defined in
 
-[circle/circularArrayList.ts:142](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L142)
+[circle/circularArrayList.ts:142](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L142)
 
 ___
 
@@ -398,29 +397,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[circle/circularArrayList.ts:153](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L153)
-
-___
-
-### copyWithin
-
-▸ **copyWithin**(`target`, `start?`, `end?`): `this`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `target` | `number` |
-| `start?` | `number` |
-| `end?` | `number` |
-
-#### Returns
-
-`this`
-
-#### Defined in
-
-[circle/circularArrayList.ts:160](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L160)
+[circle/circularArrayList.ts:153](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L153)
 
 ___
 
@@ -449,7 +426,7 @@ Subsequent elements are shifted one position towards the start of the list.
 
 #### Defined in
 
-[circle/circularArrayList.ts:208](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L208)
+[circle/circularArrayList.ts:213](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L213)
 
 ___
 
@@ -472,7 +449,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[circle/circularArrayList.ts:230](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L230)
+[circle/circularArrayList.ts:235](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L235)
 
 ___
 
@@ -503,7 +480,7 @@ The instance of the list for chaining.
 
 #### Defined in
 
-[circle/circularArrayList.ts:237](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L237)
+[circle/circularArrayList.ts:241](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L241)
 
 ___
 
@@ -517,7 +494,7 @@ ___
 
 #### Defined in
 
-[circle/circularArrayList.ts:264](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L264)
+[circle/circularArrayList.ts:264](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L264)
 
 ___
 
@@ -544,7 +521,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[circle/circularArrayList.ts:268](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L268)
+[circle/circularArrayList.ts:268](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L268)
 
 ___
 
@@ -572,7 +549,7 @@ Determines whether a specific element exists within the list.
 
 #### Defined in
 
-[circle/circularArrayList.ts:280](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L280)
+[circle/circularArrayList.ts:279](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L279)
 
 ___
 
@@ -595,7 +572,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[circle/circularArrayList.ts:291](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L291)
+[circle/circularArrayList.ts:291](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L291)
 
 ___
 
@@ -609,7 +586,7 @@ ___
 
 #### Defined in
 
-[circle/circularArrayList.ts:297](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L297)
+[circle/circularArrayList.ts:297](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L297)
 
 ___
 
@@ -651,7 +628,7 @@ CircularBase.on
 
 #### Defined in
 
-[circle/circularBase.ts:69](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularBase.ts#L69)
+[circle/circularBase.ts:69](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularBase.ts#L69)
 
 ___
 
@@ -673,7 +650,7 @@ The last element of the list, or `undefined` if the list is empty.
 
 #### Defined in
 
-[circle/circularArrayList.ts:310](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L310)
+[circle/circularArrayList.ts:301](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L301)
 
 ___
 
@@ -714,7 +691,7 @@ CircularBase.prependListener
 
 #### Defined in
 
-[circle/circularBase.ts:98](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularBase.ts#L98)
+[circle/circularBase.ts:98](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularBase.ts#L98)
 
 ___
 
@@ -743,7 +720,7 @@ The new length of the list.
 
 #### Defined in
 
-[circle/circularArrayList.ts:340](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L340)
+[circle/circularArrayList.ts:328](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L328)
 
 ___
 
@@ -780,7 +757,7 @@ CircularBase.removeListener
 
 #### Defined in
 
-[circle/circularBase.ts:123](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularBase.ts#L123)
+[circle/circularBase.ts:123](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularBase.ts#L123)
 
 ___
 
@@ -809,7 +786,7 @@ The previous value at the index if replaced, otherwise `undefined`.
 
 #### Defined in
 
-[circle/circularArrayList.ts:386](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L386)
+[circle/circularArrayList.ts:347](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L347)
 
 ___
 
@@ -832,7 +809,7 @@ The first element of the list, or `undefined` if the list is empty.
 
 #### Defined in
 
-[circle/circularArrayList.ts:402](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L402)
+[circle/circularArrayList.ts:363](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L363)
 
 ___
 
@@ -862,7 +839,7 @@ A new list containing the specified elements.
 
 #### Defined in
 
-[circle/circularArrayList.ts:427](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L427)
+[circle/circularArrayList.ts:389](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L389)
 
 ___
 
@@ -893,7 +870,7 @@ A new list containing the deleted elements, if any.
 
 #### Defined in
 
-[circle/circularArrayList.ts:464](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L464)
+[circle/circularArrayList.ts:417](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L417)
 
 ___
 
@@ -922,7 +899,7 @@ The new length of the list.
 
 #### Defined in
 
-[circle/circularArrayList.ts:590](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L590)
+[circle/circularArrayList.ts:542](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L542)
 
 ___
 
@@ -945,4 +922,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[circle/circularArrayList.ts:651](https://github.com/havelessbemore/circle-ds/blob/fffc8f6/src/circle/circularArrayList.ts#L651)
+[circle/circularArrayList.ts:635](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/circle/circularArrayList.ts#L635)
