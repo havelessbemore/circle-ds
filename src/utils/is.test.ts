@@ -5,11 +5,12 @@ import {
   isFunction,
   isInfinity,
   isIterable,
+  isLinkedLength,
   isNumber,
   isSafeCount,
   isSymbol,
 } from "./is";
-import { ARRAY_MAX_LENGTH } from "./constants";
+import { ARRAY_MAX_LENGTH, LINKED_MAX_LENGTH } from "./constants";
 
 describe(`${isArrayLength.name}()`, () => {
   test("returns true for zero", () => {
@@ -178,6 +179,46 @@ describe(`${isIterable.name}()`, () => {
   test("should return false for a boolean", () => {
     expect(isIterable(true)).toBe(false);
     expect(isIterable(false)).toBe(false);
+  });
+});
+
+describe(`${isLinkedLength.name}()`, () => {
+  test("returns true for zero", () => {
+    expect(isLinkedLength(0)).toBe(true);
+  });
+
+  test("returns true for valid integer within array length range", () => {
+    expect(isLinkedLength(100)).toBe(true);
+  });
+
+  test("returns false for negative integers", () => {
+    expect(isLinkedLength(-1)).toBe(false);
+  });
+
+  test("returns false for integers greater than LINKED_MAX_LENGTH", () => {
+    expect(isLinkedLength(LINKED_MAX_LENGTH + 1)).toBe(false);
+  });
+
+  test("returns false for non-integer numbers", () => {
+    expect(isLinkedLength(10.5)).toBe(false);
+  });
+
+  test("returns false for -Infinity", () => {
+    expect(isLinkedLength(-Infinity)).toBe(false);
+  });
+
+  test("returns false for +Infinity", () => {
+    expect(isLinkedLength(Infinity)).toBe(false);
+  });
+
+  test("returns false for non-number types", () => {
+    expect(isLinkedLength("100")).toBe(false);
+    expect(isLinkedLength(true)).toBe(false);
+    expect(isLinkedLength(false)).toBe(false);
+    expect(isLinkedLength([])).toBe(false);
+    expect(isLinkedLength({})).toBe(false);
+    expect(isLinkedLength(null)).toBe(false);
+    expect(isLinkedLength(undefined)).toBe(false);
   });
 });
 
