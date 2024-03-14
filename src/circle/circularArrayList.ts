@@ -11,39 +11,40 @@ export class CircularArrayList<T>
   implements Bounded<T>, List<T>
 {
   /**
-   * The maximum number of elements that can be stored in the collection.
    * @internal
+   * The maximum number of elements that can be stored in the collection.
    */
   protected _capacity: number;
 
   /**
-   * The index representing the first element.
    * @internal
+   * The index representing the first element.
    */
-  protected head: number;
+  protected _head: number;
 
   /**
+   * @internal
    * Whether capacity is finite (true) or infinite (false).
    */
-  protected isFinite: boolean;
+  protected _isFinite: boolean;
 
   /**
+   * @internal
    * The index one more than the last element.
-   * @internal
    */
-  protected next: number;
+  protected _next: number;
 
   /**
-   * The number of elements.
    * @internal
+   * The number of elements.
    */
   protected _size: number;
 
   /**
-   * The stored values.
    * @internal
+   * The stored values.
    */
-  protected vals: T[];
+  protected _vals: T[];
 
   /**
    * Creates a new list. Default `capacity` is `Infinity`.
@@ -66,11 +67,11 @@ export class CircularArrayList<T>
 
     // Initialize class variables
     this._capacity = ARRAY_MAX_LENGTH;
-    this.head = 0;
-    this.isFinite = false;
+    this._head = 0;
+    this._isFinite = false;
     this._size = 0;
-    this.next = 0;
-    this.vals = [];
+    this._next = 0;
+    this._vals = [];
 
     // If capacity is null, undefined, or Infinity
     if (capacity == null || isInfinity(capacity)) {
@@ -85,19 +86,19 @@ export class CircularArrayList<T>
       }
       // If capacity is valid
       this._capacity = capacity;
-      this.isFinite = true;
+      this._isFinite = true;
       return;
     }
 
     // If capacity is an iterable
-    this.vals = Array.from(capacity as Iterable<T>);
-    this._capacity = this.vals.length;
-    this.isFinite = true;
+    this._vals = Array.from(capacity as Iterable<T>);
+    this._capacity = this._vals.length;
+    this._isFinite = true;
     this._size = this._capacity;
   }
 
   get capacity(): number {
-    return this.isFinite ? this._capacity : Infinity;
+    return this._isFinite ? this._capacity : Infinity;
   }
 
   get size(): number {
@@ -116,10 +117,10 @@ export class CircularArrayList<T>
     if (isInfinity(capacity)) {
       // If capacity is Infinity
       capacity = ARRAY_MAX_LENGTH;
-      this.isFinite = false;
+      this._isFinite = false;
     } else if (isArrayLength(capacity)) {
       // If capacity is valid
-      this.isFinite = true;
+      this._isFinite = true;
     } else {
       // If capacity is invalid
       throw new RangeError("Invalid capacity");
@@ -147,14 +148,14 @@ export class CircularArrayList<T>
     }
 
     // Return value
-    return this.vals[this.toIndex(index)];
+    return this._vals[this.toIndex(index)];
   }
 
   clear(): void {
     this._size = 0;
-    this.head = 0;
-    this.next = 0;
-    this.vals.length = 0;
+    this._head = 0;
+    this._next = 0;
+    this._vals.length = 0;
   }
 
   /*
@@ -186,7 +187,7 @@ export class CircularArrayList<T>
 
     // Get source data segments
     const capacity = this._capacity - 1;
-    const vals = this.vals;
+    const vals = this._vals;
     const ranges = this.toRanges(start, end);
 
     if (target <= start || end <= target) {
@@ -234,7 +235,7 @@ export class CircularArrayList<T>
 
   *entries(): IterableIterator<[number, T]> {
     for (let ext = 0; ext < this._size; ++ext) {
-      yield [ext, this.vals[this.toIndex(ext)]];
+      yield [ext, this._vals[this.toIndex(ext)]];
     }
   }
 
@@ -257,12 +258,12 @@ export class CircularArrayList<T>
    */
   protected _fill(value: T, start: number, end: number): void {
     for (const [min, max] of this.toRanges(start, end)) {
-      this.vals.fill(value, min, max);
+      this._vals.fill(value, min, max);
     }
   }
 
   first(): T | undefined {
-    return this._size > 0 ? this.vals[this.head] : undefined;
+    return this._size > 0 ? this._vals[this._head] : undefined;
   }
 
   forEach(
@@ -271,13 +272,13 @@ export class CircularArrayList<T>
   ): void {
     const N = this._size;
     for (let ext = 0; ext < N && ext < this._size; ++ext) {
-      const value = this.vals[this.toIndex(ext)];
+      const value = this._vals[this.toIndex(ext)];
       callbackfn.call(thisArg, value, ext, this);
     }
   }
 
   has(value: T): boolean {
-    const vals = this.vals;
+    const vals = this._vals;
     for (const [min, max] of this.toRanges(0, this._size)) {
       for (let i = min; i < max; ++i) {
         if (value === vals[i]) {
@@ -295,7 +296,9 @@ export class CircularArrayList<T>
   }
 
   last(): T | undefined {
-    return this._size > 0 ? this.vals[this.toIndex(this._size - 1)] : undefined;
+    return this._size > 0
+      ? this._vals[this.toIndex(this._size - 1)]
+      : undefined;
   }
 
   pop(): T | undefined {
@@ -305,7 +308,7 @@ export class CircularArrayList<T>
     }
 
     // Get and remove first value
-    const value = this.vals[this.toIndex(this._size - 1)];
+    const value = this._vals[this.toIndex(this._size - 1)];
     this._pop(1);
 
     // Return value
@@ -321,24 +324,24 @@ export class CircularArrayList<T>
     this._fill(undefined as T, newSize, this._size);
 
     // Update state
-    this.next = this.toIndex(newSize);
+    this._next = this.toIndex(newSize);
     this._size = newSize;
   }
 
-  push(...values: T[]): number {
-    // If no values
-    if (values.length <= 0) {
+  push(...items: T[]): number {
+    // If no items
+    if (items.length <= 0) {
       return this._size;
     }
 
     // If no capacity
     if (this._capacity <= 0) {
-      this._overflow(values);
+      this._overflow(items);
       return this._size;
     }
 
-    // Push values
-    this._insert(this._size, values);
+    // Push items
+    this._insert(this._size, items);
 
     // Return new size
     return this._size;
@@ -353,8 +356,8 @@ export class CircularArrayList<T>
 
     // Update value
     index = this.toIndex(index);
-    const prevValue = this.vals[index];
-    this.vals[index] = value;
+    const prevValue = this._vals[index];
+    this._vals[index] = value;
 
     // Return previous value
     return prevValue;
@@ -366,8 +369,8 @@ export class CircularArrayList<T>
       return undefined;
     }
 
-    // Get and remove last value
-    const value = this.vals[this.head];
+    // Get and remove first value
+    const value = this._vals[this._head];
     this._shift(1);
 
     // Return value
@@ -378,11 +381,11 @@ export class CircularArrayList<T>
    * @internal
    */
   protected _shift(N: number): void {
-    // Remove values
+    // Remove items
     this._fill(undefined as T, 0, N);
 
     // Update state
-    this.head = this.toIndex(N);
+    this._head = this.toIndex(N);
     this._size -= N;
   }
 
@@ -401,7 +404,7 @@ export class CircularArrayList<T>
    * @internal
    */
   protected _slice(start: number, end: number): T[] {
-    const from = this.vals;
+    const from = this._vals;
     const to = new Array<T>(end - start);
 
     let j = 0;
@@ -441,7 +444,7 @@ export class CircularArrayList<T>
   protected _splice(start: number, deleteCount: number, items: T[] = []): void {
     const addCount = items.length;
     const replaceCount = Math.min(deleteCount, addCount);
-    const vals = this.vals;
+    const vals = this._vals;
 
     // Replace values
     let j = 0;
@@ -482,7 +485,7 @@ export class CircularArrayList<T>
     }
 
     // Check if "infinite" capacity yet not enough space
-    if (!this.isFinite) {
+    if (!this._isFinite) {
       this._safeInsert(start, items, min, min + free);
       throw new Error("Out of memory");
     }
@@ -518,7 +521,7 @@ export class CircularArrayList<T>
     max = items.length
   ): void {
     const N = max - min;
-    const vals = this.vals;
+    const vals = this._vals;
 
     // Make space
     this._copyWithin(vIndex + N, vIndex, this._size);
@@ -532,27 +535,27 @@ export class CircularArrayList<T>
 
     // Update state
     this._size += N;
-    this.next = this.toIndex(this._size);
+    this._next = this.toIndex(this._size);
   }
 
   [Symbol.iterator](): IterableIterator<T> {
     return this.values();
   }
 
-  unshift(...values: T[]): number {
-    // If no values
-    if (values.length <= 0) {
+  unshift(...items: T[]): number {
+    // If no items
+    if (items.length <= 0) {
       return this._size;
     }
 
     // If no capacity
     if (this._capacity <= 0) {
-      this._overflow(values);
+      this._overflow(items);
       return this._size;
     }
 
-    // Presert values
-    this._presert(0, values);
+    // Presert items
+    this._presert(0, items);
 
     // Return new size
     return this._size;
@@ -577,7 +580,7 @@ export class CircularArrayList<T>
     }
 
     // Check if "infinite" capacity yet not enough space
-    if (!this.isFinite) {
+    if (!this._isFinite) {
       this._safePresert(end, items, max - free, max);
       throw new Error("Out of memory");
     }
@@ -613,7 +616,7 @@ export class CircularArrayList<T>
   ): void {
     const capacity = this._capacity;
     const N = max - min;
-    const vals = this.vals;
+    const vals = this._vals;
 
     // Make space
     const newHead = capacity - N;
@@ -629,12 +632,12 @@ export class CircularArrayList<T>
 
     // Update state
     this._size += N;
-    this.head = this.toIndex(newHead);
+    this._head = this.toIndex(newHead);
   }
 
   *values(): IterableIterator<T> {
     for (let ext = 0; ext < this._size; ++ext) {
-      yield this.vals[this.toIndex(ext)];
+      yield this._vals[this.toIndex(ext)];
     }
   }
 
@@ -664,20 +667,20 @@ export class CircularArrayList<T>
     }
 
     // Queue is not sequential: [456T    H123]
-    if (this._size <= this.head) {
+    if (this._size <= this._head) {
       // [H123456T] = A + B = N
-      const temp = this._size - this.next;
-      this.vals.copyWithin(temp, 0, this.next);
-      this.vals.copyWithin(0, this.head, this.head + temp);
-      this.vals.length = this._size;
-      this.head = 0;
-      this.next = this._size;
-    } else if (this.head + this._size <= capacity) {
+      const temp = this._size - this._next;
+      this._vals.copyWithin(temp, 0, this._next);
+      this._vals.copyWithin(0, this._head, this._head + temp);
+      this._vals.length = this._size;
+      this._head = 0;
+      this._next = this._size;
+    } else if (this._head + this._size <= capacity) {
       // [        H123456T] = 2B < 2N
-      this.vals.length = this.head + this._size;
-      this.vals.copyWithin(this._capacity, 0, this.next);
-      this.vals.fill(undefined as T, 0, this.next);
-      this.next = (this.head + this._size) % capacity;
+      this._vals.length = this._head + this._size;
+      this._vals.copyWithin(this._capacity, 0, this._next);
+      this._vals.fill(undefined as T, 0, this._next);
+      this._next = (this._head + this._size) % capacity;
     } /* else if (this.next + this._size <= capacity) {
       // [    H123456T] = A + 2B = N + B < 2N
       const temp = this._capacity - this.head;
@@ -691,12 +694,12 @@ export class CircularArrayList<T>
     } */ else {
       // [6T      H12345] = B + D < 2B < 2N
       const diff = capacity - this._capacity;
-      this.vals.length = capacity;
-      this.vals.copyWithin(this._capacity, 0, diff);
-      this.vals.copyWithin(0, diff, this.next);
-      const temp = Math.max(diff, this.next - diff);
-      this.vals.fill(undefined as T, temp, this.next);
-      this.next -= diff;
+      this._vals.length = capacity;
+      this._vals.copyWithin(this._capacity, 0, diff);
+      this._vals.copyWithin(0, diff, this._next);
+      const temp = Math.max(diff, this._next - diff);
+      this._vals.fill(undefined as T, temp, this._next);
+      this._next -= diff;
     }
 
     // Update capacity
@@ -711,7 +714,7 @@ export class CircularArrayList<T>
    * @returns `true` if the list is sequential in memory, `false` otherwise.
    */
   protected isSequential(): boolean {
-    return this.head < this.next || this.next <= 0;
+    return this._head < this._next || this._next <= 0;
   }
 
   /**
@@ -728,25 +731,25 @@ export class CircularArrayList<T>
    * @returns `true` if the list was reset, `false` otherwise.
    */
   protected sequentialReset(capacity: number): boolean {
-    const tail = this.head + this._size;
+    const tail = this._head + this._size;
 
     // If list fits in current location: [    H------T    ]
     if (tail <= capacity) {
-      this.vals.length = tail;
-      this.next = this.vals.length % capacity;
+      this._vals.length = tail;
+      this._next = this._vals.length % capacity;
 
       // If list must be fully moved: [H------T    ]
-    } else if (this.head >= capacity) {
-      this.vals.copyWithin(0, this.head, tail);
-      this.vals.length = this._size;
-      this.head = 0;
-      this.next = this._size % capacity;
+    } else if (this._head >= capacity) {
+      this._vals.copyWithin(0, this._head, tail);
+      this._vals.length = this._size;
+      this._head = 0;
+      this._next = this._size % capacity;
 
       // If list must be partially moved: [--T  H----]
     } else {
-      this.vals.copyWithin(0, capacity, tail);
-      this.vals.length = capacity;
-      this.next = tail - capacity;
+      this._vals.copyWithin(0, capacity, tail);
+      this._vals.length = capacity;
+      this._next = tail - capacity;
     }
 
     this._capacity = capacity;
@@ -776,9 +779,9 @@ export class CircularArrayList<T>
 
     // Shift 1st half of list: [456T....H123] -> [456T..H123]
     const diff = this._capacity - capacity;
-    this.vals.copyWithin(this.head - diff, this.head, this._capacity);
-    this.vals.length = capacity;
-    this.head -= diff;
+    this._vals.copyWithin(this._head - diff, this._head, this._capacity);
+    this._vals.length = capacity;
+    this._head -= diff;
     this._capacity = capacity;
   }
 
@@ -786,17 +789,17 @@ export class CircularArrayList<T>
    * @internal
    */
   protected toIndex(externalIndex: number): number {
-    return (this.head + externalIndex) % this._capacity;
+    return (this._head + externalIndex) % this._capacity;
   }
 
   /**
    * @internal
    */
-  protected toList(values: T[]): CircularArrayList<T> {
+  protected toList(items: T[]): CircularArrayList<T> {
     const out = new CircularArrayList<T>(0);
-    out.vals = values;
-    out._size = values.length;
-    out._capacity = values.length;
+    out._vals = items;
+    out._size = items.length;
+    out._capacity = items.length;
     return out;
   }
 
@@ -804,7 +807,7 @@ export class CircularArrayList<T>
    * @internal
    */
   protected toRanges(min: number, max: number): [number, number][] {
-    const head = this.head;
+    const head = this._head;
     const mid = this._capacity - head;
     if (max <= mid) {
       return [[head + min, head + max]];
