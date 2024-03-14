@@ -17,7 +17,7 @@ export class CircularDeque<T> implements Bounded<T>, Deque<T> {
   /**
    * @internal
    */
-  protected list: CircularArrayList<T>;
+  protected _list: CircularArrayList<T>;
 
   /**
    * Creates a new deque. Default `capacity` is `Infinity`.
@@ -36,15 +36,15 @@ export class CircularDeque<T> implements Bounded<T>, Deque<T> {
    */
   constructor(items: Iterable<T>);
   constructor(capacity?: number | null | Iterable<T>) {
-    this.list = new CircularArrayList(capacity as number);
+    this._list = new CircularArrayList(capacity as number);
   }
 
   get capacity(): number {
-    return this.list.capacity;
+    return this._list.capacity;
   }
 
   get size(): number {
-    return this.list.size;
+    return this._list.size;
   }
 
   get [Symbol.toStringTag](): string {
@@ -52,77 +52,77 @@ export class CircularDeque<T> implements Bounded<T>, Deque<T> {
   }
 
   set capacity(capacity: number) {
-    this.list.capacity = capacity;
+    this._list.capacity = capacity;
   }
 
   clear(): void {
-    this.list.clear();
+    this._list.clear();
   }
 
   entries(): IterableIterator<[number, T]> {
-    return this.list.entries();
+    return this._list.entries();
   }
 
   first(): T | undefined {
-    return this.list.first();
+    return this._list.first();
   }
 
   forEach(
     callbackfn: (value: T, index: number, collection: this) => void,
     thisArg?: unknown
   ): void {
-    return this.list.forEach((v, i) => callbackfn.call(thisArg, v, i, this));
+    return this._list.forEach((v, i) => callbackfn.call(thisArg, v, i, this));
   }
 
   front(): T | undefined {
-    return this.list.first();
+    return this._list.first();
   }
 
   has(value: T): boolean {
-    return this.list.has(value);
+    return this._list.has(value);
   }
 
   keys(): IterableIterator<number> {
-    return this.list.keys();
+    return this._list.keys();
   }
 
   last(): T | undefined {
-    return this.list.last();
+    return this._list.last();
   }
 
   pop(): T | undefined {
-    return this.list.pop();
+    return this._list.pop();
   }
 
   push(...elems: T[]): number {
-    return this.list.push(...elems);
+    return this._list.push(...elems);
   }
 
   shift(): T | undefined {
-    return this.list.shift();
+    return this._list.shift();
   }
 
   [Symbol.iterator](): IterableIterator<T> {
-    return this.list.values();
+    return this._list.values();
   }
 
   top(): T | undefined {
-    return this.list.last();
+    return this._list.last();
   }
 
   unshift(...elems: T[]): number {
-    return this.list.unshift(...elems);
+    return this._list.unshift(...elems);
   }
 
   values(): IterableIterator<T> {
-    return this.list.values();
+    return this._list.values();
   }
 
   addListener(
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.addListener(event, listener);
+    this._list.addListener(event, listener);
     return this;
   }
 
@@ -130,7 +130,7 @@ export class CircularDeque<T> implements Bounded<T>, Deque<T> {
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.on(event, listener);
+    this._list.on(event, listener);
     return this;
   }
 
@@ -138,7 +138,7 @@ export class CircularDeque<T> implements Bounded<T>, Deque<T> {
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.prependListener(event, listener);
+    this._list.prependListener(event, listener);
     return this;
   }
 
@@ -146,7 +146,7 @@ export class CircularDeque<T> implements Bounded<T>, Deque<T> {
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.removeListener(event, listener);
+    this._list.removeListener(event, listener);
     return this;
   }
 }

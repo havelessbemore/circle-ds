@@ -13,16 +13,16 @@ export class CircularMap<K, V>
   implements Bounded<[K, V]>, Map<K, V>, Collection<K, V>
 {
   /**
-   * The maximum number of elements that can be stored in the collection.
    * @internal
+   * The maximum number of elements that can be stored in the collection.
    */
   protected _capacity: number;
 
   /**
-   * The internal map.
    * @internal
+   * The internal map.
    */
-  protected map: Map<K, V>;
+  protected _map: Map<K, V>;
 
   /**
    * Creates a new map with `capacity` defaulted to `Infinity`.
@@ -45,7 +45,7 @@ export class CircularMap<K, V>
 
     // Initialize class variables
     this._capacity = Infinity;
-    this.map = new Map();
+    this._map = new Map();
 
     // Case 1: capacity is null, undefined or Infinity
     capacity = capacity ?? Infinity;
@@ -63,8 +63,8 @@ export class CircularMap<K, V>
     }
 
     // Case 3: capacity is iterable
-    this.map = new Map(capacity as Iterable<[K, V]>);
-    this._capacity = this.map.size;
+    this._map = new Map(capacity as Iterable<[K, V]>);
+    this._capacity = this._map.size;
   }
 
   /**
@@ -78,7 +78,7 @@ export class CircularMap<K, V>
    * @returns the number of values in the map.
    */
   get size(): number {
-    return this.map.size;
+    return this._map.size;
   }
 
   /**
@@ -115,28 +115,28 @@ export class CircularMap<K, V>
 
     // Check if new capacity is zero
     if (capacity === 0) {
-      const evicted = Array.from(this.map);
+      const evicted = Array.from(this._map);
       this.clear();
-      this.emitter.emit(BoundedEvent.Overflow, evicted);
+      this._emitter.emit(BoundedEvent.Overflow, evicted);
       return;
     }
 
     // Shrink down map.
     const evicted: [K, V][] = [];
-    const iter = this.map.entries();
+    const iter = this._map.entries();
     for (let n = this.size - capacity; n > 0; --n) {
       const entry = iter.next().value;
-      this.map.delete(entry[0]);
+      this._map.delete(entry[0]);
       evicted.push(entry);
     }
-    this.emitter.emit(BoundedEvent.Overflow, evicted);
+    this._emitter.emit(BoundedEvent.Overflow, evicted);
   }
 
   /**
    * Removes all elements from the map.
    */
   clear(): void {
-    this.map.clear();
+    this._map.clear();
   }
 
   /**
@@ -145,7 +145,7 @@ export class CircularMap<K, V>
    * @returns `true` if the value existed in the map and has been removed, or `false` otherwise.
    */
   delete(key: K): boolean {
-    return this.map.delete(key);
+    return this._map.delete(key);
   }
 
   /**
@@ -156,7 +156,7 @@ export class CircularMap<K, V>
    * @returns an iterable of [key, value] pairs for every entry.
    */
   entries(): IterableIterator<[K, V]> {
-    return this.map.entries();
+    return this._map.entries();
   }
 
   /**
@@ -171,7 +171,7 @@ export class CircularMap<K, V>
     callbackfn: (value: V, key: K, map: this) => void,
     thisArg?: unknown
   ): void {
-    for (const [key, value] of this.map.entries()) {
+    for (const [key, value] of this._map.entries()) {
       callbackfn.call(thisArg, value, key, this);
     }
   }
@@ -184,7 +184,7 @@ export class CircularMap<K, V>
    * @returns the value associated with the specified key, or `undefined` if no value is associated.
    */
   get(key: K): V | undefined {
-    return this.map.get(key);
+    return this._map.get(key);
   }
 
   /**
@@ -195,7 +195,7 @@ export class CircularMap<K, V>
    * @returns `true` if the value was found, `false` otherwise.
    */
   has(key: K): boolean {
-    return this.map.has(key);
+    return this._map.has(key);
   }
 
   /**
@@ -206,7 +206,7 @@ export class CircularMap<K, V>
    * @returns an iterable of the map's keys.
    */
   keys(): IterableIterator<K> {
-    return this.map.keys();
+    return this._map.keys();
   }
 
   /**
@@ -218,24 +218,24 @@ export class CircularMap<K, V>
   set(key: K, value: V): this {
     // Base case: map has no capacity.
     if (this.capacity < 1) {
-      this.emitter.emit(BoundedEvent.Overflow, [[key, value]]);
+      this._emitter.emit(BoundedEvent.Overflow, [[key, value]]);
       return this;
     }
 
     // Evict excess items
     const evicted: [K, V][] = [];
-    if (!this.map.delete(key) && this.size >= this.capacity) {
-      const entry = this.map.entries().next().value;
-      this.map.delete(entry[0]);
+    if (!this._map.delete(key) && this.size >= this.capacity) {
+      const entry = this._map.entries().next().value;
+      this._map.delete(entry[0]);
       evicted.push(entry);
     }
 
     // Add value
-    this.map.set(key, value);
+    this._map.set(key, value);
 
     // Emit evicted
     if (evicted.length > 0) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted);
+      this._emitter.emit(BoundedEvent.Overflow, evicted);
     }
 
     return this;
@@ -249,7 +249,7 @@ export class CircularMap<K, V>
    * @returns an iterable of values.
    */
   [Symbol.iterator](): IterableIterator<[K, V]> {
-    return this.map.entries();
+    return this._map.entries();
   }
 
   /**
@@ -260,6 +260,6 @@ export class CircularMap<K, V>
    * @returns an iterable of the map's values.
    */
   values(): IterableIterator<V> {
-    return this.map.values();
+    return this._map.values();
   }
 }

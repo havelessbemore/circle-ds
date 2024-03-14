@@ -649,7 +649,7 @@ export class CircularArrayList<T>
    * @param evicted - The items evicted from the collection.
    */
   protected _overflow(evicted: T[]): void {
-    this.emitter.emit(BoundedEvent.Overflow, evicted);
+    this._emitter.emit(BoundedEvent.Overflow, evicted);
   }
 
   /**

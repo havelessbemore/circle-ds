@@ -12,20 +12,20 @@ export class CircularDoublyLinkedList<T>
   implements Bounded<T>, List<T>
 {
   /**
-   * The maximum number of elements that can be stored in the collection.
    * @internal
+   * The maximum number of elements that can be stored in the collection.
    */
   protected _capacity: number;
 
   /**
-   * The root of the linked list
    * @internal
+   * The root of the linked list
    */
-  protected root: Node<T>;
+  protected _root: Node<T>;
 
   /**
-   * The current size of the list (0 \<= size \<= capacity)
    * @internal
+   * The current size of the list (0 \<= size \<= capacity)
    */
   protected _size!: number;
 
@@ -50,7 +50,7 @@ export class CircularDoublyLinkedList<T>
 
     // Initialize class variables
     this._capacity = Infinity;
-    this.root = { value: undefined } as Node<T>;
+    this._root = { value: undefined } as Node<T>;
     this.clear();
 
     // Case 1: capacity is null, undefined or Infinity
@@ -72,10 +72,10 @@ export class CircularDoublyLinkedList<T>
     const [head, tail, size] = toList(capacity as Iterable<T>);
     this._capacity = size;
     if (size > 0) {
-      this.root.next = head!;
-      this.root.prev = tail!;
-      head!.prev = this.root;
-      tail!.next = this.root;
+      this._root.next = head!;
+      this._root.prev = tail!;
+      head!.prev = this._root;
+      tail!.next = this._root;
       this._size = size;
     }
   }
@@ -111,11 +111,11 @@ export class CircularDoublyLinkedList<T>
 
     // Shrink
     const diff = this._size - capacity;
-    const [head, tail] = cut(this.root, diff);
+    const [head, tail] = cut(this._root, diff);
     this._size -= diff;
 
     // Emit discarded items
-    this.emitter.emit(BoundedEvent.Overflow, toArray(head, tail!.next));
+    this._emitter.emit(BoundedEvent.Overflow, toArray(head, tail!.next));
   }
 
   at(index: number): T | undefined {
@@ -131,8 +131,8 @@ export class CircularDoublyLinkedList<T>
 
   clear(): void {
     this._size = 0;
-    this.root.next = this.root;
-    this.root.prev = this.root;
+    this._root.next = this._root;
+    this._root.prev = this._root;
   }
 
   delete(index: number): boolean {
@@ -152,7 +152,7 @@ export class CircularDoublyLinkedList<T>
   }
 
   entries(): IterableIterator<[number, T]> {
-    return entries(this.root.next, this.root);
+    return entries(this._root.next, this._root);
   }
 
   fill(value: T, start?: number, end?: number): this {
@@ -179,7 +179,7 @@ export class CircularDoublyLinkedList<T>
     callbackfn: (value: T, index: number, list: this) => void,
     thisArg?: unknown
   ): void {
-    let node = this.root;
+    let node = this._root;
     for (let i = 0; i < this._size; ++i) {
       node = node.next!;
       callbackfn.call(thisArg, node.value, i, this);
@@ -187,11 +187,11 @@ export class CircularDoublyLinkedList<T>
   }
 
   has(value: T): boolean {
-    return has(this.root.next, value, this.root);
+    return has(this._root.next, value, this._root);
   }
 
   keys(): IterableIterator<number> {
-    return keys(this.root.next, this.root);
+    return keys(this._root.next, this._root);
   }
 
   pop(): T | undefined {
@@ -201,7 +201,7 @@ export class CircularDoublyLinkedList<T>
     }
 
     // Remove tail
-    const node = this.root.prev!;
+    const node = this._root.prev!;
     node.prev!.next = node.next;
     node.next!.prev = node.prev;
     --this._size;
@@ -220,12 +220,12 @@ export class CircularDoublyLinkedList<T>
     // Case 2: Zero capacity
     const capacity = this._capacity;
     if (capacity <= 0) {
-      this.emitter.emit(BoundedEvent.Overflow, values);
+      this._emitter.emit(BoundedEvent.Overflow, values);
       return this._size;
     }
 
     // Add values
-    this.append(this.root.prev!, values);
+    this.append(this._root.prev!, values);
 
     // Return size
     return this._size;
@@ -254,7 +254,7 @@ export class CircularDoublyLinkedList<T>
     }
 
     // Remove head
-    const head = this.root.next!;
+    const head = this._root.next!;
     head.prev!.next = head.next;
     head.next!.prev = head.prev;
     --this._size;
@@ -313,10 +313,10 @@ export class CircularDoublyLinkedList<T>
     if (deleteCount > 0) {
       const [head, tail] = cut(prev, deleteCount);
       this._size -= deleteCount;
-      head!.prev = out.root;
-      tail!.next = out.root;
-      out.root.next = head;
-      out.root.prev = tail;
+      head!.prev = out._root;
+      tail!.next = out._root;
+      out._root.next = head;
+      out._root.prev = tail;
       out._size = deleteCount;
     }
 
@@ -326,7 +326,7 @@ export class CircularDoublyLinkedList<T>
   }
 
   [Symbol.iterator](): IterableIterator<T> {
-    return values(this.root.next, this.root);
+    return values(this._root.next, this._root);
   }
 
   unshift(...values: T[]): number {
@@ -339,26 +339,26 @@ export class CircularDoublyLinkedList<T>
     // Case 2: Zero capacity
     const capacity = this._capacity;
     if (capacity <= 0) {
-      this.emitter.emit(BoundedEvent.Overflow, values);
+      this._emitter.emit(BoundedEvent.Overflow, values);
       return this._size;
     }
 
     // Add values
-    this.prepend(this.root.next!, values);
+    this.prepend(this._root.next!, values);
 
     // Return size
     return this._size;
   }
 
   values(): IterableIterator<T> {
-    return values(this.root.next, this.root);
+    return values(this._root.next, this._root);
   }
 
   /**
    * @internal
    */
   protected append(tail: Node<T>, values: T[]): Node<T> {
-    const root = this.root;
+    const root = this._root;
     const next = tail.next!;
     const evicted: T[] = [];
     const capacity = this._capacity;
@@ -383,7 +383,7 @@ export class CircularDoublyLinkedList<T>
 
     // Emit evicted items
     if (evicted.length > 0) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted);
+      this._emitter.emit(BoundedEvent.Overflow, evicted);
     }
 
     // Update size
@@ -398,14 +398,14 @@ export class CircularDoublyLinkedList<T>
    */
   protected get(index: number): Node<T> {
     index -= index <= this._size / 2 ? -1 : this._size;
-    return get(this.root, index)!;
+    return get(this._root, index)!;
   }
 
   /**
    * @internal
    */
   protected prepend(next: Node<T>, values: T[]): Node<T> {
-    const root = this.root;
+    const root = this._root;
     const prev = next.prev!;
     const evicted: T[] = [];
     const capacity = this._capacity;
@@ -429,7 +429,7 @@ export class CircularDoublyLinkedList<T>
 
     // Emit evicted items
     if (evicted.length > 0) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted.reverse());
+      this._emitter.emit(BoundedEvent.Overflow, evicted.reverse());
     }
 
     // Update size

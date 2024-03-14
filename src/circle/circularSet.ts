@@ -13,14 +13,14 @@ export class CircularSet<T>
   implements Bounded<T>, Set<T>, Collection<T, T>
 {
   /**
-   * The maximum number of elements that can be stored in the collection.
    * @internal
+   * The maximum number of elements that can be stored in the collection.
    */
   protected _capacity: number;
 
   /**
-   * The internal set.
    * @internal
+   * The internal set.
    */
   protected set: Set<T>;
 
@@ -117,7 +117,7 @@ export class CircularSet<T>
     if (capacity === 0) {
       const evicted = Array.from(this.set);
       this.clear();
-      this.emitter.emit(BoundedEvent.Overflow, evicted);
+      this._emitter.emit(BoundedEvent.Overflow, evicted);
       return;
     }
 
@@ -129,7 +129,7 @@ export class CircularSet<T>
       this.set.delete(value);
       evicted.push(value);
     }
-    this.emitter.emit(BoundedEvent.Overflow, evicted);
+    this._emitter.emit(BoundedEvent.Overflow, evicted);
   }
 
   /**
@@ -140,7 +140,7 @@ export class CircularSet<T>
   add(value: T): this {
     // Base case: set has no capacity.
     if (this.capacity < 1) {
-      this.emitter.emit(BoundedEvent.Overflow, [value]);
+      this._emitter.emit(BoundedEvent.Overflow, [value]);
       return this;
     }
 
@@ -157,7 +157,7 @@ export class CircularSet<T>
 
     // Emit evicted
     if (evicted.length > 0) {
-      this.emitter.emit(BoundedEvent.Overflow, evicted);
+      this._emitter.emit(BoundedEvent.Overflow, evicted);
     }
 
     return this;
