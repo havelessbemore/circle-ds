@@ -1,6 +1,6 @@
-[circle-ds](../README.md) / [Exports](../modules.md) / CircularDoublyLinkedList
+[circle-ds](../README.md) / [Exports](../modules.md) / CircularSkipList
 
-# Class: CircularDoublyLinkedList\<T\>
+# Class: CircularSkipList\<T\>
 
 A bounded collection restricts the number of elements it can hold to a
 specified capacity. When an attempt is made to add elements beyond this
@@ -38,56 +38,57 @@ collection's state, especially when dealing with asynchronous event listeners.
 
 - `CircularBase`\<`T`\>
 
-  ↳ **`CircularDoublyLinkedList`**
+  ↳ **`CircularSkipList`**
 
 ## Implements
 
 - [`Bounded`](../interfaces/Bounded.md)\<`T`\>
-- [`List`](../interfaces/List.md)\<`T`\>
+- [`SkipList`](../interfaces/SkipList.md)\<`T`\>
 
 ## Table of contents
 
 ### Constructors
 
-- [constructor](CircularDoublyLinkedList.md#constructor)
+- [constructor](CircularSkipList.md#constructor)
 
 ### Accessors
 
-- [[toStringTag]](CircularDoublyLinkedList.md#[tostringtag])
-- [capacity](CircularDoublyLinkedList.md#capacity)
-- [size](CircularDoublyLinkedList.md#size)
+- [[toStringTag]](CircularSkipList.md#[tostringtag])
+- [capacity](CircularSkipList.md#capacity)
+- [levels](CircularSkipList.md#levels)
+- [maxLevel](CircularSkipList.md#maxlevel)
+- [p](CircularSkipList.md#p)
+- [size](CircularSkipList.md#size)
 
 ### Methods
 
-- [[iterator]](CircularDoublyLinkedList.md#[iterator])
-- [addListener](CircularDoublyLinkedList.md#addlistener)
-- [at](CircularDoublyLinkedList.md#at)
-- [clear](CircularDoublyLinkedList.md#clear)
-- [delete](CircularDoublyLinkedList.md#delete)
-- [entries](CircularDoublyLinkedList.md#entries)
-- [fill](CircularDoublyLinkedList.md#fill)
-- [forEach](CircularDoublyLinkedList.md#foreach)
-- [has](CircularDoublyLinkedList.md#has)
-- [keys](CircularDoublyLinkedList.md#keys)
-- [on](CircularDoublyLinkedList.md#on)
-- [pop](CircularDoublyLinkedList.md#pop)
-- [prependListener](CircularDoublyLinkedList.md#prependlistener)
-- [push](CircularDoublyLinkedList.md#push)
-- [removeListener](CircularDoublyLinkedList.md#removelistener)
-- [set](CircularDoublyLinkedList.md#set)
-- [shift](CircularDoublyLinkedList.md#shift)
-- [slice](CircularDoublyLinkedList.md#slice)
-- [splice](CircularDoublyLinkedList.md#splice)
-- [unshift](CircularDoublyLinkedList.md#unshift)
-- [values](CircularDoublyLinkedList.md#values)
+- [[iterator]](CircularSkipList.md#[iterator])
+- [addListener](CircularSkipList.md#addlistener)
+- [at](CircularSkipList.md#at)
+- [clear](CircularSkipList.md#clear)
+- [delete](CircularSkipList.md#delete)
+- [entries](CircularSkipList.md#entries)
+- [fill](CircularSkipList.md#fill)
+- [forEach](CircularSkipList.md#foreach)
+- [has](CircularSkipList.md#has)
+- [keys](CircularSkipList.md#keys)
+- [on](CircularSkipList.md#on)
+- [pop](CircularSkipList.md#pop)
+- [prependListener](CircularSkipList.md#prependlistener)
+- [push](CircularSkipList.md#push)
+- [removeListener](CircularSkipList.md#removelistener)
+- [set](CircularSkipList.md#set)
+- [shift](CircularSkipList.md#shift)
+- [slice](CircularSkipList.md#slice)
+- [splice](CircularSkipList.md#splice)
+- [unshift](CircularSkipList.md#unshift)
+- [values](CircularSkipList.md#values)
 
 ## Constructors
 
 ### constructor
 
-• **new CircularDoublyLinkedList**\<`T`\>(): [`CircularDoublyLinkedList`](CircularDoublyLinkedList.md)\<`T`\>
-
-Creates a standard linked list (no capacity restriction).
+• **new CircularSkipList**\<`T`\>(): [`CircularSkipList`](CircularSkipList.md)\<`T`\>
 
 #### Type parameters
 
@@ -97,7 +98,7 @@ Creates a standard linked list (no capacity restriction).
 
 #### Returns
 
-[`CircularDoublyLinkedList`](CircularDoublyLinkedList.md)\<`T`\>
+[`CircularSkipList`](CircularSkipList.md)\<`T`\>
 
 #### Overrides
 
@@ -105,39 +106,9 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:35](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L35)
+[circle/circularSkipList.ts:76](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L76)
 
-• **new CircularDoublyLinkedList**\<`T`\>(`capacity?`): [`CircularDoublyLinkedList`](CircularDoublyLinkedList.md)\<`T`\>
-
-Creates a linked list with the given capacity.
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `capacity?` | ``null`` \| `number` | the list's capacity. |
-
-#### Returns
-
-[`CircularDoublyLinkedList`](CircularDoublyLinkedList.md)\<`T`\>
-
-#### Overrides
-
-CircularBase\&lt;T\&gt;.constructor
-
-#### Defined in
-
-[circle/circularDoublyLinkedList.ts:41](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L41)
-
-• **new CircularDoublyLinkedList**\<`T`\>(`items`): [`CircularDoublyLinkedList`](CircularDoublyLinkedList.md)\<`T`\>
-
-Creates a linked list with the given items. Capacity is set to the number of items.
+• **new CircularSkipList**\<`T`\>(`capacity?`): [`CircularSkipList`](CircularSkipList.md)\<`T`\>
 
 #### Type parameters
 
@@ -147,13 +118,13 @@ Creates a linked list with the given items. Capacity is set to the number of ite
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `items` | `Iterable`\<`T`\> | the values to store in the list. |
+| Name | Type |
+| :------ | :------ |
+| `capacity?` | ``null`` \| `number` |
 
 #### Returns
 
-[`CircularDoublyLinkedList`](CircularDoublyLinkedList.md)\<`T`\>
+[`CircularSkipList`](CircularSkipList.md)\<`T`\>
 
 #### Overrides
 
@@ -161,7 +132,59 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:47](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L47)
+[circle/circularSkipList.ts:77](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L77)
+
+• **new CircularSkipList**\<`T`\>(`config`): [`CircularSkipList`](CircularSkipList.md)\<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | `CircularSkipListConfig` |
+
+#### Returns
+
+[`CircularSkipList`](CircularSkipList.md)\<`T`\>
+
+#### Overrides
+
+CircularBase\&lt;T\&gt;.constructor
+
+#### Defined in
+
+[circle/circularSkipList.ts:78](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L78)
+
+• **new CircularSkipList**\<`T`\>(`items`): [`CircularSkipList`](CircularSkipList.md)\<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `items` | `Iterable`\<`T`\> |
+
+#### Returns
+
+[`CircularSkipList`](CircularSkipList.md)\<`T`\>
+
+#### Overrides
+
+CircularBase\&lt;T\&gt;.constructor
+
+#### Defined in
+
+[circle/circularSkipList.ts:79](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L79)
 
 ## Accessors
 
@@ -177,11 +200,11 @@ A string tag for the `Collection` class that is used in `Object.prototype.toStri
 
 #### Implementation of
 
-List.[toStringTag]
+SkipList.[toStringTag]
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:91](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L91)
+[circle/circularSkipList.ts:140](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L140)
 
 ___
 
@@ -214,7 +237,7 @@ limited to an array's maximum length (2^32 - 1 in JavaScript).
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:83](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L83)
+[circle/circularSkipList.ts:120](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L120)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -249,7 +272,115 @@ limited to an array's maximum length (2^32 - 1 in JavaScript).
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:95](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L95)
+[circle/circularSkipList.ts:144](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L144)
+
+___
+
+### levels
+
+• `get` **levels**(): `number`
+
+The current number of levels in the skip list.
+
+#### Returns
+
+`number`
+
+#### Implementation of
+
+[SkipList](../interfaces/SkipList.md).[levels](../interfaces/SkipList.md#levels)
+
+#### Defined in
+
+[circle/circularSkipList.ts:124](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L124)
+
+___
+
+### maxLevel
+
+• `get` **maxLevel**(): `number`
+
+The maximum number of levels in the skip list.
+
+#### Returns
+
+`number`
+
+#### Implementation of
+
+[SkipList](../interfaces/SkipList.md).[maxLevel](../interfaces/SkipList.md#maxlevel)
+
+#### Defined in
+
+[circle/circularSkipList.ts:128](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L128)
+
+• `set` **maxLevel**(`maxLevel`): `void`
+
+The maximum number of levels in the skip list.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `maxLevel` | `number` |
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[SkipList](../interfaces/SkipList.md).[maxLevel](../interfaces/SkipList.md#maxlevel)
+
+#### Defined in
+
+[circle/circularSkipList.ts:174](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L174)
+
+___
+
+### p
+
+• `get` **p**(): `number`
+
+The probability factor used to randomly determine the levels
+of new nodes. Should be a value between 0 and 1, where a lower
+value results in fewer levels on average.
+
+#### Returns
+
+`number`
+
+#### Implementation of
+
+[SkipList](../interfaces/SkipList.md).[p](../interfaces/SkipList.md#p)
+
+#### Defined in
+
+[circle/circularSkipList.ts:132](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L132)
+
+• `set` **p**(`p`): `void`
+
+The probability factor used to randomly determine the levels
+of new nodes. Should be a value between 0 and 1, where a lower
+value results in fewer levels on average.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `p` | `number` |
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[SkipList](../interfaces/SkipList.md).[p](../interfaces/SkipList.md#p)
+
+#### Defined in
+
+[circle/circularSkipList.ts:192](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L192)
 
 ___
 
@@ -265,11 +396,11 @@ Gets the number of elements contained in the `Collection`.
 
 #### Implementation of
 
-List.size
+SkipList.size
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:87](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L87)
+[circle/circularSkipList.ts:136](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L136)
 
 ## Methods
 
@@ -285,11 +416,11 @@ Returns the default iterator through the list's elements.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[[iterator]](../interfaces/List.md#[iterator])
+[SkipList](../interfaces/SkipList.md).[[iterator]](../interfaces/SkipList.md#[iterator])
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:328](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L328)
+[circle/circularSkipList.ts:397](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L397)
 
 ___
 
@@ -355,11 +486,11 @@ The element at the specified index, or `undefined` if the index is out of bounds
 
 #### Implementation of
 
-[List](../interfaces/List.md).[at](../interfaces/List.md#at)
+[SkipList](../interfaces/SkipList.md).[at](../interfaces/SkipList.md#at)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:121](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L121)
+[circle/circularSkipList.ts:205](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L205)
 
 ___
 
@@ -375,11 +506,11 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[clear](../interfaces/List.md#clear)
+[SkipList](../interfaces/SkipList.md).[clear](../interfaces/SkipList.md#clear)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:132](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L132)
+[circle/circularSkipList.ts:216](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L216)
 
 ___
 
@@ -404,11 +535,11 @@ Subsequent elements are shifted one position towards the start of the list.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[delete](../interfaces/List.md#delete)
+[SkipList](../interfaces/SkipList.md).[delete](../interfaces/SkipList.md#delete)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:138](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L138)
+[circle/circularSkipList.ts:223](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L223)
 
 ___
 
@@ -427,11 +558,11 @@ An iterable iterator for the entries of the collection.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[entries](../interfaces/List.md#entries)
+[SkipList](../interfaces/SkipList.md).[entries](../interfaces/SkipList.md#entries)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:154](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L154)
+[circle/circularSkipList.ts:237](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L237)
 
 ___
 
@@ -458,11 +589,11 @@ The instance of the list for chaining.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[fill](../interfaces/List.md#fill)
+[SkipList](../interfaces/SkipList.md).[fill](../interfaces/SkipList.md#fill)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:158](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L158)
+[circle/circularSkipList.ts:241](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L241)
 
 ___
 
@@ -485,11 +616,11 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[forEach](../interfaces/List.md#foreach)
+[SkipList](../interfaces/SkipList.md).[forEach](../interfaces/SkipList.md#foreach)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:178](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L178)
+[circle/circularSkipList.ts:262](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L262)
 
 ___
 
@@ -513,11 +644,11 @@ Determines whether a specific element exists within the list.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[has](../interfaces/List.md#has)
+[SkipList](../interfaces/SkipList.md).[has](../interfaces/SkipList.md#has)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:189](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L189)
+[circle/circularSkipList.ts:273](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L273)
 
 ___
 
@@ -536,11 +667,11 @@ An iterable iterator for the keys of the collection.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[keys](../interfaces/List.md#keys)
+[SkipList](../interfaces/SkipList.md).[keys](../interfaces/SkipList.md#keys)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:193](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L193)
+[circle/circularSkipList.ts:277](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L277)
 
 ___
 
@@ -600,11 +731,11 @@ The last element of the list, or `undefined` if the list is empty.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[pop](../interfaces/List.md#pop)
+[SkipList](../interfaces/SkipList.md).[pop](../interfaces/SkipList.md#pop)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:197](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L197)
+[circle/circularSkipList.ts:281](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L281)
 
 ___
 
@@ -670,11 +801,11 @@ The new length of the list.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[push](../interfaces/List.md#push)
+[SkipList](../interfaces/SkipList.md).[push](../interfaces/SkipList.md#push)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:213](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L213)
+[circle/circularSkipList.ts:294](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L294)
 
 ___
 
@@ -736,11 +867,11 @@ The previous value at the index if replaced, otherwise `undefined`.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[set](../interfaces/List.md#set)
+[SkipList](../interfaces/SkipList.md).[set](../interfaces/SkipList.md#set)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:234](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L234)
+[circle/circularSkipList.ts:313](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L313)
 
 ___
 
@@ -759,17 +890,17 @@ The first element of the list, or `undefined` if the list is empty.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[shift](../interfaces/List.md#shift)
+[SkipList](../interfaces/SkipList.md).[shift](../interfaces/SkipList.md#shift)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:250](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L250)
+[circle/circularSkipList.ts:329](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L329)
 
 ___
 
 ### slice
 
-▸ **slice**(`start?`, `end?`): [`CircularDoublyLinkedList`](CircularDoublyLinkedList.md)\<`T`\>
+▸ **slice**(`start?`, `end?`): [`CircularSkipList`](CircularSkipList.md)\<`T`\>
 
 Creates a shallow copy of the list from start index (inclusive)
 to end index (exclusive) into a new list. Does not modify the existing list.
@@ -783,23 +914,23 @@ to end index (exclusive) into a new list. Does not modify the existing list.
 
 #### Returns
 
-[`CircularDoublyLinkedList`](CircularDoublyLinkedList.md)\<`T`\>
+[`CircularSkipList`](CircularSkipList.md)\<`T`\>
 
 A new list containing the specified elements.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[slice](../interfaces/List.md#slice)
+[SkipList](../interfaces/SkipList.md).[slice](../interfaces/SkipList.md#slice)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:266](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L266)
+[circle/circularSkipList.ts:342](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L342)
 
 ___
 
 ### splice
 
-▸ **splice**(`start`, `deleteCount?`, `...items`): [`CircularDoublyLinkedList`](CircularDoublyLinkedList.md)\<`T`\>
+▸ **splice**(`start`, `deleteCount?`, `...items`): [`CircularSkipList`](CircularSkipList.md)\<`T`\>
 
 Changes the contents of the list by removing existing elements
 and/or adding new elements at a given index.
@@ -814,17 +945,17 @@ and/or adding new elements at a given index.
 
 #### Returns
 
-[`CircularDoublyLinkedList`](CircularDoublyLinkedList.md)\<`T`\>
+[`CircularSkipList`](CircularSkipList.md)\<`T`\>
 
 A new list containing the deleted elements, if any.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[splice](../interfaces/List.md#splice)
+[SkipList](../interfaces/SkipList.md).[splice](../interfaces/SkipList.md#splice)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:294](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L294)
+[circle/circularSkipList.ts:367](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L367)
 
 ___
 
@@ -849,11 +980,11 @@ The new length of the list.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[unshift](../interfaces/List.md#unshift)
+[SkipList](../interfaces/SkipList.md).[unshift](../interfaces/SkipList.md#unshift)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:332](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L332)
+[circle/circularSkipList.ts:401](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L401)
 
 ___
 
@@ -872,8 +1003,8 @@ An iterable iterator for the values of the collection.
 
 #### Implementation of
 
-[List](../interfaces/List.md).[values](../interfaces/List.md#values)
+[SkipList](../interfaces/SkipList.md).[values](../interfaces/SkipList.md#values)
 
 #### Defined in
 
-[circle/circularDoublyLinkedList.ts:353](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularDoublyLinkedList.ts#L353)
+[circle/circularSkipList.ts:420](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L420)

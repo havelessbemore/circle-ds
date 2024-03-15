@@ -16,6 +16,7 @@
 - [CircularMap](classes/CircularMap.md)
 - [CircularQueue](classes/CircularQueue.md)
 - [CircularSet](classes/CircularSet.md)
+- [CircularSkipList](classes/CircularSkipList.md)
 - [CircularStack](classes/CircularStack.md)
 
 ### Interfaces
@@ -25,6 +26,7 @@
 - [Deque](interfaces/Deque.md)
 - [List](interfaces/List.md)
 - [Queue](interfaces/Queue.md)
+- [SkipList](interfaces/SkipList.md)
 - [Stack](interfaces/Stack.md)
 
 ### Variables
@@ -64,4 +66,4 @@ event handling across the application.
 
 #### Defined in
 
-[types/boundedEvent.ts:21](https://github.com/havelessbemore/circle-ds/blob/76d298e/src/types/boundedEvent.ts#L21)
+[types/boundedEvent.ts:21](https://github.com/havelessbemore/circle-ds/blob/2846985/src/types/boundedEvent.ts#L21)

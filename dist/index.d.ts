@@ -2,6 +2,7 @@
 
 import { Bounded } from './types/bounded';
 import { Bounded as Bounded_2 } from '../types/bounded';
+import { BoundedConfig } from '../types/bounded';
 import { Collection } from './types/collection';
 import { Collection as Collection_2 } from '../types/collection';
 import { Deque } from './types/deque';
@@ -13,6 +14,10 @@ import { List } from './types/list';
 import { List as List_2 } from '../types/list';
 import { Queue } from './types/queue';
 import { Queue as Queue_2 } from '../types/queue';
+import { SkipList } from './types/skipList';
+import { SkipList as SkipList_2 } from '../types/skipList';
+import { SkipListConfig } from '../types/skipList';
+import { SkipNode } from '../types/skipList';
 import { Stack } from './types/stack';
 import { Stack as Stack_2 } from '../types/stack';
 
@@ -44,14 +49,11 @@ export declare const BoundedEvent: {
 
 export declare class CircularArrayList<T> extends CircularBase<T> implements Bounded_2<T>, List_2<T> {
     /* Excluded from this release type: _capacity */
-    /* Excluded from this release type: head */
-    /**
-     * Whether capacity is finite (true) or infinite (false).
-     */
-    protected isFinite: boolean;
-    /* Excluded from this release type: next */
+    /* Excluded from this release type: _head */
+    /* Excluded from this release type: _isFinite */
+    /* Excluded from this release type: _next */
     /* Excluded from this release type: _size */
-    /* Excluded from this release type: vals */
+    /* Excluded from this release type: _vals */
     /**
      * Creates a new list. Default `capacity` is `Infinity`.
      */
@@ -87,7 +89,7 @@ export declare class CircularArrayList<T> extends CircularBase<T> implements Bou
     last(): T | undefined;
     pop(): T | undefined;
     /* Excluded from this release type: _pop */
-    push(...values: T[]): number;
+    push(...items: T[]): number;
     set(index: number, value: T): T | undefined;
     shift(): T | undefined;
     /* Excluded from this release type: _shift */
@@ -98,7 +100,7 @@ export declare class CircularArrayList<T> extends CircularBase<T> implements Bou
     /* Excluded from this release type: _insert */
     /* Excluded from this release type: _safeInsert */
     [Symbol.iterator](): IterableIterator<T>;
-    unshift(...values: T[]): number;
+    unshift(...items: T[]): number;
     /* Excluded from this release type: _presert */
     /* Excluded from this release type: _safePresert */
     values(): IterableIterator<T>;
@@ -113,7 +115,7 @@ export declare class CircularArrayList<T> extends CircularBase<T> implements Bou
 }
 
 declare class CircularBase<T> {
-    /* Excluded from this release type: emitter */
+    /* Excluded from this release type: _emitter */
     constructor(emitter?: EventEmitter);
     /**
      * Appends the listener function to the listeners array for the
@@ -203,7 +205,7 @@ declare class CircularBase<T> {
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularDeque<T> implements Bounded_2<T>, Deque<T> {
-    /* Excluded from this release type: list */
+    /* Excluded from this release type: _list */
     /**
      * Creates a new deque. Default `capacity` is `Infinity`.
      */
@@ -247,7 +249,7 @@ export declare class CircularDeque<T> implements Bounded_2<T>, Deque<T> {
 
 export declare class CircularDoublyLinkedList<T> extends CircularBase<T> implements Bounded<T>, List_2<T> {
     /* Excluded from this release type: _capacity */
-    /* Excluded from this release type: root */
+    /* Excluded from this release type: _root */
     /* Excluded from this release type: _size */
     /**
      * Creates a standard linked list (no capacity restriction).
@@ -302,7 +304,7 @@ export declare class CircularDoublyLinkedList<T> extends CircularBase<T> impleme
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularLinkedDeque<T> implements Bounded_2<T>, Deque_2<T> {
-    /* Excluded from this release type: list */
+    /* Excluded from this release type: _list */
     /**
      * Creates a new stack with `capacity` defaulted to `Infinity`.
      */
@@ -346,9 +348,9 @@ export declare class CircularLinkedDeque<T> implements Bounded_2<T>, Deque_2<T> 
 
 export declare class CircularLinkedList<T> extends CircularBase<T> implements Bounded<T>, List_2<T> {
     /* Excluded from this release type: _capacity */
-    /* Excluded from this release type: root */
+    /* Excluded from this release type: _root */
     /* Excluded from this release type: _size */
-    /* Excluded from this release type: tail */
+    /* Excluded from this release type: _tail */
     /**
      * Creates a standard linked list (no capacity restriction).
      */
@@ -386,7 +388,7 @@ export declare class CircularLinkedList<T> extends CircularBase<T> implements Bo
     [Symbol.iterator](): IterableIterator<T>;
     unshift(...values: T[]): number;
     values(): IterableIterator<T>;
-    /* Excluded from this release type: append */
+    /* Excluded from this release type: _append */
 }
 
 /**
@@ -400,7 +402,7 @@ export declare class CircularLinkedList<T> extends CircularBase<T> implements Bo
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularLinkedQueue<T> implements Bounded_2<T>, Queue_2<T> {
-    /* Excluded from this release type: list */
+    /* Excluded from this release type: _list */
     /**
      * Creates a new stack with `capacity` defaulted to `Infinity`.
      */
@@ -449,7 +451,7 @@ export declare class CircularLinkedQueue<T> implements Bounded_2<T>, Queue_2<T> 
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularLinkedStack<T> implements Bounded_2<T>, Stack_2<T> {
-    /* Excluded from this release type: list */
+    /* Excluded from this release type: _list */
     /**
      * Creates a new stack with `capacity` defaulted to `Infinity`.
      */
@@ -492,7 +494,7 @@ export declare class CircularLinkedStack<T> implements Bounded_2<T>, Stack_2<T> 
  */
 export declare class CircularMap<K, V> extends CircularBase<[K, V]> implements Bounded_2<[K, V]>, Map<K, V>, Collection_2<K, V> {
     /* Excluded from this release type: _capacity */
-    /* Excluded from this release type: map */
+    /* Excluded from this release type: _map */
     /**
      * Creates a new map with `capacity` defaulted to `Infinity`.
      */
@@ -755,6 +757,55 @@ export declare class CircularSet<T> extends CircularBase<T> implements Bounded_2
     [Symbol.iterator](): IterableIterator<T>;
 }
 
+export declare class CircularSkipList<T> extends CircularBase<T> implements Bounded_2<T>, SkipList_2<T> {
+    /* Excluded from this release type: _capacity */
+    /* Excluded from this release type: _isFinite */
+    /* Excluded from this release type: _maxLevel */
+    /* Excluded from this release type: _p */
+    /* Excluded from this release type: _root */
+    /* Excluded from this release type: _size */
+    /* Excluded from this release type: _tail */
+    constructor();
+    constructor(capacity?: number | null);
+    constructor(config: CircularSkipListConfig);
+    constructor(items: Iterable<T>);
+    get capacity(): number;
+    get levels(): number;
+    get maxLevel(): number;
+    get p(): number;
+    get size(): number;
+    get [Symbol.toStringTag](): string;
+    set capacity(capacity: number);
+    set maxLevel(maxLevel: number);
+    set p(p: number);
+    at(index: number): T | undefined;
+    clear(): void;
+    delete(index: number): boolean;
+    entries(): IterableIterator<[number, T]>;
+    fill(value: T, start?: number, end?: number): this;
+    forEach(callbackfn: (value: T, index: number, list: this) => void, thisArg?: unknown): void;
+    has(value: T): boolean;
+    keys(): IterableIterator<number>;
+    pop(): T | undefined;
+    push(...values: T[]): number;
+    set(index: number, value: T): T | undefined;
+    shift(): T | undefined;
+    slice(start?: number, end?: number): CircularSkipList<T>;
+    splice(start: number, deleteCount?: number, ...items: T[]): CircularSkipList<T>;
+    [Symbol.iterator](): IterableIterator<T>;
+    unshift(...values: T[]): number;
+    values(): IterableIterator<T>;
+    /* Excluded from this release type: _delete */
+    /* Excluded from this release type: _genLevels */
+    /* Excluded from this release type: _insert */
+    /* Excluded from this release type: _overflow */
+    /* Excluded from this release type: _presert */
+    /* Excluded from this release type: _safeInsert */
+}
+
+declare interface CircularSkipListConfig extends BoundedConfig, SkipListConfig {
+}
+
 /**
  * A circular stack is similar to a traditional stack, but uses a fixed-size,
  * circular buffer. When the stack reaches its maximum capacity and a new
@@ -811,6 +862,8 @@ export { Deque }
 export { List }
 
 export { Queue }
+
+export { SkipList }
 
 export { Stack }
 
