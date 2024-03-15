@@ -15,6 +15,11 @@ import { List } from "..";
  */
 export interface SkipList<T> extends List<T> {
   /**
+   * The current number of levels in the skip list.
+   */
+  levels: readonly number;
+
+  /**
    * The maximum number of levels in the skip list.
    */
   maxLevel: number;

@@ -176,7 +176,7 @@ export class CircularSkipList<T>
     maxLevel = +maxLevel;
 
     // If input is invalid
-    if (!isArrayLength(maxLevel)) {
+    if (!isArrayLength(maxLevel) || maxLevel <= 0) {
       throw new RangeError("Invalid maxLevel");
     }
 

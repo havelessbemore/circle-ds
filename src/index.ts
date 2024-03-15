@@ -7,6 +7,7 @@ export type { Collection } from "./types/collection";
 export type { Deque } from "./types/deque";
 export type { List } from "./types/list";
 export type { Queue } from "./types/queue";
+export type { SkipList } from "./types/skipList";
 export type { Stack } from "./types/stack";
 
 // Circular Classes
@@ -20,4 +21,5 @@ export { CircularLinkedStack } from "./circle/circularLinkedStack";
 export { CircularMap } from "./circle/circularMap";
 export { CircularQueue } from "./circle/circularQueue";
 export { CircularSet } from "./circle/circularSet";
+export { CircularSkipList } from "./circle/circularSkipList";
 export { CircularStack } from "./circle/circularStack";
