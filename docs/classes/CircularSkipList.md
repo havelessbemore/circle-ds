@@ -106,7 +106,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularSkipList.ts:76](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L76)
+[circle/circularSkipList.ts:76](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L76)
 
 • **new CircularSkipList**\<`T`\>(`capacity?`): [`CircularSkipList`](CircularSkipList.md)\<`T`\>
 
@@ -132,7 +132,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularSkipList.ts:77](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L77)
+[circle/circularSkipList.ts:77](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L77)
 
 • **new CircularSkipList**\<`T`\>(`config`): [`CircularSkipList`](CircularSkipList.md)\<`T`\>
 
@@ -158,7 +158,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularSkipList.ts:78](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L78)
+[circle/circularSkipList.ts:78](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L78)
 
 • **new CircularSkipList**\<`T`\>(`items`): [`CircularSkipList`](CircularSkipList.md)\<`T`\>
 
@@ -184,7 +184,7 @@ CircularBase\&lt;T\&gt;.constructor
 
 #### Defined in
 
-[circle/circularSkipList.ts:79](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L79)
+[circle/circularSkipList.ts:79](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L79)
 
 ## Accessors
 
@@ -204,7 +204,7 @@ SkipList.[toStringTag]
 
 #### Defined in
 
-[circle/circularSkipList.ts:140](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L140)
+[circle/circularSkipList.ts:140](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L140)
 
 ___
 
@@ -237,7 +237,7 @@ limited to an array's maximum length (2^32 - 1 in JavaScript).
 
 #### Defined in
 
-[circle/circularSkipList.ts:120](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L120)
+[circle/circularSkipList.ts:120](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L120)
 
 • `set` **capacity**(`capacity`): `void`
 
@@ -272,7 +272,7 @@ limited to an array's maximum length (2^32 - 1 in JavaScript).
 
 #### Defined in
 
-[circle/circularSkipList.ts:144](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L144)
+[circle/circularSkipList.ts:144](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L144)
 
 ___
 
@@ -292,7 +292,7 @@ The current number of levels in the skip list.
 
 #### Defined in
 
-[circle/circularSkipList.ts:124](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L124)
+[circle/circularSkipList.ts:124](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L124)
 
 ___
 
@@ -312,7 +312,7 @@ The maximum number of levels in the skip list.
 
 #### Defined in
 
-[circle/circularSkipList.ts:128](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L128)
+[circle/circularSkipList.ts:128](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L128)
 
 • `set` **maxLevel**(`maxLevel`): `void`
 
@@ -334,7 +334,7 @@ The maximum number of levels in the skip list.
 
 #### Defined in
 
-[circle/circularSkipList.ts:174](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L174)
+[circle/circularSkipList.ts:174](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L174)
 
 ___
 
@@ -356,7 +356,7 @@ value results in fewer levels on average.
 
 #### Defined in
 
-[circle/circularSkipList.ts:132](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L132)
+[circle/circularSkipList.ts:132](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L132)
 
 • `set` **p**(`p`): `void`
 
@@ -380,7 +380,7 @@ value results in fewer levels on average.
 
 #### Defined in
 
-[circle/circularSkipList.ts:192](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L192)
+[circle/circularSkipList.ts:192](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L192)
 
 ___
 
@@ -400,7 +400,7 @@ SkipList.size
 
 #### Defined in
 
-[circle/circularSkipList.ts:136](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L136)
+[circle/circularSkipList.ts:136](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L136)
 
 ## Methods
 
@@ -420,7 +420,7 @@ Returns the default iterator through the list's elements.
 
 #### Defined in
 
-[circle/circularSkipList.ts:397](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L397)
+[circle/circularSkipList.ts:397](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L397)
 
 ___
 
@@ -462,7 +462,7 @@ CircularBase.addListener
 
 #### Defined in
 
-[circle/circularBase.ts:36](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularBase.ts#L36)
+[circle/circularBase.ts:36](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularBase.ts#L36)
 
 ___
 
@@ -490,7 +490,7 @@ The element at the specified index, or `undefined` if the index is out of bounds
 
 #### Defined in
 
-[circle/circularSkipList.ts:205](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L205)
+[circle/circularSkipList.ts:205](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L205)
 
 ___
 
@@ -510,7 +510,7 @@ Removes all elements from the `Collection`, effectively resetting it.
 
 #### Defined in
 
-[circle/circularSkipList.ts:216](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L216)
+[circle/circularSkipList.ts:216](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L216)
 
 ___
 
@@ -539,7 +539,7 @@ Subsequent elements are shifted one position towards the start of the list.
 
 #### Defined in
 
-[circle/circularSkipList.ts:223](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L223)
+[circle/circularSkipList.ts:223](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L223)
 
 ___
 
@@ -562,7 +562,7 @@ An iterable iterator for the entries of the collection.
 
 #### Defined in
 
-[circle/circularSkipList.ts:237](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L237)
+[circle/circularSkipList.ts:237](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L237)
 
 ___
 
@@ -593,7 +593,7 @@ The instance of the list for chaining.
 
 #### Defined in
 
-[circle/circularSkipList.ts:241](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L241)
+[circle/circularSkipList.ts:241](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L241)
 
 ___
 
@@ -620,7 +620,7 @@ Executes a provided function once for each key-value pair in the `Collection`.
 
 #### Defined in
 
-[circle/circularSkipList.ts:262](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L262)
+[circle/circularSkipList.ts:262](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L262)
 
 ___
 
@@ -648,7 +648,7 @@ Determines whether a specific element exists within the list.
 
 #### Defined in
 
-[circle/circularSkipList.ts:273](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L273)
+[circle/circularSkipList.ts:273](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L273)
 
 ___
 
@@ -671,7 +671,7 @@ An iterable iterator for the keys of the collection.
 
 #### Defined in
 
-[circle/circularSkipList.ts:277](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L277)
+[circle/circularSkipList.ts:277](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L277)
 
 ___
 
@@ -713,7 +713,7 @@ CircularBase.on
 
 #### Defined in
 
-[circle/circularBase.ts:69](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularBase.ts#L69)
+[circle/circularBase.ts:69](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularBase.ts#L69)
 
 ___
 
@@ -735,7 +735,7 @@ The last element of the list, or `undefined` if the list is empty.
 
 #### Defined in
 
-[circle/circularSkipList.ts:281](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L281)
+[circle/circularSkipList.ts:281](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L281)
 
 ___
 
@@ -776,7 +776,7 @@ CircularBase.prependListener
 
 #### Defined in
 
-[circle/circularBase.ts:98](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularBase.ts#L98)
+[circle/circularBase.ts:98](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularBase.ts#L98)
 
 ___
 
@@ -805,7 +805,7 @@ The new length of the list.
 
 #### Defined in
 
-[circle/circularSkipList.ts:294](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L294)
+[circle/circularSkipList.ts:294](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L294)
 
 ___
 
@@ -842,7 +842,7 @@ CircularBase.removeListener
 
 #### Defined in
 
-[circle/circularBase.ts:123](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularBase.ts#L123)
+[circle/circularBase.ts:123](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularBase.ts#L123)
 
 ___
 
@@ -871,7 +871,7 @@ The previous value at the index if replaced, otherwise `undefined`.
 
 #### Defined in
 
-[circle/circularSkipList.ts:313](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L313)
+[circle/circularSkipList.ts:313](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L313)
 
 ___
 
@@ -894,7 +894,7 @@ The first element of the list, or `undefined` if the list is empty.
 
 #### Defined in
 
-[circle/circularSkipList.ts:329](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L329)
+[circle/circularSkipList.ts:329](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L329)
 
 ___
 
@@ -924,7 +924,7 @@ A new list containing the specified elements.
 
 #### Defined in
 
-[circle/circularSkipList.ts:342](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L342)
+[circle/circularSkipList.ts:342](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L342)
 
 ___
 
@@ -955,7 +955,7 @@ A new list containing the deleted elements, if any.
 
 #### Defined in
 
-[circle/circularSkipList.ts:367](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L367)
+[circle/circularSkipList.ts:367](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L367)
 
 ___
 
@@ -984,7 +984,7 @@ The new length of the list.
 
 #### Defined in
 
-[circle/circularSkipList.ts:401](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L401)
+[circle/circularSkipList.ts:401](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L401)
 
 ___
 
@@ -1007,4 +1007,4 @@ An iterable iterator for the values of the collection.
 
 #### Defined in
 
-[circle/circularSkipList.ts:420](https://github.com/havelessbemore/circle-ds/blob/2846985/src/circle/circularSkipList.ts#L420)
+[circle/circularSkipList.ts:420](https://github.com/havelessbemore/circle-ds/blob/329e5c3/src/circle/circularSkipList.ts#L420)
