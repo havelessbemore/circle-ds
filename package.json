@@ -1,7 +1,7 @@
 {
   "name": "circle-ds",
   "version": "1.4.2",
-  "description": "A suite of circular data structures, including CircleStack, CircleQueue, and CircleDeque. Use circular buffers with ease and supported by a variety of operations.",
+  "description": "A suite of circular data structures, including deques, lists, maps, queues, sets and stacks.",
   "files": [
     "dist/",
     "LICENSE",
@@ -39,10 +39,13 @@
     "data",
     "data structure",
     "deque",
+    "linkedlist",
+    "list",
     "map",
     "queue",
     "ring",
     "set",
+    "skiplist",
     "stack"
   ],
   "author": "Michael Rojas <dev.michael.rojas@gmail.com> (https://github.com/havelessbemore)",

@@ -1,4 +1,4 @@
-import { ARRAY_MAX_LENGTH } from "./constants";
+import { ARRAY_MAX_LENGTH, LINKED_MAX_LENGTH } from "./constants";
 
 /**
  * Checks if a given value is an integer within a valid array length range.
@@ -54,6 +54,24 @@ export function isInfinity(value: unknown): boolean {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isIterable(value: any): value is Iterable<unknown> {
   return typeof value?.[Symbol.iterator] === "function";
+}
+
+/**
+ * Checks if a given value is an integer within a valid linked length range.
+ *
+ * This function is useful for validating linked lengths before attempting operations
+ * that could result in a `RangeError` due to invalid linked list size.
+ *
+ * @param value - The value to check.
+ *
+ * @returns `true` if the value is an integer within the `[0, LINKED_MAX_LENGTH]` range, `false` otherwise.
+ */
+export function isLinkedLength(value: unknown): value is number {
+  return (
+    Number.isInteger(value) &&
+    (value as number) >= 0 &&
+    (value as number) <= LINKED_MAX_LENGTH
+  );
 }
 
 /**

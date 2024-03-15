@@ -210,7 +210,8 @@ export function getTail<N extends LinkedNode<unknown>>(
  * @returns An array with the values of the list from `node` to `end`.
  *
  * @throws - {@link TypeError}
- * thrown if an `end` node is provided but not encountered before the end of the list.
+ * thrown if an `end` node is provided but
+ * not encountered before the end of the list.
  */
 export function toArray<T>(node?: LinkedNode<T>, end?: LinkedNode<T>): T[] {
   const array: T[] = [];

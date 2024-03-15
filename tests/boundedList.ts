@@ -649,186 +649,185 @@ export function testBoundedList(cls: Constructor<BoundedList<unknown>>) {
         expect(Array.from(list)).toEqual([5, 6, 7]);
       });
     });
-  });
 
-  describe("unshift()", () => {
-    it("maintain capacity when adding more elements than capacity", () => {
-      const deque = new cls(5);
-      deque.push(1, 2, 3, 4, 5);
-      expect(deque.unshift(6)).toEqual(5);
-      expect(deque.size).toBe(5);
-      expect(Array.from(deque.values())).toEqual([6, 1, 2, 3, 4]);
-    });
+    describe("unshift()", () => {
+      it("maintain capacity when adding more elements than capacity", () => {
+        const list = new cls(5);
+        list.push(1, 2, 3, 4, 5);
+        expect(list.unshift(6)).toEqual(5);
+        expect(list.size).toBe(5);
+        expect(Array.from(list.values())).toEqual([6, 1, 2, 3, 4]);
+      });
 
-    it("removes the oldest elements when exceeding capacity", () => {
-      const deque = new cls(5);
-      deque.push(1, 2, 3, 4, 5);
-      expect(deque.unshift(6, 7)).toEqual(5);
-      expect(deque.size).toBe(5);
-      expect(Array.from(deque.values())).toEqual([6, 7, 1, 2, 3]);
-    });
+      it("removes the oldest elements when exceeding capacity", () => {
+        const list = new cls(5);
+        list.push(1, 2, 3, 4, 5);
+        expect(list.unshift(6, 7)).toEqual(5);
+        expect(list.size).toBe(5);
+        expect(Array.from(list.values())).toEqual([6, 7, 1, 2, 3]);
+      });
 
-    it("correctly handles adding more elements than capacity", () => {
-      const deque = new cls(2);
-      expect(deque.unshift(1, 2, 3)).toEqual(2);
-      expect(deque.size).toBe(2);
-      expect(Array.from(deque.values())).toEqual([1, 2]);
-      deque.clear();
-      expect(deque.unshift(1, 2, 3, 4, 5, 6, 7, 8, 9)).toEqual(2);
-      expect(deque.size).toBe(2);
-      expect(Array.from(deque.values())).toEqual([1, 2]);
-    });
+      it("correctly handles adding more elements than capacity", () => {
+        const list = new cls(2);
+        expect(list.unshift(1, 2, 3)).toEqual(2);
+        expect(list.size).toBe(2);
+        expect(Array.from(list.values())).toEqual([1, 2]);
+        list.clear();
+        expect(list.unshift(1, 2, 3, 4, 5, 6, 7, 8, 9)).toEqual(2);
+        expect(list.size).toBe(2);
+        expect(Array.from(list.values())).toEqual([1, 2]);
+      });
 
-    it("handles prepending elements when capacity is 0", () => {
-      const deque = new cls(0);
-      expect(deque.unshift(1)).toBe(0);
-      expect(deque.size).toBe(0);
-      expect(deque.at(0)).toBeUndefined();
-      expect(deque.at(-1)).toBeUndefined();
-      expect(Array.from(deque.values())).toEqual([]);
-      expect(deque.unshift(2)).toBe(0);
-      expect(deque.size).toBe(0);
-      expect(deque.at(0)).toBeUndefined();
-      expect(deque.at(-1)).toBeUndefined();
-      expect(Array.from(deque.values())).toEqual([]);
-    });
+      it("handles prepending elements when capacity is 0", () => {
+        const list = new cls(0);
+        expect(list.unshift(1)).toBe(0);
+        expect(list.size).toBe(0);
+        expect(list.at(0)).toBeUndefined();
+        expect(list.at(-1)).toBeUndefined();
+        expect(Array.from(list.values())).toEqual([]);
+        expect(list.unshift(2)).toBe(0);
+        expect(list.size).toBe(0);
+        expect(list.at(0)).toBeUndefined();
+        expect(list.at(-1)).toBeUndefined();
+        expect(Array.from(list.values())).toEqual([]);
+      });
 
-    it("handles prepending elements when capacity is 1", () => {
-      const deque = new cls(1);
-      expect(deque.unshift(1)).toBe(1);
-      expect(deque.size).toBe(1);
-      expect(deque.at(0)).toBe(1);
-      expect(deque.at(-1)).toBe(1);
-      expect(Array.from(deque.values())).toEqual([1]);
-      expect(deque.unshift(2)).toBe(1);
-      expect(deque.size).toBe(1);
-      expect(deque.at(0)).toBe(2);
-      expect(deque.at(-1)).toBe(2);
-      expect(Array.from(deque.values())).toEqual([2]);
-    });
+      it("handles prepending elements when capacity is 1", () => {
+        const list = new cls(1);
+        expect(list.unshift(1)).toBe(1);
+        expect(list.size).toBe(1);
+        expect(list.at(0)).toBe(1);
+        expect(list.at(-1)).toBe(1);
+        expect(Array.from(list.values())).toEqual([1]);
+        expect(list.unshift(2)).toBe(1);
+        expect(list.size).toBe(1);
+        expect(list.at(0)).toBe(2);
+        expect(list.at(-1)).toBe(2);
+        expect(Array.from(list.values())).toEqual([2]);
+      });
 
-    it("correctly updates the deque when prepending elements after decreasing capacity", () => {
-      const deque = new cls(5);
-      deque.capacity = 3;
-      expect(deque.unshift(1, 2, 3, 4)).toBe(3);
-      expect(deque.size).toBe(3);
-      expect(Array.from(deque.values())).toEqual([1, 2, 3]);
-    });
+      it("correctly updates the list when prepending elements after decreasing capacity", () => {
+        const list = new cls(5);
+        list.capacity = 3;
+        expect(list.unshift(1, 2, 3, 4)).toBe(3);
+        expect(list.size).toBe(3);
+        expect(Array.from(list.values())).toEqual([1, 2, 3]);
+      });
 
-    it("correctly updates the deque when prepending elements after increasing capacity", () => {
-      const deque = new cls(2);
-      deque.capacity = 5;
-      expect(deque.unshift(1, 2, 3, 4)).toBe(4);
-      expect(deque.size).toBe(4);
-      expect(Array.from(deque.values())).toEqual([1, 2, 3, 4]);
-    });
+      it("correctly updates the list when prepending elements after increasing capacity", () => {
+        const list = new cls(2);
+        list.capacity = 5;
+        expect(list.unshift(1, 2, 3, 4)).toBe(4);
+        expect(list.size).toBe(4);
+        expect(Array.from(list.values())).toEqual([1, 2, 3, 4]);
+      });
 
-    it("correctly updates after overflow", () => {
-      const deque = new cls(5);
-      deque.push(1, 2, 3, 4, 5);
-      deque.push(6, 7, 8);
-      expect(deque.unshift(9)).toBe(5);
-      expect(deque.size).toBe(5);
-      expect(Array.from(deque.values())).toEqual([9, 4, 5, 6, 7]);
-    });
+      it("correctly updates after overflow", () => {
+        const list = new cls(5);
+        list.push(1, 2, 3, 4, 5);
+        list.push(6, 7, 8);
+        expect(list.unshift(9)).toBe(5);
+        expect(list.size).toBe(5);
+        expect(Array.from(list.values())).toEqual([9, 4, 5, 6, 7]);
+      });
 
-    it("correctly updates after overflow 2", () => {
-      const deque = new cls(5);
-      deque.push(1, 2, 3, 4, 5);
-      deque.push(6, 7);
-      expect(deque.size).toBe(5);
-      expect(deque.unshift(8, 9)).toBe(5);
-      expect(deque.size).toBe(5);
-      expect(Array.from(deque.values())).toEqual([8, 9, 3, 4, 5]);
-    });
+      it("correctly updates after overflow 2", () => {
+        const list = new cls(5);
+        list.push(1, 2, 3, 4, 5);
+        list.push(6, 7);
+        expect(list.size).toBe(5);
+        expect(list.unshift(8, 9)).toBe(5);
+        expect(list.size).toBe(5);
+        expect(Array.from(list.values())).toEqual([8, 9, 3, 4, 5]);
+      });
 
-    it("correctly updates after overflow 3", () => {
-      const deque = new cls(5);
-      deque.push(1, 2, 3, 4, 5);
-      deque.push(6, 7);
-      expect(deque.size).toBe(5);
-      expect(deque.unshift(8, 9, 10)).toBe(5);
-      expect(deque.size).toBe(5);
-      expect(Array.from(deque.values())).toEqual([8, 9, 10, 3, 4]);
-    });
+      it("correctly updates after overflow 3", () => {
+        const list = new cls(5);
+        list.push(1, 2, 3, 4, 5);
+        list.push(6, 7);
+        expect(list.size).toBe(5);
+        expect(list.unshift(8, 9, 10)).toBe(5);
+        expect(list.size).toBe(5);
+        expect(Array.from(list.values())).toEqual([8, 9, 10, 3, 4]);
+      });
 
-    it("does not discard items when adding within capacity", async () => {
-      const deque = new cls(3);
-      const onItemEvicted = vi.fn();
+      it("does not discard items when adding within capacity", async () => {
+        const list = new cls(3);
+        const onItemEvicted = vi.fn();
 
-      deque.on(BoundedEvent.Overflow, onItemEvicted);
-      deque.unshift(1, 2);
-      deque.unshift(3);
+        list.on(BoundedEvent.Overflow, onItemEvicted);
+        list.unshift(1, 2);
+        list.unshift(3);
 
-      await new Promise<void>(done => {
-        setImmediate(() => {
-          expect(onItemEvicted).not.toHaveBeenCalled();
-          done();
+        await new Promise<void>(done => {
+          setImmediate(() => {
+            expect(onItemEvicted).not.toHaveBeenCalled();
+            done();
+          });
         });
       });
-    });
 
-    it(`emits '${BoundedEvent.Overflow}' event with the discarded item when capacity is exceeded`, async () => {
-      const deque = new cls(3);
-      const onItemEvicted = vi.fn();
+      it(`emits '${BoundedEvent.Overflow}' event with the discarded item when capacity is exceeded`, async () => {
+        const list = new cls(3);
+        const onItemEvicted = vi.fn();
 
-      deque.on(BoundedEvent.Overflow, onItemEvicted);
-      deque.unshift(1, 2, 3); // Fill the deque to its capacity
-      deque.unshift(4); // Should trigger the eviction of 3
-
-      await new Promise<void>((done, reject) => {
-        setImmediate(() => {
-          try {
-            expect(onItemEvicted.mock.calls.length).toBe(1);
-            expect(onItemEvicted).toHaveBeenCalledWith([3]);
-            done();
-          } catch (error) {
-            reject(error);
-          }
+        list.on(BoundedEvent.Overflow, onItemEvicted);
+        list.unshift(1, 2, 3); // Fill the list to its capacity
+        list.unshift(4); // Should trigger the eviction of 3
+        await new Promise<void>((done, reject) => {
+          setImmediate(() => {
+            try {
+              expect(onItemEvicted.mock.calls.length).toBe(1);
+              expect(onItemEvicted).toHaveBeenCalledWith([3]);
+              done();
+            } catch (error) {
+              reject(error);
+            }
+          });
         });
       });
-    });
 
-    it(`emits '${BoundedEvent.Overflow}' event(s) with multiple items when multiple items are discarded`, async () => {
-      const deque = new cls(3);
-      const evicted: number[] = [];
-      const onItemEvicted = vi.fn(items => evicted.push(...items));
+      it(`emits '${BoundedEvent.Overflow}' event(s) with multiple items when multiple items are discarded`, async () => {
+        const list = new cls(3);
+        const evicted: number[] = [];
+        const onItemEvicted = vi.fn(items => evicted.push(...items));
 
-      deque.on(BoundedEvent.Overflow, onItemEvicted);
-      deque.unshift(1, 2, 3); // Fill the deque to its capacity
-      deque.unshift(4, 5, 6); // Prepend 3 items, should trigger eviction of 1, 2, 3
+        list.on(BoundedEvent.Overflow, onItemEvicted);
+        list.unshift(1, 2, 3); // Fill the list to its capacity
+        list.unshift(4, 5, 6); // Prepend 3 items, should trigger eviction of 1, 2, 3
 
-      await new Promise<void>((done, reject) => {
-        setImmediate(() => {
-          try {
-            expect(onItemEvicted.mock.calls.length).toBeGreaterThan(0);
-            expect(evicted).toEqual([1, 2, 3]);
-            done();
-          } catch (error) {
-            reject(error);
-          }
+        await new Promise<void>((done, reject) => {
+          setImmediate(() => {
+            try {
+              expect(onItemEvicted.mock.calls.length).toBeGreaterThan(0);
+              expect(evicted).toEqual([1, 2, 3]);
+              done();
+            } catch (error) {
+              reject(error);
+            }
+          });
         });
       });
-    });
 
-    it(`emits '${BoundedEvent.Overflow}' event(s) with multiple items in expected order when discarded`, async () => {
-      const deque = new cls(3);
-      const evicted: number[] = [];
-      const onItemEvicted = vi.fn(items => evicted.push(...items));
+      it(`emits '${BoundedEvent.Overflow}' event(s) with multiple items in expected order when discarded`, async () => {
+        const list = new cls(3);
+        const evicted: number[] = [];
+        const onItemEvicted = vi.fn(items => evicted.push(...items));
 
-      deque.on(BoundedEvent.Overflow, onItemEvicted);
-      deque.unshift(1, 2, 3); // Fill the deque to its capacity
-      deque.unshift(4, 5, 6); // Prepend 3 items, should trigger eviction of 1, 2, 3
+        list.on(BoundedEvent.Overflow, onItemEvicted);
+        list.unshift(1, 2, 3); // Fill the list to its capacity
+        list.unshift(4, 5, 6); // Prepend 3 items, should trigger eviction of 1, 2, 3
 
-      await new Promise<void>((done, reject) => {
-        setImmediate(() => {
-          try {
-            expect(onItemEvicted.mock.calls.length).toBeGreaterThan(0);
-            expect(evicted).toEqual([1, 2, 3]);
-            done();
-          } catch (error) {
-            reject(error);
-          }
+        await new Promise<void>((done, reject) => {
+          setImmediate(() => {
+            try {
+              expect(onItemEvicted.mock.calls.length).toBeGreaterThan(0);
+              expect(evicted).toEqual([1, 2, 3]);
+              done();
+            } catch (error) {
+              reject(error);
+            }
+          });
         });
       });
     });

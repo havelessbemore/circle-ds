@@ -7,10 +7,10 @@ export class CircularBase<T> {
    * The event emitter.
    * @internal
    */
-  protected emitter: EventEmitter;
+  protected _emitter: EventEmitter;
 
   constructor(emitter = new EventEmitter()) {
-    this.emitter = emitter;
+    this._emitter = emitter;
   }
 
   /**
@@ -42,7 +42,7 @@ export class CircularBase<T> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     listener: (...args: any[]) => void
   ): this {
-    this.emitter.addListener(event, listener);
+    this._emitter.addListener(event, listener);
     return this;
   }
 
@@ -72,7 +72,7 @@ export class CircularBase<T> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     listener: (...args: any[]) => void
   ): this {
-    this.emitter.on(event, listener);
+    this._emitter.on(event, listener);
     return this;
   }
 
@@ -104,7 +104,7 @@ export class CircularBase<T> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     listener: (...args: any[]) => void
   ): this {
-    this.emitter.prependListener(event, listener);
+    this._emitter.prependListener(event, listener);
     return this;
   }
 
@@ -129,7 +129,7 @@ export class CircularBase<T> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     listener: (...args: any[]) => void
   ): this {
-    this.emitter.removeListener(event, listener);
+    this._emitter.removeListener(event, listener);
     return this;
   }
 }

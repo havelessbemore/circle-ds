@@ -79,7 +79,7 @@ export function log(value: number, base: number): number {
  * probabilistically constrained sequence length, such as simulating streaks or
  * runs in games of chance.
  *
- * @param p - The probability threshold. Defaults to 0.5.
+ * @param probability - The probability threshold. Defaults to 0.5.
  * @param max - The maximum value the of the run. Defaults to Infinity.
  * @param min - The starting value of the run. Defaults to 0.
  * @param randomFn - A function that generates a random number. Defaults to `Math.random`.
@@ -87,12 +87,12 @@ export function log(value: number, base: number): number {
  * @returns The length of the run.
  */
 export function randomRun(
-  p = 0.5,
-  max = Infinity,
+  probability = 0.5,
   min = 0,
+  max = Infinity,
   randomFn = Math.random
 ): number {
-  while (min < max && randomFn() < p) {
+  while (min < max && randomFn() < probability) {
     ++min;
   }
   return min;

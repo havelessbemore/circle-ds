@@ -122,3 +122,15 @@ export interface Bounded<T> {
     listener: (...args: any[]) => void
   ): this;
 }
+
+/**
+ * Configuration options for creating a bounded collection.
+ */
+export interface BoundedConfig {
+  /**
+   * The maximum number of elements that can be stored in the collection.
+   *
+   * Optional. Defaults to positive Infinity.
+   */
+  capacity?: number;
+}
