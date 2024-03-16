@@ -1,4 +1,4 @@
-import { SkipLink, SkipNode } from "../types/skipList";
+import { SkipLink, SkipListCore, SkipNode } from "../types/skipList";
 import { log } from "./math";
 
 /**
@@ -59,14 +59,14 @@ export function copy<T>(
   root: SkipNode<T>,
   start: number,
   count: number
-): [SkipNode<T>, SkipNode<T>[], number] {
+): SkipListCore<T> {
   // Create new root
   let levels = root.levels.length;
   const segRoot = gen(undefined as T, levels);
 
   // Check count
   if (count <= 0) {
-    return [segRoot, [segRoot], 0];
+    return { root: segRoot, size: 0, tails: [segRoot] };
   }
 
   // Initialize new list
@@ -114,7 +114,7 @@ export function copy<T>(
   }
 
   // Return the copy
-  return [segRoot, tails, size];
+  return { root: segRoot, size, tails };
 }
 
 /**
@@ -311,10 +311,7 @@ export function* levels<T>(node?: SkipNode<T>): Generator<number> {
  * - If the lengths of the input arrays do not match, the function operates on the smallest length.
  * - A dummy root node is created and updated to have up to the maximum level in the `levels` array.
  */
-export function toList<T>(
-  levels: number[],
-  values: T[]
-): [SkipNode<T>, SkipNode<T>[], number] {
+export function toList<T>(levels: number[], values: T[]): SkipListCore<T> {
   // Get # of values (X) and max level (Y)
   let Y = -Infinity;
   const X = Math.min(levels.length, values.length);
@@ -327,7 +324,7 @@ export function toList<T>(
   // Check inputs
   if (Y <= 0 || X <= 0) {
     const root = gen(undefined as T);
-    return [root, [root], 0];
+    return { root, size: 0, tails: [root] };
   }
 
   // Create root node and tails array
@@ -350,7 +347,7 @@ export function toList<T>(
   }
 
   // Return root, tails and list length
-  return [root, tails, X];
+  return { root, size: X, tails };
 }
 
 /**

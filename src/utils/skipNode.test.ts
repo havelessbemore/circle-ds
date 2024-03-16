@@ -23,7 +23,7 @@ function testList<T>(values: T[]): SkipNode<T>[] {
     return [];
   }
   const levels = new Array(N).fill(1);
-  const [root] = toList(levels, values);
+  const { root } = toList(levels, values);
   return Array.from(getNodes(root.levels[0].next));
 }
 
@@ -78,41 +78,41 @@ describe(`${calcMaxLevel.name}()`, () => {
 
 describe(`${copy.name}()`, () => {
   test("returns a segment with only a root node when count is 0 or negative", () => {
-    const [root] = toList([1, 1, 1], ["A", "B", "C"]);
-    const [newRoot, tails, size] = copy(root, 1, 0);
+    const { root } = toList([1, 1, 1], ["A", "B", "C"]);
+    const core = copy(root, 1, 0);
 
-    expect(size).toBe(0);
-    expect(tails[0]).toBe(newRoot);
-    expect(newRoot.levels.length).toBe(1);
-    expect(tails[0].levels[0].next).toBeUndefined();
+    expect(core.size).toBe(0);
+    expect(core.root.levels.length).toBe(1);
+    expect(core.tails[0]).toBe(core.root);
+    expect(core.tails[0].levels[0].next).toBeUndefined();
   });
 
   test("copies the specified number of nodes from the list starting at the given position", () => {
-    const [root] = toList([2, 2, 2, 2], ["A", "B", "C", "D"]);
-    const [newRoot, tails, size] = copy(root, 1, 2); // Copy from node 'B' to 'C'
+    const { root } = toList([2, 2, 2, 2], ["A", "B", "C", "D"]);
+    const core = copy(root, 1, 2); // Copy from node 'B' to 'C'
 
-    expect(size).toBe(2);
-    expect(tails.length).toBe(2);
-    expect(newRoot.levels[0].next?.value).toBe("B");
-    expect(tails[0].value).toBe("C");
-    expect(tails[0].levels[0].next).toBeUndefined();
+    expect(core.size).toBe(2);
+    expect(core.tails.length).toBe(2);
+    expect(core.root.levels[0].next?.value).toBe("B");
+    expect(core.tails[0].value).toBe("C");
+    expect(core.tails[0].levels[0].next).toBeUndefined();
   });
 
   test("handles copying more nodes than available from the start position", () => {
-    const [root] = toList([1, 1, 1], ["A", "B", "C"]);
-    const [, tails, size] = copy(root, 1, 5);
+    const { root } = toList([1, 1, 1], ["A", "B", "C"]);
+    const core = copy(root, 1, 5);
 
-    expect(size).toBe(2);
-    expect(tails[0].value).toBe("C");
-    expect(tails[0].levels[0].next).toBeUndefined();
+    expect(core.size).toBe(2);
+    expect(core.tails[0].value).toBe("C");
+    expect(core.tails[0].levels[0].next).toBeUndefined();
   });
 
   test("correctly updates span values in the copied segment", () => {
-    const [root] = toList([1, 2, 1, 1], ["A", "B", "C", "D"]);
-    const [newRoot, ,] = copy(root, 0, 3);
+    const { root } = toList([1, 2, 1, 1], ["A", "B", "C", "D"]);
+    const core = copy(root, 0, 3);
 
     // Check span values to ensure they are correctly calculated
-    let nextNode = newRoot.levels[0]?.next;
+    let nextNode = core.root.levels[0]?.next;
     expect(nextNode?.levels[0].span).toBe(1);
     nextNode = nextNode?.levels[0]?.next;
     expect(nextNode?.levels[0].span).toBe(1);
@@ -137,7 +137,7 @@ describe(`${entries.name}()`, () => {
   });
 
   test("yields correctly for each node in the list", () => {
-    const [root] = toList([1, 3, 2], ["a", "b", "c"]);
+    const { root } = toList([1, 3, 2], ["a", "b", "c"]);
     expect(Array.from(entries(root))).toEqual([
       [0, undefined],
       [1, "a"],
@@ -327,7 +327,7 @@ describe(`${getClosest.name}()`, () => {
   });
 
   test("returns the last node and remaining distance if distance exceeds total span", () => {
-    const [root] = toList([5, 3, 1, 4, 2], ["a", "b", "c", "d", "e"]);
+    const { root } = toList([5, 3, 1, 4, 2], ["a", "b", "c", "d", "e"]);
     const nodes = Array.from(getNodes(root));
     const [resultNode, remainingDistance] = getClosest(nodes[1], 100);
     expect(resultNode).toBe(nodes[5]);
@@ -352,7 +352,7 @@ describe(`${getNodes.name}()`, () => {
   });
 
   test("yields no nodes if the start node does not reach the specified level", () => {
-    const [root] = toList([1, 3, 5, 4, 2], ["A", "B", "C", "D", "E"]);
+    const { root } = toList([1, 3, 5, 4, 2], ["A", "B", "C", "D", "E"]);
     const head = root.levels[0].next!;
     expect(Array.from(getNodes(head, 1))).toEqual([]);
     expect(Array.from(getNodes(head, 2))).toEqual([]);
@@ -369,7 +369,7 @@ describe(`${getNodes.name}()`, () => {
   });
 
   test("yields nodes at a specified higher level", () => {
-    const [root] = toList([1, 3, 5, 4, 2], ["A", "B", "C", "D", "E"]);
+    const { root } = toList([1, 3, 5, 4, 2], ["A", "B", "C", "D", "E"]);
     let result = Array.from(getNodes(root, 4));
     expect(result).toEqual([root, get(root, 3)!]);
     result = Array.from(getNodes(root, 2));
@@ -383,27 +383,27 @@ describe(`${has.name}()`, () => {
   });
 
   test("returns true when value is present in the list", () => {
-    const [root] = toList([1, 1, 1], ["a", "b", "c"]);
+    const { root } = toList([1, 1, 1], ["a", "b", "c"]);
     expect(has(root, "b")).toBe(true);
   });
 
   test("returns false when value is not present in the list", () => {
-    const [root] = toList([1, 1, 1], ["x", "y", "z"]);
+    const { root } = toList([1, 1, 1], ["x", "y", "z"]);
     expect(has(root, "a")).toBe(false);
   });
 
   test("returns true when value is at the beginning of the list", () => {
-    const [root] = toList([1, 1, 1], [1, 2, 3]);
+    const { root } = toList([1, 1, 1], [1, 2, 3]);
     expect(has(root, 1)).toBe(true);
   });
 
   test("returns true when value is at the end of the list", () => {
-    const [root] = toList([1, 1, 1], [1, 2, 3]);
+    const { root } = toList([1, 1, 1], [1, 2, 3]);
     expect(has(root, 3)).toBe(true);
   });
 
   test("returns true for multiple occurrences of the value, finds first occurrence", () => {
-    const [root] = toList([1, 1, 1], ["repeat", "repeat", "unique"]);
+    const { root } = toList([1, 1, 1], ["repeat", "repeat", "unique"]);
     expect(has(root, "repeat")).toBe(true);
   });
 });
@@ -423,7 +423,7 @@ describe(`${keys.name}()`, () => {
   });
 
   test("yields correctly for each node in the list", () => {
-    const [root] = toList([1, 3, 2], ["a", "b", "c"]);
+    const { root } = toList([1, 3, 2], ["a", "b", "c"]);
     expect(Array.from(keys(root))).toEqual([0, 1, 2, 3]);
   });
 });
@@ -443,14 +443,14 @@ describe(`${levels.name}()`, () => {
   });
 
   test("yields correct heights for each node in the list", () => {
-    const [root] = toList([1, 3, 2], ["a", "b", "c"]);
+    const { root } = toList([1, 3, 2], ["a", "b", "c"]);
     expect(Array.from(levels(root))).toEqual([3, 1, 3, 2]);
   });
 });
 
 describe(`${toList.name}()`, () => {
   test("creates an empty list with a dummy root node when no values are provided", () => {
-    const [root, tails, size] = toList([], []);
+    const { root, tails, size } = toList([], []);
 
     expect(root.value).toBeUndefined();
     expect(tails.length).toBe(1);
@@ -463,7 +463,7 @@ describe(`${toList.name}()`, () => {
     const values = ["A", "B"];
     const maxLevel = Math.max(...levels);
 
-    const [root, tails, size] = toList(levels, values);
+    const { root, tails, size } = toList(levels, values);
     const nodes = Array.from(getNodes(root));
 
     expect(size).toBe(2);
@@ -476,7 +476,7 @@ describe(`${toList.name}()`, () => {
   });
 
   test("handles lists with levels array and empty values array", () => {
-    const [root, tails, size] = toList([1, 2, 3], []);
+    const { root, tails, size } = toList([1, 2, 3], []);
 
     expect(root.value).toBeUndefined();
     expect(tails.length).toBe(1);
@@ -490,7 +490,7 @@ describe(`${toList.name}()`, () => {
     const minLen = Math.min(levels.length, values.length);
     const maxLevel = Math.max(...levels.slice(0, minLen));
 
-    const [root, tails, size] = toList(levels, values);
+    const { root, tails, size } = toList(levels, values);
     const nodes = Array.from(getNodes(root));
 
     expect(size).toBe(minLen);
@@ -502,7 +502,7 @@ describe(`${toList.name}()`, () => {
   });
 
   test("handles lists with empty levels array and values array", () => {
-    const [root, tails, size] = toList([], ["A", "B", "C"]);
+    const { root, tails, size } = toList([], ["A", "B", "C"]);
 
     expect(root.value).toBeUndefined();
     expect(tails.length).toBe(1);
@@ -516,7 +516,7 @@ describe(`${toList.name}()`, () => {
     const minLen = Math.min(levels.length, values.length);
     const maxLevel = Math.max(...levels.slice(0, minLen));
 
-    const [root, tails, size] = toList(levels, values);
+    const { root, tails, size } = toList(levels, values);
     const nodes = Array.from(getNodes(root));
 
     expect(size).toBe(minLen);
@@ -533,7 +533,7 @@ describe(`${toList.name}()`, () => {
     const minLen = Math.min(levels.length, values.length);
     const maxLevel = Math.max(...levels.slice(0, minLen));
 
-    const [root, tails, size] = toList(levels, values);
+    const { root, tails, size } = toList(levels, values);
     const nodes = Array.from(getNodes(root));
 
     expect(size).toBe(minLen);
@@ -562,25 +562,25 @@ describe(`${truncateLevels.name}()`, () => {
   });
 
   test("does nothing if target level is equal to root levels length", () => {
-    const [root] = toList([1, 3, 2], ["a", "b", "c"]);
+    const { root } = toList([1, 3, 2], ["a", "b", "c"]);
     expect(() => truncateLevels(root, 3)).not.toThrow();
     expect(Array.from(levels(root))).toEqual([3, 1, 3, 2]);
   });
 
   test("does nothing if target level is greater than root levels length", () => {
-    const [root] = toList([1, 3, 2], ["a", "b", "c"]);
+    const { root } = toList([1, 3, 2], ["a", "b", "c"]);
     expect(() => truncateLevels(root, 5)).not.toThrow();
     expect(Array.from(levels(root))).toEqual([3, 1, 3, 2]);
   });
 
   test("reduces the levels of nodes higher than the specified level", () => {
-    const [root] = toList([3, 6, 9], ["a", "b", "c"]);
+    const { root } = toList([3, 6, 9], ["a", "b", "c"]);
     expect(() => truncateLevels(root, 2)).not.toThrow();
     expect(Array.from(levels(root))).toEqual([2, 2, 2, 2]);
   });
 
   test("truncates levels correctly for all nodes until the end of the list", () => {
-    const [root] = toList(
+    const { root } = toList(
       [5, 1, 7, 2, 1, 6, 1],
       ["a", "b", "c", "d", "e", "f", "g"]
     );
@@ -604,7 +604,7 @@ describe(`${values.name}()`, () => {
   });
 
   test("yields correctly for each node in the list", () => {
-    const [root] = toList([1, 3, 2], ["a", "b", "c"]);
+    const { root } = toList([1, 3, 2], ["a", "b", "c"]);
     expect(Array.from(values(root))).toEqual([undefined, "a", "b", "c"]);
   });
 });

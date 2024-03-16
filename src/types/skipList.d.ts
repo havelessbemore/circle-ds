@@ -37,6 +37,15 @@ export interface SkipList<T> extends List<T> {
  */
 export interface SkipListConfig {
   /**
+   * The size used to calculate the optimal max level. Ignored
+   * if `maxLevel` is specified.
+   *
+   * Optional. Default value depends on the implementation.
+   * For example, the implementation's maximum supported size.
+   */
+  expectedSize?: number;
+
+  /**
    * The maximum number of levels in the skip list.
    *
    * Optional. A default value is calculated based
@@ -53,15 +62,6 @@ export interface SkipListConfig {
    * For example, 0.5.
    */
   p?: number;
-
-  /**
-   * The size used to calculate the optimal max level. Ignored
-   * if `maxLevel` is specified.
-   *
-   * Optional. Default value depends on the implementation.
-   * For example, the implementation's maximum supported size.
-   */
-  expectedSize?: number;
 }
 
 /**
@@ -77,24 +77,31 @@ export interface SkipListCore<T> {
    */
   root: SkipNode<T>;
   /**
+   * The total number of nodes within the skip list, excluding the root node.
+   */
+  size: number;
+  /**
    * An array of tail nodes, one for each level of the skip list. Each tail
    * node represents the last node at the given level.
    */
   tails: SkipNode<T>[];
-  /**
-   * The total number of nodes within the skip list, excluding the root node.
-   */
-  size: number;
 }
 
 /**
- * Represents an entry in a skip list.
+ * Defines an entry within a skip list.
  *
- * An entry consists of a node and its
- * absolute position (index) within the list.
+ * This is useful for operations that require knowing a node's position
+ * within the list, such as traversal, search, insertion, or deletion.
  */
 export interface SkipEntry<T> {
+  /**
+   * Represents the zero-based position of the node within the skip list.
+   */
   index: number;
+
+  /**
+   * A reference to the {@link SkipNode} associated with this entry.
+   */
   node: SkipNode<T>;
 }
 

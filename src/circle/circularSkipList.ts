@@ -1,7 +1,12 @@
 import { BoundedEvent } from "../types/boundedEvent";
 import { Bounded, BoundedConfig } from "../types/bounded";
 import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../utils/constants";
-import { SkipList, SkipListConfig, SkipNode } from "../types/skipList";
+import {
+  SkipList,
+  SkipListConfig,
+  SkipListCore,
+  SkipNode,
+} from "../types/skipList";
 
 import {
   isArrayLength,
@@ -69,9 +74,9 @@ export class CircularSkipList<T>
 
   /**
    * @internal
-   * The last node in the linked list.
+   * The last nodes in the skip list at each level.
    */
-  protected _tail: SkipNode<T>;
+  protected _tails: SkipNode<T>[];
 
   constructor();
   constructor(capacity?: number | null);
@@ -87,7 +92,7 @@ export class CircularSkipList<T>
     this._maxLevel = NodeUtils.calcMaxLevel(this._p, LINKED_MAX_LENGTH);
     this._root = NodeUtils.gen(undefined as T);
     this._size = 0;
-    this._tail = this._root;
+    this._tails = [this._root];
 
     // Case 1: input is null or undefined
     if (config == null) {
@@ -167,7 +172,7 @@ export class CircularSkipList<T>
     }
 
     // Shrink list and emit discarded items
-    const [root] = this._delete(0, this._size - capacity);
+    const { root } = this._cut(0, this._size - capacity);
     this._overflow(NodeUtils.values(root.levels[0].next));
   }
 
@@ -215,7 +220,7 @@ export class CircularSkipList<T>
 
   clear(): void {
     this._size = 0;
-    this._tail = this._root;
+    this._tails = [this._root];
     this._root.levels.length = 1;
     this._root.levels[0] = { next: undefined, span: 1 };
   }
@@ -228,7 +233,7 @@ export class CircularSkipList<T>
     }
 
     // Delete value
-    this._delete(index, 1);
+    this._cut(index, 1);
 
     // Return success
     return true;
@@ -285,7 +290,7 @@ export class CircularSkipList<T>
     }
 
     // Remove last value
-    const [root] = this._delete(this._size - 1, 1);
+    const { root } = this._cut(this._size - 1, 1);
 
     // Return value
     return root.levels[0].next!.value;
@@ -333,7 +338,7 @@ export class CircularSkipList<T>
     }
 
     // Remove first value
-    const [root] = this._delete(0, 1);
+    const { root } = this._cut(0, 1);
 
     // Return value
     return root.levels[0].next!.value;
@@ -347,19 +352,15 @@ export class CircularSkipList<T>
     end = clamp(addIfBelow(toInteger(end, size), size), start, size);
 
     // Return copied segment as a list
-    const [root, tails, length] = NodeUtils.copy(
-      this._root,
-      start,
-      end - start
-    );
+    const core = NodeUtils.copy(this._root, start, end - start);
     const list = new CircularSkipList<T>({
-      capacity: length,
+      capacity: core.size,
       p: this._p,
       maxLevel: this._maxLevel,
     });
-    list._root = root;
-    list._tail = tails[0];
-    list._size = length;
+    list._root = core.root;
+    list._tails = core.tails;
+    list._size = core.size;
 
     return list;
   }
@@ -376,7 +377,7 @@ export class CircularSkipList<T>
     deleteCount = clamp(toInteger(deleteCount, 0), 0, size - start);
 
     // Remove deleted items
-    const [root, tails] = this._delete(start, deleteCount);
+    const core = this._cut(start, deleteCount);
 
     // Add new items
     this._insert(start, items);
@@ -387,9 +388,9 @@ export class CircularSkipList<T>
       p: this._p,
       maxLevel: this._maxLevel,
     });
-    list._root = root;
-    list._tail = tails[0];
-    list._size = deleteCount;
+    list._root = core.root;
+    list._tails = core.tails;
+    list._size = core.size;
 
     return list;
   }
@@ -424,90 +425,19 @@ export class CircularSkipList<T>
   /**
    * @internal
    */
-  protected _delete(
-    start: number,
-    count: number
-  ): [SkipNode<T>, SkipNode<T>[], number] {
-    // Initialize output list
-    const segRoot = NodeUtils.gen(undefined as T);
-    const segTails: SkipNode<T>[] = [segRoot];
+  protected _cut(start: number, count: number): SkipListCore<T> {
+    // Create list core
+    const core = { root: this._root, size: this._size, tails: this._tails };
 
-    // Check count
-    if (count <= 0) {
-      return [segRoot, segTails, 0];
-    }
+    // Cut and get removed segment
+    const seg = StackUtils.cut(core, start, count);
 
-    // Initialize constants
-    const root = this._root;
-    const prevStack = StackUtils.getClosest(StackUtils.gen(root, -1), start);
-    const tailStack = StackUtils.getClosest(StackUtils.clone(prevStack), count);
-    const levels = this.levels;
-    const end = start + count;
+    // Update list state
+    this._size = core.size;
+    this._tails = core.tails;
 
-    // Detach deleted segment
-    let lvl: number;
-    for (lvl = 0; lvl < levels; ++lvl) {
-      const prev = prevStack[lvl];
-      const tail = tailStack[lvl];
-
-      // Check if segment exists at this level
-      if (prev.index >= tail.index) {
-        break;
-      }
-
-      // Connect segment start to new root
-      let edge = prev.node.levels[lvl];
-      let span = prev.index + edge.span - start;
-      segRoot.levels[lvl] = { next: edge.next, span };
-
-      // Remove segment from list
-      edge = tail.node.levels[lvl];
-      span = tail.index - prev.index + (edge.span - count);
-      prev.node.levels[lvl] = { next: edge.next, span };
-
-      // Detach segment end
-      tail.node.levels[lvl] = { next: undefined, span: end - tail.index };
-      segTails[lvl] = tail.node;
-    }
-
-    // Remove segment from remaining levels
-    while (lvl < levels) {
-      const prev = prevStack[lvl];
-      const tail = tailStack[lvl];
-      const { next, span } = tail.node.levels[lvl];
-
-      // If level is empty, truncate list height
-      if (prev.index < 0 && next === undefined) {
-        root.levels.length = lvl;
-        break;
-      }
-
-      const diff = tail.index - prev.index - count;
-      prev.node.levels[lvl] = { next: next, span: span + diff };
-      ++lvl;
-    }
-
-    // Update tail
-    if (end >= this._size) {
-      this._tail = prevStack[0].node;
-    }
-
-    // Update state
-    this._size -= count;
-
-    // Return removed list
-    return [segRoot, segTails, count];
-  }
-
-  /**
-   * @internal
-   */
-  protected _genLevels(N: number): number[] {
-    const levels = new Array<number>(N);
-    for (let i = 0; i < N; ++i) {
-      levels[i] = randomRun(this._p, 1, this._maxLevel);
-    }
-    return levels;
+    // Return cut segment
+    return seg;
   }
 
   /**
@@ -532,7 +462,7 @@ export class CircularSkipList<T>
     // Remove from head
     if (index > 0) {
       const shifted = Math.min(index, N - free);
-      const [root] = this._delete(0, shifted);
+      const { root } = this._cut(0, shifted);
       this._overflow(NodeUtils.values(root.levels[0].next));
       index -= shifted;
       free += shifted;
@@ -589,7 +519,7 @@ export class CircularSkipList<T>
     // Remove from tail
     if (index < this._size) {
       const popped = Math.min(this._size - index, N - free);
-      const [root] = this._delete(this._size - popped, popped);
+      const { root } = this._cut(this._size - popped, popped);
       this._overflow(NodeUtils.values(root.levels[0].next));
       free += popped;
     }
@@ -609,55 +539,22 @@ export class CircularSkipList<T>
    * @internal
    */
   protected _safeInsert(index: number, values: T[]): void {
-    // Check values
-    if (values.length <= 0) {
-      return;
-    }
-
-    // Create inserting segment
+    // Create levels
     const N = values.length;
-    const [root, tails] = NodeUtils.toList(this._genLevels(N), values);
-
-    // Increase list level if needed
-    const minY = tails.length;
-    for (let y = this.levels; y < minY; ++y) {
-      this._root.levels[y] = { next: undefined, span: this._size + 1 };
+    const levels = new Array<number>(N);
+    for (let i = 0; i < N; ++i) {
+      levels[i] = randomRun(this._p, 1, this._maxLevel);
     }
 
-    // Attach segment at given index
-    const prevs = StackUtils.getClosest(StackUtils.gen(this._root, -1), index);
-    for (let y = 0; y < minY; ++y) {
-      const prev = prevs[y].node;
-      const prevI = prevs[y].index;
+    // Create segment
+    const seg = NodeUtils.toList(levels, values);
 
-      const prevEdge = prev.levels[y];
-      const tail = tails[y];
-      const tailEdge = tail.levels[y];
-      const nextI = prevI + prevEdge.span;
-      const nextD = nextI - index;
-      const tailD = tailEdge.span;
-      tail.levels[y] = { next: prevEdge.next, span: nextD + tailD };
+    // Insert segment
+    const core = { root: this._root, size: this._size, tails: this._tails };
+    StackUtils.insert(core, index, seg);
 
-      const rootEdge = root.levels[y];
-      const headD = rootEdge.span - 1;
-      const prevD = index - prevI;
-      prev.levels[y] = { next: rootEdge.next, span: prevD + headD };
-    }
-
-    // Update higher levels
-    const maxY = this.levels;
-    for (let y = minY; y < maxY; ++y) {
-      const levels = prevs[y].node.levels;
-      const { next, span } = levels[y];
-      levels[y] = { next, span: span + N };
-    }
-
-    // Update tail
-    if (index === this._size) {
-      this._tail = tails[0];
-    }
-
-    // Update size
-    this._size += N;
+    // Update list state
+    this._size = core.size;
+    this._tails = core.tails;
   }
 }

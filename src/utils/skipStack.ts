@@ -1,4 +1,6 @@
-import { SkipNode, SkipStack } from "../types/skipList";
+import { SkipListCore, SkipNode, SkipStack } from "../types/skipList";
+
+import { gen as genNode } from "./skipNode";
 
 /**
  * Creates a copy of the provided skip stack.
@@ -14,6 +16,108 @@ export function clone<T>(stack: SkipStack<T>): SkipStack<T> {
     dupe[i] = { index, node };
   }
   return dupe;
+}
+
+/**
+ * Cuts a segment from a given skip list.
+ *
+ * The cut starts at the specified position and spans the given distance. The
+ * cut segment is returned as a new skip list.
+ *
+ * @param core - The {@link SkipListCore} representing the skip list from which to cut the segment.
+ *               This skip list will be modified to reflect the removal.
+ * @param start - The zero-based index indicating the start position of the cut, inclusive.
+ * @param distance - The number of elements to be included in the cut segment.
+ *
+ * @returns A new {@link SkipListCore} representing the skip list segment that has been cut.
+ *
+ * @remarks
+ * - The height (levels) of the original list may be reduced if segment removal results in empty levels.
+ * - The cut segment's height (levels) may be less than the original list. It will only contain
+ *   levels that include nodes within the segment.
+ */
+export function cut<T>(
+  core: SkipListCore<T>,
+  start: number,
+  distance: number
+): SkipListCore<T> {
+  // Initialize output list
+  const segRoot = genNode(undefined as T);
+  const seg: SkipListCore<T> = { root: segRoot, size: 0, tails: [segRoot] };
+
+  // Check inputs
+  if (distance <= 0) {
+    return seg;
+  }
+
+  // Initialize constants
+  const prevStack = getClosest(gen(core.root, -1), start);
+  const tailStack = getClosest(clone(prevStack), distance);
+  const end = tailStack[0].index + tailStack[0].node.levels[0].span;
+
+  // Update inputs
+  let levels = core.root.levels.length;
+  start = prevStack[0].index + prevStack[0].node.levels[0].span;
+  distance = end - start;
+
+  // Detach segment from participating levels
+  let lvl: number;
+  for (lvl = 0; lvl < levels; ++lvl) {
+    const prev = prevStack[lvl];
+    const tail = tailStack[lvl];
+
+    // Check if segment exists at this level
+    if (prev.index >= tail.index) {
+      break;
+    }
+
+    // Connect segment start to new root
+    let edge = prev.node.levels[lvl];
+    let span = prev.index + edge.span - start;
+    segRoot.levels[lvl] = { next: edge.next, span };
+
+    // Remove segment from list
+    edge = tail.node.levels[lvl];
+    span = tail.index - prev.index + (edge.span - distance);
+    prev.node.levels[lvl] = { next: edge.next, span };
+
+    // Detach segment end
+    tail.node.levels[lvl] = { next: undefined, span: end - tail.index };
+    seg.tails[lvl] = tail.node;
+  }
+
+  if (lvl < levels) {
+    // Remove segment from higher levels
+    while (lvl < levels) {
+      const prev = prevStack[lvl];
+      const { next, span } = prev.node.levels[lvl];
+      prev.node.levels[lvl] = { next: next, span: span - distance };
+      ++lvl;
+    }
+  } else {
+    // Remove empty levels from the source list
+    const links = core.root.levels;
+    while (lvl > 1 && links[lvl - 1].next == null) {
+      --lvl;
+    }
+    levels = lvl;
+    links.length = levels;
+    core.tails.length = levels;
+  }
+
+  // Update tails from source list
+  if (end >= core.size) {
+    for (lvl = 0; lvl < levels; ++lvl) {
+      core.tails[lvl] = prevStack[lvl].node;
+    }
+  }
+
+  // Update source list's size
+  core.size -= distance;
+
+  // Return removed segment
+  seg.size = distance;
+  return seg;
 }
 
 /**
@@ -89,4 +193,72 @@ export function getClosest<T>(
   }
 
   return stack;
+}
+
+/**
+ * Inserts a skip list segment (`src`) into another skip list (`dest`) at a specified index.
+ *
+ * @param dest - The {@link SkipListCore} representing the destination skip list into which the segment is to be
+ *               inserted. This skip list will be modified to include the nodes from the source segment.
+ * @param index - The zero-based position within the destination list at which the source segment is to be inserted.
+ * @param src - The {@link SkipListCore} representing the source skip list segment to be inserted into the destination
+ *              list. This skip list's tail nodes will be modified to contain links within the destination list.
+ *
+ * @remarks
+ * - The function may increase the height (number of levels) of the destination list if the source segment has
+ *   more levels than the destination. This ensures that the merged list can accommodate the full structure of
+ *   the segment being inserted.
+ */
+export function insert<T>(
+  dest: SkipListCore<T>,
+  index: number,
+  src: SkipListCore<T>
+): void {
+  // Check source values
+  if (src.size <= 0) {
+    return;
+  }
+
+  // Increase destination's height if necessary
+  const minY = src.tails.length;
+  for (let y = dest.tails.length; y < minY; ++y) {
+    dest.root.levels[y] = { next: undefined, span: dest.size + 1 };
+    dest.tails[y] = dest.root;
+  }
+
+  // Attach segment at given index
+  const prevs = getClosest(gen(dest.root, -1), index);
+  for (let y = 0; y < minY; ++y) {
+    const prev = prevs[y].node;
+    const prevI = prevs[y].index;
+
+    const prevEdge = prev.levels[y];
+    const tail = src.tails[y];
+    const tailEdge = tail.levels[y];
+    const nextI = prevI + prevEdge.span;
+    const nextD = nextI - index;
+    const tailD = tailEdge.span;
+    tail.levels[y] = { next: prevEdge.next, span: nextD + tailD };
+
+    const rootEdge = src.root.levels[y];
+    const headD = rootEdge.span - 1;
+    const prevD = index - prevI;
+    prev.levels[y] = { next: rootEdge.next, span: prevD + headD };
+  }
+
+  // Update higher levels
+  const maxY = dest.tails.length;
+  for (let y = minY; y < maxY; ++y) {
+    const levels = prevs[y].node.levels;
+    const { next, span } = levels[y];
+    levels[y] = { next, span: span + src.size };
+  }
+
+  // Update tail
+  if (index === dest.size) {
+    dest.tails = src.tails;
+  }
+
+  // Update size
+  dest.size += src.size;
 }
