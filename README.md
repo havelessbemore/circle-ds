@@ -54,7 +54,7 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 - `values(): IterableIterator<V>`: Returns an iterator for the values in the collection.
 
-- `[Symbol.iterator](): IterableIterator`: Returns an iterator for the values or key-value pairs in the collection.
+- `[Symbol.iterator](): IterableIterator`: Returns an iterator of the values in the collection. If the collection is a map, returns an iterator of [key, value] pairs in the collection.
 
 ### [Deque](./docs/interfaces/Deque.md)
 
@@ -90,8 +90,6 @@ The following is common across all collections. See the [Collection](./docs/inte
 - `top(): T | undefined`: Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
 
 - `unshift(...items: T[]): number`: Prepends items to the collection and returns the new size. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
-
-- `[Symbol.iterator](): IterableIterator<T>`: Returns an iterator for the values in the collection.
 
 ### [List](./docs/interfaces/List.md)
 
@@ -132,8 +130,6 @@ A `List` is a sequence of elements allowing for indexed access, modification, an
 
 - `splice(start: number, deleteCount?: number, ...items: V[]): CircularLinkedList<V>`: Changes the contents of the list by removing existing elements and/or adding new elements at a given index.
 
-- `[Symbol.iterator](): IterableIterator<T>`: Returns an iterator for the values in the collection.
-
 - `unshift(...items: T[]): number`: Prepends items to the collection and returns the new size. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
 ### Map
@@ -155,8 +151,6 @@ A `List` is a sequence of elements allowing for indexed access, modification, an
 - `has(key: K): boolean`: Checks if the collection contains a specific value.
 
 - `set(key: K, value: V): this`: Sets the key to the given value in the collection. If at capacity, the oldest key-value pair is overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event. If an existing key is added again, then it will be treated as new.
-
-- `[Symbol.iterator](): IterableIterator<[K, V]>`: Returns an iterator for the entries in the collection.
 
 ### [Queue](./docs/interfaces/Queue.md)
 
@@ -185,8 +179,6 @@ A `Queue` is a FIFO (First In, First Out) data structure.
 
 - `shift(): T | undefined`: Removes and returns the first item, or `undefined` if the collection is empty.
 
-- `[Symbol.iterator](): IterableIterator<T>`: Returns an iterator for the values in the collection.
-
 ### Set
 
 #### Implementations
@@ -206,8 +198,6 @@ A `Queue` is a FIFO (First In, First Out) data structure.
 - `delete(value: T): boolean`: Deletes the value from the collection. Returns `true` if the value exists and was removed successfully, or `false` otherwise.
 
 - `has(value: T): boolean`: Checks if the collection contains a specific value.
-
-- `[Symbol.iterator](): IterableIterator<T>`: Returns an iterator for the values in the collection.
 
 ### [Stack](./docs/interfaces/Stack.md)
 
@@ -235,8 +225,6 @@ A `Stack` is a LIFO (Last In, First Out) data structure.
 - `push(...items: T[]): number`: Appends items to the collection and returns the new size. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
 - `top(): T | undefined`: Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
-
-- `[Symbol.iterator](): IterableIterator<T>`: Returns an iterator for the values in the collection.
 
 ## Build
 
