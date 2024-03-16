@@ -17,7 +17,7 @@ export interface SkipList<T> extends List<T> {
   /**
    * The current number of levels in the skip list.
    */
-  levels: readonly number;
+  get levels(): number;
 
   /**
    * The maximum number of levels in the skip list.
@@ -65,23 +65,53 @@ export interface SkipListConfig {
 }
 
 /**
- * Represents a level in a skip list node.
- *
- * A skip list level is part of a skip list node, which is used to implement
- * an efficient list with probabilistic balancing. Each level in a skip list
- * node contains a pointer to the next node at that level, along with the
- * span (distance) to the next node. This allows for jumping large distances
- * in a list, enabling fast traversal, insertions and deletions.
+ * Represents the core structural components of a skip list, encapsulating
+ * the essential elements necessary for its operation. This interface is
+ * central to managing and navigating the skip list.
  */
-export interface SkipLevel<T> {
+export interface SkipListCore<T> {
   /**
-   * Points to the next {@link SkipNode} in the skip list at the current level.
-   * If `undefined`, it indicates the end of the list at this level.
+   * The root node of the skip list, acting as the entry point for traversal
+   * operations. The root has links to the first node at every level of the
+   * skip list, allowing for efficient navigation.
+   */
+  root: SkipNode<T>;
+  /**
+   * An array of tail nodes, one for each level of the skip list. Each tail
+   * node represents the last node at the given level.
+   */
+  tails: SkipNode<T>[];
+  /**
+   * The total number of nodes within the skip list, excluding the root node.
+   */
+  size: number;
+}
+
+/**
+ * Represents an entry in a skip list.
+ *
+ * An entry consists of a node and its
+ * absolute position (index) within the list.
+ */
+export interface SkipEntry<T> {
+  index: number;
+  node: SkipNode<T>;
+}
+
+/**
+ * Defines a link within a skip list, connecting nodes together at a specific level.
+ */
+export interface SkipLink<T> {
+  /**
+   * A reference to the next node in the skip list at the current level.
+   * If `undefined`, it signifies the end of the skip list.
    */
   next?: SkipNode<T>;
 
   /**
-   * The distance to the next node at the current level.
+   * The distance to the next node in the skip list at this level. If the next node
+   * is `undefined`, represents the distance to the end of the list. Distance is
+   * defined as the number of nodes traversed when using this link.
    */
   span: number;
 }
@@ -97,7 +127,7 @@ export interface SkipNode<T> {
   /**
    * The levels this node extends to.
    */
-  levels: SkipLevel<T>[];
+  levels: SkipLink<T>[];
 
   /**
    * The value stored in the node.
@@ -106,17 +136,9 @@ export interface SkipNode<T> {
 }
 
 /**
- * Represents a stack of entries in a SkipList; one per level.
+ * Represents a stack of entries in a skip list; one per level.
+ *
+ * This is useful for operations where absolute positioning is
+ * desired over relative positioning.
  */
 export type SkipStack<T> = SkipEntry<T>[];
-
-/**
- * Represents an entry in a skip list.
- *
- * The entry points to a specific node in the list and its
- * corresponding index (position in the list).
- */
-export interface SkipEntry<T> {
-  index: number;
-  node: SkipNode<T>;
-}

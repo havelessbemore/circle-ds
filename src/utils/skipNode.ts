@@ -1,4 +1,4 @@
-import { SkipLevel, SkipNode } from "../types/skipList";
+import { SkipLink, SkipNode } from "../types/skipList";
 import { log } from "./math";
 
 /**
@@ -32,26 +32,6 @@ export function calcMaxLevel(p: number, expectedSize: number): number {
     return Infinity;
   }
   return Math.ceil(log(expectedSize, 1 / p));
-}
-
-/**
- * Climbs up the skip list from the given node to find and return the first
- * node at or above the specified level.
- *
- * @param node - The starting {@link SkipNode} from which the climb begins.
- * @param level - The target level to reach.
- *
- * @returns The first {@link SkipNode} encountered at or above the specified level, or `undefined` if no such node
- *          exists in the portion of the list being traversed.
- */
-export function climb<T>(
-  node: SkipNode<T> | undefined,
-  level: number
-): SkipNode<T> | undefined {
-  while (node != null && node.levels.length <= level) {
-    node = node.levels[node.levels.length - 1].next;
-  }
-  return node;
 }
 
 /**
@@ -141,21 +121,14 @@ export function copy<T>(
  * Iterates through a skip list, yielding each node's index
  * (position in the list) and value as a tuple.
  *
- * Iteration starts from the `node` node and continues until either the end
- * of the list, or the `end` node if provided.
- *
+ * Iteration starts from the given node and continues the end of the list.
  * This generator function provides a convenient way to enumerate all nodes in
  * a skip list, similar to how `Array.prototype.entries()` works for arrays.
  *
  * @param node - The node at which to start iterating.
- * @param end - An optional node at which to end (exclusive).
- * If not provided, iteration continues until the end of the list.
  */
-export function* entries<T>(
-  node?: SkipNode<T>,
-  end?: SkipNode<T>
-): Generator<[number, T]> {
-  for (let i = 0; node != null && node != end; ++i) {
+export function* entries<T>(node?: SkipNode<T>): Generator<[number, T]> {
+  for (let i = 0; node != null; ++i) {
     yield [i, node.value];
     node = node.levels[0].next;
   }
@@ -179,7 +152,7 @@ export function gen<T>(
   span = 1,
   next?: SkipNode<T>
 ): SkipNode<T> {
-  const array = new Array<SkipLevel<T>>(levels);
+  const array = new Array<SkipLink<T>>(levels);
   for (let i = 0; i < levels; ++i) {
     array[i] = { next, span };
   }
@@ -259,13 +232,12 @@ export function getClosest<T>(
  */
 export function* getNodes<T>(
   node?: SkipNode<T>,
-  end?: SkipNode<T>,
   level = 0
 ): Generator<SkipNode<T>> {
   if (node == null || level < 0 || node.levels.length <= level) {
     return;
   }
-  while (node != null && node != end) {
+  while (node != null) {
     yield node;
     node = node.levels[level].next;
   }
@@ -274,30 +246,17 @@ export function* getNodes<T>(
 /**
  * Determines whether a skip list contains a node with a specified value.
  *
- * Iteration starts from the `node` node and continues until either the end
- * of the list, or the `end` node if provided.
- *
  * @param node - The node from which to start searching.
  * @param value - The value to search for.
- * @param end - An optional node at which to end the search (exclusive).
- * If not provided, the search continues until the end of the list.
  *
  * @returns `true` if the specified value is found, `false` otherwise.
- *
- * @throws - {@link TypeError}
- * thrown if an `end` node is provided but not encountered before the end of the list.
- *
  */
-export function has<T>(
-  node: SkipNode<T> | undefined,
-  value: T,
-  end?: SkipNode<T>
-): boolean {
-  while (node != end) {
-    if (node!.value === value) {
+export function has<T>(node: SkipNode<T> | undefined, value: T): boolean {
+  while (node != null) {
+    if (node.value === value) {
       return true;
     }
-    node = node!.levels[0].next;
+    node = node.levels[0].next;
   }
   return false;
 }
@@ -306,60 +265,31 @@ export function has<T>(
  * Iterates through a skip list, yielding each node's index
  * (position in the list).
  *
- * Iteration starts from the `node` node and continues until either the end
- * of the list, or the `end` node if provided.
- *
  * This generator function provides a convenient way to enumerate all nodes in
  * a skip list, similar to how `Array.prototype.entries()` works for arrays.
  *
  * @param node - The node at which to start iterating.
- * @param end - An optional node at which to end (exclusive).
- * If not provided, iteration continues until the end of the list.
- *
- * @throws - {@link TypeError}
- * thrown if an `end` node is provided but not encountered before the end of the list.
  */
-export function* keys<T>(
-  node?: SkipNode<T>,
-  end?: SkipNode<T>
-): Generator<number> {
-  for (let i = 0; node != end; ++i) {
+export function* keys<T>(node?: SkipNode<T>): Generator<number> {
+  for (let i = 0; node != null; ++i) {
     yield i;
     node = node!.levels[0].next;
   }
 }
 
 /**
- * Converts a skip list into an array of values.
+ * Iterates through a skip list, yielding each node's height.
  *
- * The conversion starts from the `node` node and includes all nodes up to the
- * end of the list, or the `end` node if provided.
+ * Iteration starts from the `node` node and continues until
+ * the end of the list.
  *
- * @param node - The node at which to start converting.
- * @param end - An optional node at which to end (exclusive).
- * If not provided, conversion continues until the end of the list.
- * @param level - The level at which to traverse the skip list. Defaults to `0`
- * (the base level). If negative, or if `node` does not reach this level, an
- * empty array is returned.
- *
- * @returns An array with the values of the list from `node` to `end` at the given level.
+ * @param node - The node at which to start iterating.
  */
-export function toArray<T>(
-  node?: SkipNode<T>,
-  end?: SkipNode<T>,
-  level = 0
-): T[] {
-  if (level < 0 || (node != null && node.levels.length <= level)) {
-    return [];
+export function* levels<T>(node?: SkipNode<T>): Generator<number> {
+  while (node != null) {
+    yield node.levels.length;
+    node = node.levels[0].next;
   }
-
-  const array: T[] = [];
-  while (node != null && node != end) {
-    array.push(node.value);
-    node = node.levels[level].next;
-  }
-
-  return array;
 }
 
 /**
@@ -424,52 +354,39 @@ export function toList<T>(
 }
 
 /**
- * Truncates the levels of nodes in a skip list.
+ * Reduces the height of the skip list to the specified level.
  *
- * Adjusts the `levels` array of each affected node by truncating it to the
- * specified level, reducing the height of the list for the segment.
- *
- * @param node - The node of the skip list from which level adjustment begins.
- *             This node will be the first node to have its level adjusted.
- * @param level - The target level to which the nodes' levels should be
- *              decreased if it's greater than this value.
+ * @param root - The root node of the skip list.
+ * @param level - The target level.
  */
 export function truncateLevels<T>(
-  node: SkipNode<T> | undefined,
+  root: SkipNode<T> | undefined,
   level: number
 ): void {
-  // Get first node at given level.
-  node = climb(node, level);
+  // Check inputs
+  if (root == null || root.levels.length <= level) {
+    return;
+  }
 
   // Truncate nodes
+  let node: SkipNode<T> = root;
   while (node != null) {
-    const next = node!.levels[level].next;
+    const next = node.levels[level].next;
     node.levels.length = level;
-    node = next;
+    node = next!;
   }
 }
 
 /**
  * Iterates through a skip list, yielding each node's value.
  *
- * Iteration starts from the `node` node and continues until either the end
- * of the list, or the `end` node if provided.
- *
  * This generator function provides a convenient way to enumerate all nodes in
  * a skip list, similar to how `Array.prototype.entries()` works for arrays.
  *
  * @param node - The node at which to start iterating.
- * @param end - An optional node at which to end (exclusive).
- * If not provided, iteration continues until the end of the list.
- *
- * @throws - {@link TypeError}
- * thrown if an `end` node is provided but not encountered before the end of the list.
  */
-export function* values<T>(
-  node?: SkipNode<T>,
-  end?: SkipNode<T>
-): Generator<T> {
-  while (node != null && node != end) {
+export function* values<T>(node?: SkipNode<T>): Generator<T> {
+  while (node != null) {
     yield node.value;
     node = node.levels[0].next;
   }
