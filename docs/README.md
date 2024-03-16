@@ -63,9 +63,14 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 - `[Symbol.iterator](): IterableIterator`: Returns an iterator for the values or key-value pairs in the collection.
 
-### [CircularDeque](./docs/classes/CircularDeque.md) & [CircularLinkedDeque](./docs/classes/CircularLinkedDeque.md)
+### [Deque](./docs/interfaces/Deque.md)
 
-`CircularDeque` is a double-ended queue that combines the features of stacks and queues, allowing insertion and removal at both ends.
+`Deque` is a double-ended queue that combines the features of stacks and queues, allowing insertion and removal at both ends.
+
+#### Implementations
+
+- [CircularDeque](./docs/classes/CircularDeque.md)
+- [CircularLinkedDeque](./docs/classes/CircularLinkedDeque.md)
 
 #### Constructor
 
@@ -93,9 +98,16 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularDeque.md#iterator): Returns an iterator for the values in the collection.
 
-### [CircularArrayList](./docs/classes/CircularArrayList.md), [CircularLinkedList](./docs/classes/CircularLinkedList.md), [CircularDoublyLinkedList](./docs/classes/CircularDoublyLinkedList.md) & [CircularSkipList](./docs/classes/CircularSkipList.md)
+### [List](./docs/interfaces/List.md)
 
-A list of elements allowing for indexed access, modification, and iteration.
+A `List` is a sequence of elements allowing for indexed access, modification, and iteration.
+
+#### Implementations
+
+- [CircularArrayList](./docs/classes/CircularArrayList.md)
+- [CircularDoublyLinkedList](./docs/classes/CircularDoublyLinkedList.md)
+- [CircularLinkedList](./docs/classes/CircularLinkedList.md)
+- [CircularSkipList](./docs/classes/CircularSkipList.md)
 
 #### Constructor
 
@@ -127,7 +139,11 @@ A list of elements allowing for indexed access, modification, and iteration.
 
 - [`unshift(...items: T[]): number`](./docs/classes/CircularLinkedList.md#unshift): Prepends items to the collection and returns the new size. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
 
-### [CircularMap](./docs/classes/CircularMap.md)
+### Map
+
+#### Implementations
+
+- [CircularMap](./docs/classes/CircularMap.md)
 
 #### Constructor
 
@@ -143,9 +159,14 @@ A list of elements allowing for indexed access, modification, and iteration.
 
 - [`[Symbol.iterator](): IterableIterator<[K, V]>`](./docs/classes/CircularMap.md#iterator): Returns an iterator for the entries in the collection.
 
-### [CircularQueue](./docs/classes/CircularQueue.md) & [CircularLinkedQueue](./docs/classes/CircularLinkedQueue.md)
+### [Queue](./docs/interfaces/Queue.md)
 
-`CircularQueue` is a FIFO (First In, First Out) data structure with a fixed capacity.
+A `Queue` is a FIFO (First In, First Out) data structure.
+
+#### Implementations
+
+- [CircularQueue](./docs/classes/CircularQueue.md)
+- [CircularLinkedQueue](./docs/classes/CircularLinkedQueue.md)
 
 #### Constructor
 
@@ -165,7 +186,11 @@ A list of elements allowing for indexed access, modification, and iteration.
 
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularQueue.md#iterator): Returns an iterator for the values in the collection.
 
-### [CircularSet](./docs/classes/CircularSet.md)
+### Set
+
+#### Implementations
+
+- [CircularSet](./docs/classes/CircularSet.md)
 
 #### Constructor
 
@@ -181,9 +206,14 @@ A list of elements allowing for indexed access, modification, and iteration.
 
 - [`[Symbol.iterator](): IterableIterator<T>`](./docs/classes/CircularSet.md#iterator): Returns an iterator for the values in the collection.
 
-### [CircularStack](./docs/classes/CircularStack.md) & [CircularLinkedStack](./docs/classes/CircularLinkedStack.md)
+### [Stack](./docs/interfaces/Stack.md)
 
-`CircularStack` is a LIFO (Last In, First Out) data structure with a fixed capacity.
+A `Stack` is a LIFO (Last In, First Out) data structure.
+
+#### Implementations
+
+- [CircularStack](./docs/classes/CircularStack.md)
+- [CircularLinkedStack](./docs/classes/CircularLinkedStack.md)
 
 #### Constructor
 

@@ -17,6 +17,7 @@ import { Queue as Queue_2 } from '../types/queue';
 import { SkipList } from './types/skipList';
 import { SkipList as SkipList_2 } from '../types/skipList';
 import { SkipListConfig } from '../types/skipList';
+import { SkipListCore } from '../types/skipList';
 import { SkipNode } from '../types/skipList';
 import { Stack } from './types/stack';
 import { Stack as Stack_2 } from '../types/stack';
@@ -764,7 +765,7 @@ export declare class CircularSkipList<T> extends CircularBase<T> implements Boun
     /* Excluded from this release type: _p */
     /* Excluded from this release type: _root */
     /* Excluded from this release type: _size */
-    /* Excluded from this release type: _tail */
+    /* Excluded from this release type: _tails */
     constructor();
     constructor(capacity?: number | null);
     constructor(config: CircularSkipListConfig);
@@ -795,8 +796,7 @@ export declare class CircularSkipList<T> extends CircularBase<T> implements Boun
     [Symbol.iterator](): IterableIterator<T>;
     unshift(...values: T[]): number;
     values(): IterableIterator<T>;
-    /* Excluded from this release type: _delete */
-    /* Excluded from this release type: _genLevels */
+    /* Excluded from this release type: _cut */
     /* Excluded from this release type: _insert */
     /* Excluded from this release type: _overflow */
     /* Excluded from this release type: _presert */
