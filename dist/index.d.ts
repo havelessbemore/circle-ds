@@ -290,10 +290,12 @@ export declare class CircularDoublyLinkedList<T> extends CircularBase<T> impleme
     [Symbol.iterator](): IterableIterator<T>;
     unshift(...values: T[]): number;
     values(): IterableIterator<T>;
-    /* Excluded from this release type: _append */
+    /* Excluded from this release type: _cut */
     /* Excluded from this release type: _get */
+    /* Excluded from this release type: _insert */
     /* Excluded from this release type: _overflow */
-    /* Excluded from this release type: _prepend */
+    /* Excluded from this release type: _presert */
+    /* Excluded from this release type: _safeInsert */
 }
 
 /**
