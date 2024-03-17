@@ -1,26 +1,26 @@
 /// <reference types="node" />
 
 import { Bounded } from './types/bounded';
-import { Bounded as Bounded_2 } from '../types/bounded';
-import { BoundedConfig } from '../types/bounded';
+import { Bounded as Bounded_2 } from '../../types/bounded';
+import { BoundedConfig } from '../../types/bounded';
 import { Collection } from './types/collection';
-import { Collection as Collection_2 } from '../types/collection';
+import { Collection as Collection_2 } from '../../types/collection';
 import { Deque } from './types/deque';
-import { Deque as Deque_2 } from '../types/deque';
-import { DoublyLinkedNode } from '../types/doublyLinkedNode';
+import { Deque as Deque_2 } from '../../types/deque';
+import { DoublyLinkedNode } from '../../types/doublyLinkedNode';
 import EventEmitter from 'events';
-import { LinkedNode } from '../types/linkedNode';
+import { LinkedNode } from '../../types/linkedNode';
 import { List } from './types/list';
-import { List as List_2 } from '../types/list';
+import { List as List_2 } from '../../types/list';
 import { Queue } from './types/queue';
-import { Queue as Queue_2 } from '../types/queue';
+import { Queue as Queue_2 } from '../../types/queue';
+import { SkipCore } from '../../types/skipList';
 import { SkipList } from './types/skipList';
-import { SkipList as SkipList_2 } from '../types/skipList';
-import { SkipListConfig } from '../types/skipList';
-import { SkipListCore } from '../types/skipList';
-import { SkipNode } from '../types/skipList';
+import { SkipList as SkipList_2 } from '../../types/skipList';
+import { SkipListConfig } from '../../types/skipList';
+import { SkipNode } from '../../types/skipList';
 import { Stack } from './types/stack';
-import { Stack as Stack_2 } from '../types/stack';
+import { Stack as Stack_2 } from '../../types/stack';
 
 export { Bounded }
 
@@ -248,8 +248,9 @@ export declare class CircularDeque<T> implements Bounded_2<T>, Deque<T> {
     removeListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
 }
 
-export declare class CircularDoublyLinkedList<T> extends CircularBase<T> implements Bounded<T>, List_2<T> {
+export declare class CircularDoublyLinkedList<T> extends CircularBase<T> implements Bounded_2<T>, List_2<T> {
     /* Excluded from this release type: _capacity */
+    /* Excluded from this release type: _isFinite */
     /* Excluded from this release type: _root */
     /* Excluded from this release type: _size */
     /**
@@ -289,9 +290,10 @@ export declare class CircularDoublyLinkedList<T> extends CircularBase<T> impleme
     [Symbol.iterator](): IterableIterator<T>;
     unshift(...values: T[]): number;
     values(): IterableIterator<T>;
-    /* Excluded from this release type: append */
-    /* Excluded from this release type: get */
-    /* Excluded from this release type: prepend */
+    /* Excluded from this release type: _append */
+    /* Excluded from this release type: _get */
+    /* Excluded from this release type: _overflow */
+    /* Excluded from this release type: _prepend */
 }
 
 /**
@@ -349,6 +351,7 @@ export declare class CircularLinkedDeque<T> implements Bounded_2<T>, Deque_2<T> 
 
 export declare class CircularLinkedList<T> extends CircularBase<T> implements Bounded<T>, List_2<T> {
     /* Excluded from this release type: _capacity */
+    /* Excluded from this release type: _isFinite */
     /* Excluded from this release type: _root */
     /* Excluded from this release type: _size */
     /* Excluded from this release type: _tail */
@@ -389,7 +392,12 @@ export declare class CircularLinkedList<T> extends CircularBase<T> implements Bo
     [Symbol.iterator](): IterableIterator<T>;
     unshift(...values: T[]): number;
     values(): IterableIterator<T>;
-    /* Excluded from this release type: _append */
+    /* Excluded from this release type: _cut */
+    /* Excluded from this release type: _get */
+    /* Excluded from this release type: _insert */
+    /* Excluded from this release type: _overflow */
+    /* Excluded from this release type: _presert */
+    /* Excluded from this release type: _safeInsert */
 }
 
 /**

@@ -749,6 +749,23 @@ class CircularDeque {
     return this;
   }
 }
+function copy$1(node, distance) {
+  if (node == null || distance <= 0) {
+    return [void 0, void 0, 0];
+  }
+  const root = { value: void 0 };
+  let tail = root;
+  let size = 0;
+  while (node != null && size < distance) {
+    const dupe = { value: node.value };
+    tail.next = dupe;
+    tail = dupe;
+    ++size;
+    node = node.next;
+  }
+  tail.next = void 0;
+  return [root.next, tail, size];
+}
 function cut$2(prev, count) {
   if (count <= 0) {
     return [void 0, void 0];
@@ -789,14 +806,6 @@ function* keys$1(node, end) {
     node = node.next;
   }
 }
-function toArray(node, end) {
-  const array = [];
-  while (node != end) {
-    array.push(node.value);
-    node = node.next;
-  }
-  return array;
-}
 function toList$2(values2) {
   const root = {};
   let count = 0;
@@ -808,10 +817,10 @@ function toList$2(values2) {
   }
   return root.next === void 0 ? [void 0, void 0, 0] : [root.next, tail, count];
 }
-function* values$1(head, end) {
-  for (let i = 0; head != end; ++i) {
-    yield head.value;
-    head = head.next;
+function* values$1(node, end) {
+  while (node != end) {
+    yield node.value;
+    node = node.next;
   }
 }
 function cut$1(root, count) {
@@ -849,6 +858,22 @@ function toList$1(values2) {
   root.next.prev = void 0;
   return [root.next, tail, count];
 }
+function* chunk(source, chunkSize) {
+  if (chunkSize < 1) {
+    return;
+  }
+  let chunk2 = [];
+  chunkSize = Math.trunc(chunkSize);
+  for (const value of source) {
+    if (chunk2.push(value) >= chunkSize) {
+      yield chunk2;
+      chunk2 = [];
+    }
+  }
+  if (chunk2.length > 0) {
+    yield chunk2;
+  }
+}
 class CircularDoublyLinkedList extends CircularBase {
   constructor(capacity) {
     super();
@@ -859,6 +884,11 @@ class CircularDoublyLinkedList extends CircularBase {
     __publicField(this, "_capacity");
     /**
      * @internal
+     * Whether capacity is finite (true) or infinite (false).
+     */
+    __publicField(this, "_isFinite");
+    /**
+     * @internal
      * The root of the linked list
      */
     __publicField(this, "_root");
@@ -867,22 +897,20 @@ class CircularDoublyLinkedList extends CircularBase {
      * The current size of the list (0 \<= size \<= capacity)
      */
     __publicField(this, "_size");
-    this._capacity = Infinity;
+    this._capacity = LINKED_MAX_LENGTH;
+    this._isFinite = false;
     this._root = { value: void 0 };
     this.clear();
-    capacity = capacity ?? Infinity;
-    if (isInfinity(capacity)) {
+    if (capacity == null) {
       return;
     }
     if (isNumber(capacity)) {
-      if (!isSafeCount(capacity)) {
-        throw new RangeError("Invalid capacity");
-      }
-      this._capacity = capacity;
+      this.capacity = capacity;
       return;
     }
     const [head, tail, size] = toList$1(capacity);
     this._capacity = size;
+    this._isFinite = true;
     if (size > 0) {
       this._root.next = head;
       this._root.prev = tail;
@@ -892,7 +920,7 @@ class CircularDoublyLinkedList extends CircularBase {
     }
   }
   get capacity() {
-    return this._capacity;
+    return this._isFinite ? this._capacity : Infinity;
   }
   get size() {
     return this._size;
@@ -902,7 +930,13 @@ class CircularDoublyLinkedList extends CircularBase {
   }
   set capacity(capacity) {
     capacity = +capacity;
-    if (!isInfinity(capacity) && !isSafeCount(capacity)) {
+    capacity = +capacity;
+    if (isInfinity(capacity)) {
+      capacity = LINKED_MAX_LENGTH;
+      this._isFinite = false;
+    } else if (isLinkedLength(capacity)) {
+      this._isFinite = true;
+    } else {
       throw new RangeError("Invalid capacity");
     }
     this._capacity = capacity;
@@ -912,14 +946,16 @@ class CircularDoublyLinkedList extends CircularBase {
     const diff = this._size - capacity;
     const [head, tail] = cut$1(this._root, diff);
     this._size -= diff;
-    this._emitter.emit(BoundedEvent.Overflow, toArray(head, tail.next));
+    for (const array of chunk(values$1(head, tail.next), ARGS_MAX_LENGTH)) {
+      this._overflow(array);
+    }
   }
   at(index) {
     index = addIfBelow(toInteger(index, -Infinity), this._size);
     if (!isInRange(index, 0, this._size)) {
       return void 0;
     }
-    return this.get(index).value;
+    return this._get(index).value;
   }
   clear() {
     this._size = 0;
@@ -931,7 +967,7 @@ class CircularDoublyLinkedList extends CircularBase {
     if (!isInRange(index, 0, this._size)) {
       return false;
     }
-    const node = this.get(index);
+    const node = this._get(index);
     node.prev.next = node.next;
     node.next.prev = node.prev;
     --this._size;
@@ -945,7 +981,7 @@ class CircularDoublyLinkedList extends CircularBase {
     start = clamp(addIfBelow(start, this._size), 0, this._size);
     end = toInteger(end, this._size);
     end = clamp(addIfBelow(end, this._size), 0, this._size);
-    let node = this.get(start);
+    let node = this._get(start);
     while (start < end) {
       node.value = value;
       node = node.next;
@@ -983,10 +1019,10 @@ class CircularDoublyLinkedList extends CircularBase {
     }
     const capacity = this._capacity;
     if (capacity <= 0) {
-      this._emitter.emit(BoundedEvent.Overflow, values2);
+      this._overflow(values2);
       return this._size;
     }
-    this.append(this._root.prev, values2);
+    this._append(this._root.prev, values2);
     return this._size;
   }
   set(index, value) {
@@ -994,7 +1030,7 @@ class CircularDoublyLinkedList extends CircularBase {
     if (!isInRange(index, 0, this._size)) {
       return void 0;
     }
-    const node = this.get(index);
+    const node = this._get(index);
     const prevValue = node.value;
     node.value = value;
     return prevValue;
@@ -1018,7 +1054,7 @@ class CircularDoublyLinkedList extends CircularBase {
     start = clamp(addIfBelow(start, this._size), 0, this._size);
     end = toInteger(end, this._size);
     end = clamp(addIfBelow(end, this._size), 0, this._size);
-    let prev = this.get(start - 1);
+    let prev = this._get(start - 1);
     while (start < end) {
       prev = prev.next;
       out.push(prev.value);
@@ -1032,7 +1068,7 @@ class CircularDoublyLinkedList extends CircularBase {
     start = clamp(addIfBelow(start, this._size), 0, this._size);
     deleteCount = toInteger(deleteCount, 0);
     deleteCount = clamp(deleteCount, 0, this._size - start);
-    const prev = this.get(start - 1);
+    const prev = this._get(start - 1);
     if (deleteCount > 0) {
       const [head, tail] = cut$1(prev, deleteCount);
       this._size -= deleteCount;
@@ -1042,7 +1078,7 @@ class CircularDoublyLinkedList extends CircularBase {
       out._root.prev = tail;
       out._size = deleteCount;
     }
-    this.append(prev, items);
+    this._append(prev, items);
     return out;
   }
   [Symbol.iterator]() {
@@ -1055,10 +1091,10 @@ class CircularDoublyLinkedList extends CircularBase {
     }
     const capacity = this._capacity;
     if (capacity <= 0) {
-      this._emitter.emit(BoundedEvent.Overflow, values2);
+      this._overflow(values2);
       return this._size;
     }
-    this.prepend(this._root.next, values2);
+    this._prepend(this._root.next, values2);
     return this._size;
   }
   values() {
@@ -1067,7 +1103,7 @@ class CircularDoublyLinkedList extends CircularBase {
   /**
    * @internal
    */
-  append(tail, values2) {
+  _append(tail, values2) {
     const root = this._root;
     const next = tail.next;
     const evicted = [];
@@ -1089,7 +1125,7 @@ class CircularDoublyLinkedList extends CircularBase {
     next.prev = tail;
     root.next.prev = root;
     if (evicted.length > 0) {
-      this._emitter.emit(BoundedEvent.Overflow, evicted);
+      this._overflow(evicted);
     }
     this._size = size;
     return tail;
@@ -1097,14 +1133,27 @@ class CircularDoublyLinkedList extends CircularBase {
   /**
    * @internal
    */
-  get(index) {
+  _get(index) {
     index -= index <= this._size / 2 ? -1 : this._size;
     return get$1(this._root, index);
   }
   /**
    * @internal
+   *
+   * Emit an overflow event containing the items evicted from the collection.
+   *
+   * @param evicted - The items evicted from the collection.
    */
-  prepend(next, values2) {
+  _overflow(evicted) {
+    if (!Array.isArray(evicted)) {
+      evicted = Array.from(evicted);
+    }
+    this._emitter.emit(BoundedEvent.Overflow, evicted);
+  }
+  /**
+   * @internal
+   */
+  _prepend(next, values2) {
     const root = this._root;
     const prev = next.prev;
     const evicted = [];
@@ -1125,7 +1174,7 @@ class CircularDoublyLinkedList extends CircularBase {
     prev.next = next;
     root.prev.next = root;
     if (evicted.length > 0) {
-      this._emitter.emit(BoundedEvent.Overflow, evicted.reverse());
+      this._overflow(evicted.reverse());
     }
     this._size = size;
     return next;
@@ -1223,6 +1272,11 @@ class CircularLinkedList extends CircularBase {
     __publicField(this, "_capacity");
     /**
      * @internal
+     * Whether capacity is finite (true) or infinite (false).
+     */
+    __publicField(this, "_isFinite");
+    /**
+     * @internal
      * The root of the linked list
      */
     __publicField(this, "_root");
@@ -1236,22 +1290,20 @@ class CircularLinkedList extends CircularBase {
      * The last node in the linked list.
      */
     __publicField(this, "_tail");
-    this._capacity = Infinity;
+    this._capacity = LINKED_MAX_LENGTH;
+    this._isFinite = false;
     this._root = { value: void 0 };
     this.clear();
-    capacity = capacity ?? Infinity;
-    if (isInfinity(capacity)) {
+    if (capacity == null) {
       return;
     }
     if (isNumber(capacity)) {
-      if (!isSafeCount(capacity)) {
-        throw new RangeError("Invalid capacity");
-      }
-      this._capacity = capacity;
+      this.capacity = capacity;
       return;
     }
     const [head, tail, size] = toList$2(capacity);
     this._capacity = size;
+    this._isFinite = true;
     if (size > 0) {
       this._root.next = head;
       this._tail = tail;
@@ -1259,7 +1311,7 @@ class CircularLinkedList extends CircularBase {
     }
   }
   get capacity() {
-    return this._capacity;
+    return this._isFinite ? this._capacity : Infinity;
   }
   get size() {
     return this._size;
@@ -1269,7 +1321,12 @@ class CircularLinkedList extends CircularBase {
   }
   set capacity(capacity) {
     capacity = +capacity;
-    if (!isInfinity(capacity) && !isSafeCount(capacity)) {
+    if (isInfinity(capacity)) {
+      capacity = LINKED_MAX_LENGTH;
+      this._isFinite = false;
+    } else if (isLinkedLength(capacity)) {
+      this._isFinite = true;
+    } else {
       throw new RangeError("Invalid capacity");
     }
     this._capacity = capacity;
@@ -1282,17 +1339,14 @@ class CircularLinkedList extends CircularBase {
     if (this._size <= 0) {
       this._tail = this._root;
     }
-    this._emitter.emit(BoundedEvent.Overflow, toArray(head));
+    this._overflow(head);
   }
   at(index) {
     index = addIfBelow(toInteger(index, -Infinity), this._size);
     if (!isInRange(index, 0, this._size)) {
       return void 0;
     }
-    if (++index == this._size) {
-      return this._tail.value;
-    }
-    return get$2(this._root, index).value;
+    return this._get(index).value;
   }
   clear() {
     this._size = 0;
@@ -1304,27 +1358,23 @@ class CircularLinkedList extends CircularBase {
     if (!isInRange(index, 0, this._size)) {
       return false;
     }
-    const prev = get$2(this._root, index);
-    prev.next = prev.next.next;
-    --this._size;
-    if (index == this._size) {
-      this._tail = prev;
-    }
+    this._cut(index, 1);
     return true;
   }
   entries() {
     return entries$1(this._root.next);
   }
   fill(value, start, end) {
-    start = toInteger(start, 0);
-    start = clamp(addIfBelow(start, this._size), 0, this._size);
-    end = toInteger(end, this._size);
-    end = clamp(addIfBelow(end, this._size), 0, this._size);
-    let node = get$2(this._root, start + 1);
-    while (start < end) {
+    const size = this._size;
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    end = clamp(addIfBelow(toInteger(end, size), size), start, size);
+    if (start >= end) {
+      return this;
+    }
+    let node = this._get(start);
+    for (let i = start; i < end; ++i) {
       node.value = value;
       node = node.next;
-      ++start;
     }
     return this;
   }
@@ -1345,22 +1395,11 @@ class CircularLinkedList extends CircularBase {
     if (this._size <= 0) {
       return void 0;
     }
-    const value = this._tail.value;
-    this._tail = get$2(this._root, --this._size);
-    this._tail.next = void 0;
-    return value;
+    const [head] = this._cut(this._size - 1, 1);
+    return head.value;
   }
   push(...values2) {
-    const N = values2.length;
-    if (N <= 0) {
-      return this._size;
-    }
-    const capacity = this._capacity;
-    if (capacity <= 0) {
-      this._emitter.emit(BoundedEvent.Overflow, values2);
-      return this._size;
-    }
-    this._tail = this._append(this._tail, values2);
+    this._insert(this._size, values2);
     return this._size;
   }
   set(index, value) {
@@ -1368,7 +1407,7 @@ class CircularLinkedList extends CircularBase {
     if (!isInRange(index, 0, this._size)) {
       return void 0;
     }
-    const node = get$2(this._root, index + 1);
+    const node = this._get(index);
     const prevValue = node.value;
     node.value = value;
     return prevValue;
@@ -1377,84 +1416,41 @@ class CircularLinkedList extends CircularBase {
     if (this._size <= 0) {
       return void 0;
     }
-    const head = this._root.next;
-    this._root.next = head.next;
-    --this._size;
-    if (this._size <= 0) {
-      this._tail = this._root;
-    }
+    const [head] = this._cut(0, 1);
     return head.value;
   }
   slice(start, end) {
-    const out = new CircularLinkedList();
-    if (this._size <= 0) {
-      return out;
+    const size = this._size;
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    end = clamp(addIfBelow(toInteger(end, size), size), start, size);
+    if (start >= end) {
+      return new CircularLinkedList(0);
     }
-    start = toInteger(start, 0);
-    start = clamp(addIfBelow(start, this._size), 0, this._size);
-    end = toInteger(end, this._size);
-    end = clamp(addIfBelow(end, this._size), 0, this._size);
-    let node = get$2(this._root, start);
-    while (start < end) {
-      node = node.next;
-      out.push(node.value);
-      ++start;
-    }
-    return out;
+    const node = this._get(start);
+    const [head, tail, length] = copy$1(node, end - start);
+    const list = new CircularLinkedList(length);
+    list._root.next = head;
+    list._tail = tail ?? list._root;
+    list._size = length;
+    return list;
   }
   splice(start, deleteCount, ...items) {
-    const out = new CircularLinkedList();
-    start = toInteger(start, 0);
-    start = clamp(addIfBelow(start, this._size), 0, this._size);
-    deleteCount = toInteger(deleteCount, 0);
-    deleteCount = clamp(deleteCount, 0, this._size - start);
-    let prev = get$2(this._root, start);
-    if (deleteCount > 0) {
-      const [head, tail] = cut$2(prev, deleteCount);
-      this._size -= deleteCount;
-      out._root.next = head;
-      out._tail = tail;
-      out._size = deleteCount;
-    }
-    prev = this._append(prev, items);
-    if (prev.next == null) {
-      this._tail = prev;
-    }
-    return out;
+    const size = this._size;
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    deleteCount = clamp(toInteger(deleteCount, 0), 0, size - start);
+    const [head, tail] = this._cut(start, deleteCount);
+    this._insert(start, items);
+    const list = new CircularLinkedList(deleteCount);
+    list._root.next = head;
+    list._tail = tail ?? list._root;
+    list._size = deleteCount;
+    return list;
   }
   [Symbol.iterator]() {
     return values$1(this._root.next);
   }
   unshift(...values2) {
-    let N = values2.length;
-    if (N <= 0) {
-      return this._size;
-    }
-    const capacity = this._capacity;
-    if (capacity <= 0) {
-      this._emitter.emit(BoundedEvent.Overflow, values2);
-      return this._size;
-    }
-    const diff = N <= capacity ? 0 : N - capacity;
-    N -= diff;
-    if (this._size + N > capacity) {
-      this._size = capacity - N;
-      const prev = get$2(this._root, this._size);
-      this._emitter.emit(BoundedEvent.Overflow, toArray(prev.next));
-      prev.next = void 0;
-      this._tail = prev;
-    }
-    if (diff > 0) {
-      this._emitter.emit(BoundedEvent.Overflow, values2.slice(N));
-      values2.length = N;
-    }
-    const [head, tail] = toList$2(values2);
-    tail.next = this._root.next;
-    this._root.next = head;
-    if (this._size <= 0) {
-      this._tail = tail;
-    }
-    this._size += N;
+    this._presert(0, values2);
     return this._size;
   }
   values() {
@@ -1463,170 +1459,759 @@ class CircularLinkedList extends CircularBase {
   /**
    * @internal
    */
-  _append(tail, values2, minIndex = 0) {
-    const root = this._root;
-    const next = tail.next;
-    const evicted = [];
-    const capacity = this._capacity;
-    let size = this._size;
+  _cut(start, count) {
+    const prev = this._get(start - 1);
+    const [head, tail] = cut$2(prev, count);
+    this._size -= count;
+    if (start >= this._size) {
+      this._tail = prev;
+    }
+    return [head, tail];
+  }
+  /**
+   * @internal
+   */
+  _get(index) {
+    return ++index == this._size ? this._tail : get$2(this._root, index);
+  }
+  /**
+   * @internal
+   */
+  _insert(index, values2) {
     const N = values2.length;
-    for (let i = minIndex; i < N; ++i) {
-      const curr = { value: values2[i] };
-      tail.next = curr;
-      tail = curr;
-      if (size < capacity) {
-        ++size;
-      } else {
-        evicted.push(root.next.value);
-        root.next = root.next.next;
-      }
+    if (N <= 0) {
+      return;
     }
-    tail.next = next;
-    if (evicted.length > 0) {
+    if (this._capacity <= 0) {
+      this._overflow(values2);
+      return;
+    }
+    let free = this._capacity - this._size;
+    if (free >= N) {
+      this._safeInsert(index, values2);
+      return;
+    }
+    if (!this._isFinite) {
+      this._safeInsert(index, values2.slice(0, free));
+      throw new Error("Out of memory");
+    }
+    if (index > 0) {
+      const shifted = Math.min(index, N - free);
+      const [head] = this._cut(0, shifted);
+      this._overflow(head);
+      index -= shifted;
+      free += shifted;
+    }
+    if (free >= N) {
+      this._safeInsert(index, values2);
+      return;
+    }
+    const mid = values2.length - free;
+    this._overflow(values2.slice(0, mid));
+    this._safeInsert(0, values2.slice(mid));
+  }
+  /**
+   * @internal
+   *
+   * Emit an overflow event containing the items evicted from the collection.
+   *
+   * @param evicted - The items evicted from the collection.
+   */
+  _overflow(evicted) {
+    if (evicted == null) {
+      return;
+    }
+    if (Array.isArray(evicted)) {
       this._emitter.emit(BoundedEvent.Overflow, evicted);
+      return;
     }
-    this._size = size;
-    return tail;
+    for (const array of chunk(values$1(evicted), ARGS_MAX_LENGTH)) {
+      this._emitter.emit(BoundedEvent.Overflow, array);
+    }
+  }
+  /**
+   * @internal
+   */
+  _presert(index, values2) {
+    const N = values2.length;
+    if (N <= 0) {
+      return;
+    }
+    if (this._capacity <= 0) {
+      this._overflow(values2);
+      return;
+    }
+    let free = this._capacity - this._size;
+    if (free >= N) {
+      this._safeInsert(index, values2);
+      return;
+    }
+    if (!this._isFinite) {
+      this._safeInsert(0, values2.slice(values2.length - free));
+      throw new Error("Out of memory");
+    }
+    if (index < this._size) {
+      const popped = Math.min(this._size - index, N - free);
+      const [head] = this._cut(this._size - popped, popped);
+      this._overflow(head);
+      free += popped;
+    }
+    if (free >= N) {
+      this._safeInsert(index, values2);
+      return;
+    }
+    this._overflow(values2.slice(free));
+    this._safeInsert(this._size, values2.slice(0, free));
+  }
+  /**
+   * @internal
+   */
+  _safeInsert(index, values2) {
+    if (values2.length <= 0) {
+      return;
+    }
+    const [head, tail, size] = toList$2(values2);
+    const prev = this._get(index - 1);
+    tail.next = prev.next;
+    prev.next = head;
+    this._tail = index < this._size ? this._tail : tail;
+    this._size += size;
   }
 }
-class CircularLinkedQueue {
-  constructor(capacity) {
-    /**
-     * @internal
-     */
-    __publicField(this, "_list");
-    this._list = new CircularLinkedList(capacity);
+function calcMaxLevel(p, expectedSize) {
+  if (p <= 0 || expectedSize <= 1) {
+    return 1;
   }
-  get capacity() {
-    return this._list.capacity;
+  if (p >= 1) {
+    return Infinity;
   }
-  get size() {
-    return this._list.size;
+  return Math.ceil(log(expectedSize, 1 / p));
+}
+function copy(root, start, distance) {
+  let levels2 = root.levels.length;
+  const segRoot = gen$1(void 0, levels2);
+  if (distance <= 0) {
+    return { root: segRoot, size: 0, tails: [segRoot] };
   }
-  get [Symbol.toStringTag]() {
-    return CircularLinkedQueue.name;
+  const tails = new Array(levels2).fill(segRoot);
+  const indexes = new Array(levels2).fill(-1);
+  let node = getClosest$1(root, start)[0];
+  node = node.levels[0].next;
+  levels2 = 1;
+  let size = 0;
+  let index = 0;
+  while (node != null && index < distance) {
+    const L = node.levels.length;
+    levels2 = levels2 >= L ? levels2 : L;
+    const dupe = gen$1(node.value, L);
+    for (let lvl = 0; lvl < L; ++lvl) {
+      tails[lvl].levels[lvl] = { next: dupe, span: index - indexes[lvl] };
+      tails[lvl] = dupe;
+      indexes[lvl] = index;
+    }
+    const { next, span } = node.levels[0];
+    index += span;
+    node = next;
+    ++size;
   }
-  set capacity(capacity) {
-    this._list.capacity = capacity;
+  tails.length = levels2;
+  segRoot.levels.length = levels2;
+  index = indexes[0] + 1;
+  for (let i = 0; i < levels2; ++i) {
+    tails[i].levels[i] = { next: void 0, span: index - indexes[i] };
   }
-  clear() {
-    this._list.clear();
-  }
-  entries() {
-    return this._list.entries();
-  }
-  first() {
-    return this._list.at(0);
-  }
-  forEach(callbackfn, thisArg) {
-    this._list.forEach((v, i) => callbackfn.call(thisArg, v, i, this), thisArg);
-  }
-  front() {
-    return this._list.at(0);
-  }
-  has(value) {
-    return this._list.has(value);
-  }
-  keys() {
-    return this._list.keys();
-  }
-  push(...elems) {
-    return this._list.push(...elems);
-  }
-  shift() {
-    return this._list.shift();
-  }
-  [Symbol.iterator]() {
-    return this.values();
-  }
-  values() {
-    return this._list.values();
-  }
-  addListener(event, listener) {
-    this._list.addListener(event, listener);
-    return this;
-  }
-  on(event, listener) {
-    this._list.on(event, listener);
-    return this;
-  }
-  prependListener(event, listener) {
-    this._list.prependListener(event, listener);
-    return this;
-  }
-  removeListener(event, listener) {
-    this._list.removeListener(event, listener);
-    return this;
+  return { root: segRoot, size, tails };
+}
+function* entries(node) {
+  for (let i = 0; node != null; ++i) {
+    yield [i, node.value];
+    node = node.levels[0].next;
   }
 }
-class CircularLinkedStack {
-  constructor(capacity) {
+function gen$1(value, levels2 = 1, span = 1, next) {
+  const array = new Array(levels2);
+  for (let i = 0; i < levels2; ++i) {
+    array[i] = { next, span };
+  }
+  return { value, levels: array };
+}
+function get(node, distance) {
+  [node, distance] = getClosest$1(node, distance);
+  return distance === 0 ? node : void 0;
+}
+function getClosest$1(node, distance) {
+  if (distance <= 0) {
+    return [node, distance];
+  }
+  let lvl = node.levels.length - 1;
+  while (true) {
+    const { next, span } = node.levels[lvl];
+    if (span <= distance && next != null)
+      ;
+    else if (--lvl < 0) {
+      return [node, distance];
+    } else {
+      continue;
+    }
+    if (span == distance) {
+      return [next, 0];
+    }
+    distance -= span;
+    node = next;
+  }
+}
+function has(node, value) {
+  while (node != null) {
+    if (node.value === value) {
+      return true;
+    }
+    node = node.levels[0].next;
+  }
+  return false;
+}
+function* keys(node) {
+  for (let i = 0; node != null; ++i) {
+    yield i;
+    node = node.levels[0].next;
+  }
+}
+function toList(levels2, values2) {
+  let Y = -Infinity;
+  const X = Math.min(levels2.length, values2.length);
+  for (let x = 0; x < X; ++x) {
+    if (Y < levels2[x]) {
+      Y = levels2[x];
+    }
+  }
+  if (Y <= 0 || X <= 0) {
+    const root2 = gen$1(void 0);
+    return { root: root2, size: 0, tails: [root2] };
+  }
+  const root = gen$1(void 0, Y, X + 1);
+  const tails = new Array(Y).fill(root);
+  for (let x = 0; x < X; ++x) {
+    const span = X - x;
+    const nextY = levels2[x];
+    const next = gen$1(values2[x], nextY, span);
+    for (let y = 0; y < nextY; ++y) {
+      const levels3 = tails[y].levels;
+      levels3[y] = { next, span: levels3[y].span - span };
+      tails[y] = next;
+    }
+  }
+  return { root, size: X, tails };
+}
+function truncateLevels(root, level) {
+  if (root == null || root.levels.length <= level) {
+    return;
+  }
+  let node = root;
+  while (node != null) {
+    const next = node.levels[level].next;
+    node.levels.length = level;
+    node = next;
+  }
+}
+function* values(node) {
+  while (node != null) {
+    yield node.value;
+    node = node.levels[0].next;
+  }
+}
+function clone(stack) {
+  const N = stack.length;
+  const dupe = new Array(N);
+  for (let i = 0; i < N; ++i) {
+    const { index, node } = stack[i];
+    dupe[i] = { index, node };
+  }
+  return dupe;
+}
+function cut(core, start, distance) {
+  const segRoot = gen$1(void 0);
+  const seg = { root: segRoot, size: 0, tails: [segRoot] };
+  if (distance <= 0) {
+    return seg;
+  }
+  const prevStack = getClosest(gen(core.root, -1), start);
+  const tailStack = getClosest(clone(prevStack), distance);
+  const end = tailStack[0].index + tailStack[0].node.levels[0].span;
+  let levels = core.root.levels.length;
+  start = prevStack[0].index + prevStack[0].node.levels[0].span;
+  distance = end - start;
+  let lvl;
+  for (lvl = 0; lvl < levels; ++lvl) {
+    const prev = prevStack[lvl];
+    const tail = tailStack[lvl];
+    if (prev.index >= tail.index) {
+      break;
+    }
+    let edge = prev.node.levels[lvl];
+    let span = prev.index + edge.span - start;
+    segRoot.levels[lvl] = { next: edge.next, span };
+    edge = tail.node.levels[lvl];
+    span = tail.index - prev.index + (edge.span - distance);
+    prev.node.levels[lvl] = { next: edge.next, span };
+    tail.node.levels[lvl] = { next: void 0, span: end - tail.index };
+    seg.tails[lvl] = tail.node;
+  }
+  if (lvl < levels) {
+    while (lvl < levels) {
+      const prev = prevStack[lvl];
+      const { next, span } = prev.node.levels[lvl];
+      prev.node.levels[lvl] = { next, span: span - distance };
+      ++lvl;
+    }
+  } else {
+    const links = core.root.levels;
+    while (lvl > 1 && links[lvl - 1].next == null) {
+      --lvl;
+    }
+    levels = lvl;
+    links.length = levels;
+    core.tails.length = levels;
+  }
+  if (end >= core.size) {
+    for (lvl = 0; lvl < levels; ++lvl) {
+      core.tails[lvl] = prevStack[lvl].node;
+    }
+  }
+  core.size -= distance;
+  seg.size = distance;
+  return seg;
+}
+function gen(node, index = 0) {
+  const N = node.levels.length;
+  const stack = new Array(N);
+  for (let i = 0; i < N; ++i) {
+    stack[i] = { index, node };
+  }
+  return stack;
+}
+function getClosest(stack, distance) {
+  if (distance <= 0 || stack.length <= 0) {
+    return stack;
+  }
+  let lvl = stack.length - 1;
+  let ptr = stack[lvl];
+  const target = stack[0].index + distance;
+  while (true) {
+    const { next, span } = ptr.node.levels[lvl];
+    const nextIndex = ptr.index + span;
+    if (nextIndex <= target && next != null)
+      ;
+    else if (--lvl < 0) {
+      break;
+    } else {
+      ptr = stack[lvl];
+      continue;
+    }
+    ptr = { index: nextIndex, node: next };
+    stack[lvl] = ptr;
+    if (nextIndex == target) {
+      break;
+    }
+  }
+  for (let i = 0; i < lvl; ++i) {
+    stack[i] = { index: ptr.index, node: ptr.node };
+  }
+  return stack;
+}
+function insert(dest, index, src) {
+  if (src.size <= 0) {
+    return;
+  }
+  const minY = src.tails.length;
+  for (let y = dest.tails.length; y < minY; ++y) {
+    dest.root.levels[y] = { next: void 0, span: dest.size + 1 };
+    dest.tails[y] = dest.root;
+  }
+  const prevs = getClosest(gen(dest.root, -1), index);
+  for (let y = 0; y < minY; ++y) {
+    const prev = prevs[y].node;
+    const prevI = prevs[y].index;
+    const prevEdge = prev.levels[y];
+    const tail = src.tails[y];
+    const tailEdge = tail.levels[y];
+    const nextI = prevI + prevEdge.span;
+    const nextD = nextI - index;
+    const tailD = tailEdge.span;
+    tail.levels[y] = { next: prevEdge.next, span: nextD + tailD };
+    const rootEdge = src.root.levels[y];
+    const headD = rootEdge.span - 1;
+    const prevD = index - prevI;
+    prev.levels[y] = { next: rootEdge.next, span: prevD + headD };
+  }
+  const maxY = dest.tails.length;
+  for (let y = minY; y < maxY; ++y) {
+    const levels = prevs[y].node.levels;
+    const { next, span } = levels[y];
+    levels[y] = { next, span: span + src.size };
+  }
+  if (index === dest.size) {
+    for (let y = 0; y < minY; ++y) {
+      dest.tails[y] = src.tails[y];
+    }
+  }
+  dest.size += src.size;
+}
+class CircularSkipList extends CircularBase {
+  constructor(config) {
+    super();
     /**
      * @internal
+     * The maximum number of elements that can be stored in the collection.
      */
-    __publicField(this, "_list");
-    this._list = new CircularDoublyLinkedList(capacity);
+    __publicField(this, "_capacity");
+    /**
+     * @internal
+     * Whether capacity is finite (true) or infinite (false).
+     */
+    __publicField(this, "_isFinite");
+    /**
+     * @internal
+     * The maximum number of levels in the skip list.
+     */
+    __publicField(this, "_maxLevel");
+    /**
+     * @internal
+     * The probability factor used to randomly determine the levels
+     * of new nodes. Should be a value between 0 and 1, where a lower
+     * value results in fewer levels on average.
+     */
+    __publicField(this, "_p");
+    /**
+     * @internal
+     * The root of the skip list
+     */
+    __publicField(this, "_root");
+    /**
+     * @internal
+     * The current size of the list (0 \<= size \<= capacity)
+     */
+    __publicField(this, "_size");
+    /**
+     * @internal
+     * The last nodes in the skip list at each level.
+     */
+    __publicField(this, "_tails");
+    this._capacity = LINKED_MAX_LENGTH;
+    this._isFinite = false;
+    this._p = 0.5;
+    this._maxLevel = calcMaxLevel(this._p, LINKED_MAX_LENGTH);
+    this._root = gen$1(void 0);
+    this._size = 0;
+    this._tails = [this._root];
+    if (config == null) {
+      return;
+    }
+    if (isNumber(config)) {
+      this.capacity = config;
+      return;
+    }
+    if (!isIterable(config)) {
+      this.capacity = config.capacity ?? this._capacity;
+      this.p = config.p ?? this._p;
+      const size = config.expectedSize ?? this._capacity;
+      this.maxLevel = config.maxLevel ?? calcMaxLevel(this._p, size);
+      return;
+    }
+    for (const vals of chunk(config, ARGS_MAX_LENGTH)) {
+      this._insert(this._size, vals);
+    }
+    this._capacity = this._size;
+    this._isFinite = true;
   }
   get capacity() {
-    return this._list.capacity;
+    return this._isFinite ? this._capacity : Infinity;
+  }
+  get levels() {
+    return this._root.levels.length;
+  }
+  get maxLevel() {
+    return this._maxLevel;
+  }
+  get p() {
+    return this._p;
   }
   get size() {
-    return this._list.size;
+    return this._size;
   }
   get [Symbol.toStringTag]() {
-    return CircularLinkedStack.name;
+    return CircularSkipList.name;
   }
   set capacity(capacity) {
-    this._list.capacity = capacity;
+    capacity = +capacity;
+    if (isInfinity(capacity)) {
+      capacity = LINKED_MAX_LENGTH;
+      this._isFinite = false;
+    } else if (isLinkedLength(capacity)) {
+      this._isFinite = true;
+    } else {
+      throw new RangeError("Invalid capacity");
+    }
+    this._capacity = capacity;
+    if (this._size <= capacity) {
+      return;
+    }
+    const { root } = this._cut(0, this._size - capacity);
+    this._overflow(root.levels[0].next);
+  }
+  set maxLevel(maxLevel) {
+    maxLevel = +maxLevel;
+    if (!isArrayLength(maxLevel) || maxLevel <= 0) {
+      throw new RangeError("Invalid maxLevel");
+    }
+    this._maxLevel = maxLevel;
+    if (maxLevel < this.levels) {
+      truncateLevels(this._root, maxLevel);
+    }
+  }
+  set p(p) {
+    p = +p;
+    if (isNaN(p) || p < 0 || p > 1) {
+      throw new RangeError("Invalid p");
+    }
+    this._p = p;
+  }
+  at(index) {
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
+      return void 0;
+    }
+    return get(this._root, index + 1).value;
   }
   clear() {
-    this._list.clear();
+    this._size = 0;
+    this._tails = [this._root];
+    this._root.levels.length = 1;
+    this._root.levels[0] = { next: void 0, span: 1 };
+  }
+  delete(index) {
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
+      return false;
+    }
+    this._cut(index, 1);
+    return true;
   }
   entries() {
-    return this._list.entries();
+    return entries(this._root.levels[0].next);
+  }
+  fill(value, start, end) {
+    const size = this._size;
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    end = clamp(addIfBelow(toInteger(end, size), size), start, size);
+    if (start >= end) {
+      return this;
+    }
+    let node = get(this._root, start + 1);
+    for (let i = start; i < end; ++i) {
+      node.value = value;
+      node = node.levels[0].next;
+    }
+    return this;
   }
   forEach(callbackfn, thisArg) {
-    this._list.forEach((v, i) => callbackfn.call(thisArg, v, i, this), thisArg);
+    let node = this._root;
+    for (let i = 0; i < this._size; ++i) {
+      node = node.levels[0].next;
+      callbackfn.call(thisArg, node.value, i, this);
+    }
   }
   has(value) {
-    return this._list.has(value);
+    return has(this._root.levels[0].next, value);
   }
   keys() {
-    return this._list.keys();
-  }
-  last() {
-    return this._list.at(-1);
+    return keys(this._root.levels[0].next);
   }
   pop() {
-    return this._list.pop();
+    if (this._size <= 0) {
+      return void 0;
+    }
+    const { root } = this._cut(this._size - 1, 1);
+    return root.levels[0].next.value;
   }
-  push(...elems) {
-    return this._list.push(...elems);
+  push(...values2) {
+    this._insert(this._size, values2);
+    return this._size;
+  }
+  set(index, value) {
+    index = addIfBelow(toInteger(index, -Infinity), this._size);
+    if (!isInRange(index, 0, this._size)) {
+      return void 0;
+    }
+    const node = get(this._root, index + 1);
+    const prevValue = node.value;
+    node.value = value;
+    return prevValue;
+  }
+  shift() {
+    if (this._size <= 0) {
+      return void 0;
+    }
+    const { root } = this._cut(0, 1);
+    return root.levels[0].next.value;
+  }
+  slice(start, end) {
+    const size = this._size;
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    end = clamp(addIfBelow(toInteger(end, size), size), start, size);
+    const config = {
+      capacity: 0,
+      p: this._p,
+      maxLevel: this._maxLevel
+    };
+    if (start >= end) {
+      return new CircularSkipList(config);
+    }
+    const core = copy(this._root, start, end - start);
+    config.capacity = core.size;
+    const list = new CircularSkipList(config);
+    list._root = core.root;
+    list._tails = core.tails;
+    list._size = core.size;
+    return list;
+  }
+  splice(start, deleteCount, ...items) {
+    const size = this._size;
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    deleteCount = clamp(toInteger(deleteCount, 0), 0, size - start);
+    const core = this._cut(start, deleteCount);
+    this._insert(start, items);
+    const list = new CircularSkipList({
+      capacity: deleteCount,
+      p: this._p,
+      maxLevel: this._maxLevel
+    });
+    list._root = core.root;
+    list._tails = core.tails;
+    list._size = core.size;
+    return list;
   }
   [Symbol.iterator]() {
     return this.values();
   }
-  top() {
-    return this._list.at(-1);
+  unshift(...values2) {
+    this._presert(0, values2);
+    return this._size;
   }
   values() {
-    return this._list.values();
+    return values(this._root.levels[0].next);
   }
-  addListener(event, listener) {
-    this._list.addListener(event, listener);
-    return this;
+  /**
+   * @internal
+   */
+  _cut(start, count) {
+    const core = { root: this._root, size: this._size, tails: this._tails };
+    const seg = cut(core, start, count);
+    this._size = core.size;
+    this._tails = core.tails;
+    return seg;
   }
-  on(event, listener) {
-    this._list.on(event, listener);
-    return this;
+  /**
+   * @internal
+   */
+  _insert(index, values2) {
+    const N = values2.length;
+    if (N <= 0) {
+      return;
+    }
+    if (this._capacity <= 0) {
+      this._overflow(values2);
+      return;
+    }
+    let free = this._capacity - this._size;
+    if (free >= N) {
+      this._safeInsert(index, values2);
+      return;
+    }
+    if (!this._isFinite) {
+      this._safeInsert(index, values2.slice(0, free));
+      throw new Error("Out of memory");
+    }
+    if (index > 0) {
+      const shifted = Math.min(index, N - free);
+      const { root } = this._cut(0, shifted);
+      this._overflow(root.levels[0].next);
+      index -= shifted;
+      free += shifted;
+    }
+    if (free >= N) {
+      this._safeInsert(index, values2);
+      return;
+    }
+    const mid = values2.length - free;
+    this._overflow(values2.slice(0, mid));
+    this._safeInsert(0, values2.slice(mid));
   }
-  prependListener(event, listener) {
-    this._list.prependListener(event, listener);
-    return this;
+  /**
+   * @internal
+   *
+   * Emit an overflow event containing the items evicted from the collection.
+   *
+   * @param evicted - The items evicted from the collection.
+   */
+  _overflow(evicted) {
+    if (evicted == null) {
+      return;
+    }
+    if (Array.isArray(evicted)) {
+      this._emitter.emit(BoundedEvent.Overflow, evicted);
+      return;
+    }
+    for (const array of chunk(values(evicted), ARGS_MAX_LENGTH)) {
+      this._emitter.emit(BoundedEvent.Overflow, array);
+    }
   }
-  removeListener(event, listener) {
-    this._list.removeListener(event, listener);
-    return this;
+  /**
+   * @internal
+   */
+  _presert(index, values2) {
+    const N = values2.length;
+    if (N <= 0) {
+      return;
+    }
+    if (this._capacity <= 0) {
+      this._overflow(values2);
+      return;
+    }
+    let free = this._capacity - this._size;
+    if (free >= N) {
+      this._safeInsert(index, values2);
+      return;
+    }
+    if (!this._isFinite) {
+      this._safeInsert(0, values2.slice(values2.length - free));
+      throw new Error("Out of memory");
+    }
+    if (index < this._size) {
+      const popped = Math.min(this._size - index, N - free);
+      const { root } = this._cut(this._size - popped, popped);
+      this._overflow(root.levels[0].next);
+      free += popped;
+    }
+    if (free >= N) {
+      this._safeInsert(index, values2);
+      return;
+    }
+    this._overflow(values2.slice(free));
+    this._safeInsert(this._size, values2.slice(0, free));
+  }
+  /**
+   * @internal
+   */
+  _safeInsert(index, values2) {
+    const N = values2.length;
+    const levels = new Array(N);
+    for (let i = 0; i < N; ++i) {
+      levels[i] = randomRun(this._p, 1, this._maxLevel);
+    }
+    const seg = toList(levels, values2);
+    const core = { root: this._root, size: this._size, tails: this._tails };
+    insert(core, index, seg);
+    this._size = core.size;
+    this._tails = core.tails;
   }
 }
 class CircularMap extends CircularBase {
@@ -1815,6 +2400,76 @@ class CircularMap extends CircularBase {
    */
   values() {
     return this._map.values();
+  }
+}
+class CircularLinkedQueue {
+  constructor(capacity) {
+    /**
+     * @internal
+     */
+    __publicField(this, "_list");
+    this._list = new CircularLinkedList(capacity);
+  }
+  get capacity() {
+    return this._list.capacity;
+  }
+  get size() {
+    return this._list.size;
+  }
+  get [Symbol.toStringTag]() {
+    return CircularLinkedQueue.name;
+  }
+  set capacity(capacity) {
+    this._list.capacity = capacity;
+  }
+  clear() {
+    this._list.clear();
+  }
+  entries() {
+    return this._list.entries();
+  }
+  first() {
+    return this._list.at(0);
+  }
+  forEach(callbackfn, thisArg) {
+    this._list.forEach((v, i) => callbackfn.call(thisArg, v, i, this), thisArg);
+  }
+  front() {
+    return this._list.at(0);
+  }
+  has(value) {
+    return this._list.has(value);
+  }
+  keys() {
+    return this._list.keys();
+  }
+  push(...elems) {
+    return this._list.push(...elems);
+  }
+  shift() {
+    return this._list.shift();
+  }
+  [Symbol.iterator]() {
+    return this.values();
+  }
+  values() {
+    return this._list.values();
+  }
+  addListener(event, listener) {
+    this._list.addListener(event, listener);
+    return this;
+  }
+  on(event, listener) {
+    this._list.on(event, listener);
+    return this;
+  }
+  prependListener(event, listener) {
+    this._list.prependListener(event, listener);
+    return this;
+  }
+  removeListener(event, listener) {
+    this._list.removeListener(event, listener);
+    return this;
   }
 }
 class CircularQueue {
@@ -2064,646 +2719,74 @@ class CircularSet extends CircularBase {
     return this.set.values();
   }
 }
-function* chunk(source, chunkSize) {
-  if (chunkSize < 1) {
-    return;
-  }
-  let chunk2 = [];
-  chunkSize = Math.trunc(chunkSize);
-  for (const value of source) {
-    if (chunk2.push(value) >= chunkSize) {
-      yield chunk2;
-      chunk2 = [];
-    }
-  }
-  if (chunk2.length > 0) {
-    yield chunk2;
-  }
-}
-function calcMaxLevel(p, expectedSize) {
-  if (p <= 0 || expectedSize <= 1) {
-    return 1;
-  }
-  if (p >= 1) {
-    return Infinity;
-  }
-  return Math.ceil(log(expectedSize, 1 / p));
-}
-function copy(root, start, count) {
-  let levels2 = root.levels.length;
-  const segRoot = gen$1(void 0, levels2);
-  if (count <= 0) {
-    return { root: segRoot, size: 0, tails: [segRoot] };
-  }
-  const tails = new Array(levels2).fill(segRoot);
-  const indexes = new Array(levels2).fill(-1);
-  let node = getClosest$1(root, start)[0];
-  node = node.levels[0].next;
-  levels2 = 1;
-  let size = 0;
-  let index = 0;
-  while (node != null && size < count) {
-    const L = node.levels.length;
-    levels2 = levels2 >= L ? levels2 : L;
-    const dupe = gen$1(node.value, L);
-    for (let lvl = 0; lvl < L; ++lvl) {
-      tails[lvl].levels[lvl] = { next: dupe, span: index - indexes[lvl] };
-      tails[lvl] = dupe;
-      indexes[lvl] = index;
-    }
-    const { next, span } = node.levels[0];
-    index += span;
-    node = next;
-    ++size;
-  }
-  tails.length = levels2;
-  segRoot.levels.length = levels2;
-  index = indexes[0] + 1;
-  for (let i = 0; i < levels2; ++i) {
-    tails[i].levels[i] = { next: void 0, span: index - indexes[i] };
-  }
-  return { root: segRoot, size, tails };
-}
-function* entries(node) {
-  for (let i = 0; node != null; ++i) {
-    yield [i, node.value];
-    node = node.levels[0].next;
-  }
-}
-function gen$1(value, levels2 = 1, span = 1, next) {
-  const array = new Array(levels2);
-  for (let i = 0; i < levels2; ++i) {
-    array[i] = { next, span };
-  }
-  return { value, levels: array };
-}
-function get(node, distance) {
-  [node, distance] = getClosest$1(node, distance);
-  return distance === 0 ? node : void 0;
-}
-function getClosest$1(node, distance) {
-  if (distance <= 0) {
-    return [node, distance];
-  }
-  let lvl = node.levels.length - 1;
-  while (true) {
-    const { next, span } = node.levels[lvl];
-    if (span <= distance && next != null)
-      ;
-    else if (--lvl < 0) {
-      return [node, distance];
-    } else {
-      continue;
-    }
-    if (span == distance) {
-      return [next, 0];
-    }
-    distance -= span;
-    node = next;
-  }
-}
-function has(node, value) {
-  while (node != null) {
-    if (node.value === value) {
-      return true;
-    }
-    node = node.levels[0].next;
-  }
-  return false;
-}
-function* keys(node) {
-  for (let i = 0; node != null; ++i) {
-    yield i;
-    node = node.levels[0].next;
-  }
-}
-function toList(levels2, values2) {
-  let Y = -Infinity;
-  const X = Math.min(levels2.length, values2.length);
-  for (let x = 0; x < X; ++x) {
-    if (Y < levels2[x]) {
-      Y = levels2[x];
-    }
-  }
-  if (Y <= 0 || X <= 0) {
-    const root2 = gen$1(void 0);
-    return { root: root2, size: 0, tails: [root2] };
-  }
-  const root = gen$1(void 0, Y, X + 1);
-  const tails = new Array(Y).fill(root);
-  for (let x = 0; x < X; ++x) {
-    const span = X - x;
-    const nextY = levels2[x];
-    const next = gen$1(values2[x], nextY, span);
-    for (let y = 0; y < nextY; ++y) {
-      const levels3 = tails[y].levels;
-      levels3[y] = { next, span: levels3[y].span - span };
-      tails[y] = next;
-    }
-  }
-  return { root, size: X, tails };
-}
-function truncateLevels(root, level) {
-  if (root == null || root.levels.length <= level) {
-    return;
-  }
-  let node = root;
-  while (node != null) {
-    const next = node.levels[level].next;
-    node.levels.length = level;
-    node = next;
-  }
-}
-function* values(node) {
-  while (node != null) {
-    yield node.value;
-    node = node.levels[0].next;
-  }
-}
-function clone(stack) {
-  const N = stack.length;
-  const dupe = new Array(N);
-  for (let i = 0; i < N; ++i) {
-    const { index, node } = stack[i];
-    dupe[i] = { index, node };
-  }
-  return dupe;
-}
-function cut(core, start, distance) {
-  const segRoot = gen$1(void 0);
-  const seg = { root: segRoot, size: 0, tails: [segRoot] };
-  if (distance <= 0) {
-    return seg;
-  }
-  const prevStack = getClosest(gen(core.root, -1), start);
-  const tailStack = getClosest(clone(prevStack), distance);
-  const end = tailStack[0].index + tailStack[0].node.levels[0].span;
-  let levels = core.root.levels.length;
-  start = prevStack[0].index + prevStack[0].node.levels[0].span;
-  distance = end - start;
-  let lvl;
-  for (lvl = 0; lvl < levels; ++lvl) {
-    const prev = prevStack[lvl];
-    const tail = tailStack[lvl];
-    if (prev.index >= tail.index) {
-      break;
-    }
-    let edge = prev.node.levels[lvl];
-    let span = prev.index + edge.span - start;
-    segRoot.levels[lvl] = { next: edge.next, span };
-    edge = tail.node.levels[lvl];
-    span = tail.index - prev.index + (edge.span - distance);
-    prev.node.levels[lvl] = { next: edge.next, span };
-    tail.node.levels[lvl] = { next: void 0, span: end - tail.index };
-    seg.tails[lvl] = tail.node;
-  }
-  if (lvl < levels) {
-    while (lvl < levels) {
-      const prev = prevStack[lvl];
-      const { next, span } = prev.node.levels[lvl];
-      prev.node.levels[lvl] = { next, span: span - distance };
-      ++lvl;
-    }
-  } else {
-    const links = core.root.levels;
-    while (lvl > 1 && links[lvl - 1].next == null) {
-      --lvl;
-    }
-    levels = lvl;
-    links.length = levels;
-    core.tails.length = levels;
-  }
-  if (end >= core.size) {
-    for (lvl = 0; lvl < levels; ++lvl) {
-      core.tails[lvl] = prevStack[lvl].node;
-    }
-  }
-  core.size -= distance;
-  seg.size = distance;
-  return seg;
-}
-function gen(node, index = 0) {
-  const N = node.levels.length;
-  const stack = new Array(N);
-  for (let i = 0; i < N; ++i) {
-    stack[i] = { index, node };
-  }
-  return stack;
-}
-function getClosest(stack, distance) {
-  if (distance <= 0 || stack.length <= 0) {
-    return stack;
-  }
-  let lvl = stack.length - 1;
-  let ptr = stack[lvl];
-  const target = stack[0].index + distance;
-  while (true) {
-    const { next, span } = ptr.node.levels[lvl];
-    const nextIndex = ptr.index + span;
-    if (nextIndex <= target && next != null)
-      ;
-    else if (--lvl < 0) {
-      break;
-    } else {
-      ptr = stack[lvl];
-      continue;
-    }
-    ptr = { index: nextIndex, node: next };
-    stack[lvl] = ptr;
-    if (nextIndex == target) {
-      break;
-    }
-  }
-  for (let i = 0; i < lvl; ++i) {
-    stack[i] = { index: ptr.index, node: ptr.node };
-  }
-  return stack;
-}
-function insert(dest, index, src) {
-  if (src.size <= 0) {
-    return;
-  }
-  const minY = src.tails.length;
-  for (let y = dest.tails.length; y < minY; ++y) {
-    dest.root.levels[y] = { next: void 0, span: dest.size + 1 };
-    dest.tails[y] = dest.root;
-  }
-  const prevs = getClosest(gen(dest.root, -1), index);
-  for (let y = 0; y < minY; ++y) {
-    const prev = prevs[y].node;
-    const prevI = prevs[y].index;
-    const prevEdge = prev.levels[y];
-    const tail = src.tails[y];
-    const tailEdge = tail.levels[y];
-    const nextI = prevI + prevEdge.span;
-    const nextD = nextI - index;
-    const tailD = tailEdge.span;
-    tail.levels[y] = { next: prevEdge.next, span: nextD + tailD };
-    const rootEdge = src.root.levels[y];
-    const headD = rootEdge.span - 1;
-    const prevD = index - prevI;
-    prev.levels[y] = { next: rootEdge.next, span: prevD + headD };
-  }
-  const maxY = dest.tails.length;
-  for (let y = minY; y < maxY; ++y) {
-    const levels = prevs[y].node.levels;
-    const { next, span } = levels[y];
-    levels[y] = { next, span: span + src.size };
-  }
-  if (index === dest.size) {
-    dest.tails = src.tails;
-  }
-  dest.size += src.size;
-}
-class CircularSkipList extends CircularBase {
-  constructor(config) {
-    super();
+class CircularLinkedStack {
+  constructor(capacity) {
     /**
      * @internal
-     * The maximum number of elements that can be stored in the collection.
      */
-    __publicField(this, "_capacity");
-    /**
-     * @internal
-     * Whether capacity is finite (true) or infinite (false).
-     */
-    __publicField(this, "_isFinite");
-    /**
-     * @internal
-     * The maximum number of levels in the skip list.
-     */
-    __publicField(this, "_maxLevel");
-    /**
-     * @internal
-     * The probability factor used to randomly determine the levels
-     * of new nodes. Should be a value between 0 and 1, where a lower
-     * value results in fewer levels on average.
-     */
-    __publicField(this, "_p");
-    /**
-     * @internal
-     * The root of the skip list
-     */
-    __publicField(this, "_root");
-    /**
-     * @internal
-     * The current size of the list (0 \<= size \<= capacity)
-     */
-    __publicField(this, "_size");
-    /**
-     * @internal
-     * The last nodes in the skip list at each level.
-     */
-    __publicField(this, "_tails");
-    this._capacity = LINKED_MAX_LENGTH;
-    this._isFinite = false;
-    this._p = 0.5;
-    this._maxLevel = calcMaxLevel(this._p, LINKED_MAX_LENGTH);
-    this._root = gen$1(void 0);
-    this._size = 0;
-    this._tails = [this._root];
-    if (config == null) {
-      return;
-    }
-    if (isNumber(config)) {
-      this.capacity = config;
-      return;
-    }
-    if (!isIterable(config)) {
-      this.capacity = config.capacity ?? this._capacity;
-      this.p = config.p ?? this._p;
-      const size = config.expectedSize ?? this._capacity;
-      this.maxLevel = config.maxLevel ?? calcMaxLevel(this._p, size);
-      return;
-    }
-    for (const vals of chunk(config, ARGS_MAX_LENGTH)) {
-      this._insert(this._size, vals);
-    }
-    this._capacity = this._size;
-    this._isFinite = true;
+    __publicField(this, "_list");
+    this._list = new CircularDoublyLinkedList(capacity);
   }
   get capacity() {
-    return this._isFinite ? this._capacity : Infinity;
-  }
-  get levels() {
-    return this._root.levels.length;
-  }
-  get maxLevel() {
-    return this._maxLevel;
-  }
-  get p() {
-    return this._p;
+    return this._list.capacity;
   }
   get size() {
-    return this._size;
+    return this._list.size;
   }
   get [Symbol.toStringTag]() {
-    return CircularSkipList.name;
+    return CircularLinkedStack.name;
   }
   set capacity(capacity) {
-    capacity = +capacity;
-    if (isInfinity(capacity)) {
-      capacity = LINKED_MAX_LENGTH;
-      this._isFinite = false;
-    } else if (isLinkedLength(capacity)) {
-      this._isFinite = true;
-    } else {
-      throw new RangeError("Invalid capacity");
-    }
-    this._capacity = capacity;
-    if (this._size <= capacity) {
-      return;
-    }
-    const { root } = this._cut(0, this._size - capacity);
-    this._overflow(values(root.levels[0].next));
-  }
-  set maxLevel(maxLevel) {
-    maxLevel = +maxLevel;
-    if (!isArrayLength(maxLevel) || maxLevel <= 0) {
-      throw new RangeError("Invalid maxLevel");
-    }
-    this._maxLevel = maxLevel;
-    if (maxLevel < this.levels) {
-      truncateLevels(this._root, maxLevel);
-    }
-  }
-  set p(p) {
-    p = +p;
-    if (isNaN(p) || p < 0 || p > 1) {
-      throw new RangeError("Invalid p");
-    }
-    this._p = p;
-  }
-  at(index) {
-    index = addIfBelow(toInteger(index, -Infinity), this._size);
-    if (!isInRange(index, 0, this._size)) {
-      return void 0;
-    }
-    return get(this._root, index + 1).value;
+    this._list.capacity = capacity;
   }
   clear() {
-    this._size = 0;
-    this._tails = [this._root];
-    this._root.levels.length = 1;
-    this._root.levels[0] = { next: void 0, span: 1 };
-  }
-  delete(index) {
-    index = addIfBelow(toInteger(index, -Infinity), this._size);
-    if (!isInRange(index, 0, this._size)) {
-      return false;
-    }
-    this._cut(index, 1);
-    return true;
+    this._list.clear();
   }
   entries() {
-    return entries(this._root.levels[0].next);
-  }
-  fill(value, start, end) {
-    const size = this._size;
-    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
-    end = clamp(addIfBelow(toInteger(end, size), size), start, size);
-    if (start >= end) {
-      return this;
-    }
-    let node = get(this._root, start + 1);
-    for (let i = start; i < end; ++i) {
-      node.value = value;
-      node = node.levels[0].next;
-    }
-    return this;
+    return this._list.entries();
   }
   forEach(callbackfn, thisArg) {
-    let node = this._root;
-    for (let i = 0; i < this._size; ++i) {
-      node = node.levels[0].next;
-      callbackfn.call(thisArg, node.value, i, this);
-    }
+    this._list.forEach((v, i) => callbackfn.call(thisArg, v, i, this), thisArg);
   }
   has(value) {
-    return has(this._root.levels[0].next, value);
+    return this._list.has(value);
   }
   keys() {
-    return keys(this._root.levels[0].next);
+    return this._list.keys();
+  }
+  last() {
+    return this._list.at(-1);
   }
   pop() {
-    if (this._size <= 0) {
-      return void 0;
-    }
-    const { root } = this._cut(this._size - 1, 1);
-    return root.levels[0].next.value;
+    return this._list.pop();
   }
-  push(...values2) {
-    if (values2.length <= 0) {
-      return this._size;
-    }
-    if (this._capacity <= 0) {
-      this._overflow(values2);
-      return this._size;
-    }
-    this._insert(this._size, values2);
-    return this._size;
-  }
-  set(index, value) {
-    index = addIfBelow(toInteger(index, -Infinity), this._size);
-    if (!isInRange(index, 0, this._size)) {
-      return void 0;
-    }
-    const node = get(this._root, index + 1);
-    const prevValue = node.value;
-    node.value = value;
-    return prevValue;
-  }
-  shift() {
-    if (this._size <= 0) {
-      return void 0;
-    }
-    const { root } = this._cut(0, 1);
-    return root.levels[0].next.value;
-  }
-  slice(start, end) {
-    const size = this._size;
-    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
-    end = clamp(addIfBelow(toInteger(end, size), size), start, size);
-    const core = copy(this._root, start, end - start);
-    const list = new CircularSkipList({
-      capacity: core.size,
-      p: this._p,
-      maxLevel: this._maxLevel
-    });
-    list._root = core.root;
-    list._tails = core.tails;
-    list._size = core.size;
-    return list;
-  }
-  splice(start, deleteCount, ...items) {
-    const size = this._size;
-    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
-    deleteCount = clamp(toInteger(deleteCount, 0), 0, size - start);
-    const core = this._cut(start, deleteCount);
-    this._insert(start, items);
-    const list = new CircularSkipList({
-      capacity: deleteCount,
-      p: this._p,
-      maxLevel: this._maxLevel
-    });
-    list._root = core.root;
-    list._tails = core.tails;
-    list._size = core.size;
-    return list;
+  push(...elems) {
+    return this._list.push(...elems);
   }
   [Symbol.iterator]() {
     return this.values();
   }
-  unshift(...values2) {
-    if (values2.length <= 0) {
-      return this._size;
-    }
-    if (this._capacity <= 0) {
-      this._overflow(values2);
-      return this._size;
-    }
-    this._presert(0, values2);
-    return this._size;
+  top() {
+    return this._list.at(-1);
   }
   values() {
-    return values(this._root.levels[0].next);
+    return this._list.values();
   }
-  /**
-   * @internal
-   */
-  _cut(start, count) {
-    const core = { root: this._root, size: this._size, tails: this._tails };
-    const seg = cut(core, start, count);
-    this._size = core.size;
-    this._tails = core.tails;
-    return seg;
+  addListener(event, listener) {
+    this._list.addListener(event, listener);
+    return this;
   }
-  /**
-   * @internal
-   */
-  _insert(index, values$12) {
-    const N = values$12.length;
-    let free = this._capacity - this._size;
-    if (free >= N) {
-      this._safeInsert(index, values$12);
-      return;
-    }
-    if (!this._isFinite) {
-      this._safeInsert(index, values$12.slice(0, free));
-      throw new Error("Out of memory");
-    }
-    if (index > 0) {
-      const shifted = Math.min(index, N - free);
-      const { root } = this._cut(0, shifted);
-      this._overflow(values(root.levels[0].next));
-      index -= shifted;
-      free += shifted;
-    }
-    if (free >= N) {
-      this._safeInsert(index, values$12);
-      return;
-    }
-    const mid = values$12.length - free;
-    this._overflow(values$12.slice(0, mid));
-    this._safeInsert(0, values$12.slice(mid));
+  on(event, listener) {
+    this._list.on(event, listener);
+    return this;
   }
-  /**
-   * @internal
-   *
-   * Emit an overflow event containing the items evicted from the collection.
-   *
-   * @param evicted - The items evicted from the collection.
-   */
-  _overflow(evicted) {
-    if (Array.isArray(evicted)) {
-      this._emitter.emit(BoundedEvent.Overflow, evicted);
-    } else {
-      for (const array of chunk(evicted, ARGS_MAX_LENGTH)) {
-        this._emitter.emit(BoundedEvent.Overflow, array);
-      }
-    }
+  prependListener(event, listener) {
+    this._list.prependListener(event, listener);
+    return this;
   }
-  /**
-   * @internal
-   */
-  _presert(index, values$12) {
-    const N = values$12.length;
-    let free = this._capacity - this._size;
-    if (free >= N) {
-      this._safeInsert(index, values$12);
-      return;
-    }
-    if (!this._isFinite) {
-      this._safeInsert(0, values$12.slice(values$12.length - free));
-      throw new Error("Out of memory");
-    }
-    if (index < this._size) {
-      const popped = Math.min(this._size - index, N - free);
-      const { root } = this._cut(this._size - popped, popped);
-      this._overflow(values(root.levels[0].next));
-      free += popped;
-    }
-    if (free >= N) {
-      this._safeInsert(index, values$12);
-      return;
-    }
-    this._overflow(values$12.slice(free));
-    this._safeInsert(this._size, values$12.slice(0, free));
-  }
-  /**
-   * @internal
-   */
-  _safeInsert(index, values2) {
-    const N = values2.length;
-    const levels = new Array(N);
-    for (let i = 0; i < N; ++i) {
-      levels[i] = randomRun(this._p, 1, this._maxLevel);
-    }
-    const seg = toList(levels, values2);
-    const core = { root: this._root, size: this._size, tails: this._tails };
-    insert(core, index, seg);
-    this._size = core.size;
-    this._tails = core.tails;
+  removeListener(event, listener) {
+    this._list.removeListener(event, listener);
+    return this;
   }
 }
 class CircularStack {
