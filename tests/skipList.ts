@@ -370,23 +370,23 @@ export function test(cls: Constructor<SkipList<unknown>>) {
       });
 
       it("should remove empty levels as items are deleted", () => {
-        skipList = new cls({ maxLevel: 10, p: 0.55 });
-        const firsts = new Array(10).fill(0);
+        skipList = new cls({ maxLevel: 10, p: 0.6 });
+        const firsts = new Array(10).fill(-1);
 
-        let maxLevel = 1;
+        let maxLevel = 0;
         for (let i = 0; i < 10; ++i) {
           skipList.push(i);
           if (skipList.levels > maxLevel) {
-            firsts.fill(i, maxLevel + 1, skipList.levels);
+            firsts.fill(i, maxLevel, skipList.levels);
             maxLevel = skipList.levels;
           }
         }
 
-        for (let i = firsts[maxLevel]; i < 10; ++i) {
-          skipList.delete(-1);
-        }
-
         if (maxLevel > 1) {
+          const first = firsts[maxLevel - 1];
+          for (let i = 10; i > first; --i) {
+            skipList.delete(-1);
+          }
           expect(skipList.levels).toBeLessThan(maxLevel);
         }
       });
