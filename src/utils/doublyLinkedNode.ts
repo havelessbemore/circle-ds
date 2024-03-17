@@ -3,6 +3,57 @@ import { DoublyLinkedNode } from "../types/doublyLinkedNode";
 import { get as singlyGet, cut as singlyCut } from "./linkedNode";
 
 /**
+ * Creates a copy of a segment from a doubly linked list.
+ *
+ * @param node - The first {@link DoublyLinkedNode} of the original list from
+ *               which the copy operation begins.
+ * @param count - The number of nodes to copy. If the count exceeds the number
+ *                of nodes available, only the available nodes are copied.
+ *
+ * @returns A tuple containing:
+ *          - The head {@link DoublyLinkedNode} of the new list.
+ *          - The tail {@link DoublyLinkedNode} of the new list.
+ *          - An integer representing the total number of nodes copied.
+ */
+export function copy<N extends DoublyLinkedNode<unknown>>(
+  node: N | undefined,
+  distance: number
+): [N, N, number] | [undefined, undefined, 0] {
+  // Check distance
+  if (node == null || distance <= 0) {
+    return [undefined, undefined, 0];
+  }
+
+  // Initialize new list
+  const root = { value: undefined } as N;
+  let tail = root;
+
+  // For each node
+  let size = 0;
+  while (node != null && size < distance) {
+    // Create a duplicate
+    const dupe = { value: node.value } as N;
+
+    // Attach the duplicate
+    tail.next = dupe;
+    dupe.prev = tail;
+    tail = dupe;
+
+    // Update size
+    ++size;
+
+    // Move to the next node
+    node = node.next;
+  }
+
+  // Return copy
+  const head = root.next!;
+  head.prev = undefined;
+  tail.next = undefined;
+  return [head, tail, size];
+}
+
+/**
  * Removes and returns a segment of a linked list as a new list.
  *
  * This operation modifies the original list by removing the specified

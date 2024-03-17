@@ -312,18 +312,22 @@ export class CircularLinkedList<T>
     start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
     deleteCount = clamp(toInteger(deleteCount, 0), 0, size - start);
 
-    // Remove deleted items
-    const [head, tail] = this._cut(start, deleteCount);
+    // Remove deleted items, if any
+    let list: CircularLinkedList<T>;
+    if (deleteCount <= 0) {
+      list = new CircularLinkedList<T>(0);
+    } else {
+      const [head, tail] = this._cut(start, deleteCount);
+      list = new CircularLinkedList<T>(deleteCount);
+      list._root.next = head;
+      list._tail = tail!;
+      list._size = deleteCount;
+    }
 
     // Add new items
     this._insert(start, items);
 
     // Return deleted items as a list
-    const list = new CircularLinkedList<T>(deleteCount);
-    list._root.next = head;
-    list._tail = tail ?? list._root;
-    list._size = deleteCount;
-
     return list;
   }
 

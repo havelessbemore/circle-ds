@@ -1,5 +1,18 @@
 import { LinkedNode } from "../types/linkedNode";
 
+/**
+ * Creates a copy of a segment from a linked list.
+ *
+ * @param node - The first {@link LinkedNode} of the original list from which
+ *               the copy operation begins.
+ * @param count - The number of nodes to copy. If the count exceeds the number
+ *                of nodes available, only the available nodes are copied.
+ *
+ * @returns A tuple containing:
+ *          - The head {@link LinkedNode} of the new list.
+ *          - The tail {@link LinkedNode} of the new list.
+ *          - An integer representing the total number of nodes copied.
+ */
 export function copy<N extends LinkedNode<unknown>>(
   node: N | undefined,
   distance: number

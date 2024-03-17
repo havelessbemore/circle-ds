@@ -4,10 +4,15 @@ import { DoublyLinkedNode as Node } from "../../types/doublyLinkedNode";
 import { List } from "../../types/list";
 
 import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../../utils/constants";
-import { cut, get, toList } from "../../utils/doublyLinkedNode";
+import { copy, cut, get, toList } from "../../utils/doublyLinkedNode";
 import { isInfinity, isLinkedLength, isNumber } from "../../utils/is";
 import { chunk } from "../../utils/iterable";
-import { entries, has, keys, values } from "../../utils/linkedNode";
+import {
+  entries,
+  has,
+  keys,
+  values as getValues,
+} from "../../utils/linkedNode";
 import { addIfBelow, clamp, isInRange, toInteger } from "../../utils/math";
 
 import { CircularBase } from "../circularBase";
@@ -135,7 +140,7 @@ export class CircularDoublyLinkedList<T>
     this._size -= diff;
 
     // Emit discarded items
-    for (const array of chunk(values(head, tail!.next), ARGS_MAX_LENGTH)) {
+    for (const array of chunk(getValues(head, tail!.next), ARGS_MAX_LENGTH)) {
       this._overflow(array);
     }
   }
@@ -217,37 +222,21 @@ export class CircularDoublyLinkedList<T>
   }
 
   pop(): T | undefined {
-    // Check if empty
+    // If list is empty
     if (this._size <= 0) {
       return undefined;
     }
 
-    // Remove tail
-    const node = this._root.prev!;
-    node.prev!.next = node.next;
-    node.next!.prev = node.prev;
-    --this._size;
+    // Remove last value
+    const [head] = this._cut(this._size - 1, 1);
 
     // Return value
-    return node.value;
+    return head!.value;
   }
 
   push(...values: T[]): number {
-    // Case 1: No values
-    const N = values.length;
-    if (N <= 0) {
-      return this._size;
-    }
-
-    // Case 2: Zero capacity
-    const capacity = this._capacity;
-    if (capacity <= 0) {
-      this._overflow(values);
-      return this._size;
-    }
-
     // Add values
-    this._append(this._root.prev!, values);
+    this._insert(this._size, values);
 
     // Return size
     return this._size;
@@ -270,47 +259,44 @@ export class CircularDoublyLinkedList<T>
   }
 
   shift(): T | undefined {
-    // Check if empty
+    // If list is empty
     if (this._size <= 0) {
       return undefined;
     }
 
-    // Remove head
-    const head = this._root.next!;
-    head.prev!.next = head.next;
-    head.next!.prev = head.prev;
-    --this._size;
+    // Remove first value
+    const [head] = this._cut(0, 1);
 
     // Return value
-    return head.value;
+    return head!.value;
   }
 
   slice(start?: number, end?: number): CircularDoublyLinkedList<T> {
-    const out = new CircularDoublyLinkedList<T>();
+    const size = this._size;
+
+    // Sanitize inputs
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    end = clamp(addIfBelow(toInteger(end, size), size), start, size);
 
     // Check if empty
-    if (this._size <= 0) {
-      return out;
+    if (start >= end) {
+      return new CircularDoublyLinkedList<T>(0);
     }
 
-    // Sanitize start
-    start = toInteger(start, 0);
-    start = clamp(addIfBelow(start, this._size), 0, this._size);
+    // Create segment copy
+    const node = this._get(start);
+    const [head, tail, length] = copy(node, end - start);
 
-    // Sanitize end
-    end = toInteger(end, this._size);
-    end = clamp(addIfBelow(end, this._size), 0, this._size);
-
-    // Add values to output
-    let prev = this._get(start - 1);
-    while (start < end) {
-      prev = prev.next!;
-      out.push(prev.value);
-      ++start;
-    }
+    // Return copied segment as a list
+    const list = new CircularDoublyLinkedList<T>(length);
+    head!.prev = list._root;
+    tail!.next = list._root;
+    list._root.next = head;
+    list._root.prev = tail;
+    list._size = length;
 
     // Return new list
-    return out;
+    return list;
   }
 
   splice(
@@ -318,101 +304,67 @@ export class CircularDoublyLinkedList<T>
     deleteCount?: number,
     ...items: T[]
   ): CircularDoublyLinkedList<T> {
-    const out = new CircularDoublyLinkedList<T>();
+    const size = this._size;
 
-    // Sanitize start
-    start = toInteger(start, 0);
-    start = clamp(addIfBelow(start, this._size), 0, this._size);
+    // Sanitize inputs
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    deleteCount = clamp(toInteger(deleteCount, 0), 0, size - start);
 
-    // Sanitize deleteCount
-    deleteCount = toInteger(deleteCount, 0);
-    deleteCount = clamp(deleteCount, 0, this._size - start);
-
-    // Get prev node
-    const prev = this._get(start - 1);
-
-    // Delete values
-    if (deleteCount > 0) {
-      const [head, tail] = cut(prev, deleteCount);
-      this._size -= deleteCount;
-      head!.prev = out._root;
-      tail!.next = out._root;
-      out._root.next = head;
-      out._root.prev = tail;
-      out._size = deleteCount;
+    // Remove deleted items, if any
+    let list: CircularDoublyLinkedList<T>;
+    if (deleteCount <= 0) {
+      list = new CircularDoublyLinkedList<T>(0);
+    } else {
+      const [head, tail] = this._cut(start, deleteCount);
+      list = new CircularDoublyLinkedList<T>(deleteCount);
+      head!.prev = list._root;
+      tail!.next = list._root;
+      list._root.next = head;
+      list._root.prev = tail;
+      list._size = deleteCount;
     }
 
-    // Add values
-    this._append(prev, items);
-    return out;
+    // Add new items
+    this._insert(start, items);
+
+    // Return deleted items as a list
+    return list;
   }
 
   [Symbol.iterator](): IterableIterator<T> {
-    return values(this._root.next, this._root);
+    return getValues(this._root.next, this._root);
   }
 
   unshift(...values: T[]): number {
-    // Case 1: No values
-    const N = values.length;
-    if (N <= 0) {
-      return this._size;
-    }
-
-    // Case 2: Zero capacity
-    const capacity = this._capacity;
-    if (capacity <= 0) {
-      this._overflow(values);
-      return this._size;
-    }
-
     // Add values
-    this._prepend(this._root.next!, values);
+    this._presert(0, values);
 
-    // Return size
+    // Return new size
     return this._size;
   }
 
   values(): IterableIterator<T> {
-    return values(this._root.next, this._root);
+    return getValues(this._root.next, this._root);
   }
 
   /**
    * @internal
    */
-  protected _append(tail: Node<T>, values: T[]): Node<T> {
-    const root = this._root;
-    const next = tail.next!;
-    const evicted: T[] = [];
-    const capacity = this._capacity;
+  protected _cut(
+    start: number,
+    count: number
+  ): [Node<T>, Node<T>] | [undefined, undefined] {
+    // Get previous
+    const prev = this._get(start - 1)!;
 
-    // Add values
-    let size = this._size;
-    const N = values.length;
-    for (let i = 0; i < N; ++i) {
-      const curr = { prev: tail, value: values[i] } as Node<T>;
-      tail.next = curr;
-      tail = curr;
-      if (size < capacity) {
-        ++size;
-      } else {
-        evicted.push(root.next!.value);
-        root.next = root.next!.next;
-      }
-    }
-    tail.next = next;
-    next.prev = tail;
-    root.next!.prev = root;
-
-    // Emit evicted items
-    if (evicted.length > 0) {
-      this._overflow(evicted);
-    }
+    // Cut and get removed segment
+    const [head, tail] = cut(prev, count);
 
     // Update size
-    this._size = size;
+    this._size -= count;
 
-    // Return last node
-    return tail;
+    // Return cut segment
+    return [head, tail] as [Node<T>, Node<T>];
   }
 
   /**
@@ -421,6 +373,56 @@ export class CircularDoublyLinkedList<T>
   protected _get(index: number): Node<T> {
     index -= index <= this._size / 2 ? -1 : this._size;
     return get(this._root, index)!;
+  }
+
+  /**
+   * @internal
+   */
+  protected _insert(index: number, values: T[]): void {
+    // If no values
+    const N = values.length;
+    if (N <= 0) {
+      return;
+    }
+
+    // If no capacity
+    if (this._capacity <= 0) {
+      this._overflow(values);
+      return;
+    }
+
+    // Check free space
+    let free = this._capacity - this._size;
+    if (free >= N) {
+      this._safeInsert(index, values);
+      return;
+    }
+
+    // Check if "infinite" capacity yet not enough space
+    if (!this._isFinite) {
+      this._safeInsert(index, values.slice(0, free));
+      throw new Error("Out of memory");
+    }
+
+    // Remove from head
+    if (index > 0) {
+      const shifted = Math.min(index, N - free);
+      const [head] = this._cut(0, shifted);
+      this._overflow(getValues(head));
+      index -= shifted;
+      free += shifted;
+    }
+
+    // Check free space
+    if (free >= N) {
+      this._safeInsert(index, values);
+      return;
+    }
+
+    // Remove from items and insert remaining
+    const mid = values.length - free;
+    this._overflow(values.slice(0, mid));
+    this._safeInsert(0, values.slice(mid));
   }
 
   /**
@@ -440,38 +442,72 @@ export class CircularDoublyLinkedList<T>
   /**
    * @internal
    */
-  protected _prepend(next: Node<T>, values: T[]): Node<T> {
-    const root = this._root;
-    const prev = next.prev!;
-    const evicted: T[] = [];
-    const capacity = this._capacity;
-
-    // Add values
-    let size = this._size;
-    for (let i = values.length - 1; i >= 0; --i) {
-      const curr = { next, value: values[i] } as Node<T>;
-      next.prev = curr;
-      next = curr;
-      if (size < capacity) {
-        ++size;
-      } else {
-        evicted.push(root.prev!.value);
-        root.prev = root.prev!.prev;
-      }
-    }
-    next.prev = prev;
-    prev.next = next;
-    root.prev!.next = root;
-
-    // Emit evicted items
-    if (evicted.length > 0) {
-      this._overflow(evicted.reverse());
+  protected _presert(index: number, values: T[]): void {
+    // If no values
+    const N = values.length;
+    if (N <= 0) {
+      return;
     }
 
-    // Update size
-    this._size = size;
+    // If no capacity
+    if (this._capacity <= 0) {
+      this._overflow(values);
+      return;
+    }
 
-    // Return last node
-    return next;
+    // Check free space
+    let free = this._capacity - this._size;
+    if (free >= N) {
+      this._safeInsert(index, values);
+      return;
+    }
+
+    // Check if "infinite" capacity yet not enough space
+    if (!this._isFinite) {
+      this._safeInsert(0, values.slice(values.length - free));
+      throw new Error("Out of memory");
+    }
+
+    // Remove from tail
+    if (index < this._size) {
+      const popped = Math.min(this._size - index, N - free);
+      const [head] = this._cut(this._size - popped, popped);
+      this._overflow(getValues(head));
+      free += popped;
+    }
+
+    // Check free space
+    if (free >= N) {
+      this._safeInsert(index, values);
+      return;
+    }
+
+    // Remove from items and insert remaining
+    this._overflow(values.slice(free));
+    this._safeInsert(this._size, values.slice(0, free));
+  }
+
+  /**
+   * @internal
+   */
+  protected _safeInsert(index: number, values: T[]): void {
+    // Sanitize input
+    if (values.length <= 0) {
+      return;
+    }
+
+    // Create segment
+    const [head, tail, size] = toList(values);
+
+    // Insert segment
+    const prev = this._get(index - 1);
+    const next = prev.next!;
+    head!.prev = prev;
+    tail!.next = next;
+    next.prev = tail!;
+    prev.next = head;
+
+    // Update list state
+    this._size += size;
   }
 }

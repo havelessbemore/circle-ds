@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { LinkedNode } from "../types/linkedNode";
 
 import {
+  copy,
   cut,
   entries,
   get,
@@ -16,6 +17,56 @@ import {
 export function toArray<T>(node?: LinkedNode<T>): T[] {
   return Array.from(values(node));
 }
+
+describe(`${copy.name}()`, () => {
+  test("returns undefineds when input node is undefined", () => {
+    const [head, tail, size] = copy(undefined, 2);
+
+    expect(size).toBe(0);
+    expect(head).toBeUndefined();
+    expect(tail).toBeUndefined();
+  });
+
+  test("returns undefineds when count is negative", () => {
+    const [src] = toList(["A", "B", "C"]);
+    const [head, tail, size] = copy(src, -1);
+
+    expect(size).toBe(0);
+    expect(head).toBeUndefined();
+    expect(tail).toBeUndefined();
+  });
+
+  test("returns undefineds when count is zero", () => {
+    const [src] = toList(["A", "B", "C"]);
+    const [head, tail, size] = copy(src, 0);
+
+    expect(size).toBe(0);
+    expect(head).toBeUndefined();
+    expect(tail).toBeUndefined();
+  });
+
+  test("copies the specified number of nodes from the list", () => {
+    const [src] = toList(["A", "B", "C", "D"]);
+    const [head, tail, size] = copy(src, 2);
+
+    expect(size).toBe(2);
+    expect(head!.value).toBe("A");
+    expect(tail!.value).toBe("B");
+    expect(tail!.next).toBeUndefined();
+    expect(Array.from(values(head))).toEqual(["A", "B"]);
+  });
+
+  test("handles copying more nodes than available", () => {
+    const [src] = toList(["A", "B", "C"]);
+    const [head, tail, size] = copy(src, 5);
+
+    expect(size).toBe(3);
+    expect(head!.value).toBe("A");
+    expect(tail!.value).toBe("C");
+    expect(tail!.next).toBeUndefined();
+    expect(Array.from(values(head))).toEqual(["A", "B", "C"]);
+  });
+});
 
 describe(`${cut.name}()`, () => {
   test("returns [undefined, undefined] for non-positive count", () => {
