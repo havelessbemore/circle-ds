@@ -1,4 +1,4 @@
-import { SkipLink, SkipListCore, SkipNode } from "../types/skipList";
+import { SkipLink, SkipCore, SkipNode } from "../types/skipList";
 import { log } from "./math";
 
 /**
@@ -58,14 +58,14 @@ export function calcMaxLevel(p: number, expectedSize: number): number {
 export function copy<T>(
   root: SkipNode<T>,
   start: number,
-  count: number
-): SkipListCore<T> {
+  distance: number
+): SkipCore<T> {
   // Create new root
   let levels = root.levels.length;
   const segRoot = gen(undefined as T, levels);
 
-  // Check count
-  if (count <= 0) {
+  // Check distance
+  if (distance <= 0) {
     return { root: segRoot, size: 0, tails: [segRoot] };
   }
 
@@ -81,7 +81,7 @@ export function copy<T>(
   levels = 1;
   let size = 0;
   let index = 0;
-  while (node != null && size < count) {
+  while (node != null && index < distance) {
     // Update maximum level
     const L = node.levels.length;
     levels = levels >= L ? levels : L;
@@ -160,12 +160,12 @@ export function gen<T>(
 }
 
 /**
- * Retrieves the node at the specified distance from the given node.
+ * Retrieves the node at the specified distance (span) from the given node.
  *
  * @param node - The node from which to start.
- * @param distance - The forward distance of the node to retrieve.
+ * @param distance - The distance (span) of the node to retrieve.
  *
- * @returns The node at the specified index, or `undefined` if not found.
+ * @returns The node at the specified distance, or `undefined` if not found.
  */
 export function get<T>(
   node: SkipNode<T>,
@@ -176,15 +176,15 @@ export function get<T>(
 }
 
 /**
- * Retrieves the node at the specified distance from the given node, or the
- * closest node within the intended distance.
+ * Retrieves the node at the specified distance (span) from the given
+ * node, or the closest node within the intended distance.
  *
  * @param node - The node from which to start.
- * @param distance - The forward distance of the node to retrieve.
+ * @param distance - The distance (span) of the node to retrieve.
  *
- * @returns A tuple of the resulting node and any remaining distance. If the
- * intended node was found, the tuple would be `[intended node, 0]`.
- * Otherwise, the tuple would be `[closest node, distance remaining]`.
+ * @returns A tuple of the resulting node and remaining distance.
+ * If the intended node was found, the tuple is `[intended node, 0]`.
+ * Otherwise, the tuple is `[closest node, remaining distance]`.
  */
 export function getClosest<T>(
   node: SkipNode<T>,
@@ -311,7 +311,7 @@ export function* levels<T>(node?: SkipNode<T>): Generator<number> {
  * - If the lengths of the input arrays do not match, the function operates on the smallest length.
  * - A dummy root node is created and updated to have up to the maximum level in the `levels` array.
  */
-export function toList<T>(levels: number[], values: T[]): SkipListCore<T> {
+export function toList<T>(levels: number[], values: T[]): SkipCore<T> {
   // Get # of values (X) and max level (Y)
   let Y = -Infinity;
   const X = Math.min(levels.length, values.length);
