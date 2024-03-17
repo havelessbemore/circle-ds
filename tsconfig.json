@@ -115,10 +115,10 @@
   },
   "include": ["src", "tests"],
   "exclude": [
-    "**/*.test.ts",
-    "node_modules",
-    "test/**",
     ".history/**",
-    "**/tester.ts"
+    "node_modules",
+    "src/todo/**",
+    "test/**",
+    "**/*.test.ts"
   ]
 }
