@@ -1,6 +1,6 @@
-import { Stack } from "../types/stack";
-import { Bounded } from "../types/bounded";
-import { BoundedEvent, CircularDoublyLinkedList } from "..";
+import { Stack } from "../../types/stack";
+import { Bounded } from "../../types/bounded";
+import { BoundedEvent, CircularDoublyLinkedList } from "../..";
 
 /**
  * A circular stack is similar to a traditional stack, but uses a fixed-size,

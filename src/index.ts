@@ -1,25 +1,35 @@
 // Events
 export { BoundedEvent } from "./types/boundedEvent";
 
-// Types
+// Common
 export type { Bounded } from "./types/bounded";
 export type { Collection } from "./types/collection";
-export type { Deque } from "./types/deque";
-export type { List } from "./types/list";
-export type { Queue } from "./types/queue";
-export type { SkipList } from "./types/skipList";
-export type { Stack } from "./types/stack";
 
-// Circular Classes
-export { CircularArrayList } from "./circle/circularArrayList";
-export { CircularDeque } from "./circle/circularDeque";
-export { CircularDoublyLinkedList } from "./circle/circularDoublyLinkedList";
-export { CircularLinkedDeque } from "./circle/circularLinkedDeque";
-export { CircularLinkedList } from "./circle/circularLinkedList";
-export { CircularLinkedQueue } from "./circle/circularLinkedQueue";
-export { CircularLinkedStack } from "./circle/circularLinkedStack";
-export { CircularMap } from "./circle/circularMap";
-export { CircularQueue } from "./circle/circularQueue";
-export { CircularSet } from "./circle/circularSet";
-export { CircularSkipList } from "./circle/circularSkipList";
-export { CircularStack } from "./circle/circularStack";
+// Deque
+export type { Deque } from "./types/deque";
+export { CircularDeque } from "./collections/deque/circularDeque";
+export { CircularLinkedDeque } from "./collections/deque/circularLinkedDeque";
+
+// List
+export type { List } from "./types/list";
+export type { SkipList } from "./types/skipList";
+export { CircularArrayList } from "./collections/list/circularArrayList";
+export { CircularDoublyLinkedList } from "./collections/list/circularDoublyLinkedList";
+export { CircularLinkedList } from "./collections/list/circularLinkedList";
+export { CircularSkipList } from "./collections/list/circularSkipList";
+
+// Map
+export { CircularMap } from "./collections/map/circularMap";
+
+// Queue
+export type { Queue } from "./types/queue";
+export { CircularLinkedQueue } from "./collections/queue/circularLinkedQueue";
+export { CircularQueue } from "./collections/queue/circularQueue";
+
+// Set
+export { CircularSet } from "./collections/set/circularSet";
+
+// Stack
+export type { Stack } from "./types/stack";
+export { CircularLinkedStack } from "./collections/stack/circularLinkedStack";
+export { CircularStack } from "./collections/stack/circularStack";

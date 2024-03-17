@@ -1,9 +1,9 @@
-import { Bounded } from "../types/bounded";
-import { BoundedEvent } from "../types/boundedEvent";
-import { Collection } from "../types/collection";
-import { isInfinity, isNumber, isSafeCount } from "../utils/is";
+import { Bounded } from "../../types/bounded";
+import { BoundedEvent } from "../../types/boundedEvent";
+import { Collection } from "../../types/collection";
+import { isInfinity, isNumber, isSafeCount } from "../../utils/is";
 
-import { CircularBase } from "./circularBase";
+import { CircularBase } from "../circularBase";
 
 /**
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}

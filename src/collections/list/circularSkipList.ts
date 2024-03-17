@@ -1,12 +1,12 @@
-import { BoundedEvent } from "../types/boundedEvent";
-import { Bounded, BoundedConfig } from "../types/bounded";
-import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../utils/constants";
+import { BoundedEvent } from "../../types/boundedEvent";
+import { Bounded, BoundedConfig } from "../../types/bounded";
+import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../../utils/constants";
 import {
   SkipList,
   SkipListConfig,
   SkipCore,
   SkipNode,
-} from "../types/skipList";
+} from "../../types/skipList";
 
 import {
   isArrayLength,
@@ -14,19 +14,19 @@ import {
   isIterable,
   isLinkedLength,
   isNumber,
-} from "../utils/is";
-import { chunk } from "../utils/iterable";
+} from "../../utils/is";
+import { chunk } from "../../utils/iterable";
 import {
   addIfBelow,
   clamp,
   isInRange,
   randomRun,
   toInteger,
-} from "../utils/math";
-import * as NodeUtils from "../utils/skipNode";
-import * as StackUtils from "../utils/skipStack";
+} from "../../utils/math";
+import * as NodeUtils from "../../utils/skipNode";
+import * as StackUtils from "../../utils/skipStack";
 
-import { CircularBase } from "./circularBase";
+import { CircularBase } from "../circularBase";
 
 export interface CircularSkipListConfig extends BoundedConfig, SkipListConfig {}
 

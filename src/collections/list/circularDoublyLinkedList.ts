@@ -1,13 +1,16 @@
-import { Bounded, BoundedEvent } from "..";
-import { DoublyLinkedNode as Node } from "../types/doublyLinkedNode";
-import { List } from "../types/list";
-import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../utils/constants";
-import { cut, get, toList } from "../utils/doublyLinkedNode";
-import { isInfinity, isLinkedLength, isNumber } from "../utils/is";
-import { chunk } from "../utils/iterable";
-import { entries, has, keys, values } from "../utils/linkedNode";
-import { addIfBelow, clamp, isInRange, toInteger } from "../utils/math";
-import { CircularBase } from "./circularBase";
+import { Bounded } from "../../types/bounded";
+import { BoundedEvent } from "../../types/boundedEvent";
+import { DoublyLinkedNode as Node } from "../../types/doublyLinkedNode";
+import { List } from "../../types/list";
+
+import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../../utils/constants";
+import { cut, get, toList } from "../../utils/doublyLinkedNode";
+import { isInfinity, isLinkedLength, isNumber } from "../../utils/is";
+import { chunk } from "../../utils/iterable";
+import { entries, has, keys, values } from "../../utils/linkedNode";
+import { addIfBelow, clamp, isInRange, toInteger } from "../../utils/math";
+
+import { CircularBase } from "../circularBase";
 
 export class CircularDoublyLinkedList<T>
   extends CircularBase<T>

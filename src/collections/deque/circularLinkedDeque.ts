@@ -1,11 +1,12 @@
-import { BoundedEvent } from "../types/boundedEvent";
-import { Stack } from "../types/stack";
-import { Bounded } from "../types/bounded";
-import { CircularArrayList } from "./circularArrayList";
+import { BoundedEvent } from "../../types/boundedEvent";
+import { Bounded } from "../../types/bounded";
+import { Deque } from "../../types/deque";
+
+import { CircularDoublyLinkedList } from "../list/circularDoublyLinkedList";
 
 /**
- * A circular stack is similar to a traditional stack, but uses a fixed-size,
- * circular buffer. When the stack reaches its maximum capacity and a new
+ * A circular deque is similar to a traditional deque, but uses a fixed-size,
+ * circular buffer. When the deque reaches its maximum capacity and a new
  * element is added, the oldest is discarded, thus maintaining its size.
  *
  * This structure efficiently utilizes memory for applications where only the
@@ -13,14 +14,14 @@ import { CircularArrayList } from "./circularArrayList";
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export class CircularStack<T> implements Bounded<T>, Stack<T> {
+export class CircularLinkedDeque<T> implements Bounded<T>, Deque<T> {
   /**
    * @internal
    */
-  protected list: CircularArrayList<T>;
+  protected _list: CircularDoublyLinkedList<T>;
 
   /**
-   * Creates a new stack. Default `capacity` is `Infinity`.
+   * Creates a new stack with `capacity` defaulted to `Infinity`.
    */
   constructor();
   /**
@@ -30,83 +31,99 @@ export class CircularStack<T> implements Bounded<T>, Stack<T> {
    */
   constructor(capacity?: number | null);
   /**
-   * Creates a new stack from the given items. `capacity` will equal the number of items.
+   * Creates a new stack. Initial capacity is the number of items given.
    *
-   * @param items - the initial values in the stack.
+   * @param items - the values to store in the stack.
    */
   constructor(items: Iterable<T>);
   constructor(capacity?: number | null | Iterable<T>) {
-    this.list = new CircularArrayList(capacity as number);
+    this._list = new CircularDoublyLinkedList(capacity as number);
   }
 
   get capacity(): number {
-    return this.list.capacity;
+    return this._list.capacity;
   }
 
   get size(): number {
-    return this.list.size;
+    return this._list.size;
   }
 
   get [Symbol.toStringTag](): string {
-    return CircularStack.name;
+    return CircularLinkedDeque.name;
   }
 
   set capacity(capacity: number) {
-    this.list.capacity = capacity;
+    this._list.capacity = capacity;
+  }
+
+  first(): T | undefined {
+    return this._list.at(0);
+  }
+
+  front(): T | undefined {
+    return this._list.at(0);
   }
 
   clear(): void {
-    this.list.clear();
+    this._list.clear();
   }
 
   entries(): IterableIterator<[number, T]> {
-    return this.list.entries();
+    return this._list.entries();
   }
 
   forEach(
     callbackfn: (value: T, index: number, collection: this) => void,
     thisArg?: unknown
   ): void {
-    return this.list.forEach((v, i) => callbackfn.call(thisArg, v, i, this));
+    this._list.forEach((v, i) => callbackfn.call(thisArg, v, i, this), thisArg);
   }
 
   has(value: T): boolean {
-    return this.list.has(value);
+    return this._list.has(value);
   }
 
   keys(): IterableIterator<number> {
-    return this.list.keys();
+    return this._list.keys();
   }
 
   last(): T | undefined {
-    return this.list.last();
+    return this._list.at(-1);
   }
 
   pop(): T | undefined {
-    return this.list.pop();
+    return this._list.pop();
   }
 
   push(...elems: T[]): number {
-    return this.list.push(...elems);
+    return this._list.push(...elems);
+  }
+
+  shift(): T | undefined {
+    return this._list.shift();
   }
 
   [Symbol.iterator](): IterableIterator<T> {
-    return this.list.values();
+    return this.values();
   }
 
   top(): T | undefined {
-    return this.list.last();
+    return this._list.at(-1);
+  }
+
+  unshift(...elems: T[]): number {
+    return this._list.unshift(...elems);
   }
 
   values(): IterableIterator<T> {
-    return this.list.values();
+    return this._list.values();
   }
 
   addListener(
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.addListener(event, listener);
+    this._list.addListener(event, listener);
     return this;
   }
 
@@ -114,7 +131,7 @@ export class CircularStack<T> implements Bounded<T>, Stack<T> {
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.on(event, listener);
+    this._list.on(event, listener);
     return this;
   }
 
@@ -122,7 +139,7 @@ export class CircularStack<T> implements Bounded<T>, Stack<T> {
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.prependListener(event, listener);
+    this._list.prependListener(event, listener);
     return this;
   }
 
@@ -130,7 +147,7 @@ export class CircularStack<T> implements Bounded<T>, Stack<T> {
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.removeListener(event, listener);
+    this._list.removeListener(event, listener);
     return this;
   }
 }

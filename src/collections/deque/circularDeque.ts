@@ -1,8 +1,7 @@
-import { BoundedEvent } from "../types/boundedEvent";
-import { Bounded } from "../types/bounded";
-import { Deque } from "../types/deque";
-
-import { CircularDoublyLinkedList } from "./circularDoublyLinkedList";
+import { BoundedEvent } from "../../types/boundedEvent";
+import { Bounded } from "../../types/bounded";
+import { Deque } from "../..";
+import { CircularArrayList } from "../list/circularArrayList";
 
 /**
  * A circular deque is similar to a traditional deque, but uses a fixed-size,
@@ -14,30 +13,30 @@ import { CircularDoublyLinkedList } from "./circularDoublyLinkedList";
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export class CircularLinkedDeque<T> implements Bounded<T>, Deque<T> {
+export class CircularDeque<T> implements Bounded<T>, Deque<T> {
   /**
    * @internal
    */
-  protected _list: CircularDoublyLinkedList<T>;
+  protected _list: CircularArrayList<T>;
 
   /**
-   * Creates a new stack with `capacity` defaulted to `Infinity`.
+   * Creates a new deque. Default `capacity` is `Infinity`.
    */
   constructor();
   /**
-   * Creates a new stack with the given capacity.
+   * Creates a new deque with the given capacity.
    *
-   * @param capacity - the stack's capacity.
+   * @param capacity - the deque's capacity.
    */
   constructor(capacity?: number | null);
   /**
-   * Creates a new stack. Initial capacity is the number of items given.
+   * Creates a new deque from the given items. `capacity` will equal the number of items.
    *
-   * @param items - the values to store in the stack.
+   * @param items - the initial values in the deque.
    */
   constructor(items: Iterable<T>);
   constructor(capacity?: number | null | Iterable<T>) {
-    this._list = new CircularDoublyLinkedList(capacity as number);
+    this._list = new CircularArrayList(capacity as number);
   }
 
   get capacity(): number {
@@ -49,19 +48,11 @@ export class CircularLinkedDeque<T> implements Bounded<T>, Deque<T> {
   }
 
   get [Symbol.toStringTag](): string {
-    return CircularLinkedDeque.name;
+    return CircularDeque.name;
   }
 
   set capacity(capacity: number) {
     this._list.capacity = capacity;
-  }
-
-  first(): T | undefined {
-    return this._list.at(0);
-  }
-
-  front(): T | undefined {
-    return this._list.at(0);
   }
 
   clear(): void {
@@ -72,11 +63,19 @@ export class CircularLinkedDeque<T> implements Bounded<T>, Deque<T> {
     return this._list.entries();
   }
 
+  first(): T | undefined {
+    return this._list.first();
+  }
+
   forEach(
     callbackfn: (value: T, index: number, collection: this) => void,
     thisArg?: unknown
   ): void {
-    this._list.forEach((v, i) => callbackfn.call(thisArg, v, i, this), thisArg);
+    return this._list.forEach((v, i) => callbackfn.call(thisArg, v, i, this));
+  }
+
+  front(): T | undefined {
+    return this._list.first();
   }
 
   has(value: T): boolean {
@@ -88,7 +87,7 @@ export class CircularLinkedDeque<T> implements Bounded<T>, Deque<T> {
   }
 
   last(): T | undefined {
-    return this._list.at(-1);
+    return this._list.last();
   }
 
   pop(): T | undefined {
@@ -104,11 +103,11 @@ export class CircularLinkedDeque<T> implements Bounded<T>, Deque<T> {
   }
 
   [Symbol.iterator](): IterableIterator<T> {
-    return this.values();
+    return this._list.values();
   }
 
   top(): T | undefined {
-    return this._list.at(-1);
+    return this._list.last();
   }
 
   unshift(...elems: T[]): number {

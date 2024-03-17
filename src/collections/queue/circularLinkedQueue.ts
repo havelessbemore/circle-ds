@@ -1,7 +1,8 @@
-import { BoundedEvent } from "../types/boundedEvent";
-import { Queue } from "../types/queue";
-import { Bounded } from "../types/bounded";
-import { CircularArrayList } from "./circularArrayList";
+import { Queue } from "../../types/queue";
+import { Bounded } from "../../types/bounded";
+
+import { CircularLinkedList } from "../list/circularLinkedList";
+import { BoundedEvent } from "../..";
 
 /**
  * A circular queue is similar to a traditional queue, but uses a fixed-size,
@@ -13,100 +14,100 @@ import { CircularArrayList } from "./circularArrayList";
  *
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
-export class CircularQueue<T> implements Bounded<T>, Queue<T> {
+export class CircularLinkedQueue<T> implements Bounded<T>, Queue<T> {
   /**
    * @internal
    */
-  protected list: CircularArrayList<T>;
+  protected _list: CircularLinkedList<T>;
 
   /**
-   * Creates a new queue. Default `capacity` is `Infinity`.
+   * Creates a new stack with `capacity` defaulted to `Infinity`.
    */
   constructor();
   /**
-   * Creates a new queue with the given capacity.
+   * Creates a new stack with the given capacity.
    *
-   * @param capacity - the queue's capacity.
+   * @param capacity - the stack's capacity.
    */
   constructor(capacity?: number | null);
   /**
-   * Creates a new queue from the given items. `capacity` will equal the number of items.
+   * Creates a new stack. Initial capacity is the number of items given.
    *
-   * @param items - the initial values in the queue.
+   * @param items - the values to store in the stack.
    */
   constructor(items: Iterable<T>);
   constructor(capacity?: number | null | Iterable<T>) {
-    this.list = new CircularArrayList(capacity as number);
+    this._list = new CircularLinkedList(capacity as number);
   }
 
   get capacity(): number {
-    return this.list.capacity;
+    return this._list.capacity;
   }
 
   get size(): number {
-    return this.list.size;
+    return this._list.size;
   }
 
   get [Symbol.toStringTag](): string {
-    return CircularQueue.name;
+    return CircularLinkedQueue.name;
   }
 
   set capacity(capacity: number) {
-    this.list.capacity = capacity;
+    this._list.capacity = capacity;
   }
 
   clear(): void {
-    this.list.clear();
+    this._list.clear();
   }
 
   entries(): IterableIterator<[number, T]> {
-    return this.list.entries();
+    return this._list.entries();
   }
 
   first(): T | undefined {
-    return this.list.first();
+    return this._list.at(0);
   }
 
   forEach(
     callbackfn: (value: T, index: number, collection: this) => void,
     thisArg?: unknown
   ): void {
-    return this.list.forEach((v, i) => callbackfn.call(thisArg, v, i, this));
+    this._list.forEach((v, i) => callbackfn.call(thisArg, v, i, this), thisArg);
   }
 
   front(): T | undefined {
-    return this.list.first();
+    return this._list.at(0);
   }
 
   has(value: T): boolean {
-    return this.list.has(value);
+    return this._list.has(value);
   }
 
   keys(): IterableIterator<number> {
-    return this.list.keys();
+    return this._list.keys();
   }
 
   push(...elems: T[]): number {
-    return this.list.push(...elems);
+    return this._list.push(...elems);
   }
 
   shift(): T | undefined {
-    return this.list.shift();
+    return this._list.shift();
   }
 
   [Symbol.iterator](): IterableIterator<T> {
-    return this.list.values();
+    return this.values();
   }
 
   values(): IterableIterator<T> {
-    return this.list.values();
+    return this._list.values();
   }
 
   addListener(
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.addListener(event, listener);
+    this._list.addListener(event, listener);
     return this;
   }
 
@@ -114,7 +115,7 @@ export class CircularQueue<T> implements Bounded<T>, Queue<T> {
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.on(event, listener);
+    this._list.on(event, listener);
     return this;
   }
 
@@ -122,7 +123,7 @@ export class CircularQueue<T> implements Bounded<T>, Queue<T> {
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.prependListener(event, listener);
+    this._list.prependListener(event, listener);
     return this;
   }
 
@@ -130,7 +131,7 @@ export class CircularQueue<T> implements Bounded<T>, Queue<T> {
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void
   ): this {
-    this.list.removeListener(event, listener);
+    this._list.removeListener(event, listener);
     return this;
   }
 }

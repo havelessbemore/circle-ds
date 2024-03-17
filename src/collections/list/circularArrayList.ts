@@ -1,10 +1,10 @@
-import { CircularBase } from "./circularBase";
-import { BoundedEvent } from "../types/boundedEvent";
-import { isArrayLength, isInfinity, isNumber } from "../utils/is";
-import { Bounded } from "../types/bounded";
-import { ARRAY_MAX_LENGTH } from "../utils/constants";
-import { List } from "../types/list";
-import { addIfBelow, clamp, isInRange, toInteger } from "../utils/math";
+import { CircularBase } from "../circularBase";
+import { BoundedEvent } from "../../types/boundedEvent";
+import { isArrayLength, isInfinity, isNumber } from "../../utils/is";
+import { Bounded } from "../../types/bounded";
+import { ARRAY_MAX_LENGTH } from "../../utils/constants";
+import { List } from "../../types/list";
+import { addIfBelow, clamp, isInRange, toInteger } from "../../utils/math";
 
 export class CircularArrayList<T>
   extends CircularBase<T>

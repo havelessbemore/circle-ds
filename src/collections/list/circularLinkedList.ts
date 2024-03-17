@@ -1,9 +1,9 @@
-import { Bounded, BoundedEvent } from "..";
-import { LinkedNode as Node } from "../types/linkedNode";
-import { List } from "../types/list";
-import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../utils/constants";
-import { isInfinity, isLinkedLength, isNumber } from "../utils/is";
-import { chunk } from "../utils/iterable";
+import { Bounded, BoundedEvent } from "../..";
+import { LinkedNode as Node } from "../../types/linkedNode";
+import { List } from "../../types/list";
+import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../../utils/constants";
+import { isInfinity, isLinkedLength, isNumber } from "../../utils/is";
+import { chunk } from "../../utils/iterable";
 import {
   copy,
   cut,
@@ -13,9 +13,9 @@ import {
   keys,
   toList,
   values,
-} from "../utils/linkedNode";
-import { addIfBelow, clamp, isInRange, toInteger } from "../utils/math";
-import { CircularBase } from "./circularBase";
+} from "../../utils/linkedNode";
+import { addIfBelow, clamp, isInRange, toInteger } from "../../utils/math";
+import { CircularBase } from "../circularBase";
 
 // splice, unshift
 
