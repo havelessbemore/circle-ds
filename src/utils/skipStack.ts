@@ -1,4 +1,4 @@
-import { SkipListCore, SkipNode, SkipStack } from "../types/skipList";
+import { SkipCore, SkipNode, SkipStack } from "../types/skipList";
 
 import { gen as genNode } from "./skipNode";
 
@@ -24,12 +24,12 @@ export function clone<T>(stack: SkipStack<T>): SkipStack<T> {
  * The cut starts at the specified position and spans the given distance. The
  * cut segment is returned as a new skip list.
  *
- * @param core - The {@link SkipListCore} representing the skip list from which to cut the segment.
+ * @param core - The {@link SkipCore} representing the skip list from which to cut the segment.
  *               This skip list will be modified to reflect the removal.
  * @param start - The zero-based index indicating the start position of the cut, inclusive.
  * @param distance - The number of elements to be included in the cut segment.
  *
- * @returns A new {@link SkipListCore} representing the skip list segment that has been cut.
+ * @returns A new {@link SkipCore} representing the skip list segment that has been cut.
  *
  * @remarks
  * - The height (levels) of the original list may be reduced if segment removal results in empty levels.
@@ -37,13 +37,13 @@ export function clone<T>(stack: SkipStack<T>): SkipStack<T> {
  *   levels that include nodes within the segment.
  */
 export function cut<T>(
-  core: SkipListCore<T>,
+  core: SkipCore<T>,
   start: number,
   distance: number
-): SkipListCore<T> {
+): SkipCore<T> {
   // Initialize output list
   const segRoot = genNode(undefined as T);
-  const seg: SkipListCore<T> = { root: segRoot, size: 0, tails: [segRoot] };
+  const seg: SkipCore<T> = { root: segRoot, size: 0, tails: [segRoot] };
 
   // Check inputs
   if (distance <= 0) {
@@ -198,10 +198,10 @@ export function getClosest<T>(
 /**
  * Inserts a skip list segment (`src`) into another skip list (`dest`) at a specified index.
  *
- * @param dest - The {@link SkipListCore} representing the destination skip list into which the segment is to be
+ * @param dest - The {@link SkipCore} representing the destination skip list into which the segment is to be
  *               inserted. This skip list will be modified to include the nodes from the source segment.
  * @param index - The zero-based position within the destination list at which the source segment is to be inserted.
- * @param src - The {@link SkipListCore} representing the source skip list segment to be inserted into the destination
+ * @param src - The {@link SkipCore} representing the source skip list segment to be inserted into the destination
  *              list. This skip list's tail nodes will be modified to contain links within the destination list.
  *
  * @remarks
@@ -210,9 +210,9 @@ export function getClosest<T>(
  *   the segment being inserted.
  */
 export function insert<T>(
-  dest: SkipListCore<T>,
+  dest: SkipCore<T>,
   index: number,
-  src: SkipListCore<T>
+  src: SkipCore<T>
 ): void {
   // Check source values
   if (src.size <= 0) {
@@ -254,9 +254,11 @@ export function insert<T>(
     levels[y] = { next, span: span + src.size };
   }
 
-  // Update tail
+  // Update tails
   if (index === dest.size) {
-    dest.tails = src.tails;
+    for (let y = 0; y < minY; ++y) {
+      dest.tails[y] = src.tails[y];
+    }
   }
 
   // Update size
