@@ -1,17 +1,21 @@
 import { describe, expect, test } from "vitest";
 
+import { LinkedNode } from "../types/linkedNode";
+
 import {
   cut,
   entries,
   get,
-  getTail,
   has,
   insert,
   keys,
-  toArray,
   toList,
   values,
 } from "./linkedNode";
+
+export function toArray<T>(node?: LinkedNode<T>): T[] {
+  return Array.from(values(node));
+}
 
 describe(`${cut.name}()`, () => {
   test("returns [undefined, undefined] for non-positive count", () => {
@@ -145,29 +149,6 @@ describe(`${get.name}()`, () => {
   });
 });
 
-describe(`${getTail.name}()`, () => {
-  test("returns the tail node and correct count in a multi-node list", () => {
-    const [head, tail, length] = toList([1, 2, 3, 4, 5]);
-    const [result, count] = getTail(head);
-    expect(result).toBe(tail);
-    expect(count).toBe(length - 1); // 4 steps to reach the tail from the head
-  });
-
-  test("returns the head as the tail node and count 0 in a single-node list", () => {
-    const [head, tail, length] = toList([42]);
-    const [result, count] = getTail(head);
-    expect(result).toBe(tail);
-    expect(count).toBe(length - 1);
-  });
-
-  test("handles empty list correctly", () => {
-    const [head, tail, length] = toList([]);
-    const [result, count] = getTail(head);
-    expect(result).toBe(tail);
-    expect(count).toBe(length - 1);
-  });
-});
-
 describe(`${has.name}()`, () => {
   test("returns false when head is undefined", () => {
     expect(has(undefined, 1)).toBe(false);
@@ -283,44 +264,6 @@ describe(`${keys.name}()`, () => {
   test("returns no keys when head is the same as end", () => {
     const node = { value: 0, next: { value: 1, next: { value: 2 } } };
     const result = Array.from(keys(node, node));
-    expect(result).toEqual([]);
-  });
-});
-
-describe(`${toArray.name}()`, () => {
-  test("yields correct array for a list", () => {
-    // 0 -> 1 -> 2 -> 3
-    const list = {
-      value: 3,
-      next: { value: 2, next: { value: 1, next: { value: 0 } } },
-    };
-    const result = toArray(list);
-    expect(result).toEqual([3, 2, 1, 0]);
-  });
-
-  test("stops iteration at the specified end node", () => {
-    // 0 -> 1 -> [2] -> 3
-    const end = { value: 1, next: { value: 0 } };
-    const list = { value: 3, next: { value: 2, next: end } };
-
-    const result = toArray(list, end);
-    expect(result).toEqual([3, 2]);
-  });
-
-  test("handles empty lists correctly", () => {
-    const result = toArray();
-    expect(result).toEqual([]);
-  });
-
-  test("handles single-element lists correctly", () => {
-    const list = { value: 42 };
-    const result = toArray(list);
-    expect(result).toEqual([42]);
-  });
-
-  test("returns empty array when head is the same as end", () => {
-    const node = { value: 0, next: { value: 1, next: { value: 2 } } };
-    const result = toArray(node, node);
     expect(result).toEqual([]);
   });
 });

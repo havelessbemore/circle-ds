@@ -1,7 +1,12 @@
 import { describe, expect, test } from "vitest";
 
 import { cut, get, insert, toList } from "./doublyLinkedNode";
-import { toArray } from "./linkedNode";
+import { values } from "./linkedNode";
+import { LinkedNode } from "../types/linkedNode";
+
+export function toArray<T>(node?: LinkedNode<T>): T[] {
+  return Array.from(values(node));
+}
 
 describe(`${cut.name}()`, () => {
   test("returns [undefined, undefined] for non-positive count", () => {

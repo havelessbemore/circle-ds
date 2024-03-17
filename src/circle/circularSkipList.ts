@@ -173,7 +173,7 @@ export class CircularSkipList<T>
 
     // Shrink list and emit discarded items
     const { root } = this._cut(0, this._size - capacity);
-    this._overflow(NodeUtils.values(root.levels[0].next));
+    this._overflow(root.levels[0].next);
   }
 
   set maxLevel(maxLevel: number) {
@@ -340,13 +340,24 @@ export class CircularSkipList<T>
     start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
     end = clamp(addIfBelow(toInteger(end, size), size), start, size);
 
-    // Return copied segment as a list
-    const core = NodeUtils.copy(this._root, start, end - start);
-    const list = new CircularSkipList<T>({
-      capacity: core.size,
+    // Create config
+    const config: CircularSkipListConfig = {
+      capacity: 0,
       p: this._p,
       maxLevel: this._maxLevel,
-    });
+    };
+
+    // Check if empty
+    if (start >= end) {
+      return new CircularSkipList<T>(config);
+    }
+
+    // Create segment copy
+    const core = NodeUtils.copy(this._root, start, end - start);
+
+    // Return copied segment as a list
+    config.capacity = core.size;
+    const list = new CircularSkipList<T>(config);
     list._root = core.root;
     list._tails = core.tails;
     list._size = core.size;
@@ -451,7 +462,7 @@ export class CircularSkipList<T>
     if (index > 0) {
       const shifted = Math.min(index, N - free);
       const { root } = this._cut(0, shifted);
-      this._overflow(NodeUtils.values(root.levels[0].next));
+      this._overflow(root.levels[0].next);
       index -= shifted;
       free += shifted;
     }
@@ -475,13 +486,16 @@ export class CircularSkipList<T>
    *
    * @param evicted - The items evicted from the collection.
    */
-  protected _overflow(evicted: Iterable<T>): void {
+  protected _overflow(evicted?: T[] | SkipNode<T>): void {
+    if (evicted == null) {
+      return;
+    }
     if (Array.isArray(evicted)) {
       this._emitter.emit(BoundedEvent.Overflow, evicted);
-    } else {
-      for (const array of chunk(evicted, ARGS_MAX_LENGTH)) {
-        this._emitter.emit(BoundedEvent.Overflow, array);
-      }
+      return;
+    }
+    for (const array of chunk(NodeUtils.values(evicted), ARGS_MAX_LENGTH)) {
+      this._emitter.emit(BoundedEvent.Overflow, array);
     }
   }
 
@@ -518,7 +532,7 @@ export class CircularSkipList<T>
     if (index < this._size) {
       const popped = Math.min(this._size - index, N - free);
       const { root } = this._cut(this._size - popped, popped);
-      this._overflow(NodeUtils.values(root.levels[0].next));
+      this._overflow(root.levels[0].next);
       free += popped;
     }
 

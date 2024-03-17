@@ -1,5 +1,40 @@
 import { LinkedNode } from "../types/linkedNode";
 
+export function copy<N extends LinkedNode<unknown>>(
+  node: N | undefined,
+  distance: number
+): [N, N, number] | [undefined, undefined, 0] {
+  // Check distance
+  if (node == null || distance <= 0) {
+    return [undefined, undefined, 0];
+  }
+
+  // Initialize new list
+  const root = { value: undefined } as N;
+  let tail = root;
+
+  // For each node
+  let size = 0;
+  while (node != null && size < distance) {
+    // Create a duplicate
+    const dupe = { value: node.value } as N;
+
+    // Attach the duplicate
+    tail.next = dupe;
+    tail = dupe;
+
+    // Update size
+    ++size;
+
+    // Move to the next node
+    node = node.next;
+  }
+
+  // Return copy
+  tail.next = undefined;
+  return [root.next!, tail, size];
+}
+
 /**
  * Removes and returns a segment of a linked list as a new list.
  *
@@ -168,63 +203,6 @@ export function* keys<T>(
 }
 
 /**
- * Finds the tail of the linked list and the distance to it.
- *
- * This function iterates through the linked list starting from the `node`
- * node, counting each node until it reaches the tail of the list (
- * where node.next is null or undefined).
- *
- * @param node - The node from which to start counting.
- *
- * @returns a tuple with the tail and distance to it.
- */
-export function getTail(node?: null): [undefined, -1];
-export function getTail<N extends LinkedNode<unknown>>(node: N): [N, number];
-export function getTail<N extends LinkedNode<unknown>>(
-  node?: N | null
-): [N, number] | [undefined, -1];
-export function getTail<N extends LinkedNode<unknown>>(
-  node?: N | null
-): [N, number] | [undefined, -1] {
-  if (node == null) {
-    return [undefined, -1];
-  }
-  let count = 0;
-  while (node.next != null) {
-    node = node.next;
-    ++count;
-  }
-  return [node, count];
-}
-
-/**
- * Converts a linked list into an array of values.
- *
- * The conversion starts from the `node` node and includes all nodes up to the
- * end of the list, or the `end` node if provided.
- *
- * @param node - The node at which to start converting.
- * @param end - An optional node at which to end (exclusive).
- * If not provided, conversion continues until the end of the list.
- *
- * @returns An array with the values of the list from `node` to `end`.
- *
- * @throws - {@link TypeError}
- * thrown if an `end` node is provided but
- * not encountered before the end of the list.
- */
-export function toArray<T>(node?: LinkedNode<T>, end?: LinkedNode<T>): T[] {
-  const array: T[] = [];
-
-  while (node != end) {
-    array.push(node!.value);
-    node = node!.next;
-  }
-
-  return array;
-}
-
-/**
  * Converts an iterable collection of values into a linked list and returns
  * the head, tail and size of the list.
  *
@@ -271,11 +249,11 @@ export function toList<T>(
  * thrown if an `end` node is provided but not encountered before the end of the list.
  */
 export function* values<T>(
-  head?: LinkedNode<T>,
+  node?: LinkedNode<T>,
   end?: LinkedNode<T>
 ): Generator<T> {
-  for (let i = 0; head != end; ++i) {
-    yield head!.value;
-    head = head!.next;
+  while (node != end) {
+    yield node!.value;
+    node = node!.next;
   }
 }

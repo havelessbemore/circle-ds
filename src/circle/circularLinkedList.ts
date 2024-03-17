@@ -1,19 +1,23 @@
 import { Bounded, BoundedEvent } from "..";
 import { LinkedNode as Node } from "../types/linkedNode";
 import { List } from "../types/list";
-import { isInfinity, isNumber, isSafeCount } from "../utils/is";
+import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../utils/constants";
+import { isInfinity, isLinkedLength, isNumber } from "../utils/is";
+import { chunk } from "../utils/iterable";
 import {
+  copy,
   cut,
   entries,
   get,
   has,
   keys,
-  toArray,
   toList,
   values,
 } from "../utils/linkedNode";
 import { addIfBelow, clamp, isInRange, toInteger } from "../utils/math";
 import { CircularBase } from "./circularBase";
+
+// splice, unshift
 
 export class CircularLinkedList<T>
   extends CircularBase<T>
@@ -24,6 +28,12 @@ export class CircularLinkedList<T>
    * The maximum number of elements that can be stored in the collection.
    */
   protected _capacity: number;
+
+  /**
+   * @internal
+   * Whether capacity is finite (true) or infinite (false).
+   */
+  protected _isFinite: boolean;
 
   /**
    * @internal
@@ -63,28 +73,26 @@ export class CircularLinkedList<T>
     super();
 
     // Initialize class variables
-    this._capacity = Infinity;
+    this._capacity = LINKED_MAX_LENGTH;
+    this._isFinite = false;
     this._root = { value: undefined } as Node<T>;
     this.clear();
 
-    // Case 1: capacity is null, undefined or Infinity
-    capacity = capacity ?? Infinity;
-    if (isInfinity(capacity)) {
+    // Case 1: input is null or undefined
+    if (capacity == null) {
       return;
     }
 
-    // Case 2: capacity is zero or a positive safe integer
+    // Case 2: input is capacity
     if (isNumber(capacity)) {
-      if (!isSafeCount(capacity)) {
-        throw new RangeError("Invalid capacity");
-      }
-      this._capacity = capacity;
+      this.capacity = capacity;
       return;
     }
 
     // Case 3: capacity is iterable
     const [head, tail, size] = toList(capacity as Iterable<T>);
     this._capacity = size;
+    this._isFinite = true;
     if (size > 0) {
       this._root.next = head;
       this._tail = tail!;
@@ -93,7 +101,7 @@ export class CircularLinkedList<T>
   }
 
   get capacity(): number {
-    return this._capacity;
+    return this._isFinite ? this._capacity : Infinity;
   }
 
   get size(): number {
@@ -108,8 +116,16 @@ export class CircularLinkedList<T>
     // Convert input to a number
     capacity = +capacity;
 
-    // If input is NaN, below zero, or a non-integer
-    if (!isInfinity(capacity) && !isSafeCount(capacity)) {
+    // Check capacity
+    if (isInfinity(capacity)) {
+      // If capacity is Infinity
+      capacity = LINKED_MAX_LENGTH;
+      this._isFinite = false;
+    } else if (isLinkedLength(capacity)) {
+      // If capacity is valid
+      this._isFinite = true;
+    } else {
+      // If capacity is invalid
       throw new RangeError("Invalid capacity");
     }
 
@@ -132,23 +148,18 @@ export class CircularLinkedList<T>
     }
 
     // Emit discarded items
-    this._emitter.emit(BoundedEvent.Overflow, toArray(head));
+    this._overflow(head);
   }
 
   at(index?: number): T | undefined {
-    // Check index
+    // Sanitize input
     index = addIfBelow(toInteger(index, -Infinity), this._size);
     if (!isInRange(index, 0, this._size)) {
       return undefined;
     }
 
-    // If tail
-    if (++index == this._size) {
-      return this._tail.value;
-    }
-
     // Return value
-    return get(this._root, index)!.value;
+    return this._get(index)!.value;
   }
 
   clear(): void {
@@ -158,21 +169,14 @@ export class CircularLinkedList<T>
   }
 
   delete(index: number): boolean {
-    // Check index
+    // Sanitize input
     index = addIfBelow(toInteger(index, -Infinity), this._size);
     if (!isInRange(index, 0, this._size)) {
       return false;
     }
 
     // Delete value
-    const prev = get(this._root, index)!;
-    prev.next = prev.next!.next;
-    --this._size;
-
-    // Update tail, if needed
-    if (index == this._size) {
-      this._tail = prev;
-    }
+    this._cut(index, 1);
 
     return true;
   }
@@ -182,22 +186,23 @@ export class CircularLinkedList<T>
   }
 
   fill(value: T, start?: number, end?: number): this {
-    // Sanitize start
-    start = toInteger(start, 0);
-    start = clamp(addIfBelow(start, this._size), 0, this._size);
+    const size = this._size;
 
-    // Sanitize end
-    end = toInteger(end, this._size);
-    end = clamp(addIfBelow(end, this._size), 0, this._size);
-
-    // Update values
-    let node = get(this._root, start + 1);
-    while (start < end) {
-      node!.value = value;
-      node = node!.next;
-      ++start;
+    // Sanitize inputs
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    end = clamp(addIfBelow(toInteger(end, size), size), start, size);
+    if (start >= end) {
+      return this;
     }
 
+    // Fill values
+    let node = this._get(start)!;
+    for (let i = start; i < end; ++i) {
+      node.value = value;
+      node = node.next!;
+    }
+
+    // Return list
     return this;
   }
 
@@ -221,50 +226,35 @@ export class CircularLinkedList<T>
   }
 
   pop(): T | undefined {
-    // Check if empty
+    // If list is empty
     if (this._size <= 0) {
       return undefined;
     }
 
-    // Remove and update tail
-    const value = this._tail.value;
-    this._tail = get(this._root, --this._size)!;
-    this._tail.next = undefined;
+    // Remove last value
+    const [head] = this._cut(this._size - 1, 1);
 
     // Return value
-    return value;
+    return head!.value;
   }
 
   push(...values: T[]): number {
-    // If no values
-    const N = values.length;
-    if (N <= 0) {
-      return this._size;
-    }
-
-    // If no capacity
-    const capacity = this._capacity;
-    if (capacity <= 0) {
-      this._emitter.emit(BoundedEvent.Overflow, values);
-      return this._size;
-    }
-
     // Add values
-    this._tail = this._append(this._tail, values);
+    this._insert(this._size, values);
 
     // Return size
     return this._size;
   }
 
   set(index: number, value: T): T | undefined {
-    // Check index
+    // Sanitize input
     index = addIfBelow(toInteger(index, -Infinity), this._size);
     if (!isInRange(index, 0, this._size)) {
       return undefined;
     }
 
-    // Update node
-    const node = get(this._root, index + 1)!;
+    // Set value
+    const node = this._get(index);
     const prevValue = node.value;
     node.value = value;
 
@@ -273,51 +263,42 @@ export class CircularLinkedList<T>
   }
 
   shift(): T | undefined {
-    // Check if empty
+    // If list is empty
     if (this._size <= 0) {
       return undefined;
     }
 
-    // Remove head
-    const head = this._root.next!;
-    this._root.next = head.next;
-    --this._size;
-
-    // Update tail, if needed
-    if (this._size <= 0) {
-      this._tail = this._root;
-    }
+    // Remove first value
+    const [head] = this._cut(0, 1);
 
     // Return value
-    return head.value;
+    return head!.value;
   }
 
   slice(start?: number, end?: number): CircularLinkedList<T> {
-    const out = new CircularLinkedList<T>();
+    const size = this._size;
+
+    // Sanitize inputs
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    end = clamp(addIfBelow(toInteger(end, size), size), start, size);
 
     // Check if empty
-    if (this._size <= 0) {
-      return out;
+    if (start >= end) {
+      return new CircularLinkedList<T>(0);
     }
 
-    // Sanitize start
-    start = toInteger(start, 0);
-    start = clamp(addIfBelow(start, this._size), 0, this._size);
+    // Create segment copy
+    const node = this._get(start);
+    const [head, tail, length] = copy(node, end - start);
 
-    // Sanitize end
-    end = toInteger(end, this._size);
-    end = clamp(addIfBelow(end, this._size), 0, this._size);
-
-    // Add values to output
-    let node = get(this._root, start)!;
-    while (start < end) {
-      node = node.next!;
-      out.push(node.value);
-      ++start;
-    }
+    // Return copied segment as a list
+    const list = new CircularLinkedList<T>(length);
+    list._root.next = head;
+    list._tail = tail ?? list._root;
+    list._size = length;
 
     // Return new list
-    return out;
+    return list;
   }
 
   splice(
@@ -325,37 +306,25 @@ export class CircularLinkedList<T>
     deleteCount?: number,
     ...items: T[]
   ): CircularLinkedList<T> {
-    const out = new CircularLinkedList<T>();
+    const size = this._size;
 
-    // Sanitize start
-    start = toInteger(start, 0);
-    start = clamp(addIfBelow(start, this._size), 0, this._size);
+    // Sanitize inputs
+    start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
+    deleteCount = clamp(toInteger(deleteCount, 0), 0, size - start);
 
-    // Sanitize deleteCount
-    deleteCount = toInteger(deleteCount, 0);
-    deleteCount = clamp(deleteCount, 0, this._size - start);
+    // Remove deleted items
+    const [head, tail] = this._cut(start, deleteCount);
 
-    // Get prev node
-    let prev = get(this._root, start)!;
+    // Add new items
+    this._insert(start, items);
 
-    // Delete values
-    if (deleteCount > 0) {
-      const [head, tail] = cut(prev, deleteCount);
-      this._size -= deleteCount;
-      out._root.next = head;
-      out._tail = tail!;
-      out._size = deleteCount;
-    }
+    // Return deleted items as a list
+    const list = new CircularLinkedList<T>(deleteCount);
+    list._root.next = head;
+    list._tail = tail ?? list._root;
+    list._size = deleteCount;
 
-    // Add values
-    prev = this._append(prev, items);
-
-    // Update tail, if needed
-    if (prev.next == null) {
-      this._tail = prev;
-    }
-
-    return out;
+    return list;
   }
 
   [Symbol.iterator](): IterableIterator<T> {
@@ -363,50 +332,10 @@ export class CircularLinkedList<T>
   }
 
   unshift(...values: T[]): number {
-    // Case 1: No values
-    let N = values.length;
-    if (N <= 0) {
-      return this._size;
-    }
-
-    // Case 2: No capacity
-    const capacity = this._capacity;
-    if (capacity <= 0) {
-      this._emitter.emit(BoundedEvent.Overflow, values);
-      return this._size;
-    }
-
-    // Reduce input
-    const diff = N <= capacity ? 0 : N - capacity;
-    N -= diff;
-
-    // Case 3: Discard list overflow
-    if (this._size + N > capacity) {
-      this._size = capacity - N;
-      const prev = get(this._root, this._size)!;
-      this._emitter.emit(BoundedEvent.Overflow, toArray(prev.next));
-      prev.next = undefined;
-      this._tail = prev;
-    }
-
-    // Discard input overflow
-    if (diff > 0) {
-      this._emitter.emit(BoundedEvent.Overflow, values.slice(N));
-      values.length = N;
-    }
-
     // Add values
-    const [head, tail] = toList(values);
-    tail!.next = this._root.next;
-    this._root.next = head;
+    this._presert(0, values);
 
-    // Update tail, if needed
-    if (this._size <= 0) {
-      this._tail = tail!;
-    }
-
-    // Update size
-    this._size += N;
+    // Return new size
     return this._size;
   }
 
@@ -417,37 +346,172 @@ export class CircularLinkedList<T>
   /**
    * @internal
    */
-  protected _append(tail: Node<T>, values: T[], minIndex = 0): Node<T> {
-    const root = this._root;
-    const next = tail.next;
-    const evicted: T[] = [];
-    const capacity = this._capacity;
+  protected _cut(
+    start: number,
+    count: number
+  ): [Node<T>, Node<T>] | [undefined, undefined] {
+    // Get previous
+    const prev = this._get(start - 1)!;
 
-    // Add values
-    let size = this._size;
-    const N = values.length;
-    for (let i = minIndex; i < N; ++i) {
-      const curr = { value: values[i] } as Node<T>;
-      tail.next = curr;
-      tail = curr;
-      if (size < capacity) {
-        ++size;
-      } else {
-        evicted.push(root.next!.value);
-        root.next = root.next!.next;
-      }
-    }
-    tail.next = next;
-
-    // Emit evicted items
-    if (evicted.length > 0) {
-      this._emitter.emit(BoundedEvent.Overflow, evicted);
-    }
+    // Cut and get removed segment
+    const [head, tail] = cut(prev, count);
 
     // Update size
-    this._size = size;
+    this._size -= count;
 
-    // Return last node
-    return tail;
+    // Update tail
+    if (start >= this._size) {
+      this._tail = prev;
+    }
+
+    // Return cut segment
+    return [head, tail] as [Node<T>, Node<T>];
+  }
+
+  /**
+   * @internal
+   */
+  protected _get(index: number): Node<T> {
+    return ++index == this._size ? this._tail : get(this._root, index)!;
+  }
+
+  /**
+   * @internal
+   */
+  protected _insert(index: number, values: T[]): void {
+    // If no values
+    const N = values.length;
+    if (N <= 0) {
+      return;
+    }
+
+    // If no capacity
+    if (this._capacity <= 0) {
+      this._overflow(values);
+      return;
+    }
+
+    // Check free space
+    let free = this._capacity - this._size;
+    if (free >= N) {
+      this._safeInsert(index, values);
+      return;
+    }
+
+    // Check if "infinite" capacity yet not enough space
+    if (!this._isFinite) {
+      this._safeInsert(index, values.slice(0, free));
+      throw new Error("Out of memory");
+    }
+
+    // Remove from head
+    if (index > 0) {
+      const shifted = Math.min(index, N - free);
+      const [head] = this._cut(0, shifted);
+      this._overflow(head);
+      index -= shifted;
+      free += shifted;
+    }
+
+    // Check free space
+    if (free >= N) {
+      this._safeInsert(index, values);
+      return;
+    }
+
+    // Remove from items and insert remaining
+    const mid = values.length - free;
+    this._overflow(values.slice(0, mid));
+    this._safeInsert(0, values.slice(mid));
+  }
+
+  /**
+   * @internal
+   *
+   * Emit an overflow event containing the items evicted from the collection.
+   *
+   * @param evicted - The items evicted from the collection.
+   */
+  protected _overflow(evicted?: T[] | Node<T>): void {
+    if (evicted == null) {
+      return;
+    }
+    if (Array.isArray(evicted)) {
+      this._emitter.emit(BoundedEvent.Overflow, evicted);
+      return;
+    }
+    for (const array of chunk(values(evicted), ARGS_MAX_LENGTH)) {
+      this._emitter.emit(BoundedEvent.Overflow, array);
+    }
+  }
+
+  /**
+   * @internal
+   */
+  protected _presert(index: number, values: T[]): void {
+    // If no values
+    const N = values.length;
+    if (N <= 0) {
+      return;
+    }
+
+    // If no capacity
+    if (this._capacity <= 0) {
+      this._overflow(values);
+      return;
+    }
+
+    // Check free space
+    let free = this._capacity - this._size;
+    if (free >= N) {
+      this._safeInsert(index, values);
+      return;
+    }
+
+    // Check if "infinite" capacity yet not enough space
+    if (!this._isFinite) {
+      this._safeInsert(0, values.slice(values.length - free));
+      throw new Error("Out of memory");
+    }
+
+    // Remove from tail
+    if (index < this._size) {
+      const popped = Math.min(this._size - index, N - free);
+      const [head] = this._cut(this._size - popped, popped);
+      this._overflow(head);
+      free += popped;
+    }
+
+    // Check free space
+    if (free >= N) {
+      this._safeInsert(index, values);
+      return;
+    }
+
+    // Remove from items and insert remaining
+    this._overflow(values.slice(free));
+    this._safeInsert(this._size, values.slice(0, free));
+  }
+
+  /**
+   * @internal
+   */
+  protected _safeInsert(index: number, values: T[]): void {
+    // Sanitize input
+    if (values.length <= 0) {
+      return;
+    }
+
+    // Create segment
+    const [head, tail, size] = toList(values);
+
+    // Insert segment
+    const prev = this._get(index - 1);
+    tail!.next = prev.next;
+    prev.next = head;
+
+    // Update list state
+    this._tail = index < this._size ? this._tail : tail!;
+    this._size += size;
   }
 }
