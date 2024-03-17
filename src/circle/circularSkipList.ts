@@ -4,7 +4,7 @@ import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../utils/constants";
 import {
   SkipList,
   SkipListConfig,
-  SkipListCore,
+  SkipCore,
   SkipNode,
 } from "../types/skipList";
 
@@ -297,18 +297,7 @@ export class CircularSkipList<T>
   }
 
   push(...values: T[]): number {
-    // If no values
-    if (values.length <= 0) {
-      return this._size;
-    }
-
-    // If no capacity
-    if (this._capacity <= 0) {
-      this._overflow(values);
-      return this._size;
-    }
-
-    // Push values
+    // Add values
     this._insert(this._size, values);
 
     // Return new size
@@ -400,18 +389,7 @@ export class CircularSkipList<T>
   }
 
   unshift(...values: T[]): number {
-    // If no values
-    if (values.length <= 0) {
-      return this._size;
-    }
-
-    // If no capacity
-    if (this._capacity <= 0) {
-      this._overflow(values);
-      return this._size;
-    }
-
-    // Presert values
+    // Add values
     this._presert(0, values);
 
     // Return new size
@@ -425,7 +403,7 @@ export class CircularSkipList<T>
   /**
    * @internal
    */
-  protected _cut(start: number, count: number): SkipListCore<T> {
+  protected _cut(start: number, count: number): SkipCore<T> {
     // Create list core
     const core = { root: this._root, size: this._size, tails: this._tails };
 
@@ -444,7 +422,17 @@ export class CircularSkipList<T>
    * @internal
    */
   protected _insert(index: number, values: T[]): void {
+    // If no values
     const N = values.length;
+    if (N <= 0) {
+      return;
+    }
+
+    // If no capacity
+    if (this._capacity <= 0) {
+      this._overflow(values);
+      return;
+    }
 
     // Check free space
     let free = this._capacity - this._size;
@@ -501,7 +489,17 @@ export class CircularSkipList<T>
    * @internal
    */
   protected _presert(index: number, values: T[]): void {
+    // If no values
     const N = values.length;
+    if (N <= 0) {
+      return;
+    }
+
+    // If no capacity
+    if (this._capacity <= 0) {
+      this._overflow(values);
+      return;
+    }
 
     // Check free space
     let free = this._capacity - this._size;
