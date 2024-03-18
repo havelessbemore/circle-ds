@@ -77,12 +77,13 @@ export function cut<N extends DoublyLinkedNode<unknown>>(
   if (count <= 0) {
     return [undefined, undefined];
   }
-  const [head, tail] = singlyCut(root, count) as [N, N];
+  const seg = singlyCut(root, count);
+  const head = seg.root.next! as N;
   head.prev = undefined;
   if (root.next != null) {
     root.next.prev = root;
   }
-  return [head, tail];
+  return [head, seg.tail as N];
 }
 
 /**

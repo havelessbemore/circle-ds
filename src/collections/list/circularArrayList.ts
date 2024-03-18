@@ -73,24 +73,18 @@ export class CircularArrayList<T>
     this._next = 0;
     this._vals = [];
 
-    // If capacity is null, undefined, or Infinity
-    if (capacity == null || isInfinity(capacity)) {
+    // Case 1: input is null or undefined
+    if (capacity == null) {
       return;
     }
 
-    // If capacity is a number
+    // Case 2: input is capacity
     if (isNumber(capacity)) {
-      // If capacity is invalid
-      if (!isArrayLength(capacity)) {
-        throw new RangeError("Invalid capacity");
-      }
-      // If capacity is valid
-      this._capacity = capacity;
-      this._isFinite = true;
+      this.capacity = capacity;
       return;
     }
 
-    // If capacity is an iterable
+    // Case 3: input is an iterable
     this._vals = Array.from(capacity as Iterable<T>);
     this._capacity = this._vals.length;
     this._isFinite = true;

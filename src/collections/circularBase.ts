@@ -4,8 +4,9 @@ import { ValueOf } from "../types/valueOf";
 
 export class CircularBase<T> {
   /**
-   * The event emitter.
    * @internal
+   * The event emitter.
+   *
    */
   protected _emitter: EventEmitter;
 

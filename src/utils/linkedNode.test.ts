@@ -20,59 +20,79 @@ export function toArray<T>(node?: LinkedNode<T>): T[] {
 
 describe(`${copy.name}()`, () => {
   test("returns undefineds when input node is undefined", () => {
-    const [head, tail, size] = copy(undefined, 2);
+    const core = copy(undefined, 2);
 
-    expect(size).toBe(0);
-    expect(head).toBeUndefined();
-    expect(tail).toBeUndefined();
+    expect(core.size).toBe(0);
+    expect(core.root).toBeDefined();
+    expect(core.root.next).toBeUndefined();
+    expect(core.tail).toBe(core.root);
+    expect(core.tail.next).toBeUndefined();
   });
 
   test("returns undefineds when count is negative", () => {
-    const [src] = toList(["A", "B", "C"]);
-    const [head, tail, size] = copy(src, -1);
+    const src = toList(["A", "B", "C"]);
+    const core = copy(src.root.next, -1);
 
-    expect(size).toBe(0);
-    expect(head).toBeUndefined();
-    expect(tail).toBeUndefined();
+    expect(core.size).toBe(0);
+    expect(core.root).toBeDefined();
+    expect(core.root.next).toBeUndefined();
+    expect(core.tail).toBe(core.root);
+    expect(core.tail.next).toBeUndefined();
   });
 
   test("returns undefineds when count is zero", () => {
-    const [src] = toList(["A", "B", "C"]);
-    const [head, tail, size] = copy(src, 0);
+    const src = toList(["A", "B", "C"]);
+    const core = copy(src.root.next, 0);
 
-    expect(size).toBe(0);
-    expect(head).toBeUndefined();
-    expect(tail).toBeUndefined();
+    expect(core.size).toBe(0);
+    expect(core.root).toBeDefined();
+    expect(core.root.next).toBeUndefined();
+    expect(core.tail).toBe(core.root);
+    expect(core.tail.next).toBeUndefined();
   });
 
   test("copies the specified number of nodes from the list", () => {
-    const [src] = toList(["A", "B", "C", "D"]);
-    const [head, tail, size] = copy(src, 2);
+    const src = toList(["A", "B", "C", "D"]);
+    const { root, size, tail } = copy(src.root.next, 2);
 
     expect(size).toBe(2);
-    expect(head!.value).toBe("A");
+    expect(root.next!.value).toBe("A");
     expect(tail!.value).toBe("B");
     expect(tail!.next).toBeUndefined();
-    expect(Array.from(values(head))).toEqual(["A", "B"]);
+    expect(Array.from(values(root.next))).toEqual(["A", "B"]);
   });
 
   test("handles copying more nodes than available", () => {
-    const [src] = toList(["A", "B", "C"]);
-    const [head, tail, size] = copy(src, 5);
+    const src = toList(["A", "B", "C"]);
+    const { root, size, tail } = copy(src.root.next, 5);
 
     expect(size).toBe(3);
-    expect(head!.value).toBe("A");
+    expect(root.next!.value).toBe("A");
     expect(tail!.value).toBe("C");
     expect(tail!.next).toBeUndefined();
-    expect(Array.from(values(head))).toEqual(["A", "B", "C"]);
+    expect(Array.from(values(root.next))).toEqual(["A", "B", "C"]);
   });
 });
 
 describe(`${cut.name}()`, () => {
-  test("returns [undefined, undefined] for non-positive count", () => {
+  test("returns an empty core for a negative count", () => {
     const list = { value: 1, next: { value: 2 } };
-    expect(cut(list, 0)).toEqual([undefined, undefined]);
-    expect(cut(list, -1)).toEqual([undefined, undefined]);
+    const core = cut(list, -1);
+    expect(core.size).toBe(0);
+    expect(core.root).toBeDefined();
+    expect(core.root.next).toBeUndefined();
+    expect(core.tail).toBe(core.root);
+    expect(core.tail.next).toBeUndefined();
+  });
+
+  test("returns an empty core for a zero count", () => {
+    const list = { value: 1, next: { value: 2 } };
+    const core = cut(list, 0);
+    expect(core.size).toBe(0);
+    expect(core.root).toBeDefined();
+    expect(core.root.next).toBeUndefined();
+    expect(core.tail).toBe(core.root);
+    expect(core.tail.next).toBeUndefined();
   });
 
   test("throws TypeError if count is larger than list size", () => {
@@ -85,20 +105,20 @@ describe(`${cut.name}()`, () => {
       value: 0,
       next: { value: 1, next: { value: 2, next: { value: 3 } } },
     };
-    const [head, tail] = cut(list, 2);
+    const { root, tail } = cut(list, 2);
 
-    expect(head?.value).toBe(1);
-    expect(tail?.value).toBe(2);
+    expect(root.next!.value).toBe(1);
+    expect(tail.value).toBe(2);
     expect(list.next?.value).toBe(3); // Original list should now start at 3
-    expect(tail?.next).toBeUndefined(); // Ensure the tail's next is cut off
+    expect(tail.next).toBeUndefined(); // Ensure the tail's next is cut off
   });
 
   test("maintains list integrity when cutting the entire list", () => {
     const list = { value: 0, next: { value: 1, next: { value: 2 } } };
-    const [head, tail] = cut(list, 2);
+    const { root, tail } = cut(list, 2);
 
-    expect(head?.value).toBe(1);
-    expect(tail?.value).toBe(2);
+    expect(root.next!.value).toBe(1);
+    expect(tail.value).toBe(2);
     expect(list.next).toBeUndefined(); // The original list should be empty
   });
 });
@@ -152,50 +172,50 @@ describe(`${entries.name}()`, () => {
 
 describe(`${get.name}()`, () => {
   test("retrieves the correct node at a given index", () => {
-    const [head] = toList([1, 2, 3, 4, 5]);
-    const node = get(head, 2);
+    const { root } = toList([1, 2, 3, 4, 5]);
+    const node = get(root.next, 2);
     expect(node?.value).toBe(3);
   });
 
   test("returns undefined for negative indices", () => {
-    const [head] = toList([1, 2, 3]);
-    const node = get(head, -1);
+    const { root } = toList([1, 2, 3]);
+    const node = get(root.next, -1);
     expect(node).toBeUndefined();
   });
 
   test("handles empty lists correctly", () => {
-    const [head] = toList([]);
-    const node = get(head, 0);
-    expect(node).toBe(head);
+    const { root } = toList([]);
+    const node = get(root.next, 0);
+    expect(node).toBe(root.next);
   });
 
   test("handles single-element lists correctly", () => {
-    const [head] = toList([42]);
-    const node = get(head, 0);
-    expect(node).toBe(head);
+    const { root } = toList([42]);
+    const node = get(root.next, 0);
+    expect(node).toBe(root.next);
   });
 
   test("returns the head node when index is 0", () => {
-    const [head] = toList([1, 2, 3]);
-    const node = get(head, 0);
-    expect(node).toBe(head);
+    const { root } = toList([1, 2, 3]);
+    const node = get(root.next, 0);
+    expect(node).toBe(root.next);
   });
 
   test("returns the tail node when index equals length - 1", () => {
-    const [head] = toList([1, 2, 3]);
-    const node = get(head, 2);
+    const { root } = toList([1, 2, 3]);
+    const node = get(root.next, 2);
     expect(node?.value).toBe(3);
   });
 
   test("returns undefined when index equals length", () => {
-    const [head] = toList([1, 2, 3]);
-    const node = get(head, 3);
+    const { root } = toList([1, 2, 3]);
+    const node = get(root.next, 3);
     expect(node).toBe(undefined);
   });
 
   test("returns undefined when index greater than length", () => {
-    const [head] = toList([1, 2, 3]);
-    const node = get(head, 5);
+    const { root } = toList([1, 2, 3]);
+    const node = get(root.next, 5);
     expect(node).toBe(undefined);
   });
 });
@@ -206,77 +226,77 @@ describe(`${has.name}()`, () => {
   });
 
   test("returns true for a value present in the list", () => {
-    const [head] = toList([1, 2, 3, 4, 5]);
-    expect(has(head, 3)).toBe(true);
+    const { root } = toList([1, 2, 3, 4, 5]);
+    expect(has(root.next, 3)).toBe(true);
   });
 
   test("returns false for a value not present in the list", () => {
-    const [head] = toList([1, 2, 3, 4, 5]);
-    expect(has(head, 6)).toBe(false);
+    const { root } = toList([1, 2, 3, 4, 5]);
+    expect(has(root.next, 6)).toBe(false);
   });
 
   test("handles single-element lists correctly", () => {
-    const [head] = toList([42]);
-    expect(has(head, 42)).toBe(true);
-    expect(has(head, 1)).toBe(false);
+    const { root } = toList([42]);
+    expect(has(root.next, 42)).toBe(true);
+    expect(has(root.next, 1)).toBe(false);
   });
 
   test("returns false for an empty list", () => {
-    const [head] = toList([]);
-    expect(has(head, 1)).toBe(false);
+    const { root } = toList([]);
+    expect(has(root.next, 1)).toBe(false);
   });
 
   test("stops searching at the specified end node", () => {
-    const [head] = toList([1, 2, 3, 4, 5]);
-    const end = head!.next!.next!.next; // End node at value 3
-    expect(has(head, 4, end)).toBe(false); // Should not find value 4
-    expect(has(head, 3, end)).toBe(true); // Should find value 3
+    const { root } = toList([1, 2, 3, 4, 5]);
+    const end = root.next!.next!.next!.next; // End node at value 3
+    expect(has(root.next, 4, end)).toBe(false); // Should not find value 4
+    expect(has(root.next, 3, end)).toBe(true); // Should find value 3
   });
 });
 
 describe(`${insert.name}()`, () => {
   test("inserts values into an empty list", () => {
-    const [, prev] = toList([0]);
+    const { tail } = toList([0]);
     const values = [1, 2, 3];
-    const lastNode = insert(prev!, values);
-    expect(toArray(prev)).toEqual([0, 1, 2, 3]);
+    const lastNode = insert(tail, values);
+    expect(toArray(tail)).toEqual([0, 1, 2, 3]);
     expect(lastNode.value).toEqual(3);
   });
 
   test("inserts values with an empty array", () => {
-    const [, prev] = toList([0]);
+    const { tail } = toList([0]);
     const values: number[] = [];
-    const lastNode = insert(prev!, values);
-    expect(toArray(prev!)).toEqual([0]);
+    const lastNode = insert(tail, values);
+    expect(toArray(tail)).toEqual([0]);
     expect(lastNode.value).toEqual(0);
   });
 
   test("inserts values at the beginning of a list", () => {
-    const [prev] = toList([-1, 0]);
+    const { root } = toList([-1, 0]);
     const values = [1, 2, 3];
-    insert(prev!, values);
-    expect(toArray(prev)).toEqual([-1, 1, 2, 3, 0]);
+    insert(root.next!, values);
+    expect(toArray(root.next)).toEqual([-1, 1, 2, 3, 0]);
   });
 
   test("inserts values in the middle of a list", () => {
-    const [prev] = toList([0, 1, 4, 5]);
+    const { root } = toList([0, 1, 4, 5]);
     const values = [2, 3];
-    insert(prev!.next!, values);
-    expect(toArray(prev)).toEqual([0, 1, 2, 3, 4, 5]);
+    insert(root.next!.next!, values);
+    expect(toArray(root.next)).toEqual([0, 1, 2, 3, 4, 5]);
   });
 
   test("inserts values at the end of a list", () => {
-    const [head, prev] = toList([0, 1, 2]);
+    const { root, tail } = toList([0, 1, 2]);
     const values = [3, 4];
-    insert(prev!, values);
-    expect(toArray(head)).toEqual([0, 1, 2, 3, 4]);
+    insert(tail, values);
+    expect(toArray(root.next)).toEqual([0, 1, 2, 3, 4]);
   });
 
   test("inserts iterable other than an array", () => {
-    const [prev] = toList([0, 1]);
+    const { root } = toList([0, 1]);
     const values = new Set([2, 3, 4]);
-    insert(prev!, values);
-    expect(toArray(prev)).toEqual([0, 2, 3, 4, 1]);
+    insert(root.next!, values);
+    expect(toArray(root.next)).toEqual([0, 2, 3, 4, 1]);
   });
 });
 
@@ -320,50 +340,54 @@ describe(`${keys.name}()`, () => {
 });
 
 describe(`${toList.name}()`, () => {
-  test("returns [undefined, undefined, 0] for an empty iterable", () => {
-    const result = toList([]);
-    expect(result).toEqual([undefined, undefined, 0]);
+  test("returns an empty core for an empty iterable", () => {
+    const core = toList([]);
+    expect(core.size).toBe(0);
+    expect(core.root).toBeDefined();
+    expect(core.root.next).toBeUndefined();
+    expect(core.tail).toBe(core.root);
+    expect(core.tail.next).toBeUndefined();
   });
 
   test("correctly converts a single-element iterable to a list", () => {
     const values = [42];
-    const [head, tail, count] = toList(values);
+    const { root, size, tail } = toList(values);
 
-    expect(count).toBe(1);
-    expect(head).toEqual({ value: 42, next: undefined });
+    expect(size).toBe(1);
+    expect(root.next).toEqual({ value: 42, next: undefined });
     expect(tail).toEqual({ value: 42, next: undefined });
-    expect(head).toBe(tail);
+    expect(root.next).toBe(tail);
   });
 
   test("correctly converts a multi-element iterable to a list", () => {
     const values = [1, 2, 3];
-    const [head, tail, count] = toList(values);
+    const { root, size, tail } = toList(values);
 
-    expect(count).toBe(3);
-    expect(head?.value).toBe(1);
+    expect(size).toBe(3);
+    expect(root.next?.value).toBe(1);
     expect(tail?.value).toBe(3);
-    expect(head?.next?.next).toBe(tail);
+    expect(root.next?.next?.next).toBe(tail);
   });
 
   test("handles iterables with various types", () => {
     const values = ["a", "b", "c"];
-    const [head, tail, count] = toList(values);
+    const { root, size, tail } = toList(values);
 
-    expect(count).toBe(3);
-    expect(head?.value).toBe("a");
+    expect(size).toBe(3);
+    expect(root.next?.value).toBe("a");
     expect(tail?.value).toBe("c");
-    expect(head?.next?.next).toBe(tail);
+    expect(root.next?.next?.next).toBe(tail);
   });
 
   test("verifies the linked list integrity", () => {
     const values = [1, 2, 3, 4, 5];
-    const [head, tail, count] = toList(values);
+    const { root, size, tail } = toList(values);
 
-    expect(count).toBe(values.length);
-    expect(head?.value).toBe(1);
+    expect(size).toBe(values.length);
+    expect(root.next?.value).toBe(1);
     expect(tail?.value).toBe(5);
 
-    let current = head;
+    let current = root.next;
     let currentValue = 1;
     while (current?.next) {
       expect(current.value).toBe(currentValue);

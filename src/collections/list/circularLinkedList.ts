@@ -1,5 +1,5 @@
 import { Bounded, BoundedEvent } from "../..";
-import { LinkedNode as Node } from "../../types/linkedNode";
+import { LinkedCore, LinkedNode as Node } from "../../types/linkedNode";
 import { List } from "../../types/list";
 import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../../utils/constants";
 import { isInfinity, isLinkedLength, isNumber } from "../../utils/is";
@@ -90,14 +90,12 @@ export class CircularLinkedList<T>
     }
 
     // Case 3: capacity is iterable
-    const [head, tail, size] = toList(capacity as Iterable<T>);
+    const { root, size, tail } = toList(capacity as Iterable<T>);
     this._capacity = size;
     this._isFinite = true;
-    if (size > 0) {
-      this._root.next = head;
-      this._tail = tail!;
-      this._size = size;
-    }
+    this._root = root;
+    this._size = size;
+    this._tail = tail;
   }
 
   get capacity(): number {
@@ -139,7 +137,7 @@ export class CircularLinkedList<T>
 
     // Shrink
     const diff = this._size - capacity;
-    const [head] = cut(this._root, diff);
+    const { root } = cut(this._root, diff);
     this._size -= diff;
 
     // Update tail, if needed
@@ -148,7 +146,7 @@ export class CircularLinkedList<T>
     }
 
     // Emit discarded items
-    this._overflow(head);
+    this._overflow(root.next);
   }
 
   at(index?: number): T | undefined {
@@ -232,10 +230,10 @@ export class CircularLinkedList<T>
     }
 
     // Remove last value
-    const [head] = this._cut(this._size - 1, 1);
+    const { root } = this._cut(this._size - 1, 1);
 
     // Return value
-    return head!.value;
+    return root.next!.value;
   }
 
   push(...values: T[]): number {
@@ -269,10 +267,10 @@ export class CircularLinkedList<T>
     }
 
     // Remove first value
-    const [head] = this._cut(0, 1);
+    const { root } = this._cut(0, 1);
 
     // Return value
-    return head!.value;
+    return root.next!.value;
   }
 
   slice(start?: number, end?: number): CircularLinkedList<T> {
@@ -289,13 +287,13 @@ export class CircularLinkedList<T>
 
     // Create segment copy
     const node = this._get(start);
-    const [head, tail, length] = copy(node, end - start);
+    const core = copy(node, end - start);
 
     // Return copied segment as a list
-    const list = new CircularLinkedList<T>(length);
-    list._root.next = head;
-    list._tail = tail ?? list._root;
-    list._size = length;
+    const list = new CircularLinkedList<T>(core.size);
+    list._root = core.root;
+    list._size = core.size;
+    list._tail = core.tail;
 
     // Return new list
     return list;
@@ -317,11 +315,11 @@ export class CircularLinkedList<T>
     if (deleteCount <= 0) {
       list = new CircularLinkedList<T>(0);
     } else {
-      const [head, tail] = this._cut(start, deleteCount);
+      const { root, size, tail } = this._cut(start, deleteCount);
       list = new CircularLinkedList<T>(deleteCount);
-      list._root.next = head;
-      list._tail = tail!;
-      list._size = deleteCount;
+      list._root = root;
+      list._size = size;
+      list._tail = tail;
     }
 
     // Add new items
@@ -350,15 +348,12 @@ export class CircularLinkedList<T>
   /**
    * @internal
    */
-  protected _cut(
-    start: number,
-    count: number
-  ): [Node<T>, Node<T>] | [undefined, undefined] {
+  protected _cut(start: number, count: number): LinkedCore<T> {
     // Get previous
     const prev = this._get(start - 1)!;
 
     // Cut and get removed segment
-    const [head, tail] = cut(prev, count);
+    const core = cut(prev, count);
 
     // Update size
     this._size -= count;
@@ -369,7 +364,7 @@ export class CircularLinkedList<T>
     }
 
     // Return cut segment
-    return [head, tail] as [Node<T>, Node<T>];
+    return core;
   }
 
   /**
@@ -411,8 +406,8 @@ export class CircularLinkedList<T>
     // Remove from head
     if (index > 0) {
       const shifted = Math.min(index, N - free);
-      const [head] = this._cut(0, shifted);
-      this._overflow(head);
+      const { root } = this._cut(0, shifted);
+      this._overflow(root.next);
       index -= shifted;
       free += shifted;
     }
@@ -481,8 +476,8 @@ export class CircularLinkedList<T>
     // Remove from tail
     if (index < this._size) {
       const popped = Math.min(this._size - index, N - free);
-      const [head] = this._cut(this._size - popped, popped);
-      this._overflow(head);
+      const { root } = this._cut(this._size - popped, popped);
+      this._overflow(root.next);
       free += popped;
     }
 
@@ -507,12 +502,12 @@ export class CircularLinkedList<T>
     }
 
     // Create segment
-    const [head, tail, size] = toList(values);
+    const { root, size, tail } = toList(values);
 
     // Insert segment
     const prev = this._get(index - 1);
     tail!.next = prev.next;
-    prev.next = head;
+    prev.next = root.next;
 
     // Update list state
     this._tail = index < this._size ? this._tail : tail!;

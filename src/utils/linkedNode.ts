@@ -1,4 +1,4 @@
-import { LinkedNode } from "../types/linkedNode";
+import { LinkedCore, LinkedNode } from "../types/linkedNode";
 
 /**
  * Creates a copy of a segment from a linked list.
@@ -13,24 +13,19 @@ import { LinkedNode } from "../types/linkedNode";
  *          - The tail {@link LinkedNode} of the new list.
  *          - An integer representing the total number of nodes copied.
  */
-export function copy<N extends LinkedNode<unknown>>(
-  node: N | undefined,
+export function copy<T>(
+  node: LinkedNode<T> | undefined,
   distance: number
-): [N, N, number] | [undefined, undefined, 0] {
-  // Check distance
-  if (node == null || distance <= 0) {
-    return [undefined, undefined, 0];
-  }
-
-  // Initialize new list
-  const root = { value: undefined } as N;
-  let tail = root;
+): LinkedCore<T> {
+  // Create new root
+  const root: LinkedNode<T> = { value: undefined as T };
 
   // For each node
   let size = 0;
+  let tail = root;
   while (node != null && size < distance) {
     // Create a duplicate
-    const dupe = { value: node.value } as N;
+    const dupe: LinkedNode<T> = { value: node.value };
 
     // Attach the duplicate
     tail.next = dupe;
@@ -45,7 +40,7 @@ export function copy<N extends LinkedNode<unknown>>(
 
   // Return copy
   tail.next = undefined;
-  return [root.next!, tail, size];
+  return { root, size, tail };
 }
 
 /**
@@ -65,18 +60,27 @@ export function copy<N extends LinkedNode<unknown>>(
  * @throws - {@link TypeError}
  * thrown if `count` \> `len(prev)`
  */
-export function cut<N extends LinkedNode<unknown>>(
-  prev: N,
+export function cut<T>(
+  prev: LinkedNode<T> | undefined,
   count: number
-): [N, N] | [undefined, undefined] {
-  if (count <= 0) {
-    return [undefined, undefined];
+): LinkedCore<T> {
+  // Create new root
+  const root: LinkedNode<T> = { value: undefined as T };
+
+  // Check inputs
+  if (prev == null || count <= 0) {
+    return { root, size: 0, tail: root };
   }
+
+  // Cut segment
   const head = prev.next!;
   const tail = get(head, count - 1)!;
   prev.next = tail.next;
   tail.next = undefined;
-  return [head, tail];
+
+  // Return cut segment
+  root.next = head;
+  return { root, size: count, tail };
 }
 
 /**
@@ -174,7 +178,7 @@ export function insert<T>(
   values: Iterable<T>
 ): LinkedNode<T> {
   // Convert values to list
-  const [head, tail, size] = toList(values);
+  const { root, size, tail } = toList(values);
 
   // If no values
   if (size <= 0) {
@@ -183,7 +187,7 @@ export function insert<T>(
 
   // Add values
   tail!.next = prev.next;
-  prev.next = head;
+  prev.next = root.next;
 
   return tail!;
 }
@@ -227,22 +231,19 @@ export function* keys<T>(
  * @returns A triple containing the head, tail and size of the list.
  * Returns `[undefined, undefined, 0]` if the iterable is empty.
  */
-export function toList<T>(
-  values: Iterable<T>
-): [LinkedNode<T>, LinkedNode<T>, number] | [undefined, undefined, 0] {
-  const root = {} as LinkedNode<T>;
+export function toList<T>(values: Iterable<T>): LinkedCore<T> {
+  const root: LinkedNode<T> = { value: undefined as T };
 
-  let count = 0;
+  let size = 0;
   let tail = root;
   for (const value of values) {
     tail.next = { value };
     tail = tail.next;
-    ++count;
+    ++size;
   }
+  tail.next = undefined;
 
-  return root.next === undefined
-    ? [undefined, undefined, 0]
-    : [root.next, tail, count];
+  return { root, size, tail };
 }
 
 /**
