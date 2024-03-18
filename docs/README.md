@@ -10,17 +10,11 @@ A suite of circular data structures, including deques, lists, maps, queues, sets
 [![codecov](https://codecov.io/gh/havelessbemore/circle-ds/graph/badge.svg?token=F362G7C9U0)](https://codecov.io/gh/havelessbemore/circle-ds)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/circle-ds)
 
-## Features
+Circle-ds is a modern, flexible library offering a unique collection of circular data structures tailored for efficient data management and manipulation. These data structures behave dynamically but can be bounded to a given capacity, allowing for flexible data storage solutions.
 
-circle-ds is a modern, flexible library offering a unique collection of circular data structures tailored for efficient data management and manipulation. A standout feature of this library is its capacity management.
+## Getting Started
 
-By default, each data structure is unbounded, ensuring they can accommodate incoming data with the performance and behavior expected from standard implementations.
-
-When given a capacity, they transform into bounded containers, limiting their size to the predefined capacity. When necessary, older values are emitted to make room for the new, adhering to its circular nature. 
-
-This feature is useful for applications requiring fixed-size collections, such as caching mechanisms, real-time data processing, and streaming analytics, where the most recent data is prioritized, and older data is systematically discarded. With circle-ds, developers can seamlessly toggle between unbounded and bounded behaviors, offering flexibility in managing collection sizes and data lifecycles, while also preserving the expected functionality of classic data structures.
-
-## Install
+### Install
 
 Using npm:
 
@@ -31,18 +25,71 @@ npm install circle-ds
 Using yarn:
 
 ```bash
-yarn install circle-ds
+yarn add circle-ds
 ```
+
+### Usage
+
+Here's an example using a circular queue, showcasing various capabilities: 
+
+```javascript
+import { CircularQueue } from 'circle-ds';
+
+// Create a queue with capacity 4
+const queue = new CircularQueue(4);
+
+// Listen for overflow
+queue.on('overflow', (discarded) => console.log("Discarded:", discarded));
+
+// Add incoming values
+queue.push(1, 2, 3);
+console.log(queue.values()); // Output: [1, 2, 3]
+queue.push(4, 5, 6); // Discards [1, 2]
+console.log(queue.values()); // Output: [3, 4, 5, 6]
+
+// Resize queue
+queue.capacity = 2; // Discards [3, 4]
+console.log(queue.values()); // Output: [5, 6]
+
+// Remove bounds
+queue.capacity = Infinity;
+queue.push(7, 8, 9);
+console.log(queue.values()); // Output: [5, 6, 7, 8, 9]
+```
+
+## Features
+
+- **Capacity Management:** Switch seamlessly between unbounded and bounded behaviors.
+- **Efficient Data Management:** Optimized for performance, even with large datasets.
+- **Flexible and Reusable:** Designed for ease of use in a wide variety of applications.
+
+By default, data structures are unbounded, ensuring they can accommodate incoming data with the performance and behavior expected from standard implementations. When given a capacity, they become bounded containers, limiting their size to the predefined capacity. When necessary, older values are emitted to make room for the new, adhering to its circular nature. 
+
+This feature is useful for applications requiring fixed-size collections, such as caching mechanisms, real-time data processing, and streaming analytics, where the most recent data is prioritized, and older data is systematically discarded. With circle-ds, developers can seamlessly toggle between unbounded and bounded behaviors, offering flexibility in managing collection sizes and data lifecycles, while also preserving the expected functionality of classic data structures.
+
+## Compatibility
+
+This library is compatible with modern JavaScript environments, including Node.js and browsers supporting ES6+.
+
+## Community and Support
+
+We welcome contributions, feedback, and bug reports. Please feel free to [submit an issue](https://github.com/havelessbemore/circle-ds/issues) or a pull request.
+
+For support, you can reach out via [GitHub discussions](https://github.com/havelessbemore/circle-ds/discussions).
 
 ## API
 
-### Common
+### Common API Elements
 
-The following is common across all collections. See the [Collection](./docs/interfaces/Collection.md) interface for more details.
+All circle-ds data structures share common API elements, outlined in the [Collection](./docs/interfaces/Collection.md) interface. Here's a brief overview:
+
+- **Capacity Control:** Manage collection size with dynamic or fixed capacities.
+- **Iterable Interface:** Access keys, values, and entries directly using iterators.
+- **Event-Driven:** Listen to overflow events when capacity limits are reached.
 
 #### Properties
 
-- `capacity: number`: A positive integer that represents the maximum size of the collection. Can be updated to grow or shrink the collection. Can also be set to `Infinity`, representing an unbounded collection.
+- `capacity: number`: A positive integer that represents the maximum size of the collection. Can be updated to grow or shrink the collection. Can be set to `Infinity` to represent an unbounded collection.
 
 - `get size(): number`: The number of items in the collection.
 
@@ -50,13 +97,13 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 #### Events
 
-- [`BoundedEvent.Overflow`](./src/types/boundedEvent.ts): Triggered when existing elements are discarded from the collection. This happens when the collection's capacity is reduced below its size or when new values are added while at capacity.
+- [`BoundedEvent.Overflow`](./src/types/boundedEvent.ts): Triggered when existing elements are discarded from the collection. This happens when capacity is reached and old values must be removed to make room for new values.
 
 #### Methods
 
 - `clear(): void`: Remove all items from the collection.
 
-- `entries(): IterableIterator<K, V>`: Returns an iterator of `[key/index, value]` pairs through the collection.
+- `entries(): IterableIterator<K, V>`: Returns an iterator of `[index, value]` pairs through the collection. If the collection is a map, returns an iterator of `[key, value]` pairs.
 
 - `forEach(callbackFn: (value: V, index: K, collection: Collection<K, V>) => void, thisArg?: unknown): void`: Executes the provided `callbackFn` function once for each element.
 
@@ -64,11 +111,9 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 - `values(): IterableIterator<V>`: Returns an iterator for the values in the collection.
 
-- `[Symbol.iterator](): IterableIterator`: Returns an iterator of the values in the collection. If the collection is a map, returns an iterator of [key, value] pairs in the collection.
+- `[Symbol.iterator](): IterableIterator`: Returns an iterator of the values in the collection. If the collection is a map, returns an iterator of `[key, value]` pairs.
 
 ### [Deque](./docs/interfaces/Deque.md)
-
-`Deque` is a double-ended queue that combines the features of stacks and queues, allowing insertion and removal at both ends.
 
 #### Implementations
 
@@ -77,33 +122,31 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 #### Constructor
 
-- `new ()`: Initialize an empty deque of infinite capacity.
-- `new (capacity: number)`: Initialize an empty deque with the given capacity.
-- `new (items: Iterable<T>)`: Initialize a full deque with the given items.
+- `new ()`
+- `new (capacity: number)`
+- `new (items: Iterable<T>)`
 
 #### Methods
 
-- `first(): T | undefined`: Returns the first item without removing it, or `undefined` if the collection is empty. Alias for front().
+- `first(): T | undefined`
 
-- `front(): T | undefined`: Returns the item at the front without removing it, or `undefined` if the collection is empty. Alias for first().
+- `front(): T | undefined`
 
-- `has(value: T): boolean`: Checks if the collection contains a specific value.
+- `has(value: T): boolean`
 
-- `last(): T | undefined`: Returns the last item without removing it, or `undefined` if the collection is empty. Alias for top().
+- `last(): T | undefined`
 
-- `pop(): T | undefined`: Removes and returns the last item, or `undefined` if the collection is empty.
+- `pop(): T | undefined`
 
-- `push(...items: T[]): number`: Appends items to the collection and returns the new size. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- `push(...items: T[]): number`
 
-- `shift(): T | undefined`: Removes and returns the first item, or `undefined` if the collection is empty.
+- `shift(): T | undefined`
 
-- `top(): T | undefined`: Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
+- `top(): T | undefined`
 
-- `unshift(...items: T[]): number`: Prepends items to the collection and returns the new size. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- `unshift(...items: T[]): number`
 
 ### [List](./docs/interfaces/List.md)
-
-A `List` is a sequence of elements allowing for indexed access, modification, and iteration.
 
 #### Implementations
 
@@ -114,33 +157,33 @@ A `List` is a sequence of elements allowing for indexed access, modification, an
 
 #### Constructor
 
-- `new ()`: Initialize an empty list of infinite capacity.
-- `new (capacity: number)`: Initialize an empty list with the given capacity.
-- `new (items: Iterable<T>)`: Initialize a full list with the given items.
+- `new ()`
+- `new (capacity: number)`
+- `new (items: Iterable<T>)`
 
 #### Methods
 
-- `at(index: number): V | undefined`: Retrieves the element at the specified index in the list.
+- `at(index: number): V | undefined`
 
-- `delete(index: number): boolean`: Deletes the element at the specified index.
+- `delete(index: number): boolean`
 
-- `fill(value: V, start?: number, end?: number): this`: Fills the list with the specified value from start index (inclusive) to end index (exclusive).
+- `fill(value: V, start?: number, end?: number): this`
 
-- `has(value: T): boolean`: Checks if the collection contains a specific value.
+- `has(value: T): boolean`
 
-- `pop(): T | undefined`: Removes and returns the last item, or `undefined` if the collection is empty.
+- `pop(): T | undefined`
 
-- `push(...items: T[]): number`: Appends items to the collection and returns the new size. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- `push(...items: T[]): number`
 
-- `set(index: number, value: V): V | undefined`: Replaces the element at the specified index with a new value. Returns the previous value if it succeeds, otherwise `undefined`.
+- `set(index: number, value: V): V | undefined`
 
-- `shift(): T | undefined`: Removes and returns the first item, or `undefined` if the collection is empty.
+- `shift(): T | undefined`
 
-- `slice(start?: number, end?: number): CircularLinkedList<V>`: Creates a shallow copy of the list from start index (inclusive) to end index (exclusive) into a new list. Does not modify the existing list.
+- `slice(start?: number, end?: number): CircularLinkedList<V>`
 
-- `splice(start: number, deleteCount?: number, ...items: V[]): CircularLinkedList<V>`: Changes the contents of the list by removing existing elements and/or adding new elements at a given index.
+- `splice(start: number, deleteCount?: number, ...items: V[]): CircularLinkedList<V>`
 
-- `unshift(...items: T[]): number`: Prepends items to the collection and returns the new size. If capacity is surpassed, items at the end are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- `unshift(...items: T[]): number`
 
 ### Map
 
@@ -150,17 +193,17 @@ A `List` is a sequence of elements allowing for indexed access, modification, an
 
 #### Constructor
 
-- `new ()`: Initialize an empty map of infinite capacity.
-- `new (capacity: number)`: Initialize an empty map with the given capacity.
-- `new (items: Iterable<[K, V]>)`: Initialize a full map with the given items. Capacity will be the number of unique keys given.
+- `new ()`
+- `new (capacity: number)`
+- `new (items: Iterable<[K, V]>)`
 
 #### Methods
 
-- `delete(key: K): boolean`: Deletes the value from the collection. Returns `true` if the value exists and was removed successfully, or `false` otherwise.
+- `delete(key: K): boolean`
 
-- `has(key: K): boolean`: Checks if the collection contains a specific value.
+- `has(key: K): boolean`
 
-- `set(key: K, value: V): this`: Sets the key to the given value in the collection. If at capacity, the oldest key-value pair is overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event. If an existing key is added again, then it will be treated as new.
+- `set(key: K, value: V): this`
 
 ### [Queue](./docs/interfaces/Queue.md)
 
@@ -173,21 +216,21 @@ A `Queue` is a FIFO (First In, First Out) data structure.
 
 #### Constructor
 
-- `new ()`: Initialize an empty queue of infinite capacity.
-- `new (capacity: number)`: Initialize an empty queue with the given capacity.
-- `new (items: Iterable<T>)`: Initialize a full queue with the given items.
+- `new ()`
+- `new (capacity: number)`
+- `new (items: Iterable<T>)`
 
 #### Methods
 
-- `first(): T | undefined`: Returns the first item without removing it, or `undefined` if the collection is empty. Alias for front().
+- `first(): T | undefined`
 
-- `front(): T | undefined`: Returns the item at the front without removing it, or `undefined` if the collection is empty. Alias for first().
+- `front(): T | undefined`
 
-- `has(value: T): boolean`: Checks if the collection contains a specific value.
+- `has(value: T): boolean`
 
-- `push(...items: T[]): number`: Appends items to the collection and returns the new size. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- `push(...items: T[]): number`
 
-- `shift(): T | undefined`: Removes and returns the first item, or `undefined` if the collection is empty.
+- `shift(): T | undefined`
 
 ### Set
 
@@ -197,17 +240,17 @@ A `Queue` is a FIFO (First In, First Out) data structure.
 
 #### Constructor
 
-- `new ()`: Initialize an empty set of infinite capacity.
-- `new (capacity: number)`: Initialize an empty set with the given capacity.
-- `new (items: Iterable<T>)`: Initialize a full set with the given items. Capacity will be the number of unique items given.
+- `new ()`
+- `new (capacity: number)`
+- `new (items: Iterable<T>)`
 
 #### Methods
 
-- `add(value: T): this`: Adds the value to the collection. If at capacity, the oldest values are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event. If an existing value is added again, then it will be treated as new.
+- `add(value: T): this`
 
-- `delete(value: T): boolean`: Deletes the value from the collection. Returns `true` if the value exists and was removed successfully, or `false` otherwise.
+- `delete(value: T): boolean`
 
-- `has(value: T): boolean`: Checks if the collection contains a specific value.
+- `has(value: T): boolean`
 
 ### [Stack](./docs/interfaces/Stack.md)
 
@@ -220,60 +263,48 @@ A `Stack` is a LIFO (Last In, First Out) data structure.
 
 #### Constructor
 
-- `new ()`: Initialize an empty stack of infinite capacity.
-- `new (capacity: number)`: Initialize an empty stack with the given capacity.
-- `new (items: Iterable<T>)`: Initialize a full stack with the given items.
+- `new ()`
+- `new (capacity: number)`
+- `new (items: Iterable<T>)`
 
 #### Methods
 
-- `has(value: T): boolean`: Checks if the collection contains a specific value.
+- `has(value: T): boolean`
 
-- `last(): T | undefined`: Returns the last item without removing it, or `undefined` if the collection is empty. Alias for top().
+- `last(): T | undefined`
 
-- `pop(): T | undefined`: Removes and returns the last item, or `undefined` if the collection is empty.
+- `pop(): T | undefined`
 
-- `push(...items: T[]): number`: Appends items to the collection and returns the new size. If at capacity, items at the front are overwritten and emitted via the [BoundedEvent.Overflow](./src/types/boundedEvent.ts) event.
+- `push(...items: T[]): number`
 
-- `top(): T | undefined`: Returns the item at the top without removing it, or `undefined` if the collection is empty. Alias for last().
+- `top(): T | undefined`
 
 ## Build
 
-First clone the project from github:
+1. Clone the project from github
 
 ```bash
 git clone git@github.com:havelessbemore/circle-ds.git
 cd circle-ds
 ```
 
-Install the project dependencies:
+2. Install dependencies
 
 ```bash
 npm install
 ```
 
-Then, the project can be build by executing the build script via npm:
+3. Build the project
 
 ```bash
 npm run build
 ```
 
-This will build ESM and CommonJS outputs from the source files and put them in the dist/ folder.
+This will build ESM and CommonJS outputs in the dist/ folder.
 
-## Test
+## Format
 
-To execute tests for the library, install the project dependencies once:
-
-```bash
-npm install
-```
-
-Then, the tests can be executed:
-
-```bash
-npm test
-```
-
-You can separately run the code linter:
+To run the code linter:
 
 ```bash
 npm run lint
@@ -285,15 +316,27 @@ To automatically fix linting issue, run:
 npm run format
 ```
 
-To test code coverage of the tests:
+## Test
+
+1. Install dependencies
+
+```bash
+npm install
+```
+
+2. Execute tests
+
+```bash
+npm test
+```
+
+Test coverage can be measured via:
 
 ```bash
 npm run test:coverage
 ```
 
-To see the coverage results, open the generated report in your browser:
-
-    ./coverage/index.html
+A coverage report is generated at `./coverage/index.html`.
 
 ---
 
