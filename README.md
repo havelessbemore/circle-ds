@@ -41,18 +41,18 @@ queue.on("overflow", discarded => console.log("Discarded:", discarded));
 
 // Add incoming values
 queue.push(1, 2, 3);
-console.log(queue.values()); // Output: [1, 2, 3]
+console.log(Array.from(queue.values())); // Output: [1, 2, 3]
 queue.push(4, 5, 6); // Discards [1, 2]
-console.log(queue.values()); // Output: [3, 4, 5, 6]
+console.log(Array.from(queue.values())); // Output: [3, 4, 5, 6]
 
 // Resize queue
 queue.capacity = 2; // Discards [3, 4]
-console.log(queue.values()); // Output: [5, 6]
+console.log(Array.from(queue.values())); // Output: [5, 6]
 
 // Remove bounds
 queue.capacity = Infinity;
 queue.push(7, 8, 9);
-console.log(queue.values()); // Output: [5, 6, 7, 8, 9]
+console.log(Array.from(queue.values())); // Output: [5, 6, 7, 8, 9]
 ```
 
 ## Features
