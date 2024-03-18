@@ -2,11 +2,14 @@
   "name": "circle-ds",
   "version": "1.7.1",
   "description": "A suite of circular data structures, including deques, lists, maps, queues, sets and stacks.",
-  "files": [
-    "dist/",
-    "LICENSE",
-    "README.md"
-  ],
+  "license": "MIT",
+  "author": "Michael Rojas <dev.michael.rojas@gmail.com> (https://github.com/havelessbemore)",
+  "homepage": "https://github.com/havelessbemore/circle-ds",
+  "bugs": "https://github.com/havelessbemore/circle-ds/issues",
+  "sideEffects": false,
+  "engines": {
+    "node": ">= 18"
+  },
   "type": "module",
   "main": "./dist/cjs/circle-ds.cjs",
   "module": "./dist/esm/circle-ds.mjs",
@@ -18,6 +21,15 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/havelessbemore/circle-ds.git"
+  },
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "build": "rimraf dist && tsc && vite build && vite build -c vite.config.misc.ts",
     "build:docs": "typedoc",
@@ -29,7 +41,6 @@
     "test": "vitest --run",
     "test:coverage": "vitest --coverage --run"
   },
-  "sideEffects": false,
   "keywords": [
     "buffer",
     "cache",
@@ -37,27 +48,20 @@
     "collection",
     "cyclic",
     "data",
-    "data structure",
+    "data-structure",
     "deque",
-    "linkedlist",
+    "doubly-linked-list",
+    "linked-list",
+    "linked",
     "list",
     "map",
     "queue",
     "ring",
     "set",
-    "skiplist",
-    "stack"
+    "skip-list",
+    "stack",
+    "structure"
   ],
-  "author": "Michael Rojas <dev.michael.rojas@gmail.com> (https://github.com/havelessbemore)",
-  "homepage": "https://github.com/havelessbemore/circle-ds",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/havelessbemore/circle-ds.git"
-  },
-  "license": "MIT",
-  "engines": {
-    "node": ">= 18"
-  },
   "devDependencies": {
     "@types/jsdom": "^21.1.1",
     "@types/node": "^20.4.9",

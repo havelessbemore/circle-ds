@@ -1,6 +1,6 @@
 # Circle DS
 
-A suite of circular data structures, including deques, lists, maps, queues, sets and stacks. Use circular buffers with ease.
+A suite of circular data structures, including deques, lists, maps, queues, sets and stacks.
 
 [![Version](https://img.shields.io/npm/v/circle-ds.svg)](https://www.npmjs.com/package/circle-ds)
 [![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)](https://github.com/havelessbemore/circle-ds/graphs/commit-activity)
@@ -9,6 +9,14 @@ A suite of circular data structures, including deques, lists, maps, queues, sets
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/circle-ds)
 
 ## Features
+
+circle-ds is a modern, flexible library offering a unique collection of circular data structures tailored for efficient data management and manipulation. A standout feature of this library is its capacity management.
+
+By default, each data structure is unbounded, ensuring they can accommodate incoming data with the performance and behavior expected from standard implementations.
+
+When given a capacity, they transform into bounded containers, limiting their size to the predefined capacity. When necessary, older values are emitted to make room for the new, adhering to its circular nature. 
+
+This feature is useful for applications requiring fixed-size collections, such as caching mechanisms, real-time data processing, and streaming analytics, where the most recent data is prioritized, and older data is systematically discarded. With circle-ds, developers can seamlessly toggle between unbounded and bounded behaviors, offering flexibility in managing collection sizes and data lifecycles, while also preserving the expected functionality of classic data structures.
 
 ## Install
 
@@ -32,7 +40,7 @@ The following is common across all collections. See the [Collection](./docs/inte
 
 #### Properties
 
-- `capacity: number`: A positive integer that represents the maximum size of the collection. Can be updated to grow or shrink the collection. Can also be set to `Infinity`.
+- `capacity: number`: A positive integer that represents the maximum size of the collection. Can be updated to grow or shrink the collection. Can also be set to `Infinity`, representing an unbounded collection.
 
 - `get size(): number`: The number of items in the collection.
 
