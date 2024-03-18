@@ -1,6 +1,6 @@
 {
   "name": "circle-ds",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "A suite of circular data structures, including deques, lists, maps, queues, sets and stacks.",
   "files": [
     "dist/",
