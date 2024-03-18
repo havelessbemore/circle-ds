@@ -432,6 +432,18 @@ export class CircularSkipList<T>
   /**
    * @internal
    */
+  protected _genLevels(N: number): number[] {
+    const levels = new Array<number>(N);
+    const maxLevel = this._maxLevel - 1;
+    for (let i = 0; i < N; ++i) {
+      levels[i] = 1 + randomRun(this._p, maxLevel);
+    }
+    return levels;
+  }
+
+  /**
+   * @internal
+   */
   protected _insert(index: number, values: T[]): void {
     // If no values
     const N = values.length;
@@ -551,14 +563,8 @@ export class CircularSkipList<T>
    * @internal
    */
   protected _safeInsert(index: number, values: T[]): void {
-    // Create levels
-    const N = values.length;
-    const levels = new Array<number>(N);
-    for (let i = 0; i < N; ++i) {
-      levels[i] = randomRun(this._p, 1, this._maxLevel);
-    }
-
     // Create segment
+    const levels = this._genLevels(values.length);
     const seg = NodeUtils.toList(levels, values);
 
     // Insert segment

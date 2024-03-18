@@ -73,29 +73,28 @@ export function log(value: number, base: number): number {
  *
  * This function iteratively increments a counter as long as the randomly
  * generated numbers from `randomFn` are less than the specified probability
- * threshold `p`, or until the counter reaches the maximum `max`.
+ * threshold, or until the counter reaches the maximum.
  *
  * The function is useful for simulations or models that require a random yet
- * probabilistically constrained sequence length, such as simulating streaks or
- * runs in games of chance.
+ * probabilistically constrained sequence length, such as consecutive coin
+ * flips.
  *
- * @param probability - The probability threshold. Defaults to 0.5.
+ * @param probability - The probability threshold.
  * @param max - The maximum value the of the run. Defaults to Infinity.
- * @param min - The starting value of the run. Defaults to 0.
  * @param randomFn - A function that generates a random number. Defaults to `Math.random`.
  *
  * @returns The length of the run.
  */
 export function randomRun(
-  probability = 0.5,
-  min = 0,
+  probability: number,
   max = Infinity,
   randomFn = Math.random
 ): number {
-  while (min < max && randomFn() < probability) {
-    ++min;
+  let count = 0;
+  while (count < max && randomFn() < probability) {
+    ++count;
   }
-  return min;
+  return count;
 }
 
 /**

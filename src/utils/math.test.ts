@@ -181,45 +181,40 @@ describe(`${log.name}()`, () => {
 });
 
 describe(`${randomRun.name}()`, () => {
-  test("returns min if randomFn always >= p", () => {
+  test("returns zero if randomFn always >= p", () => {
     const mockRandomFn = () => 0.6;
-    expect(randomRun(0.5, 0, Infinity, mockRandomFn)).toBe(0);
+    expect(randomRun(0.5, Infinity, mockRandomFn)).toBe(0);
   });
 
-  test("increments min until randomFn < p", () => {
+  test("increments counter until randomFn < p", () => {
     let counter = 0;
     const mockRandomFn = () => {
       return ++counter <= 3 ? 0.1 : 0.6;
     };
-    expect(randomRun(0.5, 0, Infinity, mockRandomFn)).toBe(3);
+    expect(randomRun(0.5, Infinity, mockRandomFn)).toBe(3);
   });
 
   test("respects the max limit", () => {
     const mockRandomFn = () => 0.1; // Always less than p
-    expect(randomRun(0.5, 0, 5, mockRandomFn)).toBe(5);
+    expect(randomRun(0.5, 5, mockRandomFn)).toBe(5);
   });
 
-  test("works with non-default min value", () => {
-    const mockRandomFn = () => 0.4;
-    expect(randomRun(0.5, 5, 10, mockRandomFn)).toBe(10);
-  });
-
-  test("returns min immediately if min > max", () => {
+  test("returns zero immediately if max < 0", () => {
     const mockRandomFn = vi.fn(); // Not expected to be called
-    expect(randomRun(0.5, 5, 0, mockRandomFn)).toBe(5);
+    expect(randomRun(0.5, -1, mockRandomFn)).toBe(0);
     expect(mockRandomFn).not.toHaveBeenCalled();
   });
 
-  test("returns min immediately if min == max", () => {
+  test("returns zero immediately if max == 0", () => {
     const mockRandomFn = vi.fn(); // Not expected to be called
-    expect(randomRun(0.5, 5, 5, mockRandomFn)).toBe(5);
+    expect(randomRun(0.5, 0, mockRandomFn)).toBe(0);
     expect(mockRandomFn).not.toHaveBeenCalled();
   });
 
   test("handles p values outside [0, 1] range", () => {
     const mockRandomFn = () => 0.3;
-    expect(randomRun(1.2, 0, 10, mockRandomFn)).toBe(10);
-    expect(randomRun(-0.1, 0, 10, mockRandomFn)).toBe(0);
+    expect(randomRun(1.2, 10, mockRandomFn)).toBe(10);
+    expect(randomRun(-0.1, 10, mockRandomFn)).toBe(0);
   });
 });
 
