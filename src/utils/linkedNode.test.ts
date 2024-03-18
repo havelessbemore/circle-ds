@@ -140,18 +140,6 @@ describe(`${entries.name}()`, () => {
     ]);
   });
 
-  test("stops iteration at the specified end node", () => {
-    // 0 -> 1 -> [2] -> 3
-    const end = { value: 2, next: { value: 3 } };
-    const list = { value: 0, next: { value: 1, next: end } };
-
-    const result = Array.from(entries(list, end));
-    expect(result).toEqual([
-      [0, 0],
-      [1, 1],
-    ]);
-  });
-
   test("handles empty lists correctly", () => {
     const result = Array.from(entries());
     expect(result).toEqual([]);
@@ -161,12 +149,6 @@ describe(`${entries.name}()`, () => {
     const list = { value: 42 };
     const result = Array.from(entries(list));
     expect(result).toEqual([[0, 42]]);
-  });
-
-  test("returns no entries when head is the same as end", () => {
-    const node = { value: 0, next: { value: 1, next: { value: 2 } } };
-    const result = Array.from(entries(node, node));
-    expect(result).toEqual([]);
   });
 });
 
@@ -245,13 +227,6 @@ describe(`${has.name}()`, () => {
     const { root } = toList([]);
     expect(has(root.next, 1)).toBe(false);
   });
-
-  test("stops searching at the specified end node", () => {
-    const { root } = toList([1, 2, 3, 4, 5]);
-    const end = root.next!.next!.next!.next; // End node at value 3
-    expect(has(root.next, 4, end)).toBe(false); // Should not find value 4
-    expect(has(root.next, 3, end)).toBe(true); // Should find value 3
-  });
 });
 
 describe(`${insert.name}()`, () => {
@@ -312,15 +287,6 @@ describe(`${keys.name}()`, () => {
     expect(result).toEqual([0, 1, 2, 3]);
   });
 
-  test("stops iteration at the specified end node", () => {
-    // 0 -> 1 -> [2] -> 3
-    const end = { value: 1, next: { value: 0 } };
-    const list = { value: 3, next: { value: 2, next: end } };
-
-    const result = Array.from(keys(list, end));
-    expect(result).toEqual([0, 1]);
-  });
-
   test("handles empty lists correctly", () => {
     const result = Array.from(keys());
     expect(result).toEqual([]);
@@ -330,12 +296,6 @@ describe(`${keys.name}()`, () => {
     const list = { value: 42 };
     const result = Array.from(keys(list));
     expect(result).toEqual([0]);
-  });
-
-  test("returns no keys when head is the same as end", () => {
-    const node = { value: 0, next: { value: 1, next: { value: 2 } } };
-    const result = Array.from(keys(node, node));
-    expect(result).toEqual([]);
   });
 });
 
@@ -410,15 +370,6 @@ describe(`${values.name}()`, () => {
     expect(result).toEqual([3, 2, 1, 0]);
   });
 
-  test("stops iteration at the specified end node", () => {
-    // 0 -> 1 -> [2] -> 3
-    const end = { value: 1, next: { value: 0 } };
-    const list = { value: 3, next: { value: 2, next: end } };
-
-    const result = Array.from(values(list, end));
-    expect(result).toEqual([3, 2]);
-  });
-
   test("handles empty lists correctly", () => {
     const result = Array.from(values());
     expect(result).toEqual([]);
@@ -428,11 +379,5 @@ describe(`${values.name}()`, () => {
     const list = { value: 42 };
     const result = Array.from(values(list));
     expect(result).toEqual([42]);
-  });
-
-  test("returns no values when head is the same as end", () => {
-    const node = { value: 0, next: { value: 1, next: { value: 2 } } };
-    const result = Array.from(values(node, node));
-    expect(result).toEqual([]);
   });
 });

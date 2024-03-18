@@ -100,11 +100,8 @@ export function cut<T>(
  * @throws - {@link TypeError}
  * thrown if an `end` node is provided but not encountered before the end of the list.
  */
-export function* entries<T>(
-  node?: LinkedNode<T>,
-  end?: LinkedNode<T>
-): Generator<[number, T]> {
-  for (let i = 0; node != end; ++i) {
+export function* entries<T>(node?: LinkedNode<T>): Generator<[number, T]> {
+  for (let i = 0; node != null; ++i) {
     yield [i, node!.value];
     node = node!.next;
   }
@@ -152,12 +149,8 @@ export function get<N extends LinkedNode<unknown>>(
  * thrown if an `end` node is provided but not encountered before the end of the list.
  *
  */
-export function has<T>(
-  node: LinkedNode<T> | undefined,
-  value: T,
-  end?: LinkedNode<T>
-): boolean {
-  while (node != end) {
+export function has<T>(node: LinkedNode<T> | undefined, value: T): boolean {
+  while (node != null) {
     if (node!.value === value) {
       return true;
     }
@@ -209,11 +202,8 @@ export function insert<T>(
  * @throws - {@link TypeError}
  * thrown if an `end` node is provided but not encountered before the end of the list.
  */
-export function* keys<T>(
-  node?: LinkedNode<T>,
-  end?: LinkedNode<T>
-): Generator<number> {
-  for (let i = 0; node != end; ++i) {
+export function* keys<T>(node?: LinkedNode<T>): Generator<number> {
+  for (let i = 0; node != null; ++i) {
     yield i;
     node = node!.next;
   }
@@ -262,11 +252,8 @@ export function toList<T>(values: Iterable<T>): LinkedCore<T> {
  * @throws - {@link TypeError}
  * thrown if an `end` node is provided but not encountered before the end of the list.
  */
-export function* values<T>(
-  node?: LinkedNode<T>,
-  end?: LinkedNode<T>
-): Generator<T> {
-  while (node != end) {
+export function* values<T>(node?: LinkedNode<T>): Generator<T> {
+  while (node != null) {
     yield node!.value;
     node = node!.next;
   }
