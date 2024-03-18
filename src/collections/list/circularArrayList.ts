@@ -2,9 +2,10 @@ import { CircularBase } from "../circularBase";
 import { BoundedEvent } from "../../types/boundedEvent";
 import { isArrayLength, isInfinity, isNumber } from "../../utils/is";
 import { Bounded } from "../../types/bounded";
-import { ARRAY_MAX_LENGTH } from "../../utils/constants";
+import { ARGS_MAX_LENGTH, ARRAY_MAX_LENGTH } from "../../utils/constants";
 import { List } from "../../types/list";
 import { addIfBelow, clamp, isInRange, toInteger } from "../../utils/math";
+import { chunk } from "../../utils/iterable";
 
 export class CircularArrayList<T>
   extends CircularBase<T>
@@ -85,10 +86,11 @@ export class CircularArrayList<T>
     }
 
     // Case 3: input is an iterable
-    this._vals = Array.from(capacity as Iterable<T>);
-    this._capacity = this._vals.length;
+    for (const vals of chunk(capacity, ARGS_MAX_LENGTH)) {
+      this._insert(this._size, vals);
+    }
+    this._capacity = this._size;
     this._isFinite = true;
-    this._size = this._capacity;
   }
 
   get capacity(): number {

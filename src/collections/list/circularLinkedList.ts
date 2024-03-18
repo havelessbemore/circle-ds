@@ -45,13 +45,13 @@ export class CircularLinkedList<T>
    * @internal
    * The current size of the list (0 \<= size \<= capacity)
    */
-  protected _size!: number;
+  protected _size: number;
 
   /**
    * @internal
    * The last node in the linked list.
    */
-  protected _tail!: Node<T>;
+  protected _tail: Node<T>;
 
   /**
    * Creates a standard linked list (no capacity restriction).
@@ -76,7 +76,8 @@ export class CircularLinkedList<T>
     this._capacity = LINKED_MAX_LENGTH;
     this._isFinite = false;
     this._root = { value: undefined } as Node<T>;
-    this.clear();
+    this._size = 0;
+    this._tail = this._root;
 
     // Case 1: input is null or undefined
     if (capacity == null) {
@@ -90,12 +91,11 @@ export class CircularLinkedList<T>
     }
 
     // Case 3: capacity is iterable
-    const { root, size, tail } = toList(capacity as Iterable<T>);
-    this._capacity = size;
+    for (const vals of chunk(capacity, ARGS_MAX_LENGTH)) {
+      this._insert(this._size, vals);
+    }
+    this._capacity = this._size;
     this._isFinite = true;
-    this._root = root;
-    this._size = size;
-    this._tail = tail;
   }
 
   get capacity(): number {
@@ -162,8 +162,8 @@ export class CircularLinkedList<T>
 
   clear(): void {
     this._size = 0;
-    this._root.next = undefined;
     this._tail = this._root;
+    this._root.next = undefined;
   }
 
   delete(index: number): boolean {

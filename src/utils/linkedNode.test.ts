@@ -306,7 +306,6 @@ describe(`${toList.name}()`, () => {
     expect(core.root).toBeDefined();
     expect(core.root.next).toBeUndefined();
     expect(core.tail).toBe(core.root);
-    expect(core.tail.next).toBeUndefined();
   });
 
   test("correctly converts a single-element iterable to a list", () => {

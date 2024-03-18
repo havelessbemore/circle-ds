@@ -1,4 +1,4 @@
-import { DoublyLinkedNode } from "../types/doublyLinkedNode";
+import { DoublyLinkedCore, DoublyLinkedNode } from "../types/doublyLinkedNode";
 
 import { get as singlyGet, cut as singlyCut } from "./linkedNode";
 
@@ -15,24 +15,24 @@ import { get as singlyGet, cut as singlyCut } from "./linkedNode";
  *          - The tail {@link DoublyLinkedNode} of the new list.
  *          - An integer representing the total number of nodes copied.
  */
-export function copy<N extends DoublyLinkedNode<unknown>>(
-  node: N | undefined,
+export function copy<T>(
+  node: DoublyLinkedNode<T> | undefined,
   distance: number
-): [N, N, number] | [undefined, undefined, 0] {
+): DoublyLinkedCore<T> {
+  // Create new root
+  const root: DoublyLinkedNode<T> = { value: undefined as T };
+
   // Check distance
   if (node == null || distance <= 0) {
-    return [undefined, undefined, 0];
+    return { root, size: 0, tail: root };
   }
-
-  // Initialize new list
-  const root = { value: undefined } as N;
-  let tail = root;
 
   // For each node
   let size = 0;
+  let tail = root;
   while (node != null && size < distance) {
     // Create a duplicate
-    const dupe = { value: node.value } as N;
+    const dupe: DoublyLinkedNode<T> = { value: node.value };
 
     // Attach the duplicate
     tail.next = dupe;
@@ -47,10 +47,9 @@ export function copy<N extends DoublyLinkedNode<unknown>>(
   }
 
   // Return copy
-  const head = root.next!;
-  head.prev = undefined;
+  root.prev = undefined;
   tail.next = undefined;
-  return [head, tail, size];
+  return { root, size, tail };
 }
 
 /**
@@ -70,20 +69,20 @@ export function copy<N extends DoublyLinkedNode<unknown>>(
  * @throws - {@link TypeError}
  * thrown if `count` \> `len(prev)`
  */
-export function cut<N extends DoublyLinkedNode<unknown>>(
-  root: N,
+export function cut<T>(
+  node: DoublyLinkedNode<T>,
   count: number
-): [N, N] | [undefined, undefined] {
-  if (count <= 0) {
-    return [undefined, undefined];
+): DoublyLinkedCore<T> {
+  const seg = singlyCut(node, count) as DoublyLinkedCore<T>;
+  if (seg.size <= 0) {
+    return seg;
   }
-  const seg = singlyCut(root, count);
-  const head = seg.root.next! as N;
-  head.prev = undefined;
-  if (root.next != null) {
-    root.next.prev = root;
+  seg.root.next!.prev = seg.root;
+  const next = node.next;
+  if (next != null) {
+    next.prev = node;
   }
-  return [head, seg.tail as N];
+  return seg;
 }
 
 /**
@@ -124,18 +123,20 @@ export function insert<T>(
   values: T[]
 ): DoublyLinkedNode<T> {
   // Convert values to list
-  const [head, tail, size] = toList(values);
+  const list = toList(values);
 
   // If no values
-  if (size <= 0) {
+  if (list.size <= 0) {
     return prev;
   }
 
   // Add values
+  const head = list.root.next!;
+  const tail = list.tail;
   const next = prev.next;
+  head.prev = prev;
+  tail.next = next;
   prev.next = head;
-  head!.prev = prev;
-  tail!.next = next;
   if (next != null) {
     next.prev = tail;
   }
@@ -152,28 +153,20 @@ export function insert<T>(
  *
  * @param values - The iterable collection of elements.
  *
- * @returns A triple containing the head, tail and size of the list.
- * Returns `[undefined, undefined, 0]` if the iterable is empty.
+ * @returns A {@link DoublyLinkedCore}.
  */
-export function toList<T>(
-  values: Iterable<T>
-):
-  | [DoublyLinkedNode<T>, DoublyLinkedNode<T>, number]
-  | [undefined, undefined, 0] {
-  const root = {} as DoublyLinkedNode<T>;
+export function toList<T>(values: Iterable<T>): DoublyLinkedCore<T> {
+  const root: DoublyLinkedNode<T> = { value: undefined as T };
 
-  let count = 0;
+  let size = 0;
   let tail = root;
   for (const value of values) {
     tail.next = { prev: tail, value } as DoublyLinkedNode<T>;
     tail = tail.next;
-    ++count;
+    ++size;
   }
 
-  if (count <= 0) {
-    return [undefined, undefined, 0];
-  }
-
-  root.next!.prev = undefined;
-  return [root.next!, tail, count];
+  root.prev = undefined;
+  tail.next = undefined;
+  return { root, size, tail };
 }
