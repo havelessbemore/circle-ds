@@ -7,8 +7,10 @@ import { Collection } from './types/collection';
 import { Collection as Collection_2 } from '../../types/collection';
 import { Deque } from './types/deque';
 import { Deque as Deque_2 } from '../../types/deque';
+import { DoublyLinkedCore } from '../../types/doublyLinkedNode';
 import { DoublyLinkedNode } from '../../types/doublyLinkedNode';
 import EventEmitter from 'events';
+import { LinkedCore } from '../../types/linkedNode';
 import { LinkedNode } from '../../types/linkedNode';
 import { List } from './types/list';
 import { List as List_2 } from '../../types/list';
@@ -253,6 +255,7 @@ export declare class CircularDoublyLinkedList<T> extends CircularBase<T> impleme
     /* Excluded from this release type: _isFinite */
     /* Excluded from this release type: _root */
     /* Excluded from this release type: _size */
+    /* Excluded from this release type: _tail */
     /**
      * Creates a standard linked list (no capacity restriction).
      */
@@ -807,6 +810,7 @@ export declare class CircularSkipList<T> extends CircularBase<T> implements Boun
     unshift(...values: T[]): number;
     values(): IterableIterator<T>;
     /* Excluded from this release type: _cut */
+    /* Excluded from this release type: _genLevels */
     /* Excluded from this release type: _insert */
     /* Excluded from this release type: _overflow */
     /* Excluded from this release type: _presert */
