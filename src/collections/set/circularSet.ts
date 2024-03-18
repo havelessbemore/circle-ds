@@ -22,7 +22,7 @@ export class CircularSet<T>
    * @internal
    * The internal set.
    */
-  protected set: Set<T>;
+  protected _set: Set<T>;
 
   /**
    * Creates a new set with `capacity` defaulted to `Infinity`.
@@ -45,7 +45,7 @@ export class CircularSet<T>
 
     // Initialize class variables
     this._capacity = Infinity;
-    this.set = new Set();
+    this._set = new Set();
 
     // Case 1: capacity is null, undefined or Infinity
     capacity = capacity ?? Infinity;
@@ -63,8 +63,8 @@ export class CircularSet<T>
     }
 
     // Case 3: capacity is iterable
-    this.set = new Set(capacity as Iterable<T>);
-    this._capacity = this.set.size;
+    this._set = new Set(capacity as Iterable<T>);
+    this._capacity = this._set.size;
   }
 
   /**
@@ -78,7 +78,7 @@ export class CircularSet<T>
    * @returns the number of values in the set.
    */
   get size(): number {
-    return this.set.size;
+    return this._set.size;
   }
 
   /**
@@ -115,7 +115,7 @@ export class CircularSet<T>
 
     // Check if new capacity is zero
     if (capacity === 0) {
-      const evicted = Array.from(this.set);
+      const evicted = Array.from(this._set);
       this.clear();
       this._emitter.emit(BoundedEvent.Overflow, evicted);
       return;
@@ -123,10 +123,10 @@ export class CircularSet<T>
 
     // Shrink down map.
     const evicted: T[] = [];
-    const iter = this.set.values();
+    const iter = this._set.values();
     for (let n = this.size - capacity; n > 0; --n) {
       const value = iter.next().value;
-      this.set.delete(value);
+      this._set.delete(value);
       evicted.push(value);
     }
     this._emitter.emit(BoundedEvent.Overflow, evicted);
@@ -146,14 +146,14 @@ export class CircularSet<T>
 
     // Evict excess items
     const evicted: T[] = [];
-    if (!this.set.delete(value) && this.size >= this.capacity) {
-      const out = this.set.values().next().value;
-      this.set.delete(out);
+    if (!this._set.delete(value) && this.size >= this.capacity) {
+      const out = this._set.values().next().value;
+      this._set.delete(out);
       evicted.push(out);
     }
 
     // Add value
-    this.set.add(value);
+    this._set.add(value);
 
     // Emit evicted
     if (evicted.length > 0) {
@@ -167,7 +167,7 @@ export class CircularSet<T>
    * Removes all elements from the set.
    */
   clear(): void {
-    this.set.clear();
+    this._set.clear();
   }
 
   /**
@@ -176,7 +176,7 @@ export class CircularSet<T>
    * @returns `true` if the value existed in the set and has been removed, or `false` otherwise.
    */
   delete(value: T): boolean {
-    return this.set.delete(value);
+    return this._set.delete(value);
   }
 
   /**
@@ -187,7 +187,7 @@ export class CircularSet<T>
    * @returns an iterable of [key, value] pairs for every entry.
    */
   entries(): IterableIterator<[T, T]> {
-    return this.set.entries();
+    return this._set.entries();
   }
 
   /**
@@ -202,7 +202,7 @@ export class CircularSet<T>
     callbackfn: (value: T, key: T, set: this) => void,
     thisArg?: unknown
   ): void {
-    for (const key of this.set.keys()) {
+    for (const key of this._set.keys()) {
       callbackfn.call(thisArg, key, key, this);
     }
   }
@@ -215,7 +215,7 @@ export class CircularSet<T>
    * @returns `true` if the value was found, `false` otherwise.
    */
   has(value: T): boolean {
-    return this.set.has(value);
+    return this._set.has(value);
   }
 
   /**
@@ -226,7 +226,7 @@ export class CircularSet<T>
    * @returns an iterable of the set's keys.
    */
   keys(): IterableIterator<T> {
-    return this.set.keys();
+    return this._set.keys();
   }
 
   /**
@@ -237,7 +237,7 @@ export class CircularSet<T>
    * @returns an iterable of the set's values.
    */
   values(): IterableIterator<T> {
-    return this.set.keys();
+    return this._set.keys();
   }
 
   /**
@@ -248,6 +248,6 @@ export class CircularSet<T>
    * @returns an iterable of values.
    */
   [Symbol.iterator](): IterableIterator<T> {
-    return this.set.values();
+    return this._set.values();
   }
 }

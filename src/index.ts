@@ -16,7 +16,10 @@ export type { SkipList } from "./types/skipList";
 export { CircularArrayList } from "./collections/list/circularArrayList";
 export { CircularDoublyLinkedList } from "./collections/list/circularDoublyLinkedList";
 export { CircularLinkedList } from "./collections/list/circularLinkedList";
-export { CircularSkipList } from "./collections/list/circularSkipList";
+export {
+  CircularSkipList,
+  type CircularSkipListConfig,
+} from "./collections/list/circularSkipList";
 
 // Map
 export { CircularMap } from "./collections/map/circularMap";

@@ -31,7 +31,188 @@ var __publicField = (obj, key, value) => {
 const BoundedEvent = {
   Overflow: "overflow"
 };
-const EventEmitter = {};
+function getDefaultExportFromCjs(x) {
+  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
+}
+var eventemitter3 = { exports: {} };
+(function(module) {
+  var has2 = Object.prototype.hasOwnProperty, prefix = "~";
+  function Events() {
+  }
+  if (Object.create) {
+    Events.prototype = /* @__PURE__ */ Object.create(null);
+    if (!new Events().__proto__)
+      prefix = false;
+  }
+  function EE(fn, context, once) {
+    this.fn = fn;
+    this.context = context;
+    this.once = once || false;
+  }
+  function addListener(emitter, event, fn, context, once) {
+    if (typeof fn !== "function") {
+      throw new TypeError("The listener must be a function");
+    }
+    var listener = new EE(fn, context || emitter, once), evt = prefix ? prefix + event : event;
+    if (!emitter._events[evt])
+      emitter._events[evt] = listener, emitter._eventsCount++;
+    else if (!emitter._events[evt].fn)
+      emitter._events[evt].push(listener);
+    else
+      emitter._events[evt] = [emitter._events[evt], listener];
+    return emitter;
+  }
+  function clearEvent(emitter, evt) {
+    if (--emitter._eventsCount === 0)
+      emitter._events = new Events();
+    else
+      delete emitter._events[evt];
+  }
+  function EventEmitter2() {
+    this._events = new Events();
+    this._eventsCount = 0;
+  }
+  EventEmitter2.prototype.eventNames = function eventNames() {
+    var names = [], events, name;
+    if (this._eventsCount === 0)
+      return names;
+    for (name in events = this._events) {
+      if (has2.call(events, name))
+        names.push(prefix ? name.slice(1) : name);
+    }
+    if (Object.getOwnPropertySymbols) {
+      return names.concat(Object.getOwnPropertySymbols(events));
+    }
+    return names;
+  };
+  EventEmitter2.prototype.listeners = function listeners(event) {
+    var evt = prefix ? prefix + event : event, handlers = this._events[evt];
+    if (!handlers)
+      return [];
+    if (handlers.fn)
+      return [handlers.fn];
+    for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
+      ee[i] = handlers[i].fn;
+    }
+    return ee;
+  };
+  EventEmitter2.prototype.listenerCount = function listenerCount(event) {
+    var evt = prefix ? prefix + event : event, listeners = this._events[evt];
+    if (!listeners)
+      return 0;
+    if (listeners.fn)
+      return 1;
+    return listeners.length;
+  };
+  EventEmitter2.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
+    var evt = prefix ? prefix + event : event;
+    if (!this._events[evt])
+      return false;
+    var listeners = this._events[evt], len = arguments.length, args, i;
+    if (listeners.fn) {
+      if (listeners.once)
+        this.removeListener(event, listeners.fn, void 0, true);
+      switch (len) {
+        case 1:
+          return listeners.fn.call(listeners.context), true;
+        case 2:
+          return listeners.fn.call(listeners.context, a1), true;
+        case 3:
+          return listeners.fn.call(listeners.context, a1, a2), true;
+        case 4:
+          return listeners.fn.call(listeners.context, a1, a2, a3), true;
+        case 5:
+          return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
+        case 6:
+          return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
+      }
+      for (i = 1, args = new Array(len - 1); i < len; i++) {
+        args[i - 1] = arguments[i];
+      }
+      listeners.fn.apply(listeners.context, args);
+    } else {
+      var length = listeners.length, j;
+      for (i = 0; i < length; i++) {
+        if (listeners[i].once)
+          this.removeListener(event, listeners[i].fn, void 0, true);
+        switch (len) {
+          case 1:
+            listeners[i].fn.call(listeners[i].context);
+            break;
+          case 2:
+            listeners[i].fn.call(listeners[i].context, a1);
+            break;
+          case 3:
+            listeners[i].fn.call(listeners[i].context, a1, a2);
+            break;
+          case 4:
+            listeners[i].fn.call(listeners[i].context, a1, a2, a3);
+            break;
+          default:
+            if (!args)
+              for (j = 1, args = new Array(len - 1); j < len; j++) {
+                args[j - 1] = arguments[j];
+              }
+            listeners[i].fn.apply(listeners[i].context, args);
+        }
+      }
+    }
+    return true;
+  };
+  EventEmitter2.prototype.on = function on(event, fn, context) {
+    return addListener(this, event, fn, context, false);
+  };
+  EventEmitter2.prototype.once = function once(event, fn, context) {
+    return addListener(this, event, fn, context, true);
+  };
+  EventEmitter2.prototype.removeListener = function removeListener(event, fn, context, once) {
+    var evt = prefix ? prefix + event : event;
+    if (!this._events[evt])
+      return this;
+    if (!fn) {
+      clearEvent(this, evt);
+      return this;
+    }
+    var listeners = this._events[evt];
+    if (listeners.fn) {
+      if (listeners.fn === fn && (!once || listeners.once) && (!context || listeners.context === context)) {
+        clearEvent(this, evt);
+      }
+    } else {
+      for (var i = 0, events = [], length = listeners.length; i < length; i++) {
+        if (listeners[i].fn !== fn || once && !listeners[i].once || context && listeners[i].context !== context) {
+          events.push(listeners[i]);
+        }
+      }
+      if (events.length)
+        this._events[evt] = events.length === 1 ? events[0] : events;
+      else
+        clearEvent(this, evt);
+    }
+    return this;
+  };
+  EventEmitter2.prototype.removeAllListeners = function removeAllListeners(event) {
+    var evt;
+    if (event) {
+      evt = prefix ? prefix + event : event;
+      if (this._events[evt])
+        clearEvent(this, evt);
+    } else {
+      this._events = new Events();
+      this._eventsCount = 0;
+    }
+    return this;
+  };
+  EventEmitter2.prototype.off = EventEmitter2.prototype.removeListener;
+  EventEmitter2.prototype.addListener = EventEmitter2.prototype.on;
+  EventEmitter2.prefixed = prefix;
+  EventEmitter2.EventEmitter = EventEmitter2;
+  {
+    module.exports = EventEmitter2;
+  }
+})(eventemitter3);
+var eventemitter3Exports = eventemitter3.exports;
+const EventEmitter = /* @__PURE__ */ getDefaultExportFromCjs(eventemitter3Exports);
 class CircularBase {
   constructor(emitter = new EventEmitter()) {
     /**
@@ -48,10 +229,6 @@ class CircularBase {
   }
   on(event, listener) {
     this._emitter.on(event, listener);
-    return this;
-  }
-  prependListener(event, listener) {
-    this._emitter.prependListener(event, listener);
     return this;
   }
   removeListener(event, listener) {
@@ -200,9 +377,9 @@ class CircularArrayList extends CircularBase {
       this._capacity = capacity;
       this.clear();
     } else if (capacity < this._capacity) {
-      this.shrink(capacity);
+      this._shrink(capacity);
     } else if (capacity > this._capacity) {
-      this.grow(capacity);
+      this._grow(capacity);
     }
   }
   at(index) {
@@ -210,7 +387,7 @@ class CircularArrayList extends CircularBase {
     if (!isInRange(index, 0, this._size)) {
       return void 0;
     }
-    return this._vals[this.toIndex(index)];
+    return this._vals[this._toIndex(index)];
   }
   clear() {
     this._size = 0;
@@ -244,9 +421,9 @@ class CircularArrayList extends CircularBase {
     }
     const capacity = this._capacity - 1;
     const vals = this._vals;
-    const ranges = this.toRanges(start, end);
+    const ranges = this._toRanges(start, end);
     if (target <= start || end <= target) {
-      target = this.toIndex(target);
+      target = this._toIndex(target);
       for (const [min, max] of ranges) {
         for (let i = min; i < max; ++i) {
           vals[target] = vals[i];
@@ -254,7 +431,7 @@ class CircularArrayList extends CircularBase {
         }
       }
     } else {
-      target = this.toIndex(target + (end - start));
+      target = this._toIndex(target + (end - start));
       for (const [min, max] of ranges.reverse()) {
         for (let i = max - 1; i >= min; --i) {
           target = target > 0 ? target - 1 : capacity;
@@ -280,7 +457,7 @@ class CircularArrayList extends CircularBase {
   }
   *entries() {
     for (let ext = 0; ext < this._size; ++ext) {
-      yield [ext, this._vals[this.toIndex(ext)]];
+      yield [ext, this._vals[this._toIndex(ext)]];
     }
   }
   fill(value, start, end) {
@@ -294,7 +471,7 @@ class CircularArrayList extends CircularBase {
    * @internal
    */
   _fill(value, start, end) {
-    for (const [min, max] of this.toRanges(start, end)) {
+    for (const [min, max] of this._toRanges(start, end)) {
       this._vals.fill(value, min, max);
     }
   }
@@ -304,13 +481,13 @@ class CircularArrayList extends CircularBase {
   forEach(callbackfn, thisArg) {
     const N = this._size;
     for (let ext = 0; ext < N && ext < this._size; ++ext) {
-      const value = this._vals[this.toIndex(ext)];
+      const value = this._vals[this._toIndex(ext)];
       callbackfn.call(thisArg, value, ext, this);
     }
   }
   has(value) {
     const vals = this._vals;
-    for (const [min, max] of this.toRanges(0, this._size)) {
+    for (const [min, max] of this._toRanges(0, this._size)) {
       for (let i = min; i < max; ++i) {
         if (value === vals[i]) {
           return true;
@@ -325,13 +502,13 @@ class CircularArrayList extends CircularBase {
     }
   }
   last() {
-    return this._size > 0 ? this._vals[this.toIndex(this._size - 1)] : void 0;
+    return this._size > 0 ? this._vals[this._toIndex(this._size - 1)] : void 0;
   }
   pop() {
     if (this._size <= 0) {
       return void 0;
     }
-    const value = this._vals[this.toIndex(this._size - 1)];
+    const value = this._vals[this._toIndex(this._size - 1)];
     this._pop(1);
     return value;
   }
@@ -341,7 +518,7 @@ class CircularArrayList extends CircularBase {
   _pop(N) {
     const newSize = this._size - N;
     this._fill(void 0, newSize, this._size);
-    this._next = this.toIndex(newSize);
+    this._next = this._toIndex(newSize);
     this._size = newSize;
   }
   push(...items) {
@@ -360,7 +537,7 @@ class CircularArrayList extends CircularBase {
     if (!isInRange(index, 0, this._size)) {
       return void 0;
     }
-    index = this.toIndex(index);
+    index = this._toIndex(index);
     const prevValue = this._vals[index];
     this._vals[index] = value;
     return prevValue;
@@ -378,14 +555,14 @@ class CircularArrayList extends CircularBase {
    */
   _shift(N) {
     this._fill(void 0, 0, N);
-    this._head = this.toIndex(N);
+    this._head = this._toIndex(N);
     this._size -= N;
   }
   slice(start, end) {
     const size = this._size;
     start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
     end = clamp(addIfBelow(toInteger(end, size), size), start, size);
-    return this.toList(this._slice(start, end));
+    return this._toList(this._slice(start, end));
   }
   /**
    * @internal
@@ -394,7 +571,7 @@ class CircularArrayList extends CircularBase {
     const from = this._vals;
     const to = new Array(end - start);
     let j = 0;
-    for ([start, end] of this.toRanges(start, end)) {
+    for ([start, end] of this._toRanges(start, end)) {
       for (let i = start; i < end; ++i) {
         to[j++] = from[i];
       }
@@ -405,7 +582,7 @@ class CircularArrayList extends CircularBase {
     const size = this._size;
     start = clamp(addIfBelow(toInteger(start, 0), size), 0, size);
     deleteCount = clamp(toInteger(deleteCount, 0), 0, size - start);
-    const out = this.toList(this._slice(start, start + deleteCount));
+    const out = this._toList(this._slice(start, start + deleteCount));
     this._splice(start, deleteCount, items);
     return out;
   }
@@ -417,7 +594,7 @@ class CircularArrayList extends CircularBase {
     const replaceCount = Math.min(deleteCount, addCount);
     const vals = this._vals;
     let j = 0;
-    for (const [a, b] of this.toRanges(start, start + replaceCount)) {
+    for (const [a, b] of this._toRanges(start, start + replaceCount)) {
       for (let i = a; i < b; ++i) {
         vals[i] = items[j++];
       }
@@ -464,13 +641,13 @@ class CircularArrayList extends CircularBase {
     const N = max - min;
     const vals = this._vals;
     this._copyWithin(vIndex + N, vIndex, this._size);
-    for (const [start, end] of this.toRanges(vIndex, vIndex + N)) {
+    for (const [start, end] of this._toRanges(vIndex, vIndex + N)) {
       for (let i = start; i < end; ++i) {
         vals[i] = items[min++];
       }
     }
     this._size += N;
-    this._next = this.toIndex(this._size);
+    this._next = this._toIndex(this._size);
   }
   [Symbol.iterator]() {
     return this.values();
@@ -524,17 +701,17 @@ class CircularArrayList extends CircularBase {
     const newHead = capacity - N;
     this._copyWithin(newHead, 0, vIndex);
     vIndex += newHead;
-    for (const [start, end] of this.toRanges(vIndex, vIndex + N)) {
+    for (const [start, end] of this._toRanges(vIndex, vIndex + N)) {
       for (let i = start; i < end; ++i) {
         vals[i] = items[min++];
       }
     }
     this._size += N;
-    this._head = this.toIndex(newHead);
+    this._head = this._toIndex(newHead);
   }
   *values() {
     for (let ext = 0; ext < this._size; ++ext) {
-      yield this._vals[this.toIndex(ext)];
+      yield this._vals[this._toIndex(ext)];
     }
   }
   /**
@@ -554,9 +731,9 @@ class CircularArrayList extends CircularBase {
    *
    * @param capacity - the new capacity
    */
-  grow(capacity) {
-    if (this.isSequential()) {
-      this.sequentialReset(capacity);
+  _grow(capacity) {
+    if (this._isSequential()) {
+      this._sequentialReset(capacity);
       return;
     }
     if (this._size <= this._head) {
@@ -589,7 +766,7 @@ class CircularArrayList extends CircularBase {
    *
    * @returns `true` if the list is sequential in memory, `false` otherwise.
    */
-  isSequential() {
+  _isSequential() {
     return this._head < this._next || this._next <= 0;
   }
   /**
@@ -605,7 +782,7 @@ class CircularArrayList extends CircularBase {
    *
    * @returns `true` if the list was reset, `false` otherwise.
    */
-  sequentialReset(capacity) {
+  _sequentialReset(capacity) {
     const tail = this._head + this._size;
     if (tail <= capacity) {
       this._vals.length = tail;
@@ -630,14 +807,14 @@ class CircularArrayList extends CircularBase {
    *
    * @param capacity - the new capacity
    */
-  shrink(capacity) {
+  _shrink(capacity) {
     if (this._size > capacity) {
       const shifted = this._size - capacity;
       this._overflow(this._slice(0, shifted));
       this._shift(shifted);
     }
-    if (this.isSequential()) {
-      this.sequentialReset(capacity);
+    if (this._isSequential()) {
+      this._sequentialReset(capacity);
       return;
     }
     const diff = this._capacity - capacity;
@@ -649,13 +826,13 @@ class CircularArrayList extends CircularBase {
   /**
    * @internal
    */
-  toIndex(externalIndex) {
+  _toIndex(externalIndex) {
     return (this._head + externalIndex) % this._capacity;
   }
   /**
    * @internal
    */
-  toList(items) {
+  _toList(items) {
     const out = new CircularArrayList(0);
     out._vals = items;
     out._size = items.length;
@@ -665,7 +842,7 @@ class CircularArrayList extends CircularBase {
   /**
    * @internal
    */
-  toRanges(min, max) {
+  _toRanges(min, max) {
     const head = this._head;
     const mid = this._capacity - head;
     if (max <= mid) {
@@ -751,10 +928,6 @@ class CircularDeque {
   }
   on(event, listener) {
     this._list.on(event, listener);
-    return this;
-  }
-  prependListener(event, listener) {
-    this._list.prependListener(event, listener);
     return this;
   }
   removeListener(event, listener) {
@@ -1287,10 +1460,6 @@ class CircularLinkedDeque {
   }
   on(event, listener) {
     this._list.on(event, listener);
-    return this;
-  }
-  prependListener(event, listener) {
-    this._list.prependListener(event, listener);
     return this;
   }
   removeListener(event, listener) {
@@ -2509,10 +2678,6 @@ class CircularLinkedQueue {
     this._list.on(event, listener);
     return this;
   }
-  prependListener(event, listener) {
-    this._list.prependListener(event, listener);
-    return this;
-  }
   removeListener(event, listener) {
     this._list.removeListener(event, listener);
     return this;
@@ -2523,68 +2688,64 @@ class CircularQueue {
     /**
      * @internal
      */
-    __publicField(this, "list");
-    this.list = new CircularArrayList(capacity);
+    __publicField(this, "_list");
+    this._list = new CircularArrayList(capacity);
   }
   get capacity() {
-    return this.list.capacity;
+    return this._list.capacity;
   }
   get size() {
-    return this.list.size;
+    return this._list.size;
   }
   get [Symbol.toStringTag]() {
     return CircularQueue.name;
   }
   set capacity(capacity) {
-    this.list.capacity = capacity;
+    this._list.capacity = capacity;
   }
   clear() {
-    this.list.clear();
+    this._list.clear();
   }
   entries() {
-    return this.list.entries();
+    return this._list.entries();
   }
   first() {
-    return this.list.first();
+    return this._list.first();
   }
   forEach(callbackfn, thisArg) {
-    return this.list.forEach((v, i) => callbackfn.call(thisArg, v, i, this));
+    return this._list.forEach((v, i) => callbackfn.call(thisArg, v, i, this));
   }
   front() {
-    return this.list.first();
+    return this._list.first();
   }
   has(value) {
-    return this.list.has(value);
+    return this._list.has(value);
   }
   keys() {
-    return this.list.keys();
+    return this._list.keys();
   }
   push(...elems) {
-    return this.list.push(...elems);
+    return this._list.push(...elems);
   }
   shift() {
-    return this.list.shift();
+    return this._list.shift();
   }
   [Symbol.iterator]() {
-    return this.list.values();
+    return this._list.values();
   }
   values() {
-    return this.list.values();
+    return this._list.values();
   }
   addListener(event, listener) {
-    this.list.addListener(event, listener);
+    this._list.addListener(event, listener);
     return this;
   }
   on(event, listener) {
-    this.list.on(event, listener);
-    return this;
-  }
-  prependListener(event, listener) {
-    this.list.prependListener(event, listener);
+    this._list.on(event, listener);
     return this;
   }
   removeListener(event, listener) {
-    this.list.removeListener(event, listener);
+    this._list.removeListener(event, listener);
     return this;
   }
 }
@@ -2600,9 +2761,9 @@ class CircularSet extends CircularBase {
      * @internal
      * The internal set.
      */
-    __publicField(this, "set");
+    __publicField(this, "_set");
     this._capacity = Infinity;
-    this.set = /* @__PURE__ */ new Set();
+    this._set = /* @__PURE__ */ new Set();
     capacity = capacity ?? Infinity;
     if (isInfinity(capacity)) {
       return;
@@ -2614,8 +2775,8 @@ class CircularSet extends CircularBase {
       this._capacity = capacity;
       return;
     }
-    this.set = new Set(capacity);
-    this._capacity = this.set.size;
+    this._set = new Set(capacity);
+    this._capacity = this._set.size;
   }
   /**
    * @returns the maximum number of elements that can be stored.
@@ -2627,7 +2788,7 @@ class CircularSet extends CircularBase {
    * @returns the number of values in the set.
    */
   get size() {
-    return this.set.size;
+    return this._set.size;
   }
   /**
    * Return the type of the object.
@@ -2651,16 +2812,16 @@ class CircularSet extends CircularBase {
       return;
     }
     if (capacity === 0) {
-      const evicted2 = Array.from(this.set);
+      const evicted2 = Array.from(this._set);
       this.clear();
       this._emitter.emit(BoundedEvent.Overflow, evicted2);
       return;
     }
     const evicted = [];
-    const iter = this.set.values();
+    const iter = this._set.values();
     for (let n = this.size - capacity; n > 0; --n) {
       const value = iter.next().value;
-      this.set.delete(value);
+      this._set.delete(value);
       evicted.push(value);
     }
     this._emitter.emit(BoundedEvent.Overflow, evicted);
@@ -2676,12 +2837,12 @@ class CircularSet extends CircularBase {
       return this;
     }
     const evicted = [];
-    if (!this.set.delete(value) && this.size >= this.capacity) {
-      const out = this.set.values().next().value;
-      this.set.delete(out);
+    if (!this._set.delete(value) && this.size >= this.capacity) {
+      const out = this._set.values().next().value;
+      this._set.delete(out);
       evicted.push(out);
     }
-    this.set.add(value);
+    this._set.add(value);
     if (evicted.length > 0) {
       this._emitter.emit(BoundedEvent.Overflow, evicted);
     }
@@ -2691,7 +2852,7 @@ class CircularSet extends CircularBase {
    * Removes all elements from the set.
    */
   clear() {
-    this.set.clear();
+    this._set.clear();
   }
   /**
    * Deletes a specified value from the set.
@@ -2699,7 +2860,7 @@ class CircularSet extends CircularBase {
    * @returns `true` if the value existed in the set and has been removed, or `false` otherwise.
    */
   delete(value) {
-    return this.set.delete(value);
+    return this._set.delete(value);
   }
   /**
    * Iterate through the set's entries.
@@ -2709,7 +2870,7 @@ class CircularSet extends CircularBase {
    * @returns an iterable of [key, value] pairs for every entry.
    */
   entries() {
-    return this.set.entries();
+    return this._set.entries();
   }
   /**
    * Performs the specified action for each value in the set.
@@ -2720,7 +2881,7 @@ class CircularSet extends CircularBase {
    * @param thisArg - An object to which the `this` keyword refers to in the `callbackfn` function. Defaults to `undefined`.
    */
   forEach(callbackfn, thisArg) {
-    for (const key of this.set.keys()) {
+    for (const key of this._set.keys()) {
       callbackfn.call(thisArg, key, key, this);
     }
   }
@@ -2732,7 +2893,7 @@ class CircularSet extends CircularBase {
    * @returns `true` if the value was found, `false` otherwise.
    */
   has(value) {
-    return this.set.has(value);
+    return this._set.has(value);
   }
   /**
    * Iterate through the set's keys.
@@ -2742,7 +2903,7 @@ class CircularSet extends CircularBase {
    * @returns an iterable of the set's keys.
    */
   keys() {
-    return this.set.keys();
+    return this._set.keys();
   }
   /**
    * Iterate through the set's values.
@@ -2752,7 +2913,7 @@ class CircularSet extends CircularBase {
    * @returns an iterable of the set's values.
    */
   values() {
-    return this.set.keys();
+    return this._set.keys();
   }
   /**
    * Iterate through the set's values.
@@ -2762,7 +2923,7 @@ class CircularSet extends CircularBase {
    * @returns an iterable of values.
    */
   [Symbol.iterator]() {
-    return this.set.values();
+    return this._set.values();
   }
 }
 class CircularLinkedStack {
@@ -2826,10 +2987,6 @@ class CircularLinkedStack {
     this._list.on(event, listener);
     return this;
   }
-  prependListener(event, listener) {
-    this._list.prependListener(event, listener);
-    return this;
-  }
   removeListener(event, listener) {
     this._list.removeListener(event, listener);
     return this;
@@ -2840,68 +2997,64 @@ class CircularStack {
     /**
      * @internal
      */
-    __publicField(this, "list");
-    this.list = new CircularArrayList(capacity);
+    __publicField(this, "_list");
+    this._list = new CircularArrayList(capacity);
   }
   get capacity() {
-    return this.list.capacity;
+    return this._list.capacity;
   }
   get size() {
-    return this.list.size;
+    return this._list.size;
   }
   get [Symbol.toStringTag]() {
     return CircularStack.name;
   }
   set capacity(capacity) {
-    this.list.capacity = capacity;
+    this._list.capacity = capacity;
   }
   clear() {
-    this.list.clear();
+    this._list.clear();
   }
   entries() {
-    return this.list.entries();
+    return this._list.entries();
   }
   forEach(callbackfn, thisArg) {
-    return this.list.forEach((v, i) => callbackfn.call(thisArg, v, i, this));
+    return this._list.forEach((v, i) => callbackfn.call(thisArg, v, i, this));
   }
   has(value) {
-    return this.list.has(value);
+    return this._list.has(value);
   }
   keys() {
-    return this.list.keys();
+    return this._list.keys();
   }
   last() {
-    return this.list.last();
+    return this._list.last();
   }
   pop() {
-    return this.list.pop();
+    return this._list.pop();
   }
   push(...elems) {
-    return this.list.push(...elems);
+    return this._list.push(...elems);
   }
   [Symbol.iterator]() {
-    return this.list.values();
+    return this._list.values();
   }
   top() {
-    return this.list.last();
+    return this._list.last();
   }
   values() {
-    return this.list.values();
+    return this._list.values();
   }
   addListener(event, listener) {
-    this.list.addListener(event, listener);
+    this._list.addListener(event, listener);
     return this;
   }
   on(event, listener) {
-    this.list.on(event, listener);
-    return this;
-  }
-  prependListener(event, listener) {
-    this.list.prependListener(event, listener);
+    this._list.on(event, listener);
     return this;
   }
   removeListener(event, listener) {
-    this.list.removeListener(event, listener);
+    this._list.removeListener(event, listener);
     return this;
   }
 }

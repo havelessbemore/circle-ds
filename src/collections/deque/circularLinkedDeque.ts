@@ -135,14 +135,6 @@ export class CircularLinkedDeque<T> implements Bounded<T>, Deque<T> {
     return this;
   }
 
-  prependListener(
-    event: typeof BoundedEvent.Overflow,
-    listener: (elems: T[]) => void
-  ): this {
-    this._list.prependListener(event, listener);
-    return this;
-  }
-
   removeListener(
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void

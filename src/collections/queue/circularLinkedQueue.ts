@@ -119,14 +119,6 @@ export class CircularLinkedQueue<T> implements Bounded<T>, Queue<T> {
     return this;
   }
 
-  prependListener(
-    event: typeof BoundedEvent.Overflow,
-    listener: (elems: T[]) => void
-  ): this {
-    this._list.prependListener(event, listener);
-    return this;
-  }
-
   removeListener(
     event: typeof BoundedEvent.Overflow,
     listener: (elems: T[]) => void

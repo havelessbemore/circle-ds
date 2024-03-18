@@ -28,16 +28,16 @@ yarn add circle-ds
 
 ### Usage
 
-Here's an example using a circular queue, showcasing various capabilities: 
+Here's an example using a circular queue, showcasing various capabilities:
 
 ```javascript
-import { CircularQueue } from 'circle-ds';
+import { CircularQueue } from "circle-ds";
 
 // Create a queue with capacity 4
 const queue = new CircularQueue(4);
 
 // Listen for overflow
-queue.on('overflow', (discarded) => console.log("Discarded:", discarded));
+queue.on("overflow", discarded => console.log("Discarded:", discarded));
 
 // Add incoming values
 queue.push(1, 2, 3);
@@ -61,7 +61,7 @@ console.log(queue.values()); // Output: [5, 6, 7, 8, 9]
 - **Efficient Data Management:** Optimized for performance, even with large datasets.
 - **Flexible and Reusable:** Designed for ease of use in a wide variety of applications.
 
-By default, data structures are unbounded, ensuring they can accommodate incoming data with the performance and behavior expected from standard implementations. When given a capacity, they become bounded containers, limiting their size to the predefined capacity. When necessary, older values are emitted to make room for the new, adhering to its circular nature. 
+By default, data structures are unbounded, ensuring they can accommodate incoming data with the performance and behavior expected from standard implementations. When given a capacity, they become bounded containers, limiting their size to the predefined capacity. When necessary, older values are emitted to make room for the new, adhering to its circular nature.
 
 This feature is useful for applications requiring fixed-size collections, such as caching mechanisms, real-time data processing, and streaming analytics, where the most recent data is prioritized, and older data is systematically discarded. With circle-ds, developers can seamlessly toggle between unbounded and bounded behaviors, offering flexibility in managing collection sizes and data lifecycles, while also preserving the expected functionality of classic data structures.
 
@@ -95,7 +95,7 @@ All circle-ds data structures share common API elements, outlined in the [Collec
 
 #### Events
 
-- [`BoundedEvent.Overflow`](./src/types/boundedEvent.ts): Triggered when existing elements are discarded from the collection. This happens when capacity is reached and old values must be removed to make room for new values.
+- [`BoundedEvent.Overflow`](./src/types/boundedEvent.ts): Triggered when existing elements are discarded from the collection. Event listeners should expect an array of discarded elements. Event listeners may be called multiple times per overflow.
 
 #### Methods
 

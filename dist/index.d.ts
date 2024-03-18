@@ -1,5 +1,3 @@
-/// <reference types="node" />
-
 import { Bounded } from './types/bounded';
 import { Bounded as Bounded_2 } from '../../types/bounded';
 import { BoundedConfig } from '../../types/bounded';
@@ -9,7 +7,7 @@ import { Deque } from './types/deque';
 import { Deque as Deque_2 } from '../../types/deque';
 import { DoublyLinkedCore } from '../../types/doublyLinkedNode';
 import { DoublyLinkedNode } from '../../types/doublyLinkedNode';
-import EventEmitter from 'events';
+import { EventEmitter } from 'eventemitter3';
 import { LinkedCore } from '../../types/linkedNode';
 import { LinkedNode } from '../../types/linkedNode';
 import { List } from './types/list';
@@ -108,18 +106,18 @@ export declare class CircularArrayList<T> extends CircularBase<T> implements Bou
     /* Excluded from this release type: _safePresert */
     values(): IterableIterator<T>;
     /* Excluded from this release type: _overflow */
-    /* Excluded from this release type: grow */
-    /* Excluded from this release type: isSequential */
-    /* Excluded from this release type: sequentialReset */
-    /* Excluded from this release type: shrink */
-    /* Excluded from this release type: toIndex */
-    /* Excluded from this release type: toList */
-    /* Excluded from this release type: toRanges */
+    /* Excluded from this release type: _grow */
+    /* Excluded from this release type: _isSequential */
+    /* Excluded from this release type: _sequentialReset */
+    /* Excluded from this release type: _shrink */
+    /* Excluded from this release type: _toIndex */
+    /* Excluded from this release type: _toList */
+    /* Excluded from this release type: _toRanges */
 }
 
 declare class CircularBase<T> {
     /* Excluded from this release type: _emitter */
-    constructor(emitter?: EventEmitter);
+    constructor(emitter?: EventEmitter<string | symbol, any>);
     /**
      * Appends the listener function to the listeners array for the
      * {@link BoundedEvent.Overflow} event.
@@ -127,10 +125,6 @@ declare class CircularBase<T> {
      * * No checks are made to see if the listener has already been added.
      * Multiple calls with the same of event + listener combination will
      * result in the listener being added and called multiple times.
-     *
-     * * By default, event listeners are invoked in the order they are added.
-     * The `prependListener()` method can be used as an alternative to add
-     * the event listener to the beginning of the listeners array.
      *
      * @param event - The name of the event.
      * @param listener - The callback function. It will
@@ -149,10 +143,6 @@ declare class CircularBase<T> {
      * Multiple calls with the same of event + listener combination will
      * result in the listener being added and called multiple times.
      *
-     * * By default, event listeners are invoked in the order they are added.
-     * The `prependListener()` method can be used as an alternative to add
-     * the event listener to the beginning of the listeners array.
-     *
      * @param event - The name of the event.
      * @param listener - The callback function. It will
      * receive an array of elements that have been removed due to overflow.
@@ -162,26 +152,6 @@ declare class CircularBase<T> {
      * @returns the collection.
      */
     on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
-    /**
-     * Adds the listener function to the beginning of the listeners array for
-     * the {@link BoundedEvent.Overflow} event.
-     *
-     * * No checks are made to see if the listener has already been added.
-     * Multiple calls with the same of event + listener combination will
-     * result in the listener being added and called multiple times.
-     *
-     * * Alternatively, the `addListener()` method can be used to add
-     * the event listener to the end of the listeners array.
-     *
-     * @param event - The name of the event.
-     * @param listener - The callback function. It will
-     * receive an array of elements that have been removed due to overflow.
-     * This can happen when elements are added while the collection is at
-     * capacity, or when capacity is reduced below the current size.
-     *
-     * @returns the collection.
-     */
-    prependListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     /**
      * Removes the specified listener from the listener array for the event.
      *
@@ -246,7 +216,6 @@ export declare class CircularDeque<T> implements Bounded_2<T>, Deque<T> {
     values(): IterableIterator<T>;
     addListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
-    prependListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     removeListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
 }
 
@@ -350,7 +319,6 @@ export declare class CircularLinkedDeque<T> implements Bounded_2<T>, Deque_2<T> 
     values(): IterableIterator<T>;
     addListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
-    prependListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     removeListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
 }
 
@@ -450,7 +418,6 @@ export declare class CircularLinkedQueue<T> implements Bounded_2<T>, Queue_2<T> 
     values(): IterableIterator<T>;
     addListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
-    prependListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     removeListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
 }
 
@@ -499,7 +466,6 @@ export declare class CircularLinkedStack<T> implements Bounded_2<T>, Stack_2<T> 
     values(): IterableIterator<T>;
     addListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
-    prependListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     removeListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
 }
 
@@ -628,7 +594,7 @@ export declare class CircularMap<K, V> extends CircularBase<[K, V]> implements B
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularQueue<T> implements Bounded_2<T>, Queue_2<T> {
-    /* Excluded from this release type: list */
+    /* Excluded from this release type: _list */
     /**
      * Creates a new queue. Default `capacity` is `Infinity`.
      */
@@ -662,7 +628,6 @@ export declare class CircularQueue<T> implements Bounded_2<T>, Queue_2<T> {
     values(): IterableIterator<T>;
     addListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
-    prependListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     removeListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
 }
 
@@ -671,7 +636,7 @@ export declare class CircularQueue<T> implements Bounded_2<T>, Queue_2<T> {
  */
 export declare class CircularSet<T> extends CircularBase<T> implements Bounded_2<T>, Set<T>, Collection_2<T, T> {
     /* Excluded from this release type: _capacity */
-    /* Excluded from this release type: set */
+    /* Excluded from this release type: _set */
     /**
      * Creates a new set with `capacity` defaulted to `Infinity`.
      */
@@ -817,7 +782,7 @@ export declare class CircularSkipList<T> extends CircularBase<T> implements Boun
     /* Excluded from this release type: _safeInsert */
 }
 
-declare interface CircularSkipListConfig extends BoundedConfig, SkipListConfig {
+export declare interface CircularSkipListConfig extends BoundedConfig, SkipListConfig {
 }
 
 /**
@@ -831,7 +796,7 @@ declare interface CircularSkipListConfig extends BoundedConfig, SkipListConfig {
  * @see {@link https://en.wikipedia.org/wiki/Circular_buffer | Wikipedia}
  */
 export declare class CircularStack<T> implements Bounded_2<T>, Stack_2<T> {
-    /* Excluded from this release type: list */
+    /* Excluded from this release type: _list */
     /**
      * Creates a new stack. Default `capacity` is `Infinity`.
      */
@@ -865,7 +830,6 @@ export declare class CircularStack<T> implements Bounded_2<T>, Stack_2<T> {
     values(): IterableIterator<T>;
     addListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
-    prependListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
     removeListener(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
 }
 

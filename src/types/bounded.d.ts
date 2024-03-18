@@ -20,8 +20,6 @@ import { ValueOf } from "./valueOf";
  * - `addListener` and `on`: Attach a listener to the end of the listeners array for a
  *   specified event. If a listener is added multiple times, it will be invoked multiple
  *   times per event.
- * - `prependListener`: Similar to `addListener`, but adds the listener to the beginning
- *   of the listeners array.
  * - `removeListener`: Removes a listener for a specified event. If the listener was added
  *   multiple times, each call removes one instance.
  *
@@ -75,27 +73,6 @@ export interface Bounded<T> {
    */
   on(event: typeof BoundedEvent.Overflow, listener: (elems: T[]) => void): this;
   on(
-    event: ValueOf<typeof BoundedEvent>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    listener: (...args: any[]) => void
-  ): this;
-
-  /**
-   * Adds the listener function to the beginning of the listeners array for the specified
-   * event, ensuring that it is among the first to be called when the event is emitted.
-   *
-   * @param event - The specific event to listen for. Use `BoundedEvent.Overflow` for
-   * overflow-specific handling or other events as defined by the implementation.
-   * @param listener - The callback function to execute when the event occurs.
-   * For `BoundedEvent.Overflow`, it receives an array of elements removed due to overflow.
-   *
-   * @returns The instance of the collection, allowing for method chaining.
-   */
-  prependListener(
-    event: typeof BoundedEvent.Overflow,
-    listener: (elems: T[]) => void
-  ): this;
-  prependListener(
     event: ValueOf<typeof BoundedEvent>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     listener: (...args: any[]) => void

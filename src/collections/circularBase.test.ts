@@ -1,4 +1,4 @@
-import EventEmitter from "events";
+import { EventEmitter } from "eventemitter3";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { CircularBase } from "./circularBase";
@@ -91,85 +91,6 @@ describe(CircularBase.name, () => {
     });
   });
 
-  describe("prependListener()", () => {
-    test("should call a listener added with prependListener before a listener added with on", () => {
-      const callOrder: string[] = [];
-      const firstListener = () => callOrder.push("first");
-      const prependedListener = () => callOrder.push("prepended");
-
-      circularBase.on(BoundedEvent.Overflow, firstListener);
-      circularBase.prependListener(BoundedEvent.Overflow, prependedListener);
-
-      emitter.emit(BoundedEvent.Overflow, ["test"]);
-      expect(callOrder).toEqual(["prepended", "first"]);
-    });
-
-    test("should maintain the order of listeners added with prependListener", () => {
-      const callOrder: string[] = [];
-      const prependedFirst = () => callOrder.push("prependedFirst");
-      const prependedSecond = () => callOrder.push("prependedSecond");
-
-      circularBase.prependListener(BoundedEvent.Overflow, prependedSecond);
-      circularBase.prependListener(BoundedEvent.Overflow, prependedFirst);
-
-      emitter.emit(BoundedEvent.Overflow, ["test"]);
-      expect(callOrder).toEqual(["prependedFirst", "prependedSecond"]);
-    });
-
-    test("should not affect the invocation of already added listeners", () => {
-      const callOrder: string[] = [];
-      const firstListener = () => callOrder.push("first");
-      const secondListener = () => callOrder.push("second");
-
-      circularBase.on(BoundedEvent.Overflow, firstListener);
-      circularBase.prependListener(BoundedEvent.Overflow, secondListener);
-
-      emitter.emit(BoundedEvent.Overflow, ["test"]);
-      expect(callOrder).toEqual(["second", "first"]);
-    });
-
-    test("should allow multiple listeners to be prepended in reverse order", () => {
-      const callOrder: string[] = [];
-      const listeners = [
-        () => callOrder.push("first"),
-        () => callOrder.push("second"),
-        () => callOrder.push("third"),
-      ];
-
-      listeners
-        .reverse()
-        .forEach(listener =>
-          circularBase.prependListener(BoundedEvent.Overflow, listener)
-        );
-
-      emitter.emit(BoundedEvent.Overflow, ["test"]);
-      expect(callOrder).toEqual(["first", "second", "third"]);
-    });
-
-    test("should work correctly when mixed with removeListener", () => {
-      const callOrder: string[] = [];
-      const listenerToRemove = () => callOrder.push("removed");
-      const remainingListener = () => callOrder.push("remaining");
-
-      circularBase.prependListener(BoundedEvent.Overflow, listenerToRemove);
-      circularBase.prependListener(BoundedEvent.Overflow, remainingListener);
-
-      circularBase.removeListener(BoundedEvent.Overflow, listenerToRemove);
-      emitter.emit(BoundedEvent.Overflow, ["test"]);
-      expect(callOrder).toEqual(["remaining"]);
-    });
-
-    test("should not throw or fail when prepending to an event with no existing listeners", () => {
-      const prependedListener = vi.fn();
-      expect(() =>
-        circularBase.prependListener(BoundedEvent.Overflow, prependedListener)
-      ).not.toThrow();
-
-      emitter.emit(BoundedEvent.Overflow, ["test"]);
-      expect(prependedListener).toHaveBeenCalledTimes(1);
-    });
-  });
-
   describe("removeListener()", () => {
     test("removes a specific listener from receiving further events", () => {
       const mockListener = vi.fn();
@@ -198,18 +119,6 @@ describe(CircularBase.name, () => {
       expect(() =>
         circularBase.removeListener(BoundedEvent.Overflow, nonAddedListener)
       ).not.toThrow();
-    });
-
-    test("successfully removes listeners added with prependListener", () => {
-      const prependedListener = vi.fn();
-      circularBase.prependListener(BoundedEvent.Overflow, prependedListener);
-
-      emitter.emit(BoundedEvent.Overflow, ["test"]);
-      expect(prependedListener).toHaveBeenCalledTimes(1);
-
-      circularBase.removeListener(BoundedEvent.Overflow, prependedListener);
-      emitter.emit(BoundedEvent.Overflow, ["test"]);
-      expect(prependedListener).toHaveBeenCalledTimes(1);
     });
   });
 });
