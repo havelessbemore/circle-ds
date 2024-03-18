@@ -17,8 +17,6 @@ import {
 import { addIfBelow, clamp, isInRange, toInteger } from "../../utils/math";
 import { CircularBase } from "../circularBase";
 
-// splice, unshift
-
 export class CircularLinkedList<T>
   extends CircularBase<T>
   implements Bounded<T>, List<T>
