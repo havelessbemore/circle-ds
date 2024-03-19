@@ -35,7 +35,7 @@ BoundedConfig.capacity
 
 #### Defined in
 
-[types/bounded.d.ts:112](https://github.com/havelessbemore/circle-ds/blob/851e17d/src/types/bounded.d.ts#L112)
+[types/bounded.d.ts:112](https://github.com/havelessbemore/circle-ds/blob/e3bcf89/src/types/bounded.d.ts#L112)
 
 ___
 
@@ -55,7 +55,7 @@ SkipListConfig.expectedSize
 
 #### Defined in
 
-[types/skipList.d.ts:105](https://github.com/havelessbemore/circle-ds/blob/851e17d/src/types/skipList.d.ts#L105)
+[types/skipList.d.ts:105](https://github.com/havelessbemore/circle-ds/blob/e3bcf89/src/types/skipList.d.ts#L105)
 
 ___
 
@@ -74,7 +74,7 @@ SkipListConfig.maxLevel
 
 #### Defined in
 
-[types/skipList.d.ts:113](https://github.com/havelessbemore/circle-ds/blob/851e17d/src/types/skipList.d.ts#L113)
+[types/skipList.d.ts:113](https://github.com/havelessbemore/circle-ds/blob/e3bcf89/src/types/skipList.d.ts#L113)
 
 ___
 
@@ -95,4 +95,4 @@ SkipListConfig.p
 
 #### Defined in
 
-[types/skipList.d.ts:123](https://github.com/havelessbemore/circle-ds/blob/851e17d/src/types/skipList.d.ts#L123)
+[types/skipList.d.ts:123](https://github.com/havelessbemore/circle-ds/blob/e3bcf89/src/types/skipList.d.ts#L123)

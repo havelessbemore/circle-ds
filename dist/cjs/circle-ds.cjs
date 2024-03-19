@@ -957,7 +957,7 @@ function cut$2(prev, count) {
     return { root, size: 0, tail: root };
   }
   const head = prev.next;
-  const tail = get$2(head, count - 1);
+  const tail = get$1(head, count - 1);
   prev.next = tail.next;
   tail.next = void 0;
   root.next = head;
@@ -969,7 +969,7 @@ function* entries$1(node) {
     node = node.next;
   }
 }
-function get$2(node, index) {
+function get$1(node, index) {
   if (index < 0) {
     return void 0;
   }
@@ -1042,9 +1042,9 @@ function cut$1(node, count) {
   }
   return seg;
 }
-function get$1(node, index) {
+function get(node, index) {
   if (index >= 0) {
-    return get$2(node, index);
+    return get$1(node, index);
   }
   for (let i = 0; node != null && i > index; --i) {
     node = node.prev;
@@ -1285,7 +1285,7 @@ class CircularDoublyLinkedList extends CircularBase {
    */
   _get(index) {
     const mid = this._size / 2;
-    return ++index <= mid ? get$1(this._root, index) : get$1(this._tail, index - this._size);
+    return ++index <= mid ? get(this._root, index) : get(this._tail, index - this._size);
   }
   /**
    * @internal
@@ -1682,7 +1682,7 @@ class CircularLinkedList extends CircularBase {
    * @internal
    */
   _get(index) {
-    return ++index == this._size ? this._tail : get$2(this._root, index);
+    return ++index == this._size ? this._tail : get$1(this._root, index);
   }
   /**
    * @internal
@@ -1797,160 +1797,54 @@ function calcMaxLevel(p, expectedSize) {
   }
   return Math.ceil(log(expectedSize, 1 / p));
 }
-function copy(root, start, distance) {
-  let levels2 = root.levels.length;
-  const segRoot = gen$1(void 0, levels2);
-  if (distance <= 0) {
-    return { root: segRoot, size: 0, tails: [segRoot] };
-  }
-  const tails = new Array(levels2).fill(segRoot);
-  const indexes = new Array(levels2).fill(-1);
-  let node = getClosest$1(root, start)[0];
-  node = node.levels[0].next;
-  levels2 = 1;
+function copy(core, start, distance) {
   let size = 0;
-  let index = 0;
-  while (node != null && index < distance) {
-    const L = node.levels.length;
-    levels2 = levels2 >= L ? levels2 : L;
-    const dupe = gen$1(node.value, L);
-    for (let lvl = 0; lvl < L; ++lvl) {
-      tails[lvl].levels[lvl] = { next: dupe, span: index - indexes[lvl] };
-      tails[lvl] = dupe;
-      indexes[lvl] = index;
+  const root = toNode(void 0);
+  const tails = [root];
+  const sizes = [-1];
+  if (distance <= 0) {
+    return { root, size, tails };
+  }
+  let node = getEntry(core, start - 1).node;
+  node = node.levels[0].next;
+  let maxY = 1;
+  while (node != null && size < distance) {
+    const Y = node.levels.length;
+    while (maxY < Y) {
+      tails[maxY] = root;
+      sizes[maxY] = -1;
+      ++maxY;
+    }
+    const dupe = toNode(node.value, Y);
+    for (let y = 0; y < Y; ++y) {
+      tails[y].levels[y] = { next: dupe, span: size - sizes[y] };
+      tails[y] = dupe;
+      sizes[y] = size;
     }
     const { next, span } = node.levels[0];
-    index += span;
-    node = next;
-    ++size;
-  }
-  tails.length = levels2;
-  segRoot.levels.length = levels2;
-  index = indexes[0] + 1;
-  for (let i = 0; i < levels2; ++i) {
-    tails[i].levels[i] = { next: void 0, span: index - indexes[i] };
-  }
-  return { root: segRoot, size, tails };
-}
-function* entries(node) {
-  for (let i = 0; node != null; ++i) {
-    yield [i, node.value];
-    node = node.levels[0].next;
-  }
-}
-function gen$1(value, levels2 = 1, span = 1, next) {
-  const array = new Array(levels2);
-  for (let i = 0; i < levels2; ++i) {
-    array[i] = { next, span };
-  }
-  return { value, levels: array };
-}
-function get(node, distance) {
-  [node, distance] = getClosest$1(node, distance);
-  return distance === 0 ? node : void 0;
-}
-function getClosest$1(node, distance) {
-  if (distance <= 0) {
-    return [node, distance];
-  }
-  let lvl = node.levels.length - 1;
-  while (true) {
-    const { next, span } = node.levels[lvl];
-    if (span <= distance && next != null)
-      ;
-    else if (--lvl < 0) {
-      return [node, distance];
-    } else {
-      continue;
-    }
-    if (span == distance) {
-      return [next, 0];
-    }
-    distance -= span;
+    size += span;
     node = next;
   }
-}
-function has(node, value) {
-  while (node != null) {
-    if (node.value === value) {
-      return true;
-    }
-    node = node.levels[0].next;
+  size = sizes[0] + 1;
+  for (let y = 0; y < maxY; ++y) {
+    tails[y].levels[y] = { next: void 0, span: size - sizes[y] };
   }
-  return false;
-}
-function* keys(node) {
-  for (let i = 0; node != null; ++i) {
-    yield i;
-    node = node.levels[0].next;
-  }
-}
-function toList(levels2, values2) {
-  let Y = -Infinity;
-  const X = Math.min(levels2.length, values2.length);
-  for (let x = 0; x < X; ++x) {
-    if (Y < levels2[x]) {
-      Y = levels2[x];
-    }
-  }
-  if (Y <= 0 || X <= 0) {
-    const root2 = gen$1(void 0);
-    return { root: root2, size: 0, tails: [root2] };
-  }
-  const root = gen$1(void 0, Y, X + 1);
-  const tails = new Array(Y).fill(root);
-  for (let x = 0; x < X; ++x) {
-    const span = X - x;
-    const nextY = levels2[x];
-    const next = gen$1(values2[x], nextY, span);
-    for (let y = 0; y < nextY; ++y) {
-      const levels3 = tails[y].levels;
-      levels3[y] = { next, span: levels3[y].span - span };
-      tails[y] = next;
-    }
-  }
-  return { root, size: X, tails };
-}
-function truncateLevels(root, level) {
-  if (root == null || root.levels.length <= level) {
-    return;
-  }
-  let node = root;
-  while (node != null) {
-    const next = node.levels[level].next;
-    node.levels.length = level;
-    node = next;
-  }
-}
-function* values(node) {
-  while (node != null) {
-    yield node.value;
-    node = node.levels[0].next;
-  }
-}
-function clone(stack) {
-  const N = stack.length;
-  const dupe = new Array(N);
-  for (let i = 0; i < N; ++i) {
-    const { index, node } = stack[i];
-    dupe[i] = { index, node };
-  }
-  return dupe;
+  return { root, size, tails };
 }
 function cut(core, start, distance) {
-  const segRoot = gen$1(void 0);
+  const segRoot = toNode(void 0);
   const seg = { root: segRoot, size: 0, tails: [segRoot] };
   if (distance <= 0) {
     return seg;
   }
-  const prevStack = getClosest(gen(core.root, -1), start);
-  const tailStack = getClosest(clone(prevStack), distance);
+  const prevStack = getStack(core, start - 1);
+  const tailStack = nextStack(Array.from(prevStack), distance);
   const end = tailStack[0].index + tailStack[0].node.levels[0].span;
-  let levels = core.root.levels.length;
+  let levels2 = core.root.levels.length;
   start = prevStack[0].index + prevStack[0].node.levels[0].span;
   distance = end - start;
   let lvl;
-  for (lvl = 0; lvl < levels; ++lvl) {
+  for (lvl = 0; lvl < levels2; ++lvl) {
     const prev = prevStack[lvl];
     const tail = tailStack[lvl];
     if (prev.index >= tail.index) {
@@ -1965,8 +1859,8 @@ function cut(core, start, distance) {
     tail.node.levels[lvl] = { next: void 0, span: end - tail.index };
     seg.tails[lvl] = tail.node;
   }
-  if (lvl < levels) {
-    while (lvl < levels) {
+  if (lvl < levels2) {
+    while (lvl < levels2) {
       const prev = prevStack[lvl];
       const { next, span } = prev.node.levels[lvl];
       prev.node.levels[lvl] = { next, span: span - distance };
@@ -1977,12 +1871,12 @@ function cut(core, start, distance) {
     while (lvl > 1 && links[lvl - 1].next == null) {
       --lvl;
     }
-    levels = lvl;
-    links.length = levels;
-    core.tails.length = levels;
+    levels2 = lvl;
+    links.length = levels2;
+    core.tails.length = levels2;
   }
   if (end >= core.size) {
-    for (lvl = 0; lvl < levels; ++lvl) {
+    for (lvl = 0; lvl < levels2; ++lvl) {
       core.tails[lvl] = prevStack[lvl].node;
     }
   }
@@ -1990,42 +1884,92 @@ function cut(core, start, distance) {
   seg.size = distance;
   return seg;
 }
-function gen(node, index = 0) {
-  const N = node.levels.length;
-  const stack = new Array(N);
-  for (let i = 0; i < N; ++i) {
-    stack[i] = { index, node };
+function* entries(node) {
+  let i = 0;
+  while (node != null) {
+    yield [i, node.value];
+    const { next, span } = node.levels[0];
+    node = next;
+    i += span;
+  }
+}
+function getEntry(core, target) {
+  if (target < 0) {
+    return { index: -1, node: core.root };
+  }
+  const tails = core.tails;
+  if (target >= core.size - tails[0].levels[0].span) {
+    return { index: core.size - tails[0].levels[0].span, node: tails[0] };
+  }
+  let y;
+  let index = -1;
+  let node = core.root;
+  for (y = node.levels.length - 1; y >= 0 && index < target; --y) {
+    const i = core.size - tails[y].levels[y].span;
+    if (i > target) {
+      break;
+    }
+    index = i;
+    node = tails[y];
+  }
+  while (y >= 0 && index < target) {
+    const { next, span } = node.levels[y];
+    if (index + span > target || next == null) {
+      --y;
+    } else {
+      index += span;
+      node = next;
+    }
+  }
+  return { index, node };
+}
+function getStack(core, target) {
+  const stack = toStack(core.root, -1);
+  if (target < 0) {
+    return stack;
+  }
+  const Y = stack.length;
+  const tails = core.tails;
+  if (target >= core.size - tails[0].levels[0].span) {
+    for (let y2 = 0; y2 < Y; ++y2) {
+      const index = core.size - tails[y2].levels[y2].span;
+      stack[y2] = { index, node: tails[y2] };
+    }
+    return stack;
+  }
+  let y;
+  for (y = Y - 1; y >= 0 && stack[y].index < target; --y) {
+    const i = core.size - tails[y].levels[y].span;
+    if (i > target) {
+      break;
+    }
+    stack[y] = { index: i, node: tails[y] };
+  }
+  while (y >= 0 && stack[y].index < target) {
+    const { index, node } = stack[y];
+    const { next, span } = node.levels[y];
+    if (index + span > target || next == null) {
+      --y;
+    } else {
+      stack[y] = { index: index + span, node: next };
+    }
+  }
+  if (y > 0) {
+    const { index, node } = stack[y];
+    for (let i = 0; i < y; ++i) {
+      stack[i] = { index, node };
+    }
   }
   return stack;
 }
-function getClosest(stack, distance) {
-  if (distance <= 0 || stack.length <= 0) {
-    return stack;
-  }
-  let lvl = stack.length - 1;
-  let ptr = stack[lvl];
-  const target = stack[0].index + distance;
-  while (true) {
-    const { next, span } = ptr.node.levels[lvl];
-    const nextIndex = ptr.index + span;
-    if (nextIndex <= target && next != null)
-      ;
-    else if (--lvl < 0) {
-      break;
-    } else {
-      ptr = stack[lvl];
-      continue;
+function has(node, value) {
+  while (node != null) {
+    if (node.value === value) {
+      return true;
     }
-    ptr = { index: nextIndex, node: next };
-    stack[lvl] = ptr;
-    if (nextIndex == target) {
-      break;
-    }
+    node = node.levels[0].next;
   }
-  for (let i = 0; i < lvl; ++i) {
-    stack[i] = { index: ptr.index, node: ptr.node };
-  }
-  return stack;
+  return false;
 }
 function insert(dest, index, src) {
   if (src.size <= 0) {
@@ -2036,27 +1980,23 @@ function insert(dest, index, src) {
     dest.root.levels[y] = { next: void 0, span: dest.size + 1 };
     dest.tails[y] = dest.root;
   }
-  const prevs = getClosest(gen(dest.root, -1), index);
+  const prevs = getStack(dest, index - 1);
   for (let y = 0; y < minY; ++y) {
     const prev = prevs[y].node;
-    const prevI = prevs[y].index;
-    const prevEdge = prev.levels[y];
     const tail = src.tails[y];
+    const prevEdge = prev.levels[y];
     const tailEdge = tail.levels[y];
-    const nextI = prevI + prevEdge.span;
-    const nextD = nextI - index;
-    const tailD = tailEdge.span;
-    tail.levels[y] = { next: prevEdge.next, span: nextD + tailD };
+    let span = prevs[y].index - index + prevEdge.span + tailEdge.span;
+    tail.levels[y] = { next: prevEdge.next, span };
     const rootEdge = src.root.levels[y];
-    const headD = rootEdge.span - 1;
-    const prevD = index - prevI;
-    prev.levels[y] = { next: rootEdge.next, span: prevD + headD };
+    span = index - prevs[y].index + (rootEdge.span - 1);
+    prev.levels[y] = { next: rootEdge.next, span };
   }
   const maxY = dest.tails.length;
   for (let y = minY; y < maxY; ++y) {
-    const levels = prevs[y].node.levels;
-    const { next, span } = levels[y];
-    levels[y] = { next, span: span + src.size };
+    const levels2 = prevs[y].node.levels;
+    const { next, span } = levels2[y];
+    levels2[y] = { next, span: span + src.size };
   }
   if (index === dest.size) {
     for (let y = 0; y < minY; ++y) {
@@ -2064,6 +2004,95 @@ function insert(dest, index, src) {
     }
   }
   dest.size += src.size;
+}
+function* keys(node) {
+  let i = 0;
+  while (node != null) {
+    yield i;
+    const { next, span } = node.levels[0];
+    node = next;
+    i += span;
+  }
+}
+function nextStack(stack, distance) {
+  if (distance <= 0 || stack.length <= 0) {
+    return stack;
+  }
+  let y = stack.length - 1;
+  const target = stack[0].index + distance;
+  while (y >= 0 && stack[y].index < target) {
+    const { index, node } = stack[y];
+    const { next, span } = node.levels[y];
+    if (index + span > target || next == null) {
+      --y;
+    } else {
+      stack[y] = { index: index + span, node: next };
+    }
+  }
+  if (y > 0) {
+    const { index, node } = stack[y];
+    for (let i = 0; i < y; ++i) {
+      stack[i] = { index, node };
+    }
+  }
+  return stack;
+}
+function toList(levels2, values2) {
+  let Y = -Infinity;
+  const size = Math.min(levels2.length, values2.length);
+  for (let i = 0; i < size; ++i) {
+    if (Y < levels2[i]) {
+      Y = levels2[i];
+    }
+  }
+  if (Y <= 0 || size <= 0) {
+    const root2 = toNode(void 0);
+    return { root: root2, size: 0, tails: [root2] };
+  }
+  const root = toNode(void 0, Y, size + 1);
+  const tails = new Array(Y).fill(root);
+  for (let i = 0; i < size; ++i) {
+    Y = levels2[i];
+    const span = size - i;
+    const next = toNode(values2[i], Y, span);
+    for (let y = 0; y < Y; ++y) {
+      const levels3 = tails[y].levels;
+      levels3[y] = { next, span: levels3[y].span - span };
+      tails[y] = next;
+    }
+  }
+  return { root, size, tails };
+}
+function toNode(value, levels2 = 1, span = 1, next) {
+  const array = new Array(levels2);
+  for (let i = 0; i < levels2; ++i) {
+    array[i] = { next, span };
+  }
+  return { value, levels: array };
+}
+function toStack(node, index = 0) {
+  const N = node.levels.length;
+  const stack = new Array(N);
+  for (let i = 0; i < N; ++i) {
+    stack[i] = { index, node };
+  }
+  return stack;
+}
+function truncateLevels(node, level) {
+  if (node == null || node.levels.length <= level) {
+    return;
+  }
+  while (node != null) {
+    const next = node.levels[level].next;
+    node.levels.length = level;
+    node = next;
+  }
+}
+function* values(node) {
+  while (node != null) {
+    yield node.value;
+    node = node.levels[0].next;
+  }
 }
 class CircularSkipList extends CircularBase {
   constructor(config) {
@@ -2109,7 +2138,7 @@ class CircularSkipList extends CircularBase {
     this._isFinite = false;
     this._p = 0.5;
     this._maxLevel = calcMaxLevel(this._p, LINKED_MAX_LENGTH);
-    this._root = gen$1(void 0);
+    this._root = toNode(void 0);
     this._size = 0;
     this._tails = [this._root];
     if (config == null) {
@@ -2189,7 +2218,8 @@ class CircularSkipList extends CircularBase {
     if (!isInRange(index, 0, this._size)) {
       return void 0;
     }
-    return get(this._root, index + 1).value;
+    const core = { root: this._root, size: this._size, tails: this._tails };
+    return getEntry(core, index).node.value;
   }
   clear() {
     this._size = 0;
@@ -2215,7 +2245,8 @@ class CircularSkipList extends CircularBase {
     if (start >= end) {
       return this;
     }
-    let node = get(this._root, start + 1);
+    const core = { root: this._root, size: this._size, tails: this._tails };
+    let { node } = getEntry(core, start);
     for (let i = start; i < end; ++i) {
       node.value = value;
       node = node.levels[0].next;
@@ -2251,7 +2282,8 @@ class CircularSkipList extends CircularBase {
     if (!isInRange(index, 0, this._size)) {
       return void 0;
     }
-    const node = get(this._root, index + 1);
+    const core = { root: this._root, size: this._size, tails: this._tails };
+    const { node } = getEntry(core, index);
     const prevValue = node.value;
     node.value = value;
     return prevValue;
@@ -2275,12 +2307,13 @@ class CircularSkipList extends CircularBase {
     if (start >= end) {
       return new CircularSkipList(config);
     }
-    const core = copy(this._root, start, end - start);
-    config.capacity = core.size;
+    const core = { root: this._root, size: this._size, tails: this._tails };
+    const seg = copy(core, start, end - start);
+    config.capacity = seg.size;
     const list = new CircularSkipList(config);
-    list._root = core.root;
-    list._tails = core.tails;
-    list._size = core.size;
+    list._root = seg.root;
+    list._tails = seg.tails;
+    list._size = seg.size;
     return list;
   }
   splice(start, deleteCount, ...items) {
