@@ -1,6 +1,5 @@
 import { BoundedEvent } from "../../types/boundedEvent";
 import { Bounded, BoundedConfig } from "../../types/bounded";
-import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../../utils/constants";
 import {
   SkipList,
   SkipListConfig,
@@ -8,6 +7,7 @@ import {
   SkipNode,
 } from "../../types/skipList";
 
+import { ARGS_MAX_LENGTH, LINKED_MAX_LENGTH } from "../../utils/constants";
 import {
   isArrayLength,
   isInfinity,
@@ -23,8 +23,20 @@ import {
   randomRun,
   toInteger,
 } from "../../utils/math";
-import * as NodeUtils from "../../utils/skipNode";
-import * as StackUtils from "../../utils/skipStack";
+import {
+  calcMaxLevel,
+  copy,
+  cut,
+  entries,
+  getEntry,
+  has,
+  insert,
+  keys,
+  toList,
+  toNode,
+  truncateLevels,
+  values,
+} from "../../utils/skipList";
 
 import { CircularBase } from "../circularBase";
 
@@ -89,8 +101,8 @@ export class CircularSkipList<T>
     this._capacity = LINKED_MAX_LENGTH;
     this._isFinite = false;
     this._p = 0.5;
-    this._maxLevel = NodeUtils.calcMaxLevel(this._p, LINKED_MAX_LENGTH);
-    this._root = NodeUtils.gen(undefined as T);
+    this._maxLevel = calcMaxLevel(this._p, LINKED_MAX_LENGTH);
+    this._root = toNode(undefined as T);
     this._size = 0;
     this._tails = [this._root];
 
@@ -110,7 +122,7 @@ export class CircularSkipList<T>
       this.capacity = config.capacity ?? this._capacity;
       this.p = config.p ?? this._p;
       const size = config.expectedSize ?? this._capacity;
-      this.maxLevel = config.maxLevel ?? NodeUtils.calcMaxLevel(this._p, size);
+      this.maxLevel = config.maxLevel ?? calcMaxLevel(this._p, size);
       return;
     }
 
@@ -190,7 +202,7 @@ export class CircularSkipList<T>
 
     // Remove excess levels
     if (maxLevel < this.levels) {
-      NodeUtils.truncateLevels(this._root, maxLevel);
+      truncateLevels(this._root, maxLevel);
     }
   }
 
@@ -215,7 +227,8 @@ export class CircularSkipList<T>
     }
 
     // Return value
-    return NodeUtils.get(this._root, index + 1)!.value;
+    const core = { root: this._root, size: this._size, tails: this._tails };
+    return getEntry(core, index).node.value;
   }
 
   clear(): void {
@@ -240,7 +253,7 @@ export class CircularSkipList<T>
   }
 
   entries(): IterableIterator<[number, T]> {
-    return NodeUtils.entries(this._root.levels[0].next);
+    return entries(this._root.levels[0].next);
   }
 
   fill(value: T, start?: number, end?: number): this {
@@ -254,7 +267,8 @@ export class CircularSkipList<T>
     }
 
     // Fill values
-    let node = NodeUtils.get(this._root, start + 1)!;
+    const core = { root: this._root, size: this._size, tails: this._tails };
+    let { node } = getEntry(core, start);
     for (let i = start; i < end; ++i) {
       node.value = value;
       node = node.levels[0].next!;
@@ -276,11 +290,11 @@ export class CircularSkipList<T>
   }
 
   has(value: T): boolean {
-    return NodeUtils.has(this._root.levels[0].next, value);
+    return has(this._root.levels[0].next, value);
   }
 
   keys(): IterableIterator<number> {
-    return NodeUtils.keys(this._root.levels[0].next);
+    return keys(this._root.levels[0].next);
   }
 
   pop(): T | undefined {
@@ -312,7 +326,8 @@ export class CircularSkipList<T>
     }
 
     // Set value
-    const node = NodeUtils.get(this._root, index + 1)!;
+    const core = { root: this._root, size: this._size, tails: this._tails };
+    const { node } = getEntry(core, index);
     const prevValue = node.value;
     node.value = value;
 
@@ -353,14 +368,15 @@ export class CircularSkipList<T>
     }
 
     // Create segment copy
-    const core = NodeUtils.copy(this._root, start, end - start);
+    const core = { root: this._root, size: this._size, tails: this._tails };
+    const seg = copy(core, start, end - start);
 
     // Return copied segment as a list
-    config.capacity = core.size;
+    config.capacity = seg.size;
     const list = new CircularSkipList<T>(config);
-    list._root = core.root;
-    list._tails = core.tails;
-    list._size = core.size;
+    list._root = seg.root;
+    list._tails = seg.tails;
+    list._size = seg.size;
 
     return list;
   }
@@ -408,7 +424,7 @@ export class CircularSkipList<T>
   }
 
   values(): IterableIterator<T> {
-    return NodeUtils.values(this._root.levels[0].next);
+    return values(this._root.levels[0].next);
   }
 
   /**
@@ -419,7 +435,7 @@ export class CircularSkipList<T>
     const core = { root: this._root, size: this._size, tails: this._tails };
 
     // Cut and get removed segment
-    const seg = StackUtils.cut(core, start, count);
+    const seg = cut(core, start, count);
 
     // Update list state
     this._size = core.size;
@@ -506,7 +522,7 @@ export class CircularSkipList<T>
       this._emitter.emit(BoundedEvent.Overflow, evicted);
       return;
     }
-    for (const array of chunk(NodeUtils.values(evicted), ARGS_MAX_LENGTH)) {
+    for (const array of chunk(values(evicted), ARGS_MAX_LENGTH)) {
       this._emitter.emit(BoundedEvent.Overflow, array);
     }
   }
@@ -565,11 +581,11 @@ export class CircularSkipList<T>
   protected _safeInsert(index: number, values: T[]): void {
     // Create segment
     const levels = this._genLevels(values.length);
-    const seg = NodeUtils.toList(levels, values);
+    const seg = toList(levels, values);
 
     // Insert segment
     const core = { root: this._root, size: this._size, tails: this._tails };
-    StackUtils.insert(core, index, seg);
+    insert(core, index, seg);
 
     // Update list state
     this._size = core.size;
