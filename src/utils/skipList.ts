@@ -15,11 +15,11 @@ import { log } from "./math";
  * skip list can have, which impacts the overall speed of search, insertion,
  * and deletion operations within the list.
  *
- * @param p - The probability factor used for determining the level. It should
- *          be a number between 0 and 1 (exclusive). The probability factor
- *          affects the sparsity of the skip list; a lower value results in a
- *          shorter, less dense list, while a higher value results in a
- *          taller, denser list.
+ * @param probability - The probability factor used for determining the level.
+ *          It should be a number between 0 and 1 (exclusive). The probability
+ *          factor affects the sparseness of the skip list; a lower value results
+ *          in a shorter list, while a higher value results in a taller list.
+ *
  * @param expectedSize - The expected number of elements in the skip list. It
  *                     should be a positive integer. The expected size
  *                     influences the optimal maximum level for the list.
@@ -30,36 +30,33 @@ import { log } from "./math";
  *          probability factor is 1 or more, indicating an unbounded number of
  *          levels, and likely an error in inputs.
  */
-export function calcMaxLevel(p: number, expectedSize: number): number {
-  if (p <= 0 || expectedSize <= 1) {
+export function calcMaxLevel(
+  probability: number,
+  expectedSize: number
+): number {
+  if (probability <= 0 || expectedSize <= 1) {
     return 1;
   }
-  if (p >= 1) {
+  if (probability >= 1) {
     return Infinity;
   }
-  return Math.ceil(log(expectedSize, 1 / p));
+  return Math.ceil(log(expectedSize, 1 / probability));
 }
 
 /**
- * Creates a copy of a segment from a skip list, starting at a specified
- * position and including a specified number of nodes.
+ * Copies a segment from a skip list, starting at a specified position
+ * and including a specified number of nodes. The copied segment is
+ * returned as a new {@link SkipCore}.
  *
- * The copied segment is initialized with its own root node and returns
- * the new list's root, tail nodes at each level, and the total number
- * of nodes copied.
- *
- * @param root - The root {@link SkipNode} of the original skip list from
+ * @param root - The {@link SkipCore} of the original skip list from
  *               which the copy operation begins.
  * @param start - The zero-based position in the original list from which to
  *                start copying nodes.
  * @param count - The number of nodes to copy from the start position. If the
  *                count exceeds the number of nodes available, only the
  *                available nodes are copied.
- * @returns A tuple containing:
- *          - The root {@link SkipNode} of the newly created skip list.
- *          - An array of {@link SkipNode}s representing the tail nodes at
- *            each level of the new skip list.
- *          - An integer representing the total number of nodes copied.
+ *
+ * @returns The {@link SkipCore} of the duplicate list.
  */
 export function copy<T>(
   core: SkipCore<T>,
@@ -139,32 +136,36 @@ export function copy<T>(
 export function cut<T>(
   core: SkipCore<T>,
   start: number,
-  distance: number
+  end: number
 ): SkipCore<T> {
-  // Initialize output list
+  // Initialize output
   const segRoot = toNode(undefined as T);
   const seg: SkipCore<T> = { root: segRoot, size: 0, tails: [segRoot] };
 
   // Check inputs
-  if (distance <= 0) {
+  if (start >= end || end <= 0 || start >= core.size) {
     return seg;
   }
 
-  // Initialize constants
+  // Get stacks
   const prevStack = getStack(core, start - 1);
-  const tailStack = nextStack(Array.from(prevStack), distance);
-  const end = tailStack[0].index + tailStack[0].node.levels[0].span;
+  const tailStack = getStack(core, end - 1, Array.from(prevStack));
 
-  // Update inputs
-  let levels = core.root.levels.length;
+  // Check size
   start = prevStack[0].index + prevStack[0].node.levels[0].span;
-  distance = end - start;
+  end = tailStack[0].index + tailStack[0].node.levels[0].span;
+  if (start >= end) {
+    return seg;
+  }
+  const size = end - start;
+  seg.size = size;
 
-  // Detach segment from participating levels
-  let lvl: number;
-  for (lvl = 0; lvl < levels; ++lvl) {
-    const prev = prevStack[lvl];
-    const tail = tailStack[lvl];
+  // Detach segment
+  let y: number;
+  let Y = prevStack.length;
+  for (y = 0; y < Y; ++y) {
+    const prev = prevStack[y];
+    const tail = tailStack[y];
 
     // Check if segment exists at this level
     if (prev.index >= tail.index) {
@@ -172,51 +173,47 @@ export function cut<T>(
     }
 
     // Connect segment start to new root
-    let edge = prev.node.levels[lvl];
+    let edge = prev.node.levels[y];
     let span = prev.index + edge.span - start;
-    segRoot.levels[lvl] = { next: edge.next, span };
+    segRoot.levels[y] = { next: edge.next, span };
 
     // Remove segment from list
-    edge = tail.node.levels[lvl];
-    span = tail.index - prev.index + (edge.span - distance);
-    prev.node.levels[lvl] = { next: edge.next, span };
+    edge = tail.node.levels[y];
+    span = tail.index - prev.index + (edge.span - size);
+    prev.node.levels[y] = { next: edge.next, span };
 
     // Detach segment end
-    tail.node.levels[lvl] = { next: undefined, span: end - tail.index };
-    seg.tails[lvl] = tail.node;
+    tail.node.levels[y] = { next: undefined, span: end - tail.index };
+    seg.tails[y] = tail.node;
   }
 
-  if (lvl < levels) {
+  if (y < Y) {
     // Remove segment from higher levels
-    while (lvl < levels) {
-      const prev = prevStack[lvl];
-      const { next, span } = prev.node.levels[lvl];
-      prev.node.levels[lvl] = { next: next, span: span - distance };
-      ++lvl;
+    while (y < Y) {
+      const prev = prevStack[y];
+      const { next, span } = prev.node.levels[y];
+      prev.node.levels[y] = { next: next, span: span - size };
+      ++y;
     }
   } else {
     // Remove empty levels from the source list
     const links = core.root.levels;
-    while (lvl > 1 && links[lvl - 1].next == null) {
-      --lvl;
+    while (y > 1 && links[y - 1].next == null) {
+      --y;
     }
-    levels = lvl;
-    links.length = levels;
-    core.tails.length = levels;
+    Y = y;
+    links.length = Y;
+    core.tails.length = Y;
   }
 
   // Update tails from source list
-  if (end >= core.size) {
-    for (lvl = 0; lvl < levels; ++lvl) {
-      core.tails[lvl] = prevStack[lvl].node;
+  core.size -= size;
+  if (start >= core.size) {
+    for (y = 0; y < Y; ++y) {
+      core.tails[y] = prevStack[y].node;
     }
   }
 
-  // Update source list's size
-  core.size -= distance;
-
-  // Return removed segment
-  seg.size = distance;
   return seg;
 }
 
@@ -280,20 +277,23 @@ export function getEntry<T>(core: SkipCore<T>, target: number): SkipEntry<T> {
   return { index, node };
 }
 
-export function getStack<T>(core: SkipCore<T>, target: number): SkipStack<T> {
-  const stack = toStack(core.root, -1);
-
+export function getStack<T>(
+  core: SkipCore<T>,
+  target: number,
+  stack: SkipStack<T> = toStack(core.root, -1)
+): SkipStack<T> {
   // Check target minimum
-  if (target < 0) {
+  const Y = stack.length;
+  if (Y <= 0 || target <= stack[0].index) {
     return stack;
   }
 
   // Check target maximum
-  const Y = stack.length;
+  const size = core.size;
   const tails = core.tails;
-  if (target >= core.size - tails[0].levels[0].span) {
+  if (target >= size - tails[0].levels[0].span) {
     for (let y = 0; y < Y; ++y) {
-      const index = core.size - tails[y].levels[y].span;
+      const index = size - tails[y].levels[y].span;
       stack[y] = { index, node: tails[y] };
     }
     return stack;
@@ -302,7 +302,7 @@ export function getStack<T>(core: SkipCore<T>, target: number): SkipStack<T> {
   // Use tails as shortcuts
   let y: number;
   for (y = Y - 1; y >= 0 && stack[y].index < target; --y) {
-    const i = core.size - tails[y].levels[y].span;
+    const i = size - tails[y].levels[y].span;
     if (i > target) {
       break;
     }
@@ -334,7 +334,9 @@ export function getStack<T>(core: SkipCore<T>, target: number): SkipStack<T> {
 /**
  * Determines whether a skip list contains a node with a specified value.
  *
- * @param node - The node from which to start searching.
+ * Iteration starts from the given node and continues the end of the list.
+ *
+ * @param node - The {@link SkipNode} at which to start iterating.
  * @param value - The value to search for.
  *
  * @returns `true` if the specified value is found, `false` otherwise.
@@ -421,10 +423,11 @@ export function insert<T>(
  * Iterates through a skip list, yielding each node's index
  * (position in the list).
  *
- * This generator function provides a convenient way to enumerate all nodes in
+ * Iteration starts from the given node and continues the end of the list.
+ * This function provides a convenient way to enumerate all nodes in
  * a skip list, similar to how `Array.prototype.entries()` works for arrays.
  *
- * @param node - The node at which to start iterating.
+ * @param node - The {@link SkipNode} at which to start iterating.
  */
 export function* keys<T>(node?: SkipNode<T>): Generator<number> {
   let i = 0;
@@ -439,10 +442,9 @@ export function* keys<T>(node?: SkipNode<T>): Generator<number> {
 /**
  * Iterates through a skip list, yielding each node's height.
  *
- * Iteration starts from the `node` node and continues until
- * the end of the list.
+ * Iteration starts from the given node and continues the end of the list.
  *
- * @param node - The node at which to start iterating.
+ * @param node - The {@link SkipNode} at which to start iterating.
  */
 export function* levels<T>(node?: SkipNode<T>): Generator<number> {
   while (node != null) {
@@ -452,64 +454,11 @@ export function* levels<T>(node?: SkipNode<T>): Generator<number> {
 }
 
 /**
- * Moves the input stack to point to the nodes closest to a specified distance.
+ * Creates a generator that yields each node in a skip list.
  *
- * @param stack - The {@link SkipStack} representing the current pointers at various levels of the skip list.
- * @param distance - The forward distance to travel. The starting point is based on `stack`'s lowest level.
+ * Iteration starts from the given node and continues the end of the list.
  *
- * @returns A {@link SkipStack} with pointers to the nodes closest to the specified distance, based
- *          on the initial positions indicated by the input stack.
- *
- * @remarks
- * - If the specified distance is 0 or negative, the stack is not modified, as no traversal is needed.
- * - If the target distance exceeds the bounds of the skip list, the result will point to the furthest possible
- *   nodes within the list.
- */
-export function nextStack<T>(
-  stack: SkipStack<T>,
-  distance: number
-): SkipStack<T> {
-  // Check inputs
-  if (distance <= 0 || stack.length <= 0) {
-    return stack;
-  }
-
-  // Find node
-  let y = stack.length - 1;
-  const target = stack[0].index + distance;
-  while (y >= 0 && stack[y].index < target) {
-    const { index, node } = stack[y];
-    const { next, span } = node.levels[y];
-    if (index + span > target || next == null) {
-      --y;
-    } else {
-      stack[y] = { index: index + span, node: next };
-    }
-  }
-
-  // Finish stack update
-  if (y > 0) {
-    const { index, node } = stack[y];
-    for (let i = 0; i < y; ++i) {
-      stack[i] = { index, node };
-    }
-  }
-
-  return stack;
-}
-
-/**
- * Creates a generator that yields each node in a skip list at a specified level.
- *
- * Iteration begins from a given node up to, but not including, an optional end node. Defaults to level `0`.
- *
- * @param node - The starting {@link SkipNode} from which the iteration begins. If not defined, no nodes are yielded.
- * @param end - An optional {@link SkipNode} at which to end the iteration, exclusive. If provided, the iteration
- *              will halt before yielding this node. If `end` is `undefined`, the iteration will continue until
- *              the end of the list.
- * @param level - The level at which to traverse the skip list, starting from 0 for the base level. Defaults to `0`
- *                if not specified. If a negative value is given, or if the start `node` does not reach this level,
- *                no nodes are yielded.
+ * @param node - The {@link SkipNode} at which to start iterating.
  */
 export function* nodes<T>(node?: SkipNode<T>): Generator<SkipNode<T>> {
   while (node != null) {
@@ -645,10 +594,11 @@ export function truncateLevels<T>(
 /**
  * Iterates through a skip list, yielding each node's value.
  *
- * This generator function provides a convenient way to enumerate all nodes in
+ * Iteration starts from the given node and continues the end of the list.
+ * This function provides a convenient way to enumerate all nodes in
  * a skip list, similar to how `Array.prototype.entries()` works for arrays.
  *
- * @param node - The node at which to start iterating.
+ * @param node - The {@link SkipNode} at which to start iterating.
  */
 export function* values<T>(node?: SkipNode<T>): Generator<T> {
   while (node != null) {

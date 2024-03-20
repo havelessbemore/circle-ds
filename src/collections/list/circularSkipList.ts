@@ -435,7 +435,7 @@ export class CircularSkipList<T>
     const core = { root: this._root, size: this._size, tails: this._tails };
 
     // Cut and get removed segment
-    const seg = cut(core, start, count);
+    const seg = cut(core, start, start + count);
 
     // Update list state
     this._size = core.size;

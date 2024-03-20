@@ -16,7 +16,6 @@ import {
   toStack,
   truncateLevels,
   values,
-  nextStack,
   cut,
 } from "./skipList";
 import { SkipNode } from "../types/skipList";
@@ -117,7 +116,7 @@ describe(`${copy.name}()`, () => {
 });
 
 describe(`${cut.name}()`, () => {
-  test("returns an empty list when distance is negative", () => {
+  test("returns an empty list when end is negative", () => {
     const core = toList([1, 2], ["a", "b"]);
     const seg = cut(core, 1, -1);
 
@@ -127,7 +126,7 @@ describe(`${cut.name}()`, () => {
     expect(Array.from(values(seg.root))).toEqual([undefined]);
   });
 
-  test("returns an empty list when distance is 0", () => {
+  test("returns an empty list when end is 0", () => {
     const core = toList([1, 2], ["a", "b"]);
     const seg = cut(core, 1, 0);
 
@@ -141,9 +140,9 @@ describe(`${cut.name}()`, () => {
     const originalItems = ["a", "b", "c", "d", "e"];
     const core = toList([1, 2, 3, 2, 1], originalItems);
     const start = 1; // Starting at 'b'
-    const distance = 3; // Cutting 'b', 'c', 'd'
+    const end = 4; // Cutting 'b', 'c', 'd'
 
-    const segment = cut(core, start, distance);
+    const segment = cut(core, start, end);
 
     // Check if the segment has the correct items
     const segmentLevels = Array.from(levels(segment.root));
@@ -177,7 +176,7 @@ describe(`${cut.name}()`, () => {
 
   test("handles cuts beyond the list size gracefully", () => {
     const core = toList([2, 1], ["a", "b"]);
-    const segment = cut(core, 1, 5); // Attempting to cut more items than exist from position 1
+    const segment = cut(core, 1, 6); // Attempting to cut more items than exist from position 1
 
     expect(segment.size).toBe(1); // Only 'b' is cut
 
@@ -196,7 +195,7 @@ describe(`${cut.name}()`, () => {
 
   test("Adjusts levels correctly when removing highest level(s)", () => {
     const core = toList([4, 1, 5, 2], ["a", "b", "c", "d"]);
-    const segment = cut(core, 1, 2);
+    const segment = cut(core, 1, 3);
 
     // Check if the segment has the correct items
     const segmentLevels = Array.from(levels(segment.root));
@@ -209,7 +208,7 @@ describe(`${cut.name}()`, () => {
 
   test("Adjusts levels correctly when not removing highest level(s)", () => {
     const core = toList([5, 1, 2, 3], ["a", "b", "c", "d"]);
-    const segment = cut(core, 1, 2);
+    const segment = cut(core, 1, 3);
 
     // Check if the segment has the correct items
     const segmentLevels = Array.from(levels(segment.root));
@@ -476,115 +475,6 @@ describe(`${levels.name}()`, () => {
   test("yields correct heights for each node in the list", () => {
     const { root } = toList([1, 3, 2], ["a", "b", "c"]);
     expect(Array.from(levels(root))).toEqual([3, 1, 3, 2]);
-  });
-});
-
-describe(`${nextStack.name}()`, () => {
-  function toNodesArray<T>(node?: SkipNode<T>): SkipNode<T>[] {
-    const nodes: SkipNode<T>[] = [];
-    while (node != null) {
-      nodes.push(node);
-      node = node.levels[0].next;
-    }
-    return nodes;
-  }
-
-  test("returns the input stack for empty stack", () => {
-    const stack = [];
-    const result = nextStack(stack, 100);
-
-    expect(result).toBe(stack);
-    expect(result).toEqual([]);
-  });
-
-  test("returns the stack for zero distance", () => {
-    const node = toNode("A", 2);
-    const stack = [{ index: 0, node }];
-    const result = nextStack(stack, 0);
-
-    expect(result).toBe(stack);
-    expect(result).toEqual([{ index: 0, node }]);
-  });
-
-  test("returns the stack for negative distance", () => {
-    const node = toNode("A", 2);
-    const stack = [{ index: 0, node }];
-    const result = nextStack(stack, -1);
-
-    expect(result).toBe(stack);
-    expect(result).toEqual([{ index: 0, node }]);
-  });
-
-  test("finds closest nodes within bounds for distance = 1", () => {
-    const target = 1;
-    const { root } = toList([1, 2, 1, 4, 1], ["a", "b", "c", "d", "e"]);
-    const stack = toStack(root, -1);
-    const nodes = toNodesArray(stack[0].node);
-    const result = nextStack(stack, target + 1);
-    const Y = stack.length;
-
-    expect(result).toBe(stack);
-    expect(result.length).toBe(Y);
-    for (let y = 0; y < Y; ++y) {
-      const { index, node } = result[y];
-      expect(node).toBe(nodes[index + 1]);
-      expect(index).toBeLessThanOrEqual(target);
-      expect(index + node.levels[y].span).toBeGreaterThan(target);
-    }
-  });
-
-  test("finds closest nodes within bounds for positive distance", () => {
-    const target = 2;
-    const { root } = toList([1, 2, 1, 4, 1], ["a", "b", "c", "d", "e"]);
-
-    const stack = toStack(root, -1);
-    const Y = stack.length;
-    const nodes = toNodesArray(stack[0].node);
-    const result = nextStack(stack, target + 1);
-
-    expect(result).toBe(stack);
-    expect(result.length).toBe(Y);
-    for (let y = 0; y < Y; ++y) {
-      const { index, node } = result[y];
-      expect(node).toBe(nodes[index + 1]);
-      expect(index).toBeLessThanOrEqual(target);
-      expect(index + node.levels[y].span).toBeGreaterThan(target);
-    }
-  });
-
-  test("finds closest nodes within bounds for last node", () => {
-    const target = 4;
-    const { root } = toList([1, 2, 1, 4, 1], ["a", "b", "c", "d", "e"]);
-    const stack = toStack(root, -1);
-    const Y = stack.length;
-    const nodes = toNodesArray(stack[0].node);
-    const result = nextStack(stack, target + 1);
-
-    expect(result).toBe(stack);
-    expect(result.length).toBe(Y);
-    for (let y = 0; y < Y; ++y) {
-      const { index, node } = result[y];
-      expect(node).toBe(nodes[index + 1]);
-      expect(index).toBeLessThanOrEqual(target);
-      expect(index + node.levels[y].span).toBeGreaterThan(target);
-    }
-  });
-
-  test("finds closest nodes for distance exceeding bounds", () => {
-    const target = 99;
-    const { root, size } = toList([1, 2, 1, 4, 1], ["a", "b", "c", "d", "e"]);
-    const stack = toStack(root, -1);
-    const Y = stack.length;
-    const nodes = toNodesArray(stack[0].node);
-    const result = nextStack(stack, target + 1);
-
-    expect(result).toBe(stack);
-    expect(result.length).toBe(Y);
-    for (let y = 0; y < Y; ++y) {
-      const { index, node } = result[y];
-      expect(node).toBe(nodes[index + 1]);
-      expect(index + node.levels[y].span).toBe(size);
-    }
   });
 });
 
