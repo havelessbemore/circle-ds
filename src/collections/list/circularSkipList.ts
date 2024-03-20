@@ -20,7 +20,7 @@ import {
   addIfBelow,
   clamp,
   isInRange,
-  randomRun,
+  simulateWinStreak,
   toInteger,
 } from "../../utils/math";
 import {
@@ -369,7 +369,7 @@ export class CircularSkipList<T>
 
     // Create segment copy
     const core = { root: this._root, size: this._size, tails: this._tails };
-    const seg = copy(core, start, end - start);
+    const seg = copy(getEntry(core, start).node, end - start);
 
     // Return copied segment as a list
     config.capacity = seg.size;
@@ -452,7 +452,7 @@ export class CircularSkipList<T>
     const levels = new Array<number>(N);
     const maxLevel = this._maxLevel - 1;
     for (let i = 0; i < N; ++i) {
-      levels[i] = 1 + randomRun(this._p, maxLevel);
+      levels[i] = 1 + simulateWinStreak(this._p, maxLevel - 1);
     }
     return levels;
   }

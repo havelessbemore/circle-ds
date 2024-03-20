@@ -5,7 +5,33 @@ import {
   SkipNode,
   SkipStack,
 } from "../types/skipList";
-import { log } from "./math";
+import { clamp, log } from "./math";
+
+/**
+ * Adjusts the `span` property of nodes in a skip list across specified levels.
+ *
+ * The adjustment can increase (for positive `diff`) or decrease (for negative `diff`)
+ * the `span` values. This function is used to maintain
+ * the integrity of skip list distances after insertion or deletion.
+ *
+ * @param stack - An array representing a vertical cross-section (stack) of the skip list at a certain position.
+ *                Each element in the stack corresponds to a node at a different level, starting from the bottom.
+ * @param diff - The numerical difference to apply to the `span` of each node in the stack. A positive `diff`
+ *               increases the span, and a negative `diff` value decreases it.
+ * @param min - The minimum level (0-based index) at which to start adjusting spans. Defaults to 0.
+ */
+export function adjustSpan<T>(
+  stack: SkipStack<T>,
+  diff: number,
+  min = 0
+): void {
+  const Y = stack.length;
+  for (let y = min >= 0 ? min : 0; y < Y; ++y) {
+    const levels = stack[y].node.levels;
+    const { next, span } = levels[y];
+    levels[y] = { next: next, span: span + diff };
+  }
+}
 
 /**
  * Calculates the maximum level for a skip list based on the given probability
@@ -44,71 +70,60 @@ export function calcMaxLevel(
 }
 
 /**
- * Copies a segment from a skip list, starting at a specified position
- * and including a specified number of nodes. The copied segment is
+ * Copies a segment from a skip list, starting at a specified node
+ * and copying a specified distance. The copied segment is
  * returned as a new {@link SkipCore}.
  *
- * @param root - The {@link SkipCore} of the original skip list from
- *               which the copy operation begins.
- * @param start - The zero-based position in the original list from which to
- *                start copying nodes.
- * @param count - The number of nodes to copy from the start position. If the
- *                count exceeds the number of nodes available, only the
+ * @param node - The {@link SkipNode} from which the copy operation begins.
+ * @param distance - The distance to copy from the start position. If this
+ *                value exceeds the size of the original skip list, only the
  *                available nodes are copied.
  *
  * @returns The {@link SkipCore} of the duplicate list.
  */
 export function copy<T>(
-  core: SkipCore<T>,
-  start: number,
+  node: SkipNode<T> | undefined,
   distance: number
 ): SkipCore<T> {
   // Create new list
   let size = 0;
   const root = toNode(undefined as T);
   const tails: SkipNode<T>[] = [root];
-  const sizes: number[] = [-1];
 
-  // Check distance
-  if (distance <= 0) {
+  // Check input
+  if (node == null || distance <= 0) {
     return { root, size, tails };
   }
 
-  // Get initial node
-  let node: SkipNode<T> | undefined = getEntry(core, start - 1).node;
-  node = node.levels[0].next;
-
   // For each node
   let maxY = 1;
+  const indexes: number[] = [-1];
   while (node != null && size < distance) {
     // Update maximum level
     const Y = node.levels.length;
     while (maxY < Y) {
       tails[maxY] = root;
-      sizes[maxY] = -1;
+      indexes[maxY] = -1;
       ++maxY;
     }
 
-    // Create the duplicate node
+    // Create and attach the duplicate node
     const dupe = toNode(node.value, Y);
-
-    // Attach the duplicate
     for (let y = 0; y < Y; ++y) {
-      tails[y].levels[y] = { next: dupe, span: size - sizes[y] };
-      tails[y] = dupe;
-      sizes[y] = size;
+      tails[y].levels[y] = { next: dupe, span: size - indexes[y] };
     }
+    tails.fill(dupe, 0, Y);
+    indexes.fill(size, 0, Y);
 
     // Move to the next node
     const { next, span } = node.levels[0];
+    node = next as SkipNode<T>;
     size += span;
-    node = next;
   }
 
   // Update the tail pointers
-  size = sizes[0] + 1;
   for (let y = 0; y < maxY; ++y) {
-    tails[y].levels[y] = { next: undefined, span: size - sizes[y] };
+    tails[y].levels[y] = { next: undefined, span: distance - indexes[y] };
   }
 
   // Return the copy
@@ -152,8 +167,10 @@ export function cut<T>(
   const tailStack = getStack(core, end - 1, Array.from(prevStack));
 
   // Check size
-  start = prevStack[0].index + prevStack[0].node.levels[0].span;
-  end = tailStack[0].index + tailStack[0].node.levels[0].span;
+  let nextI = prevStack[0].index + prevStack[0].node.levels[0].span;
+  start = clamp(start, prevStack[0].index, nextI);
+  nextI = tailStack[0].index + tailStack[0].node.levels[0].span;
+  end = clamp(end, tailStack[0].index, nextI);
   if (start >= end) {
     return seg;
   }
@@ -187,22 +204,17 @@ export function cut<T>(
     seg.tails[y] = tail.node;
   }
 
-  if (y < Y) {
-    // Remove segment from higher levels
-    while (y < Y) {
-      const prev = prevStack[y];
-      const { next, span } = prev.node.levels[y];
-      prev.node.levels[y] = { next: next, span: span - size };
-      ++y;
-    }
-  } else {
+  // Remove segment from untouched levels
+  adjustSpan(prevStack, -size, y);
+
+  if (y >= Y) {
     // Remove empty levels from the source list
-    const links = core.root.levels;
-    while (y > 1 && links[y - 1].next == null) {
+    const levels = core.root.levels;
+    while (y > 1 && levels[y - 1].next == null) {
       --y;
     }
     Y = y;
-    links.length = Y;
+    levels.length = Y;
     core.tails.length = Y;
   }
 
@@ -245,13 +257,14 @@ export function getEntry<T>(core: SkipCore<T>, target: number): SkipEntry<T> {
 
   // Check target maximum
   const tails = core.tails;
-  if (target >= core.size - tails[0].levels[0].span) {
-    return { index: core.size - tails[0].levels[0].span, node: tails[0] };
+  let index = core.size - tails[0].levels[0].span;
+  if (target >= index) {
+    return { index, node: tails[0] };
   }
 
   // Use tails as shortcuts
+  index = -1;
   let y: number;
-  let index = -1;
   let node = core.root;
   for (y = node.levels.length - 1; y >= 0 && index < target; --y) {
     const i = core.size - tails[y].levels[y].span;
@@ -313,10 +326,10 @@ export function getStack<T>(
   while (y >= 0 && stack[y].index < target) {
     const { index, node } = stack[y];
     const { next, span } = node.levels[y];
-    if (index + span > target || next == null) {
-      --y;
-    } else {
+    if (index + span <= target && next != null) {
       stack[y] = { index: index + span, node: next };
+    } else {
+      --y;
     }
   }
 
@@ -352,6 +365,25 @@ export function has<T>(node: SkipNode<T> | undefined, value: T): boolean {
 }
 
 /**
+ * Increases the number of levels in a skip list to a specified level.
+ *
+ * Each new level is initialized such that it spans the entire list.
+ * This function directly modifies the input skip list core.
+ *
+ * @param core - The {@link SkipCore} whose levels should be increased. The core is directly modified.
+ *
+ * @param levels - The number of levels the skip list should be increased to. If the current number
+ *                 of levels is already equal to or greater than this value, no changes are made.
+ */
+export function increaseLevels<T>(core: SkipCore<T>, levels: number): void {
+  const { root, size, tails } = core;
+  for (let y = tails.length; y < levels; ++y) {
+    root.levels[y] = { next: undefined, span: size + 1 };
+    tails[y] = root;
+  }
+}
+
+/**
  * Inserts a skip list segment (`src`) into another skip list (`dest`) at a specified index.
  *
  * @param dest - The {@link SkipCore} representing the destination skip list into which the segment is to be
@@ -377,10 +409,7 @@ export function insert<T>(
 
   // Increase destination's height if necessary
   const minY = src.tails.length;
-  for (let y = dest.tails.length; y < minY; ++y) {
-    dest.root.levels[y] = { next: undefined, span: dest.size + 1 };
-    dest.tails[y] = dest.root;
-  }
+  increaseLevels(dest, minY);
 
   // Attach segment
   const prevs = getStack(dest, index - 1);
@@ -401,12 +430,7 @@ export function insert<T>(
   }
 
   // Update higher levels
-  const maxY = dest.tails.length;
-  for (let y = minY; y < maxY; ++y) {
-    const levels = prevs[y].node.levels;
-    const { next, span } = levels[y];
-    levels[y] = { next, span: span + src.size };
-  }
+  adjustSpan(prevs, src.size, minY);
 
   // Update tails
   if (index === dest.size) {
@@ -490,10 +514,8 @@ export function toList<T>(levels: number[], values: T[]): SkipCore<T> {
   // Get # of values (X) and max level (Y)
   let Y = -Infinity;
   const size = Math.min(levels.length, values.length);
-  for (let i = 0; i < size; ++i) {
-    if (Y < levels[i]) {
-      Y = levels[i];
-    }
+  for (let y = 0; y < size; ++y) {
+    Y = Y >= levels[y] ? Y : levels[y];
   }
 
   // Check inputs

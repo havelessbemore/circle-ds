@@ -17,8 +17,71 @@ import {
   truncateLevels,
   values,
   cut,
+  increaseLevels,
+  adjustSpan,
 } from "./skipList";
-import { SkipNode } from "../types/skipList";
+import { SkipCore, SkipNode, SkipStack } from "../types/skipList";
+
+describe(`${adjustSpan.name}()`, () => {
+  function createStack(spans: number[], levels: number): SkipStack<unknown> {
+    const stack: SkipStack<undefined> = new Array(levels);
+    for (let y = 0; y < levels; ++y) {
+      stack[y] = { index: 0, node: toNode(undefined, levels, spans[y]) };
+    }
+    return stack;
+  }
+
+  test("increases span across all levels", () => {
+    const stack = createStack([1, 2, 3], 3);
+    adjustSpan(stack, 2);
+    stack.forEach(({ node }, index) => {
+      expect(node.levels[index].span).toBe(3 + index);
+    });
+  });
+
+  test("decreases span across all levels", () => {
+    const stack = createStack([3, 4, 5], 3);
+    adjustSpan(stack, -2);
+    stack.forEach(({ node }, index) => {
+      expect(node.levels[index].span).toBe(1 + index);
+    });
+  });
+
+  test("adjusts span starting from a specific level", () => {
+    const stack = createStack([1, 2, 3, 4], 4);
+    adjustSpan(stack, 1, 2);
+    expect(stack[0].node.levels[0].span).toBe(1); // Unchanged
+    expect(stack[1].node.levels[1].span).toBe(2); // Unchanged
+    expect(stack[2].node.levels[2].span).toBe(4); // Increased
+    expect(stack[3].node.levels[3].span).toBe(5); // Increased
+  });
+
+  test("handles negative starting level by adjusting all levels", () => {
+    const stack = createStack([5, 6, 7], 3);
+    adjustSpan(stack, 1, -1);
+    stack.forEach(({ node }, index) => {
+      expect(node.levels[index].span).toBe(6 + index);
+    });
+  });
+
+  test("does nothing if diff is 0", () => {
+    const originalSpans = [7, 8, 9];
+    const stack = createStack(originalSpans, 3);
+    adjustSpan(stack, 0);
+    stack.forEach(({ node }, index) => {
+      expect(node.levels[index].span).toBe(originalSpans[index]);
+    });
+  });
+
+  test("does nothing if starting level is beyond the stack length", () => {
+    const originalSpans = [10, 11, 12];
+    const stack = createStack(originalSpans, 3);
+    adjustSpan(stack, 3, 4); // min level is beyond stack length
+    stack.forEach(({ node }, index) => {
+      expect(node.levels[index].span).toBe(originalSpans[index]);
+    });
+  });
+});
 
 describe(`${calcMaxLevel.name}()`, () => {
   function expectedLevel(p: number, size: number): number {
@@ -72,7 +135,7 @@ describe(`${calcMaxLevel.name}()`, () => {
 describe(`${copy.name}()`, () => {
   test("returns a segment with only a root node when count is 0 or negative", () => {
     const src = toList([1, 1, 1], ["A", "B", "C"]);
-    const core = copy(src, 1, 0);
+    const core = copy(src.root, 0);
 
     expect(core.size).toBe(0);
     expect(core.root.levels.length).toBe(1);
@@ -82,7 +145,7 @@ describe(`${copy.name}()`, () => {
 
   test("copies the specified number of nodes from the list starting at the given position", () => {
     const src = toList([2, 2, 2, 2], ["A", "B", "C", "D"]);
-    const core = copy(src, 1, 2); // Copy from node 'B' to 'C'
+    const core = copy(getEntry(src, 1).node, 2); // Copy from node 'B' to 'C'
 
     expect(core.size).toBe(2);
     expect(core.tails.length).toBe(2);
@@ -93,7 +156,7 @@ describe(`${copy.name}()`, () => {
 
   test("handles copying more nodes than available from the start position", () => {
     const src = toList([1, 1, 1], ["A", "B", "C"]);
-    const core = copy(src, 1, 5);
+    const core = copy(getEntry(src, 1).node, 5);
 
     expect(core.size).toBe(2);
     expect(core.tails[0].value).toBe("C");
@@ -102,7 +165,7 @@ describe(`${copy.name}()`, () => {
 
   test("correctly updates span values in the copied segment", () => {
     const src = toList([1, 2, 1, 1], ["A", "B", "C", "D"]);
-    const core = copy(src, 0, 3);
+    const core = copy(getEntry(src, 0).node, 3);
 
     // Check span values to ensure they are correctly calculated
     let nextNode = core.root.levels[0]?.next;
@@ -342,6 +405,58 @@ describe(`${has.name}()`, () => {
   test("returns true for multiple occurrences of the value, finds first occurrence", () => {
     const { root } = toList([1, 1, 1], ["repeat", "repeat", "unique"]);
     expect(has(root, "repeat")).toBe(true);
+  });
+});
+
+describe("increaseLevels", () => {
+  function createCore<T>(levels: number, size: number): SkipCore<T> {
+    const root: SkipNode<T> = { levels: [], value: undefined as unknown as T };
+    for (let i = 0; i < levels; i++) {
+      root.levels.push({ next: undefined, span: size + 1 });
+    }
+    return {
+      root,
+      size,
+      tails: Array(levels).fill(root),
+    };
+  }
+
+  test("should add levels to a skip list with fewer levels than target", () => {
+    const core = createCore<number>(3, 10);
+    increaseLevels(core, 5);
+
+    expect(core.root.levels.length).toBe(5);
+    expect(core.tails.length).toBe(5);
+    core.tails.forEach((tail, index) => {
+      expect(tail).toBe(core.root);
+      expect(core.root.levels[index].span).toBe(11);
+    });
+  });
+
+  test("should not modify levels if skip list already has target number of levels", () => {
+    const core = createCore<number>(5, 10);
+    increaseLevels(core, 5);
+
+    expect(core.root.levels.length).toBe(5);
+    expect(core.tails.length).toBe(5);
+  });
+
+  test("should not reduce levels if target is less than current levels", () => {
+    const core = createCore<number>(5, 10);
+    increaseLevels(core, 3);
+
+    expect(core.root.levels.length).toBe(5);
+    expect(core.tails.length).toBe(5);
+  });
+
+  test("should initialize new levels correctly when increasing levels", () => {
+    const core = createCore<number>(2, 10);
+    increaseLevels(core, 4);
+
+    for (let y = 2; y < 4; y++) {
+      expect(core.root.levels[y]).toEqual({ next: undefined, span: 11 });
+      expect(core.tails[y]).toBe(core.root);
+    }
   });
 });
 
