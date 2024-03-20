@@ -70,35 +70,56 @@ export function calcMaxLevel(
 }
 
 /**
- * Copies a segment from a skip list, starting at a specified node
- * and copying a specified distance. The copied segment is
- * returned as a new {@link SkipCore}.
+ * Copies a segment from a given skip list.
  *
- * @param node - The {@link SkipNode} from which the copy operation begins.
- * @param distance - The distance to copy from the start position. If this
- *                value exceeds the size of the original skip list, only the
- *                available nodes are copied.
+ * The copy spans the given interval and is returned as a new skip list.
  *
- * @returns The {@link SkipCore} of the duplicate list.
+ * @param core - The {@link SkipCore} representing the skip list from which to copy.
+ * @param start - The zero-based index indicating the start position of the copy, inclusive.
+ * @param end - The zero-based index indicating the end position of the copy, exclusive.
+ *
+ * @returns A new {@link SkipCore} representing the skip list segment that has been copied.
+ *
+ * @remarks
+ * - The copied segment's height (levels) may be less than the original list. It will only contain
+ *   levels that include nodes within the segment.
  */
 export function copy<T>(
-  node: SkipNode<T> | undefined,
-  distance: number
+  core: SkipCore<T>,
+  start = 0,
+  end = core.size
 ): SkipCore<T> {
-  // Create new list
-  let size = 0;
+  // Create output
   const root = toNode(undefined as T);
-  const tails: SkipNode<T>[] = [root];
+  const seg: SkipCore<T> = { root, size: 0, tails: [root] };
 
-  // Check input
-  if (node == null || distance <= 0) {
-    return { root, size, tails };
+  // Check inputs
+  if (start >= end || end <= 0 || start >= core.size) {
+    return seg;
   }
+
+  // Get prev entry
+  const prevEntry = getEntry(core, start - 1);
+
+  // Check interval
+  let index = prevEntry.index + prevEntry.node.levels[0].span;
+  start = clamp(start, prevEntry.index + 1, index);
+  end = clamp(end, start, core.size);
+  if (start >= end) {
+    return seg;
+  }
+
+  // Get size
+  const size = end - start;
+  seg.size = size;
 
   // For each node
   let maxY = 1;
+  index -= start;
+  const tails = seg.tails;
   const indexes: number[] = [-1];
-  while (node != null && size < distance) {
+  let node = prevEntry.node.levels[0].next;
+  while (node != null && index < size) {
     // Update maximum level
     const Y = node.levels.length;
     while (maxY < Y) {
@@ -110,36 +131,35 @@ export function copy<T>(
     // Create and attach the duplicate node
     const dupe = toNode(node.value, Y);
     for (let y = 0; y < Y; ++y) {
-      tails[y].levels[y] = { next: dupe, span: size - indexes[y] };
+      tails[y].levels[y] = { next: dupe, span: index - indexes[y] };
     }
     tails.fill(dupe, 0, Y);
-    indexes.fill(size, 0, Y);
+    indexes.fill(index, 0, Y);
 
-    // Move to the next node
+    // Move to next node
     const { next, span } = node.levels[0];
-    node = next as SkipNode<T>;
-    size += span;
+    node = next;
+    index += span;
   }
 
   // Update the tail pointers
   for (let y = 0; y < maxY; ++y) {
-    tails[y].levels[y] = { next: undefined, span: distance - indexes[y] };
+    tails[y].levels[y] = { next: undefined, span: size - indexes[y] };
   }
 
   // Return the copy
-  return { root, size, tails };
+  seg.size = size;
+  return seg;
 }
 
 /**
  * Cuts a segment from a given skip list.
  *
- * The cut starts at the specified position and spans the given distance. The
- * cut segment is returned as a new skip list.
+ * The cut spans the given interval and is returned as a new skip list.
  *
- * @param core - The {@link SkipCore} representing the skip list from which to cut the segment.
- *               This skip list will be modified to reflect the removal.
+ * @param core - The {@link SkipCore} representing the skip list from which to cut.
  * @param start - The zero-based index indicating the start position of the cut, inclusive.
- * @param distance - The number of elements to be included in the cut segment.
+ * @param end - The zero-based index indicating the end position of the cut, exclusive.
  *
  * @returns A new {@link SkipCore} representing the skip list segment that has been cut.
  *
@@ -153,7 +173,7 @@ export function cut<T>(
   start: number,
   end: number
 ): SkipCore<T> {
-  // Initialize output
+  // Create output
   const segRoot = toNode(undefined as T);
   const seg: SkipCore<T> = { root: segRoot, size: 0, tails: [segRoot] };
 
@@ -166,14 +186,16 @@ export function cut<T>(
   const prevStack = getStack(core, start - 1);
   const tailStack = getStack(core, end - 1, Array.from(prevStack));
 
-  // Check size
+  // Check interval
   let nextI = prevStack[0].index + prevStack[0].node.levels[0].span;
-  start = clamp(start, prevStack[0].index, nextI);
+  start = clamp(start, prevStack[0].index + 1, nextI);
   nextI = tailStack[0].index + tailStack[0].node.levels[0].span;
-  end = clamp(end, tailStack[0].index, nextI);
+  end = clamp(end, tailStack[0].index + 1, nextI);
   if (start >= end) {
     return seg;
   }
+
+  // Get size
   const size = end - start;
   seg.size = size;
 
@@ -226,6 +248,7 @@ export function cut<T>(
     }
   }
 
+  // Return the cut segment
   return seg;
 }
 

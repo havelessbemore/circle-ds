@@ -369,7 +369,7 @@ export class CircularSkipList<T>
 
     // Create segment copy
     const core = { root: this._root, size: this._size, tails: this._tails };
-    const seg = copy(getEntry(core, start).node, end - start);
+    const seg = copy(core, start, end);
 
     // Return copied segment as a list
     config.capacity = seg.size;

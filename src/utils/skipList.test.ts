@@ -133,48 +133,79 @@ describe(`${calcMaxLevel.name}()`, () => {
 });
 
 describe(`${copy.name}()`, () => {
-  test("returns a segment with only a root node when count is 0 or negative", () => {
-    const src = toList([1, 1, 1], ["A", "B", "C"]);
-    const core = copy(src.root, 0);
+  test("returns an empty list when start > end", () => {
+    const core = toList([1, 2], ["a", "b"]);
+    const seg = copy(core, 1, 0);
 
-    expect(core.size).toBe(0);
-    expect(core.root.levels.length).toBe(1);
-    expect(core.tails[0]).toBe(core.root);
-    expect(core.tails[0].levels[0].next).toBeUndefined();
+    expect(seg.size).toBe(0);
+    expect(seg.tails.length).toBe(1);
+    expect(seg.tails[0]).toBe(seg.root);
+    expect(Array.from(values(seg.root))).toEqual([undefined]);
   });
 
-  test("copies the specified number of nodes from the list starting at the given position", () => {
-    const src = toList([2, 2, 2, 2], ["A", "B", "C", "D"]);
-    const core = copy(getEntry(src, 1).node, 2); // Copy from node 'B' to 'C'
+  test("returns an empty list when start == end", () => {
+    const core = toList([1, 2], ["a", "b"]);
+    const seg = copy(core, 1, 1);
 
-    expect(core.size).toBe(2);
-    expect(core.tails.length).toBe(2);
-    expect(core.root.levels[0].next?.value).toBe("B");
-    expect(core.tails[0].value).toBe("C");
-    expect(core.tails[0].levels[0].next).toBeUndefined();
+    expect(seg.size).toBe(0);
+    expect(seg.tails.length).toBe(1);
+    expect(seg.tails[0]).toBe(seg.root);
+    expect(Array.from(values(seg.root))).toEqual([undefined]);
   });
 
-  test("handles copying more nodes than available from the start position", () => {
-    const src = toList([1, 1, 1], ["A", "B", "C"]);
-    const core = copy(getEntry(src, 1).node, 5);
+  test("copies a segment from the middle of the skip list", () => {
+    const originalItems = ["a", "b", "c", "d", "e"];
+    const core = toList([1, 2, 3, 2, 1], originalItems);
+    const start = 1; // Starting at 'b'
+    const end = 4; // Copying 'b', 'c', 'd'
 
-    expect(core.size).toBe(2);
-    expect(core.tails[0].value).toBe("C");
-    expect(core.tails[0].levels[0].next).toBeUndefined();
+    const segment = copy(core, start, end);
+
+    // Check if the segment has the correct items
+    const segmentLevels = Array.from(levels(segment.root));
+    expect(segmentLevels).toEqual([3, 2, 3, 2]);
+    const segmentValues = Array.from(values(segment.root));
+    expect(segmentValues).toEqual([undefined, "b", "c", "d"]);
   });
 
-  test("correctly updates span values in the copied segment", () => {
-    const src = toList([1, 2, 1, 1], ["A", "B", "C", "D"]);
-    const core = copy(getEntry(src, 0).node, 3);
+  test("copy the entire list when start is 0 and distance equals list size", () => {
+    const core = toList([2, 3, 1], ["a", "b", "c"]);
+    const segment = copy(core, 0, 3);
 
-    // Check span values to ensure they are correctly calculated
-    let nextNode = core.root.levels[0]?.next;
-    expect(nextNode?.levels[0].span).toBe(1);
-    nextNode = nextNode?.levels[0]?.next;
-    expect(nextNode?.levels[0].span).toBe(1);
-    expect(nextNode?.levels[1].span).toBe(2);
-    nextNode = nextNode?.levels[0]?.next;
-    expect(nextNode?.levels[0].span).toBe(1);
+    // Check if the segment has the correct items
+    const segmentLevels = Array.from(levels(segment.root));
+    expect(segmentLevels).toEqual([3, 2, 3, 1]);
+    const segmentValues = Array.from(values(segment.root));
+    expect(segmentValues).toEqual([undefined, "a", "b", "c"]);
+  });
+
+  test("handles copies beyond the list size gracefully", () => {
+    const core = toList([2, 1], ["a", "b"]);
+    const segment = copy(core, 1, 6); // Attempt to copy more items than exist
+
+    expect(segment.size).toBe(1); // Only 'b' is copied
+    const segmentLevels = Array.from(levels(segment.root));
+    expect(segmentLevels).toEqual([1, 1]);
+    const segmentValues = Array.from(values(segment.root));
+    expect(segmentValues).toEqual([undefined, "b"]);
+  });
+
+  test("Adjusts levels correctly when copying highest level(s)", () => {
+    const core = toList([4, 1, 5, 2], ["a", "b", "c", "d"]);
+    const segment = copy(core, 1, 3);
+
+    // Check if the segment has the correct items
+    const segmentLevels = Array.from(levels(segment.root));
+    expect(segmentLevels).toEqual([5, 1, 5]);
+  });
+
+  test("Adjusts levels correctly when not copying highest level(s)", () => {
+    const core = toList([5, 1, 2, 3], ["a", "b", "c", "d"]);
+    const segment = copy(core, 1, 3);
+
+    // Check if the segment has the correct items
+    const segmentLevels = Array.from(levels(segment.root));
+    expect(segmentLevels).toEqual([2, 1, 2]);
   });
 });
 
